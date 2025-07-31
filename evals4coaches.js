@@ -437,7 +437,7 @@ function showAbsentSection() {
   let html = `
     <div class="absent-container">
       <h2>Absent Students Report-Card</h2>
-      <h3>Provide comments based on the trainee’s performance:</h3>
+      <h3>Write comments in each area based on the trainee’s performance:</h3>
 
       <table>
         <colgroup>
