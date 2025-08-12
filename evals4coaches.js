@@ -13,7 +13,7 @@ const topicsList = document.getElementById("topicsList");
 //
 
 // Cargar JSON y poblar syllabus
-const jsonVersion = 2; // CAMBIAR NÚMERO AL ACLUALIZAR EL JSON
+const jsonVersion = 3; // CAMBIAR NÚMERO AL ACLUALIZAR EL JSON
 
 fetch(`topics.json?v=${jsonVersion}`)
   .then((response) => response.json())
