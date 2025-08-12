@@ -739,7 +739,7 @@ h4 {
 
 .final-container {
   height: 70dvh;
-  width: 80vw;
+  width: 70dvw;
   overflow-y: auto;
   box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
