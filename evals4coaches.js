@@ -746,7 +746,7 @@ function showFinalSection() {
   let canvavideo = "";
 
   // WEEK 4 LOGIC
-  if (selectedweek === "4") {
+  if (selectedweek === "4" || selectedweek === "7") {
     if (totalScore < 7) {
       canvavideo = "VIDEO4EVALS/THX FOR DOING BEST.mp4";
     } else if (totalScore >= 7 && totalScore < 8) {
@@ -759,7 +759,7 @@ function showFinalSection() {
   }
 
   // WEEK 8 LOGIC
-  else if (selectedweek === "8") {
+  else if (selectedweek === "8" || selectedweek === "14" || selectedweek === "6") {
     // EXIT level LOGIC by syllabus + level
     if (level === 10) {
       if (
