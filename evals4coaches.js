@@ -997,11 +997,13 @@ ${comentariosCoach ? comentariosCoach.replace(/\n/g, "<br>") + "<br><br>" : "Muy
 
   // contenedor scrollable
   const previewHTML = `
+<div class="results-preview">
   <h2> Evaluation Results Copied!</h2>
   <h4>Please review your evaluation result here:</h4>
     <div class="preview-wrapper">
       ${reportHTML}
     </div>
+     </div>
   `;
 
   // 3. Inyecta el wrapper en un popup
