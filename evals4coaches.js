@@ -805,7 +805,7 @@ function showFinalSection() {
   }
 
   html += `
-     <video width="100%" autoplay loop>
+     <video width="100%" autoplay>
             <source src="${canvavideo}" type="video/mp4" />
     `;
 
