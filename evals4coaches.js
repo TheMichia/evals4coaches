@@ -496,12 +496,164 @@ function copyAbsentResults() {
   const co = document.getElementById("td-co").innerText.trim();
 
   const report = `
-    Estudiante ausente en la evaluación; se completa el reporte en base al desempeño en clase.<br><br>
-    <strong>Gramática:</strong> ${gr}.<br><br>
-    <strong>Pronunciación:</strong> ${pr}.<br><br>
-    <strong>Entonación:</strong> ${en}.<br><br>
-    <strong>Fluidez:</strong> ${fl}.<br><br>
-    <strong>Comprensión:</strong> ${co}.<br><br>
+    <style>
+      .evaltable {
+        border-radius: 20px;
+        box-shadow: 1px 1px 10px rgba(23, 134, 140, 0.1);
+        border-collapse: collapse;
+        table-layout: fixed;
+        width: 100%;
+      }
+
+      .evalarea {
+        font-weight: bold;
+        color: #15777A;
+        font-size: 1.2rem;
+        padding: 1.3rem;
+        font-family: Verdana, sans-serif;
+        text-align: center;
+      }
+
+      .evalcomment {
+        color: #0F5557;
+        word-break: break-word;
+        font-weight: 400;
+        padding: 0 2.5rem 1.5rem 2.5rem;
+        font-family: serif;
+        text-align: left;
+        font-size: 1rem;
+
+      }
+    </style>
+    <section>
+      <!HEADER>
+        <div
+          style="background: linear-gradient(90deg, #1EAEAE 0%, #21C0C0 50%, #1EAEAE 100%); background-color: #1EAEAE; text-align: center; height: auto; padding: 0.7rem; font-family: Verdana; border-radius: 20px 5px; overflow:hidden; ">
+          <!LOGOS>
+            <div
+              style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin:0; padding-top: 1.5rem;">
+              <img   src="https://imgur.com/Qk6oytx.png" style="height: 2.5rem;">
+              <img   src="https://imgur.com/tVvbCqV.png" style="height: 2.5rem;">
+              <img   src="https://imgur.com/Duh9RGt.png" style="height: 2.5rem;">
+              <img   src="https://imgur.com/68ZykjC.png" style="height: 2.5rem;">
+            </DIV>
+            <p style="font-size: 1.5rem; font-weight: 800; color: white; padding-bottom: 0.8rem;">
+              RESULTADOS DE EVALUACIÓN MENSUAL</p>
+        </div>
+        <!CUERPO DE EMAIL>
+          <DIV style="font-family: Verdana; padding: 0 1.8rem;  color: #3D5855;">
+            <!SALUDO>
+              <div style="color: #126768; margin: 3.5rem 0; text-align: center; font-size: 1.1rem; font-weight: 600;">
+                <p>¡Hola!</p>
+                <p> Esperamos que estés teniendo una excelente semana. &#x1F31F;</p>
+              </div>
+
+              <!INFOR>
+                <div
+                  style="margin: 0 0.5rem; padding: 0.5rem; font-family: arial; font-weight: 600; text-align: center; background-color: #F2F8F7; border-radius: 20px; overflow:hidden; color: #215652; font-size: 1rem;">
+                  <p>En esta ocasión no pudiste participar en tu evaluación mensual.
+                    Este reporte se ha elaborado con base en tu desempeño observado durante clases anteriores.
+                  </p>
+
+                </div>
+
+                <div style="margin: 2rem 0.5rem; font-family: arial; font-weight: 600; align-items: center;">
+                  <!RESULTS>
+                    <P class="evalarea" style="font-size:1.5rem; text-decoration: underline; ">Áreas de desempeño:</P>
+                    <table class="evaltable" cellspacing="0" border="0">
+                      <tr>
+                        <td valign="top" class="evalarea">&#x1F4DA; Gramática</td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="evalcomment">${gr}
+
+                        </td>
+                      </tr>
+                    </table>
+
+                    <table class="evaltable" cellspacing="0" border="0">
+                      <tr>
+                        <td valign="top" class="evalarea">&#x1F5E3;&#xFE0F; Pronunciación</td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="evalcomment">${pr}
+                        </td>
+                      </tr>
+                    </table>
+
+                    <table class="evaltable" cellspacing="0" border="0">
+                      <tr>
+                        <td valign="top" class="evalarea">&#x1F3A7; Entonación</td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="evalcomment">${en}
+
+                        </td>
+                      </tr>
+                    </table>
+
+                    <table class="evaltable" cellspacing="0" border="0">
+                      <tr>
+                        <td valign="top" class="evalarea">&#x1F3B5; Fluidez</td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="evalcomment">${fl}
+
+                        </td>
+                      </tr>
+                    </table>
+
+                    <table class="evaltable" cellspacing="0" border="0">
+                      <tr>
+                        <td valign="top" class="evalarea">&#x1F4AC; Comprensión</td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="evalcomment">${co}
+
+                        </td>
+                      </tr>
+                    </table>
+
+
+
+                    <!reminder>
+                      <DIV style="margin: 2rem; text-align: center; font-size:0.9rem;">
+                        <p>La asistencia a las evaluaciones es esencial para medir tu progreso, identificar áreas de
+                          mejora y reforzar lo aprendido.
+                          Te invitamos a participar en tu próxima evaluación mensual para aprovechar al máximo tu proceso
+                          de aprendizaje. </p>
+                      </DIV>
+                </DIV>
+                <!FOOTER>
+                  <div style="font-family: verdana; margin: 4rem 2rem;">
+                    <p style="font-weight:bold;">Atentamente,
+                      <br><strong style="color: #1CA5AB; font-size: 1.1rem;">Equipo de English4Kids</strong>
+                    </p>
+                  </div>
+                  <!REFERIDOS>
+                    <div
+                      style="background-color: #1EAEAE; text-align: center; height: auto; padding: 0.7rem; font-family: Verdana; border-radius: 5px 20px; overflow:hidden; color:white; margin-top: -2rem; margin-bottom: 4rem;">
+                      <p style="font-weight: bold; font-size: 1.3rem;">Refiere a otros padres y obtén un 50% de descuento
+                        por cada referido que se inscriba. </p>
+                      <p style="font-size: 0.9rem;">&#129490;
+                        &#10024;
+                        Si disfrutas nuestras clases,
+                        puedes ayudar a que más niños aprendan inglés y tengan mejores oportunidades en la vida. Tu referido
+                        también recibe un 50% de descuento en su primer pago.</p>
+                      <p style="font-size: 1.3rem; font-weight: bold;">Entre más refieras,
+                        más ayudas y más ganas. </p>
+                      <p style="font-size: 0.9rem;"> &#128073;
+                        Para que tu referido obtenga el descuento,
+                        debe agendar una llamada con uno de nuestros asesores
+                      </p>
+                      <a href="https://www.english4kidsonline.com/amigo" target="_blank"
+                        style="display:inline-block; padding:12px 24px; background-color:white; color:#1EAEAE; text-decoration:none; border-radius:8px; font-weight:bold; font-family:Verdana">
+                        &#128153; REFIERE AQUÍ &#128153;
+                      </a>
+
+                    </div>
+          </div>
+    </section>
   `;
 
   navigator.clipboard
