@@ -1,3 +1,17 @@
+(() => {
+  const version = "Coaches";
+  const versionnum = "1.0.0";
+  const jsonVersion = 1.3;
+
+  const showversion = document.getElementById("version");
+  showversion.innerHTML = `${version} ${versionnum} - JSON ${jsonVersion}`
+})();
+
+//
+//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
+//
+
+
 let topicsData = {};
 // estado global para los temas
 const topicsStatus = {};
@@ -12,8 +26,6 @@ const topicsList = document.getElementById("topicsList");
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-// Cargar JSON y poblar syllabus
-const jsonVersion = 3; // CAMBIAR NÚMERO AL ACLUALIZAR EL JSON
 
 fetch(`topics.json?v=${jsonVersion}`)
   .then((response) => response.json())
