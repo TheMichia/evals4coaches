@@ -21,6 +21,11 @@ body::before {
   z-index: -1;
 }
 
+textarea:active,
+textarea:focus{
+    outline: 1px solid var(--turquesahex);;
+}
+
 /* =============== COMPONENTS STYLES =============== */
 
 table {
