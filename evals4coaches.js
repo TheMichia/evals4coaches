@@ -1,6 +1,7 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.0.0";
+  const versionnum = "1.0.1";
+  //added versions show and prepare for evaluators version
   const jsonVersion = 1.3;
 
   const showversion = document.getElementById("version");
