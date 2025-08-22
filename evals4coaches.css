@@ -23,7 +23,7 @@ body::before {
 
 textarea:active,
 textarea:focus{
-    outline: 1px solid var(--turquesahex);;
+    outline: 1px solid var(--turquesahex);
 }
 
 /* =============== COMPONENTS STYLES =============== */
