@@ -27,7 +27,7 @@ const topicsList = document.getElementById("topicsList");
 //
 
 
-fetch(`topics.json?v=${jsonVersion}`)
+fetch("topics.json?v=${jsonVersion}")
   .then((response) => response.json())
   .then((data) => {
     topicsData = data;
