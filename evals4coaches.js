@@ -895,95 +895,142 @@ function showErrorsSection(perfectAreasList = []) {
 //
 
 function showFinalSection() {
-  let html = `
-    <div class="final-container">
-        `;
+  const VIDEOS = {
+    exit: {
+      kids: {
+        success: "VIDEO4EVALS/SUCCESFULLY EXIT E4KIDS.mp4",
+        pass: "VIDEO4EVALS/EXIT E4KIDS.mp4",
+      },
+      teens: {
+        success: "VIDEO4EVALS/SUCCESFUL EXIT E4TEENS.mp4",
+        pass: "VIDEO4EVALS/EXIT E4TEENS.mp4",
+      },
+      kidsMasters: "VIDEO4EVALS/EXIT KIDS MASTERS.mp4",
+      teensMasters: "VIDEO4EVALS/EXIT TEENS MASTERS.mp4",
+      mastersGeneric: "VIDEO4EVALS/EXIT MASTERS.mp4",
+    },
+    midterm: {
+      fail: "VIDEO4EVALS/THX FOR DOING BEST.mp4",
+      good: "VIDEO4EVALS/AMAZING JOB EVAL.mp4",
+      better: "VIDEO4EVALS/EVAL SUCCESFULLY COMPLETED.mp4",
+      excellent: "VIDEO4EVALS/EVAL EXCELENT PERFORMANCE.mp4",
+    },
+    nextLevel: {
+      pass: "VIDEO4EVALS/NEXT LEVEL.mp4",
+      fail: "VIDEO4EVALS/THX FOR DOING BEST.mp4",
+    },
+  };
 
-  // Resultado global
-  const totalScore = window.totalScore || 0;
-  const pass = totalScore > 7 ? "yes" : "no";
-  const selectedweek = window.selectedweek || 0;
-  const level = window.selectedlevel || 0;
+  // --- HTML container start ---
+  let html = `<div class="final-container">`;
 
-  // Determinar video y URL de Canva según syllabus
+  // Resultado global (aseguramos que selectedweek y level sean números)
+  const totalScore = Number(window.totalScore || 0);
+  const selectedweek = Number(window.selectedweek || 0);
+  const level = Number(window.selectedlevel || 0);
+
+  // Obtener syllabus (texto del dropdown)
   const syllabusDropdown = document.getElementById("syllabusDropdown");
-  const syllabus = syllabusDropdown.value;
+  const syllabus = syllabusDropdown ? syllabusDropdown.value || "" : "";
+
+  // Helpers para matching de syllabus (más robusto que equality)
+  const isJuniors = syllabus.toLowerCase().startsWith("juniors");
+  const isKids = syllabus.toLowerCase().includes("kids");
+  const isTeens = syllabus.toLowerCase().includes("teens");
+  const isMasters = syllabus.toLowerCase().includes("masters");
+  const isAdults = syllabus.toLowerCase().includes("adults");
+
+  // --- DEFINICIÓN DE BANDERAS ---
+  const isExit =
+    !isJuniors &&
+    (
+      (level === 10 && (selectedweek === 8 || selectedweek === 14)) ||
+      (level === 12 && selectedweek === 4) ||
+      (isMasters && level === 10 && selectedweek === 4)
+    );
+
+  const isMidterm =
+    !isExit &&
+    (
+      // Use includes / startsWith para tolerar ligeras variaciones en labels
+      (syllabus.toLowerCase().includes("juniors 5-7") && selectedweek === 4) ||
+      (syllabus.toLowerCase().includes("kids (intensivo)") && selectedweek === 7) ||
+      (syllabus.toLowerCase().includes("kids (super intensivo)") && selectedweek === 4) ||
+      (syllabus.toLowerCase().includes("teens 13-17") && syllabus.toLowerCase().includes("3") && selectedweek === 7) ||
+      (syllabus.toLowerCase().includes("teens 13-17") && syllabus.toLowerCase().includes("5") && selectedweek === 4)
+    );
+
+  const isNextLevel =
+    !isExit && !isMidterm &&
+    (
+      (level === 0 && (selectedweek === 4 || selectedweek === 6)) ||
+      ((isMasters || isAdults) && selectedweek === 4) ||
+      ((syllabus.toLowerCase().includes("kids (intensivo)") || (syllabus.toLowerCase().includes("teens 13-17") && syllabus.toLowerCase().includes("3"))) && selectedweek === 14) ||
+      ((syllabus.toLowerCase().includes("juniors 5-7") || syllabus.toLowerCase().includes("kids (super intensivo)") || (syllabus.toLowerCase().includes("teens 13-17") && syllabus.toLowerCase().includes("5"))) && selectedweek === 8)
+    );
+
+  // --- DETERMINAR VIDEO usando el mapa VIDEOS ---
   let canvavideo = "";
 
-  // WEEK 4 LOGIC
-  if (selectedweek === "4" || selectedweek === "7") {
-    if (totalScore < 7) {
-      canvavideo = "VIDEO4EVALS/THX FOR DOING BEST.mp4";
-    } else if (totalScore >= 7 && totalScore < 8) {
-      canvavideo = "VIDEO4EVALS/AMAZING JOB EVAL.mp4";
-    } else if (totalScore >= 8 && totalScore < 9) {
-      canvavideo = "VIDEO4EVALS/EVAL SUCCESFULLY COMPLETED.mp4";
-    } else if (totalScore >= 9) {
-      canvavideo = "VIDEO4EVALS/EVAL EXCELENT PERFORMANCE.mp4";
-    }
-  }
-
-  // WEEK 8 LOGIC
-  else if (selectedweek === "8" || selectedweek === "14" || selectedweek === "6") {
-    // EXIT level LOGIC by syllabus + level
-    if (level === 10) {
-      if (
-        syllabus === "Kids (Intensivo) 8-12" ||
-        syllabus === "Kids (Super Intensivo) 8-12"
-      ) {
-        canvavideo =
-          totalScore >= 9
-            ? "VIDEO4EVALS/SUCCESFULLY EXIT E4KIDS.mp4"
-            : "VIDEO4EVALS/EXIT E4KIDS.mp4";
-      } else if (
-        syllabus === "Kids Master's" ||
-        syllabus === "Kids Master's 2"
-      ) {
-        canvavideo = "VIDEO4EVALS/EXIT KIDS MASTERS.mp4";
-      } else if (
-        syllabus === "Teens 13-17 (3 horas/semana)" ||
-        syllabus === "Teens 13-17 (5 horas/semana)"
-      ) {
-        canvavideo =
-          totalScore >= 9
-            ? "VIDEO4EVALS/SUCCESFUL EXIT E4TEENS.mp4"
-            : "VIDEO4EVALS/EXIT E4TEENS.mp4";
-      } else if (
-        syllabus === "Teens Master's" ||
-        syllabus === "Teens Master's 2"
-      ) {
-        canvavideo = "VIDEO4EVALS/EXIT TEENS MASTERS.mp4";
+  if (isExit) {
+    // Masters tienen videos propios
+    if (isMasters) {
+      if (syllabus.toLowerCase().includes("kids")) {
+        canvavideo = VIDEOS.exit.kidsMasters;
+      } else if (syllabus.toLowerCase().includes("teens")) {
+        canvavideo = VIDEOS.exit.teensMasters;
       } else {
-        // Otros syllabus con week 8
-        canvavideo =
-          totalScore >= 7
-            ? "VIDEO4EVALS/NEXT LEVEL.mp4"
-            : "VIDEO4EVALS/THX FOR DOING BEST.mp4";
+        canvavideo = VIDEOS.exit.mastersGeneric;
       }
     } else {
-      // Not level 10
-      canvavideo =
-        totalScore >= 7
-          ? "VIDEO4EVALS/NEXT LEVEL.mp4"
-          : "VIDEO4EVALS/THX FOR DOING BEST.mp4";
+      // Kids / Teens non-Masters: tres outcomes (>=9 success, >=7 pass, <7 fail -> treated as pass video but could be distinct)
+      if (totalScore >= 9) {
+        if (isKids) canvavideo = VIDEOS.exit.kids.success;
+        else if (isTeens) canvavideo = VIDEOS.exit.teens.success;
+        else canvavideo = VIDEOS.exit.mastersGeneric;
+      } else if (totalScore >= 7) {
+        if (isKids) canvavideo = VIDEOS.exit.kids.pass;
+        else if (isTeens) canvavideo = VIDEOS.exit.teens.pass;
+        else canvavideo = VIDEOS.exit.mastersGeneric;
+      } else {
+        // No pasar -> usar el mismo "pass" exit o mastersGeneric según negocio
+        if (isKids) canvavideo = VIDEOS.exit.kids.pass;
+        else if (isTeens) canvavideo = VIDEOS.exit.teens.pass;
+        else canvavideo = VIDEOS.exit.mastersGeneric;
+      }
     }
+  } else if (isMidterm) {
+    // Midterm: 4 outcomes
+    if (totalScore < 7) canvavideo = VIDEOS.midterm.fail;
+    else if (totalScore < 8) canvavideo = VIDEOS.midterm.good;
+    else if (totalScore < 9) canvavideo = VIDEOS.midterm.better;
+    else canvavideo = VIDEOS.midterm.excellent;
+  } else if (isNextLevel) {
+    canvavideo = totalScore >= 7 ? VIDEOS.nextLevel.pass : VIDEOS.nextLevel.fail;
+  } else {
+    // Fallback: si no cae en ninguna bandera, elegimos NextLevel logic por seguridad
+    canvavideo = totalScore >= 7 ? VIDEOS.nextLevel.pass : VIDEOS.nextLevel.fail;
   }
 
+  // --- INSERTAR HTML DEL VIDEO ---
   html += `
-     <video width="100%" autoplay>
-            <source src="${canvavideo}" type="video/mp4" />
-    `;
+    <video width="100%" autoplay >
+      <source src="${canvavideo}" type="video/mp4" />
+      Your browser doesn't support video feature.
+    </video>
+  </div>`;
 
-  html += `</div>            `; // close feedback-container
-  popup.querySelector("#popupContent").innerHTML = html;
-  closeBtn.style.display = "inline-block";
+  // Render
+  const popupContent = popup && popup.querySelector ? popup.querySelector("#popupContent") : null;
+  if (popupContent) popupContent.innerHTML = html;
+  if (typeof closeBtn !== "undefined" && closeBtn) closeBtn.style.display = "inline-block";
 
   // Botón back
   const backButton = document.createElement("button");
   backButton.id = "nextBtn";
   backButton.innerText = "Back: See feedback";
   backButton.addEventListener("click", () => showErrorsSection());
-  popup.querySelector("#popupContent").appendChild(backButton);
+  if (popupContent) popupContent.appendChild(backButton);
 
   // Botón copy results
   const copybutton = document.createElement("button");
@@ -991,7 +1038,7 @@ function showFinalSection() {
   copybutton.innerText = "Next: Copy Results (COACH ONLY)";
   copybutton.classList.add("copybutton");
   copybutton.addEventListener("click", () => copyResults());
-  popup.querySelector("#popupContent").appendChild(copybutton);
+  if (popupContent) popupContent.appendChild(copybutton);
 }
 
 //
