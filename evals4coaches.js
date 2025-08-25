@@ -2,9 +2,8 @@
   const version = "Coaches";
   const versionnum = "1.0.2";
   //UPDATE for video showing
-  
-  const jsonVersion = 1.3;
-
+    const jsonVersion = 1.3;
+  window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
   showversion.innerHTML = `${version} ${versionnum} - JSON ${jsonVersion}`
 })();
@@ -1033,13 +1032,28 @@ function showFinalSection() {
   backButton.addEventListener("click", () => showErrorsSection());
   if (popupContent) popupContent.appendChild(backButton);
 
-  // Botón copy results
-  const copybutton = document.createElement("button");
-  copybutton.id = "copyResults";
+// Definir currentVersion a partir del global
+const currentVersion = window.appVersion || "Coaches"; 
+
+// Botón copy results
+const copybutton = document.createElement("button");
+copybutton.id = "copyResults";
+copybutton.classList.add("copybutton");
+
+// Texto dinámico según versión
+if (currentVersion === "Coaches") {
   copybutton.innerText = "Next: Copy Results (COACH ONLY)";
-  copybutton.classList.add("copybutton");
   copybutton.addEventListener("click", () => copyResults());
-  if (popupContent) popupContent.appendChild(copybutton);
+} else if (currentVersion === "Evaluators") {
+  copybutton.innerText = "Next: Copy Results (EVALUATORS ONLY)";
+  copybutton.addEventListener("click", () => {
+    evaluatorsCopyResults();
+  });
+}
+
+// Insertar el botón en el DOM
+if (popupContent) popupContent.appendChild(copybutton);
+
 }
 
 //
