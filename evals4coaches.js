@@ -1,7 +1,8 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.0.1";
-  //added versions show and prepare for evaluators version
+  const versionnum = "1.0.2";
+  //UPDATE for video showing
+  
   const jsonVersion = 1.3;
 
   const showversion = document.getElementById("version");
