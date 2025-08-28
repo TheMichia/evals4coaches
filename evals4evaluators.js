@@ -1173,9 +1173,9 @@ mejorar nuestro servicio en el siguiente enlace: <a href="${surveyLinkFinal}" ta
   // ---------- copy to clipboard ----------
   navigator.clipboard
     .writeText(reportHTML)
-    .then(() => alert("✅ The Results have been copied to your clipboard! ✅"))
+    .then(() => showPopup("✅ The Results have been copied to your clipboard! ✅"))
     .catch(() =>
-      alert(
+      showPopup(
         "❌ No se pudo copiar automáticamente. Por favor copia manualmente o recarga la página.",
       ),
     );
