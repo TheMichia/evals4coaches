@@ -634,7 +634,7 @@ syllabusE4E.addEventListener("change", () => {
 function absentsE4E() {
   const syllabus = syllabusE4E.value || "";
   if (!syllabus) {
-    showPopup("Please select a valid syllabus first.");
+    showPopup("<h3>😓 Oops...</h3><p>Please select a valid syllabus first.</p>");
     absentBtn.disabled = true;
     return;
   }
@@ -669,7 +669,7 @@ Estimado padre/madre de familia,<br><br>Le informamos que su hijo/a <b>no asisti
   document.execCommand("copy");
   document.body.removeChild(tempEl);
 
-  showPopup(`Report for <b>${syllabus}</b> successfully copied ✅`);
+  showPopup(`<h3>🎉 Success!</h3><p>Absent-Report for <b>${syllabus}</b> successfully copied ✅</p>`);
 }
 
 //
@@ -1187,7 +1187,7 @@ mejorar nuestro servicio en el siguiente enlace: <a href="${surveyLinkFinal}" ta
 //new
 async  function evaluatorsReloadPage() {
   const proceed = await confirmPopup(
-    "The evaluation data will be reset. Are you sure you want to start a new evaluation?",
+    "<h3>Start again? 🤔</h3><p>We’ll reset everything so you can begin a fresh evaluation.</p><p><b>Are you sure you want to restart? 👀</b></p>",
   );
 
   if (proceed) {
