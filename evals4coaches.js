@@ -1274,51 +1274,6 @@ document.getElementById("closePopup").addEventListener("click", () => {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-function reloadPage() {
-  const proceed = confirm(
-    "The data will be reset. Are you sure you want to restart?",
-  );
-
-  if (proceed) {
-    // Refrescar topics como si el usuario hubiera cambiado la semana
-    if (weeksDropdown) {
-      weeksDropdown.dispatchEvent(new Event("change"));
-    }
-
-    // Resetear todos los selects a 2.0
-    const selects = document.querySelectorAll("#gr, #pr, #in, #fl, #co");
-    selects.forEach((select) => {
-      select.value = "2.0";
-    });
-
-    // Vaciar todos los textareas
-    const textareas = document.querySelectorAll("textarea");
-    textareas.forEach((textarea) => {
-      textarea.value = "";
-    });
-
-    // Resetear el total
-    if (typeof updateTotalScore === "function") {
-      updateTotalScore();
-    }
-    //back to main content
-    popup.classList.add("hidden");
-    mainContent.style.display = "block";
-
-    // Scroll to first topic
-
-    const topicsSection = document.getElementById("topicsList");
-    if (topicsSection) {
-      topicsSection.scrollIntoView({ behavior: "smooth" });
-    }
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-}
-
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
-
 let timerInterval; // global
 
 function startTimer(durationSeconds) {
@@ -1433,6 +1388,119 @@ function showPopup(message) {
     // pero dejamos la restauración clara en caso de futuras modificaciones
   });
 }
+
+//
+//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
+//
+
+// popup con confirmación
+function confirmPopup(message) {
+  // Si ya hay un popup, elimínalo (evita choques)
+  const existing = document.querySelector(".popup-overlay");
+  if (existing) {
+    existing.parentNode.removeChild(existing);
+  }
+
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    overlay.className = "popup-overlay";
+
+    const box = document.createElement("div");
+    box.className = "popup-box";
+    box.innerHTML = `
+      ${message}
+      <div class="popup-actions">
+        <button id="popupYesBtn">Yes</button>
+        <button id="popupNoBtn">No</button>
+      </div>
+    `;
+
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    const yesBtn = document.getElementById("popupYesBtn");
+    const noBtn = document.getElementById("popupNoBtn");
+
+    const cleanup = () => {
+      if (overlay.parentNode) document.body.removeChild(overlay);
+      document.body.style.overflow = ""; // restore scroll
+    };
+
+    yesBtn.addEventListener(
+      "click",
+      () => {
+        cleanup();
+        resolve(true); // ✅ confirmar
+      },
+      { once: true }
+    );
+
+    noBtn.addEventListener(
+      "click",
+      () => {
+        cleanup();
+        resolve(false); // ❌ cancelar
+      },
+      { once: true }
+    );
+
+    // cerrar si hacen click fuera del box
+    overlay.addEventListener(
+      "click",
+      (ev) => {
+        if (ev.target === overlay) {
+          cleanup();
+          resolve(false);
+        }
+      },
+      { once: true }
+    );
+
+    // bloquear scroll detrás
+    document.body.style.overflow = "hidden";
+  });
+}
+
+
+
+//
+//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
+//
+
+async function reloadPage() {
+  const proceed = await confirmPopup(
+    "<h3>Starting Again</h3> <p>The data will be reset. Are you sure you want to restart?<p>"
+  );
+
+  if (proceed) {
+    if (weeksDropdown) {
+      weeksDropdown.dispatchEvent(new Event("change"));
+    }
+
+    document.querySelectorAll("#gr, #pr, #in, #fl, #co").forEach((select) => {
+      select.value = "2.0";
+    });
+
+    document.querySelectorAll("textarea").forEach((textarea) => {
+      textarea.value = "";
+    });
+
+    if (typeof updateTotalScore === "function") {
+      updateTotalScore();
+    }
+
+    // Volver al contenido principal
+    popup.classList.add("hidden");
+    mainContent.style.display = "block";
+
+    const topicsSection = document.getElementById("topicsList");
+    if (topicsSection) {
+      topicsSection.scrollIntoView({ behavior: "smooth" });
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
