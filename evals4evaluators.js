@@ -1,7 +1,7 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "1.0.0";
-  const E4EjsonVersion = 1;
+  const versionnum = "1.0.1";
+  const E4EjsonVersion = 1.0;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
   showversion.innerHTML = `${version} ${versionnum} - JSON ${E4EjsonVersion}`;
@@ -898,10 +898,22 @@ function evaluatorsCopyResults() {
     finalScoreText || (Number.isFinite(totalScore) ? String(totalScore) : "");
 
   // ---------- condicionado logic ----------
+  // const isCondicionado =
+  //   (isExit &&
+  //     finalDisplay !== "" &&
+  //     Math.abs(Number(finalDisplay) - 7) < 1e-6) ||
+  //   (!isExit &&
+  //     Number.isFinite(totalScore) &&
+  //     Math.abs(Number(totalScore) - 7) < 1e-6);
+    console.log('DEBUG isExit, finalDisplay, totalScore:', isExit, finalDisplay, totalScore);
+
+  // ---------- condicionado logic 2.0----------
   const isCondicionado =
     (isExit &&
-      finalDisplay !== "" &&
-      Math.abs(Number(finalDisplay) - 7) < 1e-6) ||
+      ( (finalDisplay !== "" && Math.abs(Number(finalDisplay) - 7) < 1e-6) ||
+        (Number.isFinite(totalScore) && Math.abs(Number(totalScore) - 7) < 1e-6)
+      )
+    ) ||
     (!isExit &&
       Number.isFinite(totalScore) &&
       Math.abs(Number(totalScore) - 7) < 1e-6);
