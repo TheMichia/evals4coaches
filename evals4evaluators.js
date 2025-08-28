@@ -1173,10 +1173,9 @@ mejorar nuestro servicio en el siguiente enlace: <a href="${surveyLinkFinal}" ta
   // ---------- copy to clipboard ----------
   navigator.clipboard
     .writeText(reportHTML)
-    .then(() => showPopup("✅ The Results have been copied to your clipboard! ✅"))
+    .then(() => showPopup("<h3>🎉 Success!</h3><p>✅ The Results have been copied to your clipboard!📝 </p>"))
     .catch(() =>
-      showPopup(
-        "❌ No se pudo copiar automáticamente. Por favor copia manualmente o recarga la página.",
+      showPopup("<h3>😓 Oops...</h3><p>❌ The results couldn't be copied, please try again or contact Michelle Hernández via Teams.</p>",
       ),
     );
 }
