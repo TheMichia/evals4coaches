@@ -1,7 +1,8 @@
 (() => {
   const version = "Evaluators";
   const versionnum = "1.0.1";
-  const E4EjsonVersion = 1.0;
+  //updated for showpopup and confirmpopup 
+  const E4EjsonVersion = 1;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
   showversion.innerHTML = `${version} ${versionnum} - JSON ${E4EjsonVersion}`;
@@ -676,31 +677,6 @@ Estimado padre/madre de familia,<br><br>Le informamos que su hijo/a <b>no asisti
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-function showPopup(message) {
-  const overlay = document.createElement("div");
-  overlay.className = "popup-overlay";
-
-  const box = document.createElement("div");
-  box.className = "popup-box";
-  box.innerHTML = `
-    <h3>Absent-Report</h3>
-    <p>${message}</p>
-    <button id="popupOkBtn">Okay</button>
-  `;
-
-  overlay.appendChild(box);
-  document.body.appendChild(overlay);
-
-  document.getElementById("popupOkBtn").addEventListener("click", () => {
-    document.body.removeChild(overlay);
-  });
-}
-
-//
-
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
-
 function evaluatorsCopyResults() {
   // ---------- helpers ----------
   const safe = (s) =>
@@ -897,17 +873,9 @@ function evaluatorsCopyResults() {
   const finalDisplay =
     finalScoreText || (Number.isFinite(totalScore) ? String(totalScore) : "");
 
-  // ---------- condicionado logic ----------
-  // const isCondicionado =
-  //   (isExit &&
-  //     finalDisplay !== "" &&
-  //     Math.abs(Number(finalDisplay) - 7) < 1e-6) ||
-  //   (!isExit &&
-  //     Number.isFinite(totalScore) &&
-  //     Math.abs(Number(totalScore) - 7) < 1e-6);
-    console.log('DEBUG isExit, finalDisplay, totalScore:', isExit, finalDisplay, totalScore);
+  console.log('DEBUG isExit, finalDisplay, totalScore:', isExit, finalDisplay, totalScore);
 
-  // ---------- condicionado logic 2.0----------
+  // ---------- condicionado logic ----------
   const isCondicionado =
     (isExit &&
       ( (finalDisplay !== "" && Math.abs(Number(finalDisplay) - 7) < 1e-6) ||
@@ -917,6 +885,7 @@ function evaluatorsCopyResults() {
     (!isExit &&
       Number.isFinite(totalScore) &&
       Math.abs(Number(totalScore) - 7) < 1e-6);
+
 
   const condicionadoText = `<b>Condicionado/a:</b> el estudiante pasa de nivel de manera condicionada, esto significa que debe practicar lo mencionado arriba para poder estar al día con sus compañeros del siguiente nivel. Por favor, lea cuidadosamente las recomendaciones.<br><br>
 <b>Recomendaciones:</b><br><br>
@@ -1084,7 +1053,7 @@ hr>`;
       levelVal === 10 &&
       weekVal === 8
     ) {
-      // 👇 Nuevo fix: aprobar/reprobar según el score real
+      // Nuevo fix: aprobar/reprobar según el score real
       headerHTML =
         Number.isFinite(totalScore) && totalScore >= 7
           ? header_pass_juniors
@@ -1092,7 +1061,7 @@ hr>`;
     } else {
       headerHTML = passedExit
         ? `<p>&#127881; ¡Felicidades!</p>`
-        : `<p>Resultado reprobatorio</p>`;
+        : `<p></p>`;
     }
   } else {
     headerHTML =
@@ -1239,7 +1208,6 @@ async  function evaluatorsReloadPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 }
-
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
