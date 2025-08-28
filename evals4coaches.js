@@ -1469,7 +1469,7 @@ function confirmPopup(message) {
 
 async function reloadPage() {
   const proceed = await confirmPopup(
-    "<h3>Starting Again</h3> <p>The data will be reset. Are you sure you want to restart?<p>"
+    "<h3>Start again? 🤔</h3><p>We’ll reset everything so you can begin a fresh evaluation.</p><p><b>Are you sure you want to restart? 👀</b></p>"
   );
 
   if (proceed) {
