@@ -1,0 +1,139 @@
+{
+  "evaluators": {
+    "Alisson Juliana Cortes Pinzon": ["1851"],
+    "Brenda Adriana Fuentes": ["1938"],
+    "Elizabeth Albarran Santos": ["2518"],
+    "Evelyn Araceli Guevara Saravia": ["1197"],
+    "Fatima Tatiana Ortega Berrios": ["10783"],
+    "Gema Isabel Obando Barrientos": ["11225"],
+    "Karen Isabel Escobar Alvarado": ["1029"],
+    "Kate Alexandra Martinez Cruz": ["10842"],
+    "Katherine Bolivar Borda": ["2275"],
+    "Laura Camila Franco Lechuga": ["10649"],
+    "Maria Jose Vasquez Rodriguez": ["17149"],
+    "Rosa Guadalupe Custodio Palma": ["1178"],
+    "Sixto Eduardo Jimenez Moran": ["10704"],
+    "Susana Carbonell Rabago": ["2076"],
+    "Valery Cruz Roa": ["1705"],
+    "Vanessa Aneth Tobar Asencio": ["942"],
+    "Yanira Elizabeth Castillo Hernandez": ["1059"]
+  },
+  "commentsPerArea": {
+    "Fluidez": {
+      "Juniors": {
+        "El estudiante aún hace pausas largas mientras habla, lo que afecta su confianza": [
+          "El estudiante aún hace pausas largas mientras habla, lo que afecta su confianza. En casa pueden jugar a repetir frases simples como “This is color blue” o “I wake up at 6 o’clock” muchas veces, usando objetos o dibujos para estimular una respuesta más fluida y automática."
+        ],
+        "El estudiante reconoce bien el vocabulario, pero aún responde con palabras sueltas en lugar de usar frases completas": [
+          "El estudiante reconoce bien el vocabulario, pero aún responde con palabras sueltas como “apple” o “5 a.m.” en lugar de usar frases completas. En casa pueden apoyarlo jugando a describir su contexto diario con frases como “This is a red apple” o “I take a shower at 5 a.m.” para fomentar que forme ideas completas de forma natural."
+        ],
+        "El estudiante comprende lo que quiere decir, pero le cuesta unir las palabras en una idea completa": [
+          "El estudiante comprende lo que quiere decir, pero le cuesta unir las palabras en una idea completa. Cantar canciones simples en inglés o decir rimas puede ayudarle a mejorar su ritmo y conectividad al hablar."
+        ]
+      },
+      "Kids": {
+        "El estudiante entiende lo que quiere decir, pero hace pausas largas o traduce mentalmente antes de hablar": [
+          "El estudiante entiende lo que quiere decir, pero hace pausas largas o traduce mentalmente antes de hablar. Puede mejorar practicando repeticiones rápidas de frases conocidas, por ejemplo, describiendo objetos de la casa en inglés o hablando de rutinas sin detenerse."
+        ],
+        "El estudiante tiene buen vocabulario, pero responde con palabras sueltas": [
+          "El estudiante tiene buen vocabulario, pero responde con palabras sueltas. En casa pueden apoyarlo con juegos de descripción: elegir un objeto y hablar en oraciones como “This is a big ball” o “I like apples”, reforzando que siempre use frases completas."
+        ],
+        "El estudiante ya logra formar frases, pero aún no conecta sus ideas de manera continua": [
+          "El estudiante ya logra formar frases, pero aún no conecta sus ideas de manera continua. Pueden reforzarlo practicando pequeños relatos de su rutina usando conectores como “and”, “also” o “besides that”. Por ejemplo: “I wake up, and I eat breakfast. Also, I play with my dog.”"
+        ]
+      },
+      "Teens": {
+        "El estudiante organiza sus ideas en inglés, pero hace pausas largas o traduce mentalmente antes de hablar": [
+          "El estudiante organiza sus ideas en inglés, pero hace pausas largas o traduce mentalmente antes de hablar. Puede mejorar practicando conversaciones espontáneas sobre temas de su interés, sin detenerse a corregir cada detalle."
+        ],
+        "El estudiante tiene vocabulario suficiente, pero responde con palabras sueltas en lugar de oraciones completas": [
+          "El estudiante tiene vocabulario suficiente, pero responde con palabras sueltas en lugar de oraciones completas. En casa puede reforzarlo con actividades de descripción: hablar de una foto o una rutina usando frases completas como “I get up at 7 and then I go to school”."
+        ],
+        "El estudiante logra expresar frases simples, pero aún le cuesta enlazar sus ideas de forma continua": [
+          "El estudiante logra expresar frases simples, pero aún le cuesta enlazar sus ideas de forma continua. Puede avanzar practicando pequeños relatos o experiencias usando conectores básicos como and, also, besides that. Ejemplo: “I like soccer, and I also play basketball”."
+        ]
+      },
+      "Adults": {
+        "El estudiante entiende lo que quiere decir, pero hace pausas largas o traduce mentalmente antes de hablar": [
+          "El estudiante entiende lo que quiere decir, pero hace pausas largas o traduce mentalmente antes de hablar. Puede mejorar practicando conversaciones cortas y espontáneas sobre su rutina o trabajo, enfocándose en hablar sin detenerse demasiado en la corrección."
+        ],
+        "El estudiante maneja buen vocabulario, pero en ocasiones responde con palabras aisladas en lugar de frases completas": [
+          "El estudiante maneja buen vocabulario, pero en ocasiones responde con palabras aisladas en lugar de frases completas. Puede reforzarlo describiendo objetos o experiencias en oraciones sencillas, por ejemplo: “This is my office. I work here every day”."
+        ],
+        "El estudiante logra expresar frases simples, pero aún le cuesta enlazar ideas para mantener un discurso más continuo": [
+          "El estudiante logra expresar frases simples, pero aún le cuesta enlazar ideas para mantener un discurso más continuo. Puede avanzar practicando relatos de experiencias usando conectores como and, also, besides that. Por ejemplo: “I like music, and I also play guitar. Besides that, I enjoy singing”."
+        ]
+      },
+      "Masters": {
+        "El ritmo del estudiante se expresa lento y le falta proporcionar detalles en sus ideas": [
+          " el ritmo del estudiante se expresa lento y le falta proporcionar detalles en sus ideas. Para mejorar la fluidez, intenta acelerar el ritmo cuando hablas y agrega más detalles en tus respuestas. Un buen ejercicio es describir tu día o contar una historia en voz alta sin pausar mucho. También puedes practicar con un cronómetro: elige un tema y habla de él durante 1 minuto sin parar. ¡Sigue practicando y verás grandes avances!"
+        ]
+      }
+    },
+    "Entonación": {
+      "Juniors": {
+        "El estudiante entiende enunciados, pero todavía habla en un tono plano afectando la naturalidad del discurso": [
+          "El estudiante entiende enunciados, pero todavía habla en un tono plano afectando la naturalidad del discurso. En casa pueden practicar diciendo frases cotidianas como “I like apples” o “I go to school every day” donde involucre pausas, subidas y bajadas de tono para sonar fluido y comprensible."
+        ],
+        "El estudiante puede decir frases completas, pero aún no destaca las palabras más importantes, lo que hace que su mensaje suene uniforme y poco claro": [
+          "El estudiante puede decir frases completas, pero aún no destaca las palabras más importantes, lo que hace que su mensaje suene uniforme y poco claro. En casa pueden ver videos cortos en inglés para niños y repetir frases remarcando las palabras clave como “apple”, “school” o “dog”. Esto ayudará a que su mensaje se entienda mejor."
+        ],
+        "El estudiante comprende bien lo que quiere decir, pero su tono no siempre refleja si está compartiendo algo emocionante, importante o cotidiano": [
+          "El estudiante comprende bien lo que quiere decir, pero su tono no siempre refleja si está compartiendo algo emocionante, importante o cotidiano. En casa pueden repetir frases con distintas intenciones (por ejemplo, una noticia feliz, una queja o una sorpresa) para ayudarle a usar su voz con más intención."
+        ]
+      },
+      "Kids": {
+        "El estudiante puede decir frases claras, pero aún mantiene un tono plano que hace que suene poco natural": [
+          "El estudiante puede decir frases claras, pero aún mantiene un tono plano que hace que suene poco natural. En casa pueden leer frases cortas de cuentos en voz alta, marcando con la voz las subidas y bajadas para darle más ritmo y musicalidad."
+        ],
+        "El estudiante no resalta las palabras clave dentro de la frase": [
+          "El estudiante no resalta las palabras clave dentro de la frase. Puede reforzarlo escuchando videos en inglés para niños y repitiendo frases destacando las palabras importantes, por ejemplo: “I LIKE pizza” o “This is MY house”."
+        ],
+        "El tono del estudiante no refleja siempre la intención (sorpresa, alegría, enfado)": [
+          "El tono del estudiante no refleja siempre la intención (sorpresa, alegría, enfado). Pueden apoyarlo con juegos de actuación donde repita frases con diferentes emociones."
+        ]
+      },
+      "Teens": {
+        "El estudiante se expresa en inglés, pero mantiene un tono plano que hace que suene poco natural": [
+          "El estudiante se expresa en inglés, pero mantiene un tono plano que hace que suene poco natural. Puede mejorar escuchando y repitiendo diálogos de series o videos cortos, marcando las subidas y bajadas de la voz para darle más ritmo a sus frases."
+        ],
+        "El estudiante logra producir frases, aunque a veces sin resaltar las palabras más importantes": [
+          "El estudiante logra producir frases, aunque a veces sin resaltar las palabras más importantes, lo que dificulta la comprensión. En casa puede practicar con lecturas en voz alta, remarcando palabras clave en frases como “I LIKE music” o “This is MY favorite book”."
+        ],
+        "El estudiante entiende el contenido, pero su tono no siempre refleja la intención (entusiasmo, duda, sorpresa)": [
+          "El estudiante entiende el contenido, pero su tono no siempre refleja la intención (entusiasmo, duda, sorpresa). Puede reforzarlo practicando frases con distintas emociones o imitando diálogos de películas para que su voz muestre mejor la intención del mensaje."
+        ]
+      },
+      "Adults": {
+        "El estudiante organiza bien sus frases, pero su tono de voz no cambia mucho, lo que hace que suene poco natural": [
+          "El estudiante organiza bien sus frases, pero su tono de voz no cambia mucho, lo que hace que suene poco natural. Puede mejorar grabándose mientras lee en voz alta y viendo videos de angloparlantes e imitándoles, enfocándose en las subidas y bajadas de tono que dan más ritmo al discurso."
+        ],
+        "El estudiante logra expresarse, aunque no siempre resalta las palabras importantes dentro de la frase": [
+          "El estudiante logra expresarse, aunque no siempre resalta las palabras importantes dentro de la frase, lo que puede dificultar la comprensión. Puede reforzarlo practicando discursos breves o lecturas en voz alta, destacando con la voz palabras clave como “important”, “like” o “because”."
+        ],
+        "El estudiante transmite sus ideas, pero su tono no siempre refleja la intención (afirmación, entusiasmo, sorpresa)": [
+          "El estudiante transmite sus ideas, pero su tono no siempre refleja la intención (afirmación, entusiasmo, sorpresa). Puede mejorar imitando entrevistas o escenas de películas, practicando cómo cambia la entonación según la emoción o el contexto."
+        ]
+      },
+      "Masters": {
+        "Debe mejorar su entonación para sonar más natural": [
+          "debes mejorar tu entonación para sonar más natural, un buen ejercicio es repetir frases de tus personajes o series favoritas en inglés imitando su tono y ritmo. También puedes practicar leyendo en voz alta, haciendo que tu voz suba y baje según la emoción del texto."
+        ]
+      }
+    },
+    "Preparación": {
+      "Se preparó bien y logró integrar la mitad o más de los temas": [
+        "<b>Preparación para la exposición: Se preparó bien y logró integrar la mitad o más de los temas</b><br>¡Excelente trabajo! Lograste integrar varios temas gramaticales en tu exposición de manera clara y organizada. Tu uso de los tiempos verbales fue acertado, y tu fluidez ha mejorado mucho. Sigue practicando para perfeccionar tu entonación y confianza al hablar. ¡Sigue así, vas por muy buen camino!"
+      ],
+      "Se preparó, pero pudo hacerlo mejor": [
+        "<b>Preparación para la exposición: Se preparó, pero pudo hacerlo mejor</b><br>Hubo preparación de parte del estudiante, pero podría haber sido más claro y organizado en su exposición. Intenta practicar más con ejemplos y conectar mejor los temas. Puedes hacer una lista de frases clave para cada estructura gramatical y repasarlas en voz alta antes de hablar. ¡Sigue practicando, estás mejorando!"
+      ],
+      "No se preparó": [
+        "<b>Preparación para la exposición: No se preparó</b><br>Recuerda que la práctica es clave para mejorar tu inglés. Para la próxima, intenta revisar cada tema con anticipación y practicar hablando en voz alta. Puedes hacer resúmenes o responder preguntas sobre cada tema para sentirte más seguro. ¡Anímate a prepararte mejor la próxima vez!"
+      ]
+    },
+    "Condicionado": [
+      "<b>Condicionado/a:</b> el estudiante pasa de nivel de manera condicionada, esto significa que debe practicar lo mencionado arriba para poder estar al día con sus compañeros del siguiente nivel. Por favor, lea cuidadosamente las recomendaciones. <b>Recomendaciones:</b> <li>Escuchar música en inglés y ver videos o películas en inglés.<li>Revisar el contenido disponible en nuestra plataforma de práctica y completar todas las actividades.<li>Repetir las oraciones del día al menos 20 veces antes o después de clase.<li>Enlace para acceder a la plataforma: https://english4kids.pathwright.com</li>"
+    ]
+  }
+}

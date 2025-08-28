@@ -1,0 +1,394 @@
+:root {
+    --naranja: 236, 102, 25;
+    /* #EC6619 */
+    --verde: 148, 193, 33;
+    /* #94C121 */
+    --naranja-claro: 240, 140, 40;
+    /* #F08C28 */
+    --rojo: 235, 89, 85;
+    /* #EB5955 */
+    --turquesa: 28, 165, 171;
+    /* #1CA5AB */
+    --turquesahex: #1CA5AB;
+    --turquesa-oscuro: #25888d;
+}
+
+/*========================MODAL EVALUATORS========================*/
+/* MAIN MODAL */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgb(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    padding: 16px;
+}
+
+/* MODAL BOX */
+.modal-box {
+    width: 60dvh;
+    max-width: 86%;
+    background: #fff;
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .35);
+    font-family: inherit;
+    color: #113d40;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.modal-title {
+    margin: 12px 6px 30px;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #15797e;
+    font-family: "Oswald";
+    text-align: center
+}
+
+.modal-desc {
+    margin: 0 6px 12px;
+    color: #32656c;
+    font-size: 0.95rem;
+}
+
+/* CONTAINER OR DROPWODN */
+.modal-grid {
+    display: grid;
+    gap: 10px;
+}
+
+.modal-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.modal-col {
+    flex: 1;
+}
+
+.modal-select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #aac8ca;
+    background: #fff;
+    appearance: menulist;
+    font-size: 1rem;
+}
+
+/* CONTAINER BUTTONS */
+.modal-btns {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.btn {
+    padding: 8px 12px;
+    border-radius: 15px;
+    border: 0;
+    cursor: pointer;
+    font-weight: 600;
+    width: 90%;
+    font-size: 1.35rem;
+}
+
+.btn-confirm {
+    background: rgb(var(--turquesa));
+    color: #fff;
+}
+
+/* focus accesible */
+.modal-select:focus,
+.btn:focus {
+    outline: 3px solid rgba(11, 116, 222, 0.15);
+    outline-offset: 2px;
+}
+
+/* responsive tweaks */
+@media (max-width: 460px) {
+    .modal-box {
+        padding: 14px;
+    }
+
+    .modal-title {
+        font-size: 1rem;
+    }
+
+    .modal-desc {
+        font-size: .9rem;
+    }
+}
+
+/*========================EVALUATORS SECTION========================*/
+.evaluatorsdropdowns {
+    display: flex;
+    gap: 5px;
+    padding: 1px;
+    margin: 0;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    min-width: 600px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.7);
+
+}
+
+/* "EVALUATOR" TEXT */
+.evaluatorsdropdowns h2 {
+    font-family: "Oswald";
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: var(--turquesa-oscuro);
+    margin: 0;
+}
+
+/* "id" TEXT */
+.evaluatorsdropdowns h3 {
+    font-family: "Oswald";
+    font-weight: 500;
+    font-size: 1.3rem;
+    color: var(--turquesa-oscuro);
+}
+
+/* ACTUAL EVALUATOR DROPDOWN */
+#evaluatorsDropdown {
+    width: auto;
+    min-width: 200px;
+    border: none;
+    border-radius: 10px;
+    font-family: "Montserrat";
+    font-weight: 600;
+    font-size: 1.2rem;
+    background-color: transparent;
+    color: #25888d;
+    text-align: left;
+    padding: 5px 5px 5px 5px;
+}
+
+/*========================EXTRA EVAL AREAS========================*/
+
+.additionalComment {
+    font-family: "Montserrat";
+    color: rgb(var(--turquesa));
+    font-weight: 700;
+    text-align: left;
+    background-color: rgb(var(--turquesa), 0.07);
+    width: 100%;
+}
+
+/* skill test and final score table */
+#exitEvalTable {
+    table-layout: fixed;
+    padding: 0;
+    margin: -20px 0 60px 0;
+    width: 100%;
+}
+
+/* title of table */
+.exitevaltitle {
+    font-family: "Oswald";
+    color: var(--turquesa-oscuro);
+    font-weight: 700;
+    text-align: center;
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 10px 0;
+    background-color: rgb(var(--turquesa), 0.04);
+}
+
+
+/* skill test <td> */
+.skilltesttd {
+    padding: 6px 10px;
+    vertical-align: middle;
+    background-color: rgb(var(--turquesa), 0.04);
+}
+
+.skilltest-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 0 0 10px;
+}
+
+.skilltest-wrapper label {
+    font-family: "Montserrat";
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--turquesa-oscuro);
+}
+
+.skilltest-input {
+    width: 40%;
+    text-align: center;
+    font-family: "Montserrat";
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--turquesa-oscuro);
+    padding: 2px 4px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px dotted var(--turquesahex);
+}
+
+
+
+/* Quitar flechas en Chrome, Edge, Safari */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Quitar flechas en Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+input:active,
+input:focus {
+    outline: none;
+}
+
+textarea:active,
+textarea:focus {
+    outline: 1px solid var(--turquesahex);
+    ;
+}
+
+
+/* score final */
+.finalscore {
+    font-family: "Oswald";
+    /* color: var(--turquesa-oscuro); */
+    color: var(--turquesa-oscuro);
+    font-weight: 700;
+    text-align: center;
+    width: 100%;
+    font-size: 1.35rem;
+    padding: 0;
+    margin: 5px 0 -5px;
+}
+
+.arrow {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-left: 20px;
+}
+
+.extraarea select {
+    width: 100%;
+    text-align: left;
+}
+
+
+#absentBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.extra-info {
+    margin: -40px 0 40px 0;
+    padding: 0;
+}
+
+.extra-info h3 {
+    text-align: center;
+    font-size: 0.95rem;
+    font-family: Montserrat;
+    color: #1CA5AB;
+}
+
+/*======================== INFO POPUP ========================*/
+/* --- estilo del popup --- */
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.popup-box {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 320px;
+    box-shadow: 0 4px 15px rgb(14, 51, 67, 0.2);
+    font-family: sans-serif;
+}
+
+.popup-box h3 {
+    margin: 0 0 25px;
+    font-size: 1.5rem;
+    color: #1EAEAE;
+    text-align: center;
+}
+
+.popup-box p {
+    font-size: 0.95rem;
+    color: #0f3939;
+    text-align: center;
+}
+
+.popup-box button {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 10px;
+    background: #1EAEAE;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2rem;
+    width: 80%;
+}
+
+.popup-box button:hover {
+    background: #21C0C0;
+}
+
+
+/*========================  ========================*/
+
+#backFromCopy {
+    width: 50%;
+    background-color: #2e9da3;
+    color: white;
+    min-width: 80px;
+    height: 3rem;
+}
+
+.preview-wrapper, .preview-wrapper p{
+    color: black;
+    font-weight: 500;
+}
+
+
+
+/*========================  ========================*/
+
+
+/*========================  ========================*/
+
+
+/*========================  ========================*/
+
+
+/*========================  ========================*/
+
+
+/*========================  ========================*/
