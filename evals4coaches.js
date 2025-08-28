@@ -13,6 +13,7 @@
 //
 
 
+
 let topicsData = {};
 // estado global para los temas
 const topicsStatus = {};
@@ -26,6 +27,7 @@ const topicsList = document.getElementById("topicsList");
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
+
 
 
 fetch("topics.json?v=${jsonVersion}")
@@ -669,15 +671,18 @@ function copyAbsentResults() {
     </section>
   `;
 
+
+
   navigator.clipboard
     .writeText(report)
     .then(() => {
-      showPopup("<h3>🎉 All done!</h3><p>✅ Absent-Report-Card has been copied to your clipboard! 📝</p>"");
+        showPopup("<h3>🎉 All done!</h3><p>✅ Absent-Report-Card has been copied to your clipboard! 📝</p>");
       ["td-gr", "td-pr", "td-en", "td-fl", "td-co"].forEach(
         (id) => (document.getElementById(id).innerText = ""),
       );
     })
     .catch(() => showPopup("<h3>😓 Oops...</h3><p>❌ We couldn't copy the report, please try again or contact Michelle Hernández via Teams</p>"));
+
 
   mainContent.style.display = "block";
   popup.classList.add("hidden");
@@ -1254,9 +1259,9 @@ ${comentariosCoach ? comentariosCoach.replace(/\n/g, "<br>") + "<br><br>" : "Muy
   // Copiar sin romper el método que ya funciona
   navigator.clipboard
     .writeText(reportHTML)
-    .then(() => showPopup("<h3>🎉 All done!</h3><p>✅ Report-Card has been copied to your clipboard! 📝</p>"))
+    .then(() => showPopup("✅ The Results have been copied to you clipboard! ✅"))
     .catch(() =>
-      showPopup("<h3>😓 Oops...</h3><p>❌ We couldn't copy the report, please try again or contact Michelle Hernández via Teams</p>"),
+      showPopup("Data couldn't be copied, please try again or reload the page"),
     );
 }
 
@@ -1269,6 +1274,7 @@ document.getElementById("closePopup").addEventListener("click", () => {
   document.getElementById("popupMistakes").classList.add("hidden");
   document.getElementById("mainContent").style.display = "block";
 });
+
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
