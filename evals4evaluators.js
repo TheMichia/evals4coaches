@@ -1185,8 +1185,9 @@ mejorar nuestro servicio en el siguiente enlace: <a href="${surveyLinkFinal}" ta
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-function evaluatorsReloadPage() {
-  const proceed = confirm(
+//new
+async  function evaluatorsReloadPage() {
+  const proceed = await confirmPopup(
     "The evaluation data will be reset. Are you sure you want to start a new evaluation?",
   );
 
@@ -1239,6 +1240,7 @@ function evaluatorsReloadPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 }
+
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
