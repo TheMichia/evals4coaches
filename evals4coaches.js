@@ -1,7 +1,7 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.0.2";
-  //UPDATE for video showing
+  const versionnum = "1.0.3";
+  //UPDATE for showpopup and confirmpopup
     const jsonVersion = 1.3;
   window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
@@ -672,12 +672,12 @@ function copyAbsentResults() {
   navigator.clipboard
     .writeText(report)
     .then(() => {
-      showPopup("✅ Absent-Report-Card copiado con éxito");
+      showPopup("<h3>🎉 All done!</h3><p>✅ Absent-Report-Card has been copied to your clipboard! 📝</p>"");
       ["td-gr", "td-pr", "td-en", "td-fl", "td-co"].forEach(
         (id) => (document.getElementById(id).innerText = ""),
       );
     })
-    .catch(() => showPopup("❌ Falló al copiar; recarga y vuelve a intentar"));
+    .catch(() => showPopup("<h3>😓 Oops...</h3><p>❌ We couldn't copy the report, please try again or contact Michelle Hernández via Teams</p>"));
 
   mainContent.style.display = "block";
   popup.classList.add("hidden");
@@ -1254,9 +1254,9 @@ ${comentariosCoach ? comentariosCoach.replace(/\n/g, "<br>") + "<br><br>" : "Muy
   // Copiar sin romper el método que ya funciona
   navigator.clipboard
     .writeText(reportHTML)
-    .then(() => showPopup("✅ The Results have been copied to you clipboard! ✅"))
+    .then(() => showPopup("<h3>🎉 All done!</h3><p>✅ Report-Card has been copied to your clipboard! 📝</p>"))
     .catch(() =>
-      showPopup("Data couldn't be copied, please try again or reload the page"),
+      showPopup("<h3>😓 Oops...</h3><p>❌ We couldn't copy the report, please try again or contact Michelle Hernández via Teams</p>"),
     );
 }
 
