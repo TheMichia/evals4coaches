@@ -672,12 +672,12 @@ function copyAbsentResults() {
   navigator.clipboard
     .writeText(report)
     .then(() => {
-      alert("✅ Absent-Report-Card copiado con éxito");
+      showPopup("✅ Absent-Report-Card copiado con éxito");
       ["td-gr", "td-pr", "td-en", "td-fl", "td-co"].forEach(
         (id) => (document.getElementById(id).innerText = ""),
       );
     })
-    .catch(() => alert("❌ Falló al copiar; recarga y vuelve a intentar"));
+    .catch(() => showPopup("❌ Falló al copiar; recarga y vuelve a intentar"));
 
   mainContent.style.display = "block";
   popup.classList.add("hidden");
@@ -1254,9 +1254,9 @@ ${comentariosCoach ? comentariosCoach.replace(/\n/g, "<br>") + "<br><br>" : "Muy
   // Copiar sin romper el método que ya funciona
   navigator.clipboard
     .writeText(reportHTML)
-    .then(() => alert("✅ The Results have been copied to you clipboard! ✅"))
+    .then(() => showPopup("✅ The Results have been copied to you clipboard! ✅"))
     .catch(() =>
-      alert("Data couldn't be copied, please try again or reload the page"),
+      showPopup("Data couldn't be copied, please try again or reload the page"),
     );
 }
 
@@ -1365,3 +1365,75 @@ function startTimer(durationSeconds) {
     }
   }, 1000);
 }
+
+//
+//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
+//
+
+// Nuevo showPopup: compatible con la llamada existente showPopup(message)
+function showPopup(message) {
+  // Si ya hay un popup, elimínalo (evita choques)
+  const existing = document.querySelector(".popup-overlay");
+  if (existing) {
+    existing.parentNode.removeChild(existing);
+  }
+
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    overlay.className = "popup-overlay";
+
+    const box = document.createElement("div");
+    box.className = "popup-box";
+    box.innerHTML = `
+      ${message}
+      <button id="popupOkBtn">Okay</button>
+    `;
+
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    const okBtn = document.getElementById("popupOkBtn");
+
+    const cleanup = () => {
+      if (overlay.parentNode) document.body.removeChild(overlay);
+      // Emitir evento global para que otras funciones puedan reaccionar
+      document.dispatchEvent(new CustomEvent("popupClosed", { detail: { message } }));
+      resolve(); 
+    };
+
+    okBtn.addEventListener(
+      "click",
+      () => {
+        cleanup();
+      },
+      { once: true }
+    );
+
+    // Cerrar si hacen click fuera del box (UX-friendly)
+    overlay.addEventListener(
+      "click",
+      (ev) => {
+        if (ev.target === overlay) cleanup();
+      },
+      { once: true }
+    );
+
+    // bloquear scroll detrás del popup 
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    // Restaurar overflow cuando se cierre
+    const restore = () => (document.body.style.overflow = prevOverflow || "");
+    // Hook para restaurar overflow al resolver la promesa
+    const originalResolve = resolve;
+    const proxiedResolve = () => {
+      restore();
+      originalResolve();
+    };
+    // Note: proxiedResolve no es estrictamente necesario aquí porque cleanup() llama resolve()
+    // pero dejamos la restauración clara en caso de futuras modificaciones
+  });
+}
+
+//
+//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
+//
