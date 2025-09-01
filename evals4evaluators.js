@@ -1,7 +1,7 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "1.0.1";
-  //updated for showpopup and confirmpopup 
+  const versionnum = "1.0.2";
+  //updated for no survey is not good evaluator
   const E4EjsonVersion = 1;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
@@ -894,11 +894,11 @@ function evaluatorsCopyResults() {
 <li>Repetir las oraciones del día al menos 20 veces antes o después de clase.</li>
 <li>Enlace para acceder a la plataforma: https://english4kids.pathwright.com</li><br><br>`;
 
-  // ---------- survey link ----------
-  const surveyBase = syllabusLower.includes("adults")
-    ? "https://e4cc.typeform.com/to/efJago3L#coach="
-    : "https://e4cc.typeform.com/to/ovOnAdWx#coach=";
-  const surveyLink = surveyBase + encodeURIComponent(evaluatorID || "");
+  // // ---------- survey link ----------
+  // const surveyBase = syllabusLower.includes("adults")
+  //   ? "https://e4cc.typeform.com/to/efJago3L#coach="
+  //   : "https://e4cc.typeform.com/to/ovOnAdWx#coach=";
+  // const surveyLink = surveyBase + encodeURIComponent(evaluatorID || "");
 
   // ---------- Build full headers (complete texts) ----------
   const header_pass_kids_teens = `
@@ -1093,13 +1093,21 @@ hr>`;
   const commentsFinal = selectorComments || extraCommentsFallback || "";
 
   // evaluator + survey + referidos
-  const surveyBaseFinal = syllabusLower.includes("adults")
-    ? "https://e4cc.typeform.com/to/efJago3L#coach="
-    : "https://e4cc.typeform.com/to/ovOnAdWx#coach=";
-  const surveyLinkFinal =
-    surveyBaseFinal + encodeURIComponent(evaluatorID || "");
-  const evaluatorLine = `Tu evaluación fue realizada por <b>${safe(evaluatorName || "error")}</b>. Agradezco tu apoyo completando una breve encuesta de satisfacción para ayudarnos a
-mejorar nuestro servicio en el siguiente enlace: <a href="${surveyLinkFinal}" target="_blank">Haz clic aquí</a>.<br><br>`;
+ // Determinar si mostramos el nombre del evaluador o lo tratamos como vacío
+const shouldHideEvaluator = evaluatorName && String(evaluatorName).startsWith("━");
+
+const surveyBaseFinal = syllabusLower.includes("adults")
+  ? "https://e4cc.typeform.com/to/efJago3L#coach="
+  : "https://e4cc.typeform.com/to/ovOnAdWx#coach=";
+
+const surveyLinkFinal = surveyBaseFinal + encodeURIComponent(evaluatorID || "");
+
+const evaluatorLine = shouldHideEvaluator
+  ? ""
+  : `Tu evaluación fue realizada por <b>${safe(evaluatorName || "error")}</b>. Agradezco tu apoyo completando una breve encuesta de satisfacción para ayudarnos a mejorar nuestro servicio en el siguiente enlace: <a href="${surveyLinkFinal}" target="_blank">Haz clic aquí</a>.<br><br>`;
+
+
+  //referidos text
   const referText = syllabusLower.includes("adults")
     ? `&#128483; &#10024; <b>¿Te gustan nuestras clases?</b> Puedes invitar a tus amigos o familiares a aprender inglés con nosotros. Por cada referido que se inscriba, obtienes 50% de descuento. Tu referido también obtiene un 50% de descuento en su primer pago. ¡Refiere, ahorra y ayuda a otros a mejorar su futuro!<br><br>&#128073; Tu referido debe agendar una llamada con uno de nuestros asesores en el siguiente enlace: <a href="https://www.english4adultsonline.com/amigo" target="_blank">www.english4adultsonline.com/amigo</a> &#128170;`
     : `&#129490; &#10024; Si te gustan nuestras clases, puedes ayudar a que más niños aprendan inglés y obtén 50% de descuento por cada referido que se inscriba. Tu referido también obtiene 50% de descuento en su primer pago. &#128073; Agenda llamada: <a href="https://www.english4kidsonline.com/amigo" target="_blank">www.english4kidsonline.com/amigo</a> &#128153;`;
