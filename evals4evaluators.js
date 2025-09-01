@@ -2,7 +2,7 @@
   const version = "Evaluators";
   const versionnum = "1.0.2";
   //updated for no survey is not good evaluator
-  const E4EjsonVersion = 1;
+  const E4EjsonVersion = 1.1;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
   showversion.innerHTML = `${version} ${versionnum} - JSON ${E4EjsonVersion}`;
