@@ -1,7 +1,7 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.0.3";
-  //UPDATE for showpopup and confirmpopup
+  const versionnum = "1.0.4";
+  //UPDATE for no survey for non evaluators and removes ! from kudos
     const jsonVersion = 1.3;
   window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
@@ -715,16 +715,16 @@ function showKudosSection() {
   // Construimos kudos por áreas
   let areaKudosList = "";
   if (document.getElementById("in").value === "2.0") {
-    areaKudosList += "<li>🎶 Intonation!</li>";
+    areaKudosList += "<li>🎶 Intonation</li>";
   }
   if (document.getElementById("fl").value === "2.0") {
-    areaKudosList += "<li>🚀 Fluency!</li>";
+    areaKudosList += "<li>🚀 Fluency</li>";
   }
   if (document.getElementById("co").value === "2.0") {
-    areaKudosList += "<li>🧠 Comprehension!</li>";
+    areaKudosList += "<li>🧠 Comprehension</li>";
   }
   if (!pronunciationMistakes) {
-    areaKudosList += "<li>🗣️ Pronunciation!</li>";
+    areaKudosList += "<li>🗣️ Pronunciation</li>";
   }
 
   closeBtn.style.display = "inline-block";
