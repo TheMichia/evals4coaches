@@ -902,7 +902,7 @@ function evaluatorsCopyResults() {
 
   // ---------- Build full headers (complete texts) ----------
   const header_pass_kids_teens = `
-<h1><b>&#127881; ¡Felicidades, papás y mamás!</b></h1>
+<p><b>&#127881; ¡Felicidades, papás y mamás!</b></p>
 <p>Hoy celebramos juntos un <b>logro extraordinario</b><: su hijo/a ha completado con éxito su curso de inglés, superando cada reto con <b>dedicación, alegría y una constancia admirable.</b> &#127942;&#10024;</p>
 <p>Durante este tiempo, no solo adquirió nuevas habilidades lingüísticas, sino que también desarrolló <b>confianza, disciplina y una mentalidad de superación</b> que le acompañará toda la vida.</p>
 <p>Este avance es fruto de su esfuerzo, del acompañamiento de ustedes y del compromiso de todo nuestro equipo English4kids. ¡Gracias por ser parte activa de este viaje y por inspirar a su pequeño/a a alcanzar la meta!</p>
@@ -910,13 +910,13 @@ function evaluatorsCopyResults() {
 `;
 
   const header_fail_kids_teens = `
-<h1>&#127919; <b>Queremos reconocer</b> la dedicación y el esfuerzo</h1>
+<p>&#127919; <b>Queremos reconocer</b> la dedicación y el esfuerzo</p>
 <p>Tu hijo/a ha mostrado compromiso y participación en cada etapa del aprendizaje del inglés. ¡Cada paso cuenta! &#10024;</p>
 <p>En esta evaluación final, <b>aún no se ha alcanzado el nivel de dominio necesario para cerrar el curso satisfactoriamente</b>. Esto significa que algunas habilidades clave todavía están en proceso de fortalecimiento.</p>
 `;
 
   const header_pass_adults = `
-    <h1>&#127881; <b>¡Felicidades!</b></h1>
+    <p>&#127881; <b>¡Felicidades!</b></p>
     <p>Hoy celebramos contigo un logro extraordinario: has completado con éxito tu curso de inglés, superando cada reto con dedicación, constancia y una admirable voluntad de aprendizaje. &#127942;&#10024;</p>
   <p>Durante este tiempo, no solo has fortalecido tus habilidades lingüísticas para desenvolverte en situaciones cotidianas con mayor seguridad y fluidez, sino que también has desarrollado confianza, disciplina y una mentalidad de superación que te acompañará en cada meta que te propongas.</p>
   <p>&#127775; Este avance es fruto de tu esfuerzo, de tu compromiso y de la determinación de seguir creciendo. Hoy no solo celebramos un curso terminado, sino el inicio de un futuro lleno de nuevas oportunidades para comunicarte, conectar y alcanzar tus sueños.</p>
