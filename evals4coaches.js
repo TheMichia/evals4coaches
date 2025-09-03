@@ -1,18 +1,16 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.0.4";
-  //UPDATE for no survey for non evaluators and removes ! from kudos
-    const jsonVersion = 1.3;
+  const versionnum = "1.1.0";
+  //UPDATE for adults neutral feedback
+  const jsonVersion = 1.3;
   window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
-  showversion.innerHTML = `${version} ${versionnum} - JSON ${jsonVersion}`
+  showversion.innerHTML = `${version} ${versionnum} - JSON ${jsonVersion}`;
 })();
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
-
-
 
 let topicsData = {};
 // estado global para los temas
@@ -27,8 +25,6 @@ const topicsList = document.getElementById("topicsList");
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
-
-
 
 fetch("topics.json?v=${jsonVersion}")
   .then((response) => response.json())
@@ -254,6 +250,36 @@ weeksDropdown.addEventListener("change", () => {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
+const popup = document.getElementById("popupMistakes");
+const mainContent = document.getElementById("mainContent");
+const closeBtn = document.getElementById("closePopup");
+const feedbackBtn = document.getElementById("feedback");
+
+feedbackBtn.addEventListener("click", () => {
+  mainContent.style.display = "none";
+  popup.classList.remove("hidden");
+
+  const syllabusValue = String(
+    syllabusDropdown.value || syllabusDropdown.selectedOptions?.[0]?.text || "",
+  )
+    .trim()
+    .toLowerCase();
+
+  popup.classList.remove("pop4Adults", "pop4kids");
+
+  if (syllabusValue.includes("adults")) {
+    popup.classList.add("pop4Adults");
+  } else {
+    popup.classList.add("pop4kids");
+  }
+
+  showKudosSection();
+});
+
+//
+//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
+//
+
 function getTemasDominados() {
   const sections = document.querySelectorAll("#topicsList section");
   const resultados = [];
@@ -417,22 +443,6 @@ function updateEvaluatedCount() {
 
   countElement.textContent = `${evaluated}/${total} Evaluated`;
 }
-
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
-
-const popup = document.getElementById("popupMistakes");
-const mainContent = document.getElementById("mainContent");
-const closeBtn = document.getElementById("closePopup");
-const feedbackBtn = document.getElementById("feedback");
-
-feedbackBtn.addEventListener("click", () => {
-  mainContent.style.display = "none";
-  popup.classList.remove("hidden");
-
-  showKudosSection();
-});
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
@@ -671,18 +681,21 @@ function copyAbsentResults() {
     </section>
   `;
 
-
-
   navigator.clipboard
     .writeText(report)
     .then(() => {
-        showPopup("<h3>🎉 All done!</h3><p>✅ Absent-Report-Card has been copied to your clipboard! 📝</p>");
+      showPopup(
+        "<h3>🎉 All done!</h3><p>✅ Absent-Report-Card has been copied to your clipboard! 📝</p>",
+      );
       ["td-gr", "td-pr", "td-en", "td-fl", "td-co"].forEach(
         (id) => (document.getElementById(id).innerText = ""),
       );
     })
-    .catch(() => showPopup("<h3>😓 Oops...</h3><p>❌ We couldn't copy the report, please try again or contact Michelle Hernández via Teams</p>"));
-
+    .catch(() =>
+      showPopup(
+        "<h3>😓 Oops...</h3><p>❌ We couldn't copy the report, please try again or contact Michelle Hernández via Teams</p>",
+      ),
+    );
 
   mainContent.style.display = "block";
   popup.classList.add("hidden");
@@ -727,11 +740,24 @@ function showKudosSection() {
     areaKudosList += "<li>🗣️ Pronunciation</li>";
   }
 
+  // separation logic
+  const syllabusValue = String(
+    syllabusDropdown.value || syllabusDropdown.selectedOptions?.[0]?.text || "",
+  )
+    .trim()
+    .toLowerCase();
+  let headerText = "";
+  if (syllabusValue.includes("adults")) {
+    headerText += "Kudos";
+  } else {
+    headerText += "🌟 Kudos 🎉";
+  }
   closeBtn.style.display = "inline-block";
+  // ===============================
 
   let html = `
   <div class="kudos-container">
-    <h2>🌟 Kudos 🎉</h2>
+    <h2>${headerText}</h2>
     <div class="kudos-content">
     <div class="kudos-info">
         ${
@@ -753,9 +779,7 @@ function showKudosSection() {
         }
     ${
       !approvedTopics.length && !areaKudosList
-        ? `<div><h3>¡Buen intento! ¡Ya casi lo tienes! 💪</h3><h3>Excellent Areas:</h3>
-    <ul class="motivational-list">
-</ul>
+        ? `<div><h3>¡Buen intento! ¡Ya casi lo tienes! 💪</h3>
 <h4><strong>RECORDATORIO:</strong> Entre más practiques, más fácil se vuelve.</h4>`
         : ""
     }
@@ -765,12 +789,6 @@ function showKudosSection() {
 
   popup.querySelector("#popupContent").innerHTML = html;
 
-  // // Mostrar botón next solo si hay algo que corregir
-  // const rejectedTopics = Object.values(topicsStatus).some(
-  //   (status) => status === "no",
-  // );
-  // if (rejectedTopics || pronunciationMistakes) {
-  // Mostrar btn next
   const nextButton = document.createElement("button");
   nextButton.id = "nextBtn";
   nextButton.innerText = "Next: See Feedback";
@@ -825,15 +843,26 @@ function showErrorsSection(perfectAreasList = []) {
 
     rejectedTopics.push({
       title,
-      tableHTML: clonedTable
-        ? clonedTable.outerHTML
-        : "<p>Unknown table</p>",
+      tableHTML: clonedTable ? clonedTable.outerHTML : "<p>Unknown table</p>",
     });
   });
-
+  // separation logic
+  const syllabusValue = String(
+    syllabusDropdown.value || syllabusDropdown.selectedOptions?.[0]?.text || "",
+  )
+    .trim()
+    .toLowerCase();
+  let headerText = "";
+  if (syllabusValue.includes("adults")) {
+    headerText += "Improvement Areas";
+  } else {
+    headerText += "📝 Let's practice!";
+  }
+  closeBtn.style.display = "inline-block";
+  // =============================== <h2>${headerText}</h2>
   // 2. Construir el HTML de la sección de errores
   let html = `<div class="feedback-container">
-      <h2>📝 Let's practice!</h2>`;
+      <h2>${headerText}</h2>`;
 
   if (pronunciationMistakes) {
     html += `
@@ -855,20 +884,31 @@ function showErrorsSection(perfectAreasList = []) {
             <h4>${topic.title}</h4>
             ${topic.tableHTML}
           </div>
-        `
+        `,
           )
           .join("")}
       </div>
     `;
   }
 
+
+
   if (!pronunciationMistakes && !rejectedTopics.length) {
-    html += `
-      <div class="celebrate">
-        <h2 style="text-align: center;">OMG! No Mistakes!</h2>
+    if (syllabusValue.includes("adults")) {
+      html += `
+        <div>
         <h4>No mistakes detected in this evaluation. Great job! 🌟</h4>
-      </div>
-    `;
+        </div>
+      `;
+    } else {
+      html += `
+        <div class="celebrate">
+          <h2 style="text-align: center;">OMG! No Mistakes!</h2>
+          <h4>No mistakes detected in this evaluation. Great job! 🌟</h4>
+        </div>
+      `;
+    }
+   
   }
 
   html += `</div>`; // cierre feedback-container
@@ -892,8 +932,6 @@ function showErrorsSection(perfectAreasList = []) {
   finalButton.addEventListener("click", () => showFinalSection());
   popupContent.appendChild(finalButton);
 }
-
-
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
@@ -948,31 +986,39 @@ function showFinalSection() {
   // --- DEFINICIÓN DE BANDERAS ---
   const isExit =
     !isJuniors &&
-    (
-      (level === 10 && (selectedweek === 8 || selectedweek === 14)) ||
+    ((level === 10 && (selectedweek === 8 || selectedweek === 14)) ||
       (level === 12 && selectedweek === 4) ||
-      (isMasters && level === 10 && selectedweek === 4)
-    );
+      (isMasters && level === 10 && selectedweek === 4));
 
   const isMidterm =
     !isExit &&
-    (
-      // Use includes / startsWith para tolerar ligeras variaciones en labels
-      (syllabus.toLowerCase().includes("juniors 5-7") && selectedweek === 4) ||
-      (syllabus.toLowerCase().includes("kids (intensivo)") && selectedweek === 7) ||
-      (syllabus.toLowerCase().includes("kids (super intensivo)") && selectedweek === 4) ||
-      (syllabus.toLowerCase().includes("teens 13-17") && syllabus.toLowerCase().includes("3") && selectedweek === 7) ||
-      (syllabus.toLowerCase().includes("teens 13-17") && syllabus.toLowerCase().includes("5") && selectedweek === 4)
-    );
+    // Use includes / startsWith para tolerar ligeras variaciones en labels
+    ((syllabus.toLowerCase().includes("juniors 5-7") && selectedweek === 4) ||
+      (syllabus.toLowerCase().includes("kids (intensivo)") &&
+        selectedweek === 7) ||
+      (syllabus.toLowerCase().includes("kids (super intensivo)") &&
+        selectedweek === 4) ||
+      (syllabus.toLowerCase().includes("teens 13-17") &&
+        syllabus.toLowerCase().includes("3") &&
+        selectedweek === 7) ||
+      (syllabus.toLowerCase().includes("teens 13-17") &&
+        syllabus.toLowerCase().includes("5") &&
+        selectedweek === 4));
 
   const isNextLevel =
-    !isExit && !isMidterm &&
-    (
-      (level === 0 && (selectedweek === 4 || selectedweek === 6)) ||
+    !isExit &&
+    !isMidterm &&
+    ((level === 0 && (selectedweek === 4 || selectedweek === 6)) ||
       ((isMasters || isAdults) && selectedweek === 4) ||
-      ((syllabus.toLowerCase().includes("kids (intensivo)") || (syllabus.toLowerCase().includes("teens 13-17") && syllabus.toLowerCase().includes("3"))) && selectedweek === 14) ||
-      ((syllabus.toLowerCase().includes("juniors 5-7") || syllabus.toLowerCase().includes("kids (super intensivo)") || (syllabus.toLowerCase().includes("teens 13-17") && syllabus.toLowerCase().includes("5"))) && selectedweek === 8)
-    );
+      ((syllabus.toLowerCase().includes("kids (intensivo)") ||
+        (syllabus.toLowerCase().includes("teens 13-17") &&
+          syllabus.toLowerCase().includes("3"))) &&
+        selectedweek === 14) ||
+      ((syllabus.toLowerCase().includes("juniors 5-7") ||
+        syllabus.toLowerCase().includes("kids (super intensivo)") ||
+        (syllabus.toLowerCase().includes("teens 13-17") &&
+          syllabus.toLowerCase().includes("5"))) &&
+        selectedweek === 8));
 
   // --- DETERMINAR VIDEO usando el mapa VIDEOS ---
   let canvavideo = "";
@@ -1011,10 +1057,12 @@ function showFinalSection() {
     else if (totalScore < 9) canvavideo = VIDEOS.midterm.better;
     else canvavideo = VIDEOS.midterm.excellent;
   } else if (isNextLevel) {
-    canvavideo = totalScore >= 7 ? VIDEOS.nextLevel.pass : VIDEOS.nextLevel.fail;
+    canvavideo =
+      totalScore >= 7 ? VIDEOS.nextLevel.pass : VIDEOS.nextLevel.fail;
   } else {
     // Fallback: si no cae en ninguna bandera, elegimos NextLevel logic por seguridad
-    canvavideo = totalScore >= 7 ? VIDEOS.nextLevel.pass : VIDEOS.nextLevel.fail;
+    canvavideo =
+      totalScore >= 7 ? VIDEOS.nextLevel.pass : VIDEOS.nextLevel.fail;
   }
 
   // --- INSERTAR HTML DEL VIDEO ---
@@ -1026,9 +1074,11 @@ function showFinalSection() {
   </div>`;
 
   // Render
-  const popupContent = popup && popup.querySelector ? popup.querySelector("#popupContent") : null;
+  const popupContent =
+    popup && popup.querySelector ? popup.querySelector("#popupContent") : null;
   if (popupContent) popupContent.innerHTML = html;
-  if (typeof closeBtn !== "undefined" && closeBtn) closeBtn.style.display = "inline-block";
+  if (typeof closeBtn !== "undefined" && closeBtn)
+    closeBtn.style.display = "inline-block";
 
   // Botón back
   const backButton = document.createElement("button");
@@ -1037,28 +1087,27 @@ function showFinalSection() {
   backButton.addEventListener("click", () => showErrorsSection());
   if (popupContent) popupContent.appendChild(backButton);
 
-// Definir currentVersion a partir del global
-const currentVersion = window.appVersion || "Coaches"; 
+  // Definir currentVersion a partir del global
+  const currentVersion = window.appVersion || "Coaches";
 
-// Botón copy results
-const copybutton = document.createElement("button");
-copybutton.id = "copyResults";
-copybutton.classList.add("copybutton");
+  // Botón copy results
+  const copybutton = document.createElement("button");
+  copybutton.id = "copyResults";
+  copybutton.classList.add("copybutton");
 
-// Texto dinámico según versión
-if (currentVersion === "Coaches") {
-  copybutton.innerText = "Next: Copy Results (COACH ONLY)";
-  copybutton.addEventListener("click", () => copyResults());
-} else if (currentVersion === "Evaluators") {
-  copybutton.innerText = "Next: Copy Results (EVALUATORS ONLY)";
-  copybutton.addEventListener("click", () => {
-    evaluatorsCopyResults();
-  });
-}
+  // Texto dinámico según versión
+  if (currentVersion === "Coaches") {
+    copybutton.innerText = "Next: Copy Results (COACH ONLY)";
+    copybutton.addEventListener("click", () => copyResults());
+  } else if (currentVersion === "Evaluators") {
+    copybutton.innerText = "Next: Copy Results (EVALUATORS ONLY)";
+    copybutton.addEventListener("click", () => {
+      evaluatorsCopyResults();
+    });
+  }
 
-// Insertar el botón en el DOM
-if (popupContent) popupContent.appendChild(copybutton);
-
+  // Insertar el botón en el DOM
+  if (popupContent) popupContent.appendChild(copybutton);
 }
 
 //
@@ -1259,7 +1308,9 @@ ${comentariosCoach ? comentariosCoach.replace(/\n/g, "<br>") + "<br><br>" : "Muy
   // Copiar sin romper el método que ya funciona
   navigator.clipboard
     .writeText(reportHTML)
-    .then(() => showPopup("✅ The Results have been copied to you clipboard! ✅"))
+    .then(() =>
+      showPopup("✅ The Results have been copied to you clipboard! ✅"),
+    )
     .catch(() =>
       showPopup("Data couldn't be copied, please try again or reload the page"),
     );
@@ -1274,7 +1325,6 @@ document.getElementById("closePopup").addEventListener("click", () => {
   document.getElementById("popupMistakes").classList.add("hidden");
   document.getElementById("mainContent").style.display = "block";
 });
-
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
@@ -1358,8 +1408,10 @@ function showPopup(message) {
     const cleanup = () => {
       if (overlay.parentNode) document.body.removeChild(overlay);
       // Emitir evento global para que otras funciones puedan reaccionar
-      document.dispatchEvent(new CustomEvent("popupClosed", { detail: { message } }));
-      resolve(); 
+      document.dispatchEvent(
+        new CustomEvent("popupClosed", { detail: { message } }),
+      );
+      resolve();
     };
 
     okBtn.addEventListener(
@@ -1367,7 +1419,7 @@ function showPopup(message) {
       () => {
         cleanup();
       },
-      { once: true }
+      { once: true },
     );
 
     // Cerrar si hacen click fuera del box (UX-friendly)
@@ -1376,10 +1428,10 @@ function showPopup(message) {
       (ev) => {
         if (ev.target === overlay) cleanup();
       },
-      { once: true }
+      { once: true },
     );
 
-    // bloquear scroll detrás del popup 
+    // bloquear scroll detrás del popup
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     // Restaurar overflow cuando se cierre
@@ -1438,7 +1490,7 @@ function confirmPopup(message) {
         cleanup();
         resolve(true); // ✅ confirmar
       },
-      { once: true }
+      { once: true },
     );
 
     noBtn.addEventListener(
@@ -1447,7 +1499,7 @@ function confirmPopup(message) {
         cleanup();
         resolve(false); // ❌ cancelar
       },
-      { once: true }
+      { once: true },
     );
 
     // cerrar si hacen click fuera del box
@@ -1459,7 +1511,7 @@ function confirmPopup(message) {
           resolve(false);
         }
       },
-      { once: true }
+      { once: true },
     );
 
     // bloquear scroll detrás
@@ -1467,15 +1519,13 @@ function confirmPopup(message) {
   });
 }
 
-
-
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
 async function reloadPage() {
   const proceed = await confirmPopup(
-    "<h3>Start again? 🤔</h3><p>We’ll reset everything so you can begin a fresh evaluation.</p><p><b>Are you sure you want to restart? 👀</b></p>"
+    "<h3>Start again? 🤔</h3><p>We’ll reset everything so you can begin a fresh evaluation.</p><p><b>Are you sure you want to restart? 👀</b></p>",
   );
 
   if (proceed) {
@@ -1506,7 +1556,6 @@ async function reloadPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 }
-
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
