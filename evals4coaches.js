@@ -2,7 +2,7 @@
   const version = "Coaches";
   const versionnum = "1.1.0";
   //UPDATE for adults neutral feedback
-  const jsonVersion = 1.3;
+  const jsonVersion = 1.4;
   window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
   showversion.innerHTML = `${version} ${versionnum} - JSON ${jsonVersion}`;
