@@ -1119,7 +1119,7 @@ function copyResults() {
   const approvedTopics = [];
   Object.entries(topicsStatus).forEach(([index, choice]) => {
     const section = document.querySelector(
-      `#topicsList section:nth-child(${parseInt(index) + 1})`,
+      `#topicsList section:nth-child(${parseInt(index) + 1})`
     );
     const title =
       section?.querySelector(".topic-title h3")?.innerText ||
@@ -1153,9 +1153,9 @@ function copyResults() {
   const desempeñoHTML = areas
     .map(
       (a) =>
-        `<b>- ${a.label}:</b> ${describeScore(
-          document.getElementById(a.id).value,
-        )}<br>`,
+        `<tr><td class="evalarea">${a.label}</td><td> ${describeScore(
+          document.getElementById(a.id).value
+        )}</td></tr>`
     )
     .join("");
 
@@ -1166,7 +1166,7 @@ function copyResults() {
 
   Object.entries(topicsStatus).forEach(([index, choice]) => {
     const section = document.querySelector(
-      `#topicsList section:nth-child(${parseInt(index) + 1})`,
+      `#topicsList section:nth-child(${parseInt(index) + 1})`
     );
     const title =
       section?.querySelector(".topic-title h3")?.innerText ||
@@ -1204,88 +1204,528 @@ function copyResults() {
   const resultadoGlobal =
     totalScore > 6.5
       ? {
-          icono: "&#9989;",
-          mensajeResultado: "LOGRADO",
+          mensajeResultado: "Logrado",
           descripcionResultado:
-            "¡Felicidades! Estás avanzando a un excelente ritmo. &#128170; &#127881;",
+            "&#127881;¡Felicidades!&#127881; <br> Estás avanzando a un excelente ritmo.",
         }
       : {
-          icono: "&#10060;",
-          mensajeResultado: "NO LOGRADO",
+          mensajeResultado: "No Logrado",
           descripcionResultado:
             "Aunque aún no se ha alcanzado el objetivo, el esfuerzo cuenta y seguiremos avanzando juntos.",
         };
 
   // Construcción del HTML final
   const reportHTML = `
-&#9989;<b><u>Resultado Global:</u> ${resultadoGlobal.mensajeResultado}</b><br><br>
-${resultadoGlobal.descripcionResultado}<br>
-<hr>
+  <html lang='en'>
+    <head>
+      <meta charset='utf-8' />
+      <meta name='viewport' content='width=device-width, initial-scale=1' />
+      <title>Evals for Evals Team</title>
+      <!-- STYLE -->
+      <link href='emailtest.css' rel='stylesheet' type='text/css' />
+      <style>
+        body {
+          margin: 0 auto;
+          background: linear-gradient(to bottom, #f5ffff 10%, #AED6D6 60%, #1ca5ab 90%);
+          background-color: #1ca5ab15;
+        }
 
-&#128313; <b>Desempeño por área:</b><br><br>
-${desempeñoHTML}<br>
-<hr>
+        .Evaluation-Results table {
+          width: 80%;
+        }
 
-&#x1f4d8; <b>Temas Dominados:</b><br><br>
-${
-  approvedTopics.length
-    ? approvedTopics.map((t) => `&#9989; ${t}<br>`).join("") + "<br>"
-    : "Aún no hay temas dominados.<br><br>"
-}
-<hr>
+        .Evaluation-Results table th {
+          font-size: clamp(0.9rem, calc(50vw*0.1), 1.6rem);
+          font-family: Serif;
+          font-weight: 800;
+          color: #126064;
+          text-align: center;
+          padding: 1.7rem 0.5rem;
+          border-bottom: 1px dotted #219fa6;
+        }
 
-&#x1f7e1; <b>Temas que aún necesita reforzar:</b><br><br>
-${
-  reinforceTopics.length
-    ? reinforceTopics.map((t) => `&#10004; ${t}<br>`).join("") + "<br>"
-    : "¡Ningún tema para reforzar!<br><br>"
-}
-<hr>
+        .Evaluation-Results table td {
+          font-size: clamp(0.8rem, calc(50vw*0.06), 0.95rem);
+          font-family: Verdana;
+          font-weight: 500;
+          color: #305254;
+          padding: 0.9rem 0.5rem 0.9rem calc(50vw*0.13);
+          border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
+          text-align: left;
+        }
 
-&#128204; <b>Áreas de Oportunidad:</b><br><br>
-<b><u>Errores de gramática:</u></b><br><br>
-${
-  opportunityTopics.length
-    ? opportunityTopics
-        .map(
-          (o) => `
-&#128073; <b>Tema:</b> ${o.title}<br>
-${o.answer ? `&#10060; Respuesta: ${o.answer}<br>` : ""}
-${o.correction ? `&#9989; Corrección: ${o.correction}<br>` : ""}
-<br>`,
-        )
-        .join("")
-    : "¡Ningún error detectado!<br><br>"
-}
+        .Evaluation-Results p {
+          font-family: Verdana;
+          font-size: clamp(0.8rem, calc(50vw*0.06), 0.95rem);
+        }
 
-<b><u>Pronunciación a reforzar:</b></u></b><br><br>Debemos trabajar en perfeccionar la pronunciación de algunas palabras, por ejemplo: 
-${
-  pronunciationMistakes
-    ? pronunciationMistakes.replace(/\n/g, "<br>") + "<br><br>"
-    : "¡Sin errores de pronunciación!<br><br>"
-}
+        /* =================HEADER=============== */
+        .Evaluation-Results .header {
+          background-color: #1CA5AB;
+          text-align: center;
+          height: auto;
+          width: 100%;
+          overflow: hidden;
+          border-radius: 7px;
+        }
 
-<hr>
+        .Evaluation-Results .logos {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem;
+          margin: 0 0 -1rem;
+        }
 
-<b><u>Comentarios del coach:</u></b><br><br>
-${comentariosCoach ? comentariosCoach.replace(/\n/g, "<br>") + "<br><br>" : "Muy buen trabajo!<br><br>"}
-<hr>
-&#129490; &#10024; Si te gustan nuestras clases, puedes ayudar a que más niños aprendan inglés y tengan mejores oportunidades en la vida. Refiere a otros padres y obtén 50% de descuento por cada referido que se inscriba. Tu referido también obtiene un 50% de descuento en su primer pago. Entre más refieras, más ayudas y más ganas.<br><br>
+        .Evaluation-Results .logos img {
+          height: 1.7rem;
+        }
 
-&#128073; Tu referido debe agendar una llamada con uno de nuestros asesores en el siguiente enlace: 
-<a href="https://www.english4kidsonline.com/amigo" target="_blank">www.english4kidsonline.com/amigo</a> &#128153;
-`;
+        .Evaluation-Results .header .h1 {
+          font-size: clamp(0.5rem, calc(50vw*0.08), 1.6rem);
+          font-weight: 800;
+          font-family: Tahoma;
+          color: #ffffff;
+          padding: 1rem 0.7rem;
+        }
+
+        /* =================WELLCOME=============== */
+        .Evaluation-Results .welcome {
+          justify-items: center;
+          padding: 4rem 2rem;
+          text-align: center;
+          margin: 0 auto;
+        }
+
+        .Evaluation-Results .welcome .h2 {
+          font-size: clamp(1.2rem, calc(50vw*0.15), 2.5rem);
+          font-weight: 800;
+          color: #126064;
+          font-family: Serif;
+        }
+
+        .Evaluation-Results .welcome .h3 {
+          font-size: clamp(0.7rem, calc(50vw*0.08), 1.2rem);
+          font-weight: 800;
+          color: #126064;
+          padding-bottom: 0.8rem;
+          font-family: Verdana;
+        }
+
+        .Evaluation-Results .welcome p {
+          font-weight: 400;
+          color: #273030;
+        }
+
+        /* =================EMAIL BODY=============== */
+        .Evaluation-Results .email-body {
+          border-radius: 20px;
+          padding: 2rem 1.5rem;
+          box-shadow: 0 0 15px rgb(14, 126, 134, 0.1);
+          width: 80%;
+          margin: 0 auto;
+          background-color: rgba(255, 255, 255, 0.95);
+          max-width: 1200px;
+        }
+
+        /* -------RESULTADO GLOBAL------- */
+        .Evaluation-Results .resultado-global {
+          padding: 0 1rem;
+          text-align: center;
+        }
+
+        .Evaluation-Results .resultado-global .h2 {
+          font-family: Serif;
+          font-size: clamp(1.1rem, calc(50vw*0.18), 2.1rem);
+          font-weight: bold;
+          color: #297b7f;
+          text-shadow: 0 0 10px rgb(163, 225, 230, 0.15);
+        }
+
+        .Evaluation-Results .resultado-global .h3 {
+          font-size: clamp(0.95rem, calc(50vw*0.1), 1.2rem);
+          font-weight: 800;
+          font-family: Verdana;
+          color: #42757b;
+          padding: 2.5rem 0;
+        }
+
+        .Evaluation-Results .resultado-global p {
+          font-weight: 500;
+          font-family: Verdana;
+          color: #273030;
+          padding: 0 1rem 0;
+        }
+
+        /* -------DESEMPEÑO POR ÁREA------- */
+        .Evaluation-Results .desempeño {
+          padding: 0 1rem;
+          justify-items: center;
+        }
+
+        .Evaluation-Results .desempeño table {
+          border-radius: 10%;
+          overflow: hidden;
+        }
+
+        .Evaluation-Results .desempeño table td:first-child {
+          font-weight: 500;
+          color: #126064;
+          text-align: center;
+          font-size: clamp(0.5rem, calc(50vw*0.07), 1.1rem);
+          width: 20%;
+        }
+
+        .Evaluation-Results .desempeño table td:last-child {
+          font-weight: 500;
+          border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
+        }
+
+        /* -------TEMAS DOMINADOS------- */
+
+        .Evaluation-Results .temas-dominados {
+          margin: 2.8rem 0;
+          justify-items: center;
+        }
+
+
+        .Evaluation-Results .temas-dominados table {
+          border-radius: 10%;
+          overflow: hidden;
+        }
+
+        .Evaluation-Results .temas-dominados table td {
+          color: #044043;
+          text-align: left;
+        }
+
+
+        /* -------temas a reforzar------- */
+        .Evaluation-Results .temas-reforzar {
+          margin: 2.8rem 0;
+          justify-items: center;
+        }
+
+
+        .Evaluation-Results .temas-reforzar table {
+          border-radius: 10%;
+          overflow: hidden;
+        }
+
+        .Evaluation-Results .temas-reforzar table td {
+          color: #044043;
+        }
+
+        /* -------RESULTADO GLOBAL------- */
+        .Evaluation-Results .areas-oportunidad {
+          margin: 2.8rem 0;
+          justify-items: center;
+        }
+
+
+        .Evaluation-Results .areas-oportunidad table {
+          border-radius: 10%;
+          overflow: hidden;
+        }
+
+
+        .Evaluation-Results .tema-reforzar {
+          color: #126064;
+          text-align: left;
+          padding: 0.9rem 0.5rem 0.9rem 1.5rem;
+          border-bottom: 1px dotted rgb(18, 96, 100, 0.8)
+        }
+
+        .Evaluation-Results .reforzar-R-C {
+          text-align: left;
+          font-family: Verdana;
+          color: #052729;
+        }
+
+        /* -------RESULTADO GLOBAL------- */
+        .Evaluation-Results .pronunciacion-reforzar {
+          margin: 2.8rem 0;
+          justify-items: center;
+        }
+
+
+        .Evaluation-Results .pronunciacion-reforzar table {
+          border-radius: 10%;
+          overflow: hidden;
+        }
+
+        .Evaluation-Results .pronunciacion-reforzar table td {
+          text-align: left;
+          color: #114d50;
+        }
+
+        .Evaluation-Results .pronunciacion-reforzar table tr:first-child td {
+          font-weight: 500;
+          color: #355d5f;
+          text-align: center;
+          padding: 0.95rem 0;
+        }
+
+        /* -------RESULTADO GLOBAL------- */
+        .Evaluation-Results .comentarios-coach {
+          margin: 2.8rem 0;
+          justify-items: center;
+        }
+
+
+        .Evaluation-Results .comentarios-coach table {
+          border-radius: 10%;
+          overflow: hidden;
+        }
+
+        .Evaluation-Results .comentarios-coach table td {
+          font-weight: 500;
+          color: #044043;
+          text-align: center;
+          padding: 0.7rem 0;
+          border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
+        }
+
+        /* =================FOOTER=============== */
+        .Evaluation-Results .footer {
+          font-family: verdana;
+          margin: 2.5rem auto;
+          padding: 2rem 0.5rem 2rem 2%;
+          width: 85%;
+          text-shadow: 0 0 20px rgb(255, 255, 255, 0.1);
+        }
+
+        .Evaluation-Results .footer p {
+          font-weight: bold;
+          font-size: clamp(0.7rem, calc(50vw*0.09), 1rem);
+          color: #dbfeff;
+          margin-bottom: -1rem;
+        }
+
+        .Evaluation-Results .footer h5 {
+          color: #ffffff;
+          font-size: clamp(0.8rem, calc(50vw*1.1), 1.1rem);
+          padding: 0 3rem;
+        }
+
+        /* =================REFERIDO=============== */
+
+        .Evaluation-Results .referidos {
+          text-align: center;
+          height: auto;
+          padding: 2rem 0;
+          font-family: Verdana;
+          background-color: #147b7b;
+          color: white;
+          width: 100%;
+          border-radius: 7px;
+        }
+
+        .Evaluation-Results .referidos p {
+          padding: 0 1.8rem;
+        }
+
+        .Evaluation-Results .referbtn {
+          display: inline-block;
+          padding: 0.6rem 1.3rem;
+          background: linear-gradient(to bottom, #AED6D6 0%, #ffffff 15%, #ffffff 85%, #AED6D6 100%);
+          background-color: white;
+          color: #147b7b;
+          text-decoration: none;
+          border-radius: 12px;
+          font-weight: 800;
+          font-family: Verdana;
+          font-size: 1.4rem;
+        }
+      </style>
+    </head>
+    <body>
+      <div class='Evaluation-Results'>
+        <div class='header'>
+        <div class='logos'>
+          <img src='https://imgur.com/Qk6oytx.png' />
+          <img src='https://imgur.com/tVvbCqV.png' />
+          <img src='https://imgur.com/Duh9RGt.png' />
+          <img src='https://imgur.com/68ZykjC.png' />
+        </div>
+        <p class='h1'>RESULTADOS DE EVALUACIÓN MENSUAL</p>
+        </div>
+        <div class='welcome'>
+        <p class='h2'>¡Te saludamos de English4Kids!</p>
+        <!-- &#x1F31F; -->
+        <p class='h3'> Esperamos que estés teniendo una excelente semana
+        </p>
+        <p>
+          Queremos informarte sobre tu desempeño
+
+          en tu última evaluación mensual.
+        </p>
+        </div>
+        <div class='email-body'>
+          <div class='resultado-global'>
+            <p class='h2'>Resultado Global: ${
+              resultadoGlobal.mensajeResultado
+            }</p>
+            <p class='h3'>${resultadoGlobal.descripcionResultado}</p>
+            <p>A continuación un informe detallado de la evaluación:</p>
+          </div>
+          <div class='desempeño'>
+            <table>
+              <thead>
+                <tr>
+                  <th colspan='2'>&#128313; Desempeño por área&#128313;</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${desempeñoHTML}<br>
+              </tbody>
+              </table>
+          </div>
+          <div class='temas-dominados'>
+            <table>
+              <thead>
+                <tr>
+                  <th><b>&#128313;Temas Dominados&#128313;</b></th>
+                </tr>
+              </thead>
+              <tbody>
+            ${
+              approvedTopics.length
+                ? approvedTopics
+                    .map((t) => `<tr><td>&#9989; ${t}</td></tr>`)
+                    .join("") + "<br>"
+                : "<tr><td>Aún no hay temas dominados.</td></tr>"
+            }
+            </tbody>
+                  </table>
+          </div>
+          <div class='temas-reforzar'>
+            <table>
+            <thead>
+              <tr>
+                <th>
+                    &#128313; <b>Temas que aún necesita reforzar</b>&#128313;
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  reinforceTopics.length
+                    ? reinforceTopics
+                        .map((t) => `<tr><td>&#10004; ${t}</td></tr>`)
+                        .join("") + "<br>"
+                    : "<tr><td>¡Ningún tema para reforzar!</td></tr>"
+                }
+                </tbody>
+                </table>
+          </div>
+          <div class='areas-oportunidad'>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>&#128313;<b>Áreas de Oportunidad&#128313;</b></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    ${
+                      opportunityTopics.length
+                        ? opportunityTopics
+                            .map(
+                              (o) => `
+                              <tr><td>&#10004; ${o.title}</td></tr>
+                    ${
+                      o.answer
+                        ? `<tr><td class='reforzar-R-C'>&#10060; Respuesta: ${o.answer}</td></tr>`
+                        : ""
+                    }
+                    ${
+                      o.correction
+                        ? `<tr><td class='reforzar-R-C'>&#9989; Corrección: ${o.correction}</td></tr>`
+                        : ""
+                    }
+                    `
+                            )
+                            .join("")
+                        : "<tr><td class='reforzar-R-C'>¡Ningún error detectado!</td></tr>"
+                    }
+                    </tbody>
+                    </table>
+          </div>
+          <div class='pronunciacion-reforzar'>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th><b>&#128313;Pronunciación a reforzar&#128313;</b></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+            ${
+              pronunciationMistakes
+                ? pronunciationMistakes.replace(/\n/g, "<tr><td>") +
+                  "</td></tr>"
+                : "<tr><td>¡Sin errores de pronunciación!</td></tr>"
+            }
+            </tbody>
+            </table>
+          </div>
+          <div class='comentarios-coach'>
+            <table>
+              <thead>
+                <tr>
+                  <th>&#128221; <b>Comentarios del Coach&#128221;</b></th>
+                </tr>
+              </thead>
+              <tbody>
+                  ${
+                    comentariosCoach
+                      ? comentariosCoach.replace(/\n/g, "<tr><td>") +
+                        "</td></tr>"
+                      : "<tr><td>Muy buen trabajo!</td></tr>"
+                  }
+                </tbody>    
+            </table>
+          </div>
+        </div>
+        <div class='footer'>
+            <p>Atentamente,</p>
+            <h5>Equipo de English4Kids</h5>
+        </div>
+        <div class='referidos'>
+        <p style='font-weight: bold; font-size: 1.3rem'>
+          Refiere a otros padres y obtén un 50% de descuento por cada referido que
+          se inscriba.
+        </p>
+        <p style='font-size: 0.9rem'>
+          &#129490; &#10024; Si disfrutas nuestras clases, puedes ayudar a que más
+          niños aprendan inglés y tengan mejores oportunidades en la vida. Tu
+          referido también recibe un 50% de descuento en su primer pago.
+        </p>
+        <p style='font-size: 1.3rem; font-weight: bold'>
+          Entre más refieras, más ayudas y más ganas.
+        </p>
+        <p style='font-size: 0.9rem'>
+          &#128073; Para que tu referido obtenga el descuento, debe agendar una
+          llamada con uno de nuestros asesores
+        </p>
+        <a href='https://www.english4kidsonline.com/amigo' target='_blank' class='referbtn'>
+          REFIERE AQUÍ
+        </a>
+        </div>  
+      </div>
+    </body>
+  </html>`;
 
   // contenedor scrollable
   const previewHTML = `
-<div class="results-preview">
-  <h2> Evaluation Results Copied!</h2>
-  <h4>Please review your evaluation result here:</h4>
-    <div class="preview-wrapper">
-      ${reportHTML}
-    </div>
-     </div>
-  `;
+  <div class="results-preview">
+    <h2> Evaluation Results Copied!</h2>
+    <h4>Please review your evaluation result here:</h4>
+      <div class="preview-wrapper">
+        ${reportHTML}
+      </div>
+      </div>
+    `;
 
   // 3. Inyecta el wrapper en un popup
   document.querySelector("#popupContent").innerHTML = previewHTML;
@@ -1309,10 +1749,10 @@ ${comentariosCoach ? comentariosCoach.replace(/\n/g, "<br>") + "<br><br>" : "Muy
   navigator.clipboard
     .writeText(reportHTML)
     .then(() =>
-      showPopup("✅ The Results have been copied to you clipboard! ✅"),
+      showPopup("✅ The Results have been copied to you clipboard! ✅")
     )
     .catch(() =>
-      showPopup("Data couldn't be copied, please try again or reload the page"),
+      showPopup("Data couldn't be copied, please try again or reload the page")
     );
 }
 
