@@ -1317,11 +1317,15 @@ function copyResults() {
       <meta name='viewport' content='width=device-width, initial-scale=1' />
       <title>Evals for Evals Team</title>
       <style>
-        body {
-          margin: 0 auto;
-          background: linear-gradient(to bottom, #f5ffff 10%, #AED6D6 60%, #1ca5ab 90%);
-          background-color: #1ca5ab15;
-        }
+      body {
+        margin: 0;
+      }
+  
+      .Evaluation-Results {
+        margin: 0;
+        background: linear-gradient(to bottom, #f5ffff 10%, #AED6D6 60%, #1ca5ab 90%);
+        background-color: #1ca5ab15;
+      }
 
         .Evaluation-Results table {
           width: 80%;
