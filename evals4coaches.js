@@ -1206,13 +1206,108 @@ function copyResults() {
       ? {
           mensajeResultado: "Logrado",
           descripcionResultado:
-            "&#127881;¡Felicidades!&#127881; <br> Estás avanzando a un excelente ritmo.",
+            "&#127881;¡Felicidades!&#127881; <br> Se está avanzando a un excelente ritmo.",
         }
       : {
           mensajeResultado: "No Logrado",
           descripcionResultado:
             "Aunque aún no se ha alcanzado el objetivo, el esfuerzo cuenta y seguiremos avanzando juntos.",
         };
+
+  //approach for parents/adults
+  const syllabus =
+    typeof syllabusDropdown !== "undefined" &&
+    syllabusDropdown &&
+    syllabusDropdown.value
+      ? syllabusDropdown.value
+      : "";
+  let Welcome = "";
+  let Referal = "";
+
+  if (syllabus.startsWith("Adults")) {
+    Welcome =
+      "<p class='h2'>¡Te saludamos de English4Adults!</p><p class='h3'> Esperamos que estés teniendo una excelente semana</p><p>Queremos informarte sobre tu desempeño en tu última evaluación mensual.</p>";
+    Referal =
+      "<p style='font-weight: bold; font-size: 1.3rem'> Refiere a tus amigos o familiares y obtén un 50% de descuento por cada referido que se inscriba.</p><p style='font-size: 0.9rem'>&#129490; &#10024; Por cada referido que se inscriba, obtienes 50% de descuento y tu referido también obtiene un 50% de descuento en su primer pago.</p><p style='font-size: 1.3rem; font-weight: bold'>¡Entre más refieras, más ahorras y ayudas a otros a mejorar su futuro!</p><p style='font-size: 0.9rem'>&#128073; Para que tu referido obtenga el descuento, debe agendar una llamada con uno de nuestros asesores</p><a href='https://www.english4adultsonline.com/amigo' target='_blank' class='referbtn'> REFIERE AQUÍ </a>";
+  } else {
+    Welcome =
+      "<p class='h2'>¡Te saludamos de English4Kids!</p><p class='h3'> Esperamos que estés teniendo una excelente semana</p><p>Queremos informarte sobre el desempeño de tu hijo/a en su última evaluación mensual.</p>";
+    Referal =
+      "<p style='font-weight: bold; font-size: 1.3rem'> Refiere a otros padres y obtén un 50% de descuento por cada referido que se inscriba.</p><p style='font-size: 0.9rem'>&#129490; &#10024; Si disfrutas nuestras clases, puedes ayudar a que más niños aprendan inglés y tengan mejores oportunidades en la vida. Tu referido también recibe un 50% de descuento en su primer pago.</p><p style='font-size: 1.3rem; font-weight: bold'>Entre más refieras, más ahorras y más ayudas.</p><p style='font-size: 0.9rem'>&#128073; Para que tu referido obtenga el descuento, debe agendar una llamada con uno de nuestros asesores</p><a href='https://www.english4kidsonline.com/amigo' target='_blank' class='referbtn'> REFIERE AQUÍ </a>";
+  }
+  const temasDominadosSection = approvedTopics.length
+    ? `<div class='temas-dominados'>
+          <table>
+            <thead>
+              <tr><th><b>&#128313;Temas Dominados&#128313;</b></th></tr>
+            </thead>
+            <tbody>
+              ${approvedTopics
+                .map((t) => `<tr><td>&#9989; ${t}</td></tr>`)
+                .join("")}
+            </tbody>
+          </table>
+        </div>`
+    : "";
+
+  const temasReforzarSection = reinforceTopics.length
+    ? `<div class='temas-reforzar'>
+          <table>
+            <thead>
+              <tr><th>&#128313; <b>Temas a Reforzar</b>&#128313;</th></tr>
+            </thead>
+            <tbody>
+              ${reinforceTopics
+                .map((t) => `<tr><td>&#10004; ${t}</td></tr>`)
+                .join("")}
+            </tbody>
+          </table>
+        </div>`
+    : "";
+
+  const areasOportunidadSection = opportunityTopics.length
+    ? `<div class='areas-oportunidad'>
+          <table>
+            <thead>
+              <tr><th>&#128313;<b>Áreas de Oportunidad&#128313;</b></th></tr>
+            </thead>
+            <tbody>
+              ${opportunityTopics
+                .map(
+                  (o) => `<tr><td>&#10004; ${o.title}</td></tr>
+                        ${
+                          o.answer
+                            ? `<tr><td class='reforzar-R-C'>&#10060; Respuesta: ${o.answer}</td></tr>`
+                            : ""
+                        }
+                        ${
+                          o.correction
+                            ? `<tr><td class='reforzar-R-C'>&#9989; Corrección: ${o.correction}</td></tr>`
+                            : ""
+                        }`
+                )
+                .join("")}
+            </tbody>
+          </table>
+        </div>`
+    : "";
+
+  const pronunciacionSection =
+    pronunciationMistakes && pronunciationMistakes.trim()
+      ? `<div class='pronunciacion-reforzar'>
+          <table>
+            <thead>
+              <tr><th><b>&#128313;Pronunciación a Reforzar&#128313;</b></th></tr>
+            </thead>
+            <tbody>
+              ${pronunciationMistakes
+                .split(/\r?\n/)
+                .map((ln) => `<tr><td>${ln}</td></tr>`)
+                .join("")}
+            </tbody>
+          </table>
+        </div>`
+      : "";
 
   // Construcción del HTML final
   const reportHTML = `
@@ -1221,8 +1316,6 @@ function copyResults() {
       <meta charset='utf-8' />
       <meta name='viewport' content='width=device-width, initial-scale=1' />
       <title>Evals for Evals Team</title>
-      <!-- STYLE -->
-      <link href='emailtest.css' rel='stylesheet' type='text/css' />
       <style>
         body {
           margin: 0 auto;
@@ -1552,15 +1645,7 @@ function copyResults() {
         <p class='h1'>RESULTADOS DE EVALUACIÓN MENSUAL</p>
         </div>
         <div class='welcome'>
-        <p class='h2'>¡Te saludamos de English4Kids!</p>
-        <!-- &#x1F31F; -->
-        <p class='h3'> Esperamos que estés teniendo una excelente semana
-        </p>
-        <p>
-          Queremos informarte sobre tu desempeño
-
-          en tu última evaluación mensual.
-        </p>
+        ${Welcome}
         </div>
         <div class='email-body'>
           <div class='resultado-global'>
@@ -1582,93 +1667,10 @@ function copyResults() {
               </tbody>
               </table>
           </div>
-          <div class='temas-dominados'>
-            <table>
-              <thead>
-                <tr>
-                  <th><b>&#128313;Temas Dominados&#128313;</b></th>
-                </tr>
-              </thead>
-              <tbody>
-            ${
-              approvedTopics.length
-                ? approvedTopics
-                    .map((t) => `<tr><td>&#9989; ${t}</td></tr>`)
-                    .join("") + "<br>"
-                : "<tr><td>Aún no hay temas dominados.</td></tr>"
-            }
-            </tbody>
-                  </table>
-          </div>
-          <div class='temas-reforzar'>
-            <table>
-            <thead>
-              <tr>
-                <th>
-                    &#128313; <b>Temas que aún necesita reforzar</b>&#128313;
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                ${
-                  reinforceTopics.length
-                    ? reinforceTopics
-                        .map((t) => `<tr><td>&#10004; ${t}</td></tr>`)
-                        .join("") + "<br>"
-                    : "<tr><td>¡Ningún tema para reforzar!</td></tr>"
-                }
-                </tbody>
-                </table>
-          </div>
-          <div class='areas-oportunidad'>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>&#128313;<b>Áreas de Oportunidad&#128313;</b></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    ${
-                      opportunityTopics.length
-                        ? opportunityTopics
-                            .map(
-                              (o) => `
-                              <tr><td>&#10004; ${o.title}</td></tr>
-                    ${
-                      o.answer
-                        ? `<tr><td class='reforzar-R-C'>&#10060; Respuesta: ${o.answer}</td></tr>`
-                        : ""
-                    }
-                    ${
-                      o.correction
-                        ? `<tr><td class='reforzar-R-C'>&#9989; Corrección: ${o.correction}</td></tr>`
-                        : ""
-                    }
-                    `
-                            )
-                            .join("")
-                        : "<tr><td class='reforzar-R-C'>¡Ningún error detectado!</td></tr>"
-                    }
-                    </tbody>
-                    </table>
-          </div>
-          <div class='pronunciacion-reforzar'>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th><b>&#128313;Pronunciación a reforzar&#128313;</b></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-            ${
-              pronunciationMistakes
-                ? pronunciationMistakes.replace(/\n/g, "<tr><td>") +
-                  "</td></tr>"
-                : "<tr><td>¡Sin errores de pronunciación!</td></tr>"
-            }
-            </tbody>
-            </table>
-          </div>
+          ${temasDominadosSection}
+          ${temasReforzarSection}
+          ${areasOportunidadSection}
+          ${pronunciacionSection}
           <div class='comentarios-coach'>
             <table>
               <thead>
@@ -1692,25 +1694,7 @@ function copyResults() {
             <h5>Equipo de English4Kids</h5>
         </div>
         <div class='referidos'>
-        <p style='font-weight: bold; font-size: 1.3rem'>
-          Refiere a otros padres y obtén un 50% de descuento por cada referido que
-          se inscriba.
-        </p>
-        <p style='font-size: 0.9rem'>
-          &#129490; &#10024; Si disfrutas nuestras clases, puedes ayudar a que más
-          niños aprendan inglés y tengan mejores oportunidades en la vida. Tu
-          referido también recibe un 50% de descuento en su primer pago.
-        </p>
-        <p style='font-size: 1.3rem; font-weight: bold'>
-          Entre más refieras, más ayudas y más ganas.
-        </p>
-        <p style='font-size: 0.9rem'>
-          &#128073; Para que tu referido obtenga el descuento, debe agendar una
-          llamada con uno de nuestros asesores
-        </p>
-        <a href='https://www.english4kidsonline.com/amigo' target='_blank' class='referbtn'>
-          REFIERE AQUÍ
-        </a>
+        ${Referal}
         </div>  
       </div>
     </body>
