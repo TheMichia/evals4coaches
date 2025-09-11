@@ -1719,8 +1719,8 @@ function copyResults() {
   // contenedor scrollable
   const previewHTML = `
   <div class="results-preview">
-    <h2> Evaluation Results Copied!</h2>
-    <h4>Please review your evaluation result here:</h4>
+    <h2 class="previewh2"> Evaluation Results Copied!</h2>
+    <h4 class="previewh4">Please review your evaluation result here:</h4>
       <div class="preview-wrapper">
         ${reportHTML}
       </div>
