@@ -1862,9 +1862,10 @@ function copyResults() {
                 </tr>
               </thead>
               <tbody>
+              <tr><td>"
                   ${
                     comentariosCoach
-                      ? comentariosCoach.replace(/\n/g, "<tr><td>") +
+                      ? comentariosCoach.replace(/\n/g, "") +
                         "</td></tr>"
                       : "<tr><td>Muy buen trabajo!</td></tr>"
                   }
