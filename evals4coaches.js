@@ -1862,13 +1862,13 @@ function copyResults() {
                 </tr>
               </thead>
               <tbody>
-              <tr><td>"
+              <tr><td>
                   ${
                     comentariosCoach
-                      ? comentariosCoach.replace(/\n/g, "") +
-                        "</td></tr>"
-                      : "<tr><td>Muy buen trabajo!</td></tr>"
+                      ? comentariosCoach
+                      : "Muy buen trabajo!"
                   }
+                  </td></tr>
                 </tbody>    
             </table>
           </div>
