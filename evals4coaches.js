@@ -1041,8 +1041,13 @@ function showErrorsSection(perfectAreasList = []) {
   // =============================== <h2>${headerText}</h2>
   // 2. Construir el HTML de la sección de errores
   let html = `<div class="feedback-container">
-      <h2>${headerText}</h2>`;
-
+      `;
+  
+  // Agregar header solo si hay mistakes
+  if (pronunciationMistakes || rejectedTopics.length) {
+    html += `<h2>${headerText}</h2>`;
+  }
+  
   if (pronunciationMistakes) {
     html += `
       <div class="mistake-section pronunciation">
