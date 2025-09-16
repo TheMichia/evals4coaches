@@ -121,11 +121,14 @@ function updateExtraInfo() {
   }
 
   // 2) Regla Exit (Juniors NO es exit)
-  const isExit =
+ const isExit =
     !syllabusVal.startsWith("Juniors") &&
     ((levelVal === 10 && (weekVal === 8 || weekVal === 14)) ||
       (levelVal === 12 && weekVal === 4) ||
-      (syllabusVal.includes("Masters") && levelVal === 10 && weekVal === 4));
+      (syllabusVal.includes("Masters") && levelVal === 10 && weekVal === 4) ||
+      (syllabusVal.toLowerCase().includes("adults (5hrs/week)") &&
+        levelVal === 10 &&
+        weekVal === 4));
 
   // 3) Mostrar/ocultar tabla Exit Evaluation
   if (exitevaltable) {
