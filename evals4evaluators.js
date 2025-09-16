@@ -903,7 +903,7 @@ function evaluatorsCopyResults() {
   // ---------- Build full headers (complete texts) ----------
   const header_pass_kids_teens = `
 <p><b>&#127881; ¡Felicidades, papás y mamás!</b></p>
-<p>Hoy celebramos juntos un <b>logro extraordinario</b><: su hijo/a ha completado con éxito su curso de inglés, superando cada reto con <b>dedicación, alegría y una constancia admirable.</b> &#127942;&#10024;</p>
+<p>Hoy celebramos juntos un <b>logro extraordinario</b>: su hijo/a ha completado con éxito su curso de inglés, superando cada reto con <b>dedicación, alegría y una constancia admirable.</b> &#127942;&#10024;</p>
 <p>Durante este tiempo, no solo adquirió nuevas habilidades lingüísticas, sino que también desarrolló <b>confianza, disciplina y una mentalidad de superación</b> que le acompañará toda la vida.</p>
 <p>Este avance es fruto de su esfuerzo, del acompañamiento de ustedes y del compromiso de todo nuestro equipo English4kids. ¡Gracias por ser parte activa de este viaje y por inspirar a su pequeño/a a alcanzar la meta!</p>
 <p><b> &#127775; Hoy, más que un curso terminado, celebramos el inicio de un futuro lleno de oportunidades.</b></p>
