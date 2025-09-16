@@ -1,6 +1,6 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.3.1";
+  const versionnum = "1.3.2";
   //UPDATE for adults neutral feedback
   const jsonVersion = 1.4;
   window.appVersion = "Coaches";
