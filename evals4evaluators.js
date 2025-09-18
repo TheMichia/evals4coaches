@@ -756,11 +756,11 @@ function evaluatorsCopyResults() {
   const syllabusVal = syllabus || "";
   const isExit =
     // !syllabusVal.toLowerCase().startsWith("juniors") &&
-    ((levelVal === 10 && (weekVal === 8 || weekVal === 14)) ||
-      (levelVal === 12 && weekVal === 4) ||
-      (syllabusVal.toLowerCase().includes("masters") &&
-        levelVal === 10 &&
-        weekVal === 4));
+    (levelVal === 10 && (weekVal === 8 || weekVal === 14)) ||
+    (levelVal === 12 && weekVal === 4) ||
+    (syllabusVal.toLowerCase().includes("masters") &&
+      levelVal === 10 &&
+      weekVal === 4);
 
   // ---------- topics extraction (robust) ----------
   const approvedTopics = [];
@@ -817,12 +817,25 @@ function evaluatorsCopyResults() {
     { id: "co", label: "Comprensión" },
     { id: "in", label: "Entonación" },
   ];
-  const desempeñoHTML = areas
-    .map((a) => {
-      const val = document.getElementById(a.id)?.value ?? "";
-      return `<b>${a.label}:</b> ${describeScore(val)}<br>`;
-    })
-    .join("");
+  const desempeñoHTML = `<div class="desempeño">
+      <table>
+        <thead>
+          <tr>
+            <th colspan="2">&#128313; Desempeño por área&#128313;</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${areas
+            .map((a) => {
+              const val = document.getElementById(a.id)?.value ?? "";
+              return `<tr><td class="evalarea">${
+                a.label
+              }</td><td> ${describeScore(val)}</td></tr>`;
+            })
+            .join("")}
+        </tbody>
+      </table>
+    </div>`;
 
   // pronunciation  comments
   const pronunciationMistakes =
@@ -837,22 +850,69 @@ function evaluatorsCopyResults() {
   if (!Number.isNaN(inVal) && inVal <= 1.0) {
     const txt = document.getElementById("incomment")?.value?.trim() || "";
     if (txt)
-      areaDetails.push(`<b>Detalle de Entonación:</b> ${safe(txt)}<br><br>`);
+      areaDetails.push(`<tr><td class="tema-reforzar">Detalle de <b>Entonación:</b></td>
+    </tr> <tr><td class="reforzar-R-C"> ${safe(txt)}</td></tr>`);
   }
   if (!Number.isNaN(flVal) && flVal <= 1.0) {
     const txt = document.getElementById("flcomment")?.value?.trim() || "";
     if (txt)
-      areaDetails.push(`<b>Detalle de la fluidez:</b> ${safe(txt)}<br><br>`);
+      areaDetails.push(`<tr><td class="tema-reforzar">Detalle de <b>fluidez:</b></td>
+    </tr> <tr><td class="reforzar-R-C"> ${safe(txt)}</td></tr>`);
   }
-  // if (syllabusVal.includes("Masters 2")) {
-  //   const txt = document.getElementById("prepcomment")?.value?.trim() || "";
-  //   if (txt) areaDetails.push(`<b>Preparación para la exposición:</b> ${safe(txt)}<br><br>`);
-  // }
   // === Preparación (Masters 2) – versión larga sin leer JSON ===
   const PREPARACION_MAP = {
-    "No se preparó": `<b>Preparación para la exposición: No se preparó</b><br>Recuerda que la práctica es clave para mejorar tu inglés. Para la próxima, intenta revisar cada tema con anticipación y practicar hablando en voz alta. Puedes hacer resúmenes o responder preguntas sobre cada tema para sentirte más seguro. ¡Anímate a prepararte mejor la próxima vez!`,
-    "Se preparó, pero pudo hacerlo mejor": `<b>Preparación para la exposición: Se preparó, pero pudo hacerlo mejor</b><br>Hubo preparación de parte del estudiante, pero podría haber sido más claro y organizado en su exposición. Intenta practicar más con ejemplos y conectar mejor los temas. Puedes hacer una lista de frases clave para cada estructura gramatical y repasarlas en voz alta antes de hablar. ¡Sigue practicando, estás mejorando!`,
-    "Se preparó bien y logró integrar la mitad o más de los temas": `<b>Preparación para la exposición: Se preparó bien y logró integrar la mitad o más de los temas</b><br>¡Excelente trabajo! Lograste integrar varios temas gramaticales en tu exposición de manera clara y organizada. Tu uso de los tiempos verbales fue acertado, y tu fluidez ha mejorado mucho. Sigue practicando para perfeccionar tu entonación y confianza al hablar. ¡Sigue así, vas por muy buen camino!`,
+    "No se preparó": `
+        <tr>
+        <td class="tema-reforzar">
+        <b>Preparación para la exposición:</b> No se preparó
+        </td>
+        </tr>
+        <tr>
+        <td class="reforzar-R-C">
+        Recuerda que la práctica es clave para mejorar tu inglés.
+        Para la próxima,
+        intenta revisar cada tema con anticipación y practicar hablando en voz
+        alta.Puedes hacer resúmenes o responder preguntas sobre cada tema para
+        sentirte más seguro. <br/>
+        ¡Anímate a prepararte mejor la próxima vez!
+        </td>
+        </tr>`,
+    "Se preparó, pero pudo hacerlo mejor": `
+      <tr>
+      <td class="tema-reforzar">
+      <b>Preparación para la exposición:</b> Se preparó, pero pudo hacerlo mejor
+      </td>
+      </tr>
+      <tr>
+      <td class="reforzar-R-C">
+      Hubo preparación de parte del estudiante, pero podría haber sido más claro
+      y organizado en su exposición.
+      Intenta practicar más con ejemplos y conectar mejor los temas.      
+      Puedes hacer una lista de frases clave para cada estructura gramatical y
+      repasarlas en voz alta antes de hablar.<br/>
+      ¡Sigue practicando, estás mejorando!
+      </td>
+      </tr>`,
+    "Se preparó bien y logró integrar la mitad o más de los temas": `
+        <tr>
+        <td class="tema-reforzar">
+        <b>Preparación para la exposición:</b> Se preparó bien y logró integrar la
+        mitad o más de los temas
+        </td>
+        </tr>
+        <tr>
+        <td class="reforzar-R-C">
+        ¡Excelente trabajo! <br/>
+        Lograste integrar varios temas gramaticales en tu
+          exposición de manera clara y organizada.
+        Tu uso de los tiempos verbales
+          fue acertado, y tu fluidez ha mejorado mucho.
+         Sigue practicando para
+          perfeccionar tu entonación y confianza al hablar. <br/>
+        ¡Sigue así, vas por muy
+          buen camino!
+        </td>
+        </tr>`,
   };
 
   if (syllabusVal.includes("Masters 2")) {
@@ -860,12 +920,10 @@ function evaluatorsCopyResults() {
     if (txt) {
       const largo = PREPARACION_MAP[txt]; // coincide exacto con una de las 3 claves
       if (largo) {
-        areaDetails.push(largo + "<br><br>");
+        areaDetails.push(largo + "");
       } else {
         // fallback
-        areaDetails.push(
-          `<b>Preparación para la exposición:</b> ${safe(txt)}<br><br>`,
-        );
+        areaDetails.push(` ${safe(txt)}`);
       }
     }
   }
@@ -876,170 +934,484 @@ function evaluatorsCopyResults() {
   const finalDisplay =
     finalScoreText || (Number.isFinite(totalScore) ? String(totalScore) : "");
 
-  console.log('DEBUG isExit, finalDisplay, totalScore:', isExit, finalDisplay, totalScore);
+  console.log(
+    "DEBUG isExit, finalDisplay, totalScore:",
+    isExit,
+    finalDisplay,
+    totalScore
+  );
 
   // ---------- condicionado logic ----------
   const isCondicionado =
     (isExit &&
-      ( (finalDisplay !== "" && Math.abs(Number(finalDisplay) - 7) < 1e-6) ||
-        (Number.isFinite(totalScore) && Math.abs(Number(totalScore) - 7) < 1e-6)
-      )
-    ) ||
+      ((finalDisplay !== "" && Math.abs(Number(finalDisplay) - 7) < 1e-6) ||
+        (Number.isFinite(totalScore) &&
+          Math.abs(Number(totalScore) - 7) < 1e-6))) ||
     (!isExit &&
       Number.isFinite(totalScore) &&
       Math.abs(Number(totalScore) - 7) < 1e-6);
 
+  const condicionadoText = `
+      <tr>
+      <td class="tema-reforzar">
+      <b>Condicionado/a:</b>
+      </td>
+      </tr>
+      <tr>
+      <td class="reforzar-R-C">
+      <p>
+      El estudiante pasa de nivel de manera condicionada, esto
+      significa que debe practicar lo mencionado arriba para poder
+      estar al día con sus compañeros del siguiente nivel. Por
+      favor, lea cuidadosamente las recomendaciones.
+      </p>
 
-  const condicionadoText = `<b>Condicionado/a:</b> el estudiante pasa de nivel de manera condicionada, esto significa que debe practicar lo mencionado arriba para poder estar al día con sus compañeros del siguiente nivel. Por favor, lea cuidadosamente las recomendaciones.<br><br>
-<b>Recomendaciones:</b><br><br>
-<li>Escuchar música en inglés y ver videos o películas en inglés.</li>
-<li>Revisar el contenido disponible en nuestra plataforma de práctica y completar todas las actividades.</li>
-<li>Repetir las oraciones del día al menos 20 veces antes o después de clase.</li>
-<li>Enlace para acceder a la plataforma: https://english4kids.pathwright.com</li><br><br>`;
-
-  // // ---------- survey link ----------
-  // const surveyBase = syllabusLower.includes("adults")
-  //   ? "https://e4cc.typeform.com/to/efJago3L#coach="
-  //   : "https://e4cc.typeform.com/to/ovOnAdWx#coach=";
-  // const surveyLink = surveyBase + encodeURIComponent(evaluatorID || "");
+      <p><b>Recomendaciones:</b></p>
+      <ul>
+      <li>
+      Escuchar música en inglés y ver videos o películas en
+      inglés.
+      </li>
+      <li>
+      Revisar el contenido disponible en nuestra plataforma de
+      práctica y completar todas las actividades.
+      </li>
+      <li>
+      Repetir las oraciones del día al menos 20 veces antes o
+      después de clase.
+      </li>
+      <li>
+      <a
+      target="_blank"
+      href="https://english4kids.pathwright.com"
+      >Accede a la plataforma aquí</a
+      >
+      </li>
+      </ul>
+      </td>
+      </tr>`;
 
   // ---------- Build full headers (complete texts) ----------
+  // ---***EXIT*** Kids and teens---
   const header_pass_kids_teens = `
-<p><b>&#127881; ¡Felicidades, papás y mamás!</b></p>
-<p>Hoy celebramos juntos un <b>logro extraordinario</b>: su hijo/a ha completado con éxito su curso de inglés, superando cada reto con <b>dedicación, alegría y una constancia admirable.</b> &#127942;&#10024;</p>
-<p>Durante este tiempo, no solo adquirió nuevas habilidades lingüísticas, sino que también desarrolló <b>confianza, disciplina y una mentalidad de superación</b> que le acompañará toda la vida.</p>
-<p>Este avance es fruto de su esfuerzo, del acompañamiento de ustedes y del compromiso de todo nuestro equipo English4kids. ¡Gracias por ser parte activa de este viaje y por inspirar a su pequeño/a a alcanzar la meta!</p>
-<p><b> &#127775; Hoy, más que un curso terminado, celebramos el inicio de un futuro lleno de oportunidades.</b></p>
-`;
-
+    <div class="welcome">
+    <p class="h2">&#127881; ¡Felicidades, papás y mamás!</p>
+    <!-- &#x1F31F; -->
+    <p class="h3">Hoy celebramos juntos un <b>logro extraordinario</b></p>
+    <p class="h4">
+    Su hijo/a ha completado con éxito su curso de inglés, <br />
+    superando cada reto con
+    <b>dedicación, alegría y una constancia admirable.</b></p>
+    <p class="h4">
+    Durante este tiempo, no solo adquirió nuevas habilidades lingüísticas,
+    sino que también desarrolló
+    <b>confianza, disciplina y una mentalidad de superación</b> que le
+    acompañará toda la vida.
+    </p>
+    <p class="h4">
+    Este avance es fruto de su esfuerzo, del acompañamiento de ustedes y
+    del compromiso de todo nuestro equipo English4kids. ¡Gracias por ser
+    parte activa de este viaje y por inspirar a su pequeño/a a alcanzar la
+    meta!
+    </p>
+    <p class="h4">
+    <b>
+    &#127775; Hoy, más que un curso terminado, celebramos el inicio de
+    un futuro lleno de oportunidades.</b
+    >
+    </p>
+    </div>
+      `;
+  const resultado_global_pass_kids_teens = `
+    <div class="resultado-global">
+    <p class="h2">¡Un gran paso hacia el dominio del idioma!</p>
+    <p class="h3">
+    Tu hijo/a ha alcanzado un nivel <br />
+    intermedio de inglés (B1–B2)<br />
+    <em style="font-size: 0.8rem; font-weight: 500"
+    >Según el Marco Común Europeo (CEFR)</em
+    >
+    </p>
+    <p>
+    Estamos seguros de que este logro abrirá <br />muchas puertas para
+    su futuro.
+    </p>
+    <div class="temas-dominados">
+    <table>
+    <thead>
+    <th>Esto significa que es capaz de:</th>
+    </thead>
+    <tr>
+    <td>
+    &#10004; Comprender ideas principales en conversaciones claras
+    </td>
+    </tr>
+    <tr>
+    <td>&#10004; Expresar opiniones y relatar experiencias</td>
+    </tr>
+    <tr>
+    <td>
+    &#10004; Participar activamente en interacciones reales con
+    seguridad y autonomía
+    </td>
+    </tr>
+    </table>
+    </div>
+    </div>`;
   const header_fail_kids_teens = `
-<p>&#127919; <b>Queremos reconocer</b> la dedicación y el esfuerzo</p>
-<p>Tu hijo/a ha mostrado compromiso y participación en cada etapa del aprendizaje del inglés. ¡Cada paso cuenta! &#10024;</p>
-<p>En esta evaluación final, <b>aún no se ha alcanzado el nivel de dominio necesario para cerrar el curso satisfactoriamente</b>. Esto significa que algunas habilidades clave todavía están en proceso de fortalecimiento.</p>
-`;
-
+    <div class="welcome">
+    <p class="h2">
+    &#127919; Queremos reconocer la dedicación y el esfuerzo
+    </p>
+    <!-- &#x1F31F; -->
+    <p class="h3">Tu hijo/a ha mostrado compromiso y participación en cada etapa del
+    aprendizaje del inglés. ¡Cada paso cuenta! &#10024;</p>
+    <p class="h4">
+    En esta evaluación final,
+    <b
+    >aún no se ha alcanzado el nivel de dominio necesario para cerrar el
+    curso satisfactoriamente</b
+    >. Esto significa que algunas habilidades clave todavía están en proceso
+    de fortalecimiento.
+    </p>
+    </div>
+    `;
+  const resultado_global_fail_kids_teens = `
+    <div class="areas-oportunidad">
+    <table>
+    <tbody>
+    <tr>
+    <td class="tema-reforzar"><b>Siguientes Pasos</b></td>
+    </tr>
+    <tr>
+    <td class="reforzar-R-C">
+    No te desanimes: tu hijo/a tendrá una segunda oportunidad en
+    <b>8 semanas</b>. Será asignado/a nuevamente al mismo nivel,
+    lo que le permitirá
+    <b
+    >repasar los contenidos, reforzar áreas clave y prepararse
+    de la mejor manera </b
+    >para aprobar en la próxima evaluación.
+    </td>
+    </tr>
+    <tr>
+    <td class="tema-reforzar">&#128218; <b>Nivel actual:</b></td>
+    </tr>
+    <tr>
+    <td class="reforzar-R-C">
+    Según el Marco Común Europeo de Referencia para las Lenguas
+    (CEFR), tu hijo/a aún no alcanza el nivel intermedio (B1).
+    Actualmente se encuentra en un nivel básico alto (A2) y
+    necesita reforzar estructuras clave, comprensión auditiva y
+    expresión oral fluida para avanzar al siguiente nivel.
+    </td>
+    </tr>
+    <tr>
+    <td class="tema-reforzar">&#128187; <b>Recomendación:</b></td>
+    </tr>
+    <tr>
+    <td class="reforzar-R-C">
+    Accede a nuestra plataforma <a href="https://english4kids.pathwright.com/library/" target="_blank"><b>Pathwright</b></a> para repasar
+    los contenidos vistos, realizar actividades prácticas y
+    fortalecer las habilidades necesarias para avanzar con
+    seguridad.
+    </td>
+    </tr>
+    <tr>
+    <td class="tema-reforzar">
+    &#128153; <b>Agradecimiento: </b>
+    </td>
+    </tr>
+    <tr>
+    <td class="reforzar-R-C">
+    Gracias por acompañar este proceso. Con práctica constante y
+    apoyo familiar, ¡estamos seguros de que muy pronto alcanzará
+    el siguiente nivel!
+    </td>
+    </tr>
+    </tbody>
+    </table>
+    </div>`;
+  // ---***EXIT***ADULTS---
   const header_pass_adults = `
-    <p>&#127881; <b>¡Felicidades!</b></p>
-    <p>Hoy celebramos contigo un logro extraordinario: has completado con éxito tu curso de inglés, superando cada reto con dedicación, constancia y una admirable voluntad de aprendizaje. &#127942;&#10024;</p>
-  <p>Durante este tiempo, no solo has fortalecido tus habilidades lingüísticas para desenvolverte en situaciones cotidianas con mayor seguridad y fluidez, sino que también has desarrollado confianza, disciplina y una mentalidad de superación que te acompañará en cada meta que te propongas.</p>
-  <p>&#127775; Este avance es fruto de tu esfuerzo, de tu compromiso y de la determinación de seguir creciendo. Hoy no solo celebramos un curso terminado, sino el inicio de un futuro lleno de nuevas oportunidades para comunicarte, conectar y alcanzar tus sueños.</p>
-`;
+      <div class="welcome">
+      <p class="h2">&#127881; ¡Felicidades!</p>
+      <!-- &#x1F31F; -->
+      <p class="h3">Hoy celebramos contigo un logro extraordinario</p>
+      <p class="h4">
+      Has completado con éxito tu curso de inglés, superando cada reto con
+      dedicación, constancia y una admirable voluntad de aprendizaje.
+      &#127942;&#10024;
+      </p>
+      <p class="h4">
+      Durante este tiempo, no solo has fortalecido tus habilidades
+      lingüísticas para desenvolverte en situaciones cotidianas con mayor
+      seguridad y fluidez, sino que también has desarrollado confianza,
+      disciplina y una mentalidad de superación que te acompañará en cada
+      meta que te propongas.
+      </p>
+      <p class="h4">
+      &#127775; Este avance es fruto de tu esfuerzo, de tu compromiso y de
+      la determinación de seguir creciendo. Hoy no solo celebramos un curso
+      terminado, sino el inicio de un futuro lleno de nuevas oportunidades
+      para comunicarte, conectar y alcanzar tus sueños.
+      </p>
+      </div>   `;
 
-  const header_fail_adults = `  
-    <p><b>Reconocemos el esfuerzo y la participación</b> que has mostrado a lo largo de este programa. Cada paso que das en tu aprendizaje del inglés suma y te acerca más a tu meta.</p>
-  <p>En esta evaluación final, <b>aún no se ha alcanzado el nivel de dominio necesario para cerrar el curso satisfactoriamente</b>. Esto indica que algunas habilidades clave siguen en proceso de desarrollo.</p> 
+  const header_fail_adults = `
+    <div class="welcome">
+    <p class="h2">Reconocemos tu esfuerzo y tu participación</p>
+    <p class="h3">Cada paso que das en tu aprendizaje del inglés suma y te acerca
+    más a tu meta.
+    </p>
+    <p class="h4"> En esta evaluación final,
+    <b
+    >aún no se ha alcanzado el nivel de dominio necesario para cerrar el
+    curso satisfactoriamente</b
+    >. Esto indica que algunas habilidades clave siguen en proceso de
+    desarrollo.
+    </p>
+    </div>  `;
 
-`;
-
+  const resultado_global_fail_adults = `
+    <div class="areas-oportunidad">
+    <table>
+    <tbody>
+    <tr>
+    <td class="tema-reforzar"><b>Siguientes Pasos</b></td>
+    </tr>
+    <tr>
+    <td class="reforzar-R-C">
+    No te desanimes, tendrás una segunda oportunidad en
+    <b>4 semanas</b> mientras repites el nivel. Esto te permitirá
+    repasar los contenidos, reforzar áreas específicas y llegar
+    con más seguridad a tu próxima evaluación.
+    </td>
+    </tr>
+    <tr>
+    <td class="tema-reforzar"><b>Recomendación:</b></td>
+    </tr>
+    <tr>
+    <td class="reforzar-R-C">
+    Accede a nuestra plataforma
+    <a
+    href="https://english4kids.pathwright.com/library/"
+    target="_blank"
+    ><b>Pathwright</b></a
+    >
+    para practicar actividades, revisar el material y fortalecer
+    tus habilidades de forma dirigida.
+    </td>
+    </tr>
+    <tr>
+    <td class="tema-reforzar"><b>Mensaje finalo: </b></td>
+    </tr>
+    <tr>
+    <td class="reforzar-R-C">
+    Este resultado <b>no marca el final del camino</b>, sino una
+    nueva oportunidad para avanzar. Con tu constancia y
+    dedicación, estamos seguros de que muy pronto alcanzarás la
+    meta.
+    </td>
+    </tr>
+    </tbody>
+    </table>
+   </div>`;
+  const resultado_global_pass_adults = `
+    <div class="resultado-global">
+    <p class="h2">¡Un gran paso hacia el dominio del idioma!</p>
+    <p class="h3">
+    Has alcanzado un nivel<br />
+    A2 de inglés<br />
+    <em style="font-size: 0.8rem; font-weight: 500"
+    >Según el Marco Común Europeo (CEFR)</em
+    >
+    </p>
+    <p>
+    Estamos seguros de que este logro abrirá muchas puertas para tu
+    futuro.
+    </p>
+    <div class="temas-dominados">
+    <table>
+    <thead>
+    <th>Esto significa que puedes:</th>
+    </thead>
+    <tr>
+    <td>
+    &#10004; Comprender expresiones comunes y frases sobre temas
+    cotidianos
+    </td>
+    </tr>
+    <tr>
+    <td>
+    &#10004; Participar en conversaciones simples y directas
+    </td>
+    </tr>
+    <tr>
+    <td>
+    &#10004; Hablar sobre experiencias personales, rutinas, y
+    necesidades inmediatas
+    </td>
+    </tr>
+    </table>
+    </div>
+    <p>
+    ¡Te animamos a seguir practicando para avanzar al siguiente nivel!
+    </p>
+    </div>`;
+  // ---***EXIT***JUNIORS---
   const header_pass_juniors = `
-    <p>&#x1F389; <b>¡Felicidades, papás y mamás!</b></p>
-    <p>Hoy celebramos junto a ustedes un logro muy especial: su hijo/a ha completado con éxito su curso de inglés, superando cada reto con compromiso, entusiasmo y constancia. &#x1F3C6;&#x2728;</p>
-  <p>Durante este tiempo, ha demostrado un crecimiento notable en sus habilidades lingüísticas, ganando seguridad y confianza para comunicarse en inglés.</p>
-  <p>&#x2728;&#x1F4D8;&#x1F393; ¡Estamos muy orgullosos de su esfuerzo y dedicación!</p>
-  <p>&#x1F4E2; Gran noticia:</p>
-  <p>Su hijo/a ha alcanzado un nivel básico alto de inglés (A2), lo que significa que puede comprender conversaciones simples, participar en intercambios cortos y expresar ideas sobre su vida diaria e intereses de forma clara y sencilla.</p>
-  <p>&#x1F3AF; Este es un paso firme hacia el dominio del idioma, y sienta una base sólida para seguir avanzando hacia niveles más altos.</p> <hr>
-
-`;
+      <div class="welcome">
+      <p class="h2">&#127881; ¡Felicidades, papás y mamás!</p>
+      <!-- &#x1F31F; -->
+      <p class="h3">Hoy celebramos junto a ustedes un logro muy especial</p>
+      <p class="h4">
+      Su hijo/a ha completado con éxito su curso de inglés, <br />
+      superando cada reto con
+      <b> compromiso, entusiasmo y constancia.</b>
+      </p>
+      <p class="h4">
+      Durante este tiempo, ha demostrado un crecimiento notable en sus
+      habilidades lingüísticas, ganando seguridad y confianza para
+      comunicarse en inglés.
+      </p>
+      <p class="h4">
+      &#x1F393; ¡Estamos muy orgullosos de su esfuerzo y dedicación!
+      </p>
+      <p class="h3">&#x1F4E2; Gran noticia:</p>
+      <p class="h4">
+      Su hijo/a ha alcanzado un nivel básico alto de inglés (A2), lo que
+      significa que puede comprender conversaciones simples, participar en
+      intercambios cortos y expresar ideas sobre su vida diaria e intereses
+      de forma clara y sencilla.
+      </p>
+      <p class="h4">
+      &#x1F3AF; Este es un paso firme hacia el dominio del idioma, y sienta
+      una base sólida para seguir avanzando hacia niveles más altos.
+      </p>
+      </div>
+    `;
 
   const header_fail_juniors = `
 
-  <p><b>Queridos papás y mamás:</b><br>
-  En esta ocasión, su hijo/a no logró aprobar la evaluación final del curso, pero queremos reconocer el esfuerzo, la constancia y el compromiso que ha demostrado durante todo el programa. Cada intento es una oportunidad para aprender y avanzar.</p>
-  <p>&#x1F4D8; Con práctica constante y refuerzo en las áreas clave, estamos seguros de que podrá superar este reto y alcanzar su meta.</p>
-  <p>&#x1F504;<b> Siguientes pasos:</b></p>
-  <p>Su hijo/a será asignado/a nuevamente al mismo nivel para reforzar los contenidos y habilidades que necesitan fortalecerse. Durante este periodo, trabajará en las áreas clave y, en <b>8 semanas</b>, será evaluado/a nuevamente para medir su progreso y confirmar que está listo/a para avanzar.</p>
-  <p>&#x1F4DA;<b> Recomendación:</b></p>
-  <p>Les invitamos a motivar a su hijo/a para que ingrese a nuestra plataforma <strong>Pathwright</strong>, donde encontrará actividades y recursos diseñados para reforzar los contenidos trabajados en clase.</p>
-  <p>&#x1F499;<b> Mensaje final:</b></p>
-  <p>Con apoyo en casa y dedicación en el estudio, estamos seguros de que muy pronto celebraremos juntos el logro de aprobar este curso.</p><hr>
+      <div class="welcome">
+      <p class="h2">Queridos papás y mamás</p>
+      <!-- &#x1F31F; -->
+      <p class="h3">
+      Tu hijo/a ha mostrado compromiso y participación en cada etapa del
+      aprendizaje del inglés. ¡Cada paso cuenta! &#10024;
+      </p>
+      <p class="h4">
+      En esta ocasión, su hijo/a
+      <b>no logró aprobar la evaluación final del curso</b>, pero queremos
+      reconocer el esfuerzo, la constancia y el compromiso que ha demostrado
+      durante todo el programa. Cada intento es una oportunidad para
+      aprender y avanzar.
+      </p>
+      <p class="h4">
+      &#x1F4D8; Con práctica constante y refuerzo en las áreas clave,
+      estamos seguros de que podrá superar este reto y alcanzar su meta.
+      </p>
 
-`;
+      <p class="h3">&#x1F504;<b> Siguientes pasos:</b></p>
+      <p class="h4">
+      Su hijo/a será asignado/a nuevamente al mismo nivel para reforzar los
+      contenidos y habilidades que necesitan fortalecerse. Durante este
+      periodo, trabajará en las áreas clave y, en <b>8 semanas</b>, será
+      evaluado/a nuevamente para medir su progreso y confirmar que está
+      listo/a para avanzar.
+      </p>
 
-  // Normal eval header short
-  const normal_pass_header = `&#9989;<b><u>Resultado Global:</u> Logrado, ¡felicidades! Sigue así.</b><br><br>¡Felicidades! Estás avanzando a un excelente ritmo. &#128170; &#127881;<hr>`;
-  const normal_fail_header = `&#10060;<b><u>Resultado Global:</u> No lo logras aún, sigue esforzándote.</b><br><br>Aunque aún no se ha alcanzado el objetivo, el esfuerzo cuenta y seguiremos avanzando juntos.<hr>`;
+      <p class="h3">&#x1F4DA;<b> Recomendación:</b></p>
 
-  // ---------- details for Exit (only if not juniors) ----------
-  let detailsHTML = "";
+      <p class="h4">
+      Les invitamos a motivar a su hijo/a para que ingrese a nuestra
+      plataforma <strong>Pathwright</strong>, donde encontrará actividades y
+      recursos diseñados para reforzar los contenidos trabajados en clase.
+      </p>
+
+      <p class="h3">&#x1F499;<b> Mensaje final:</b></p>
+
+      <p class="h4">
+      Con apoyo en casa y dedicación en el estudio, estamos seguros de que
+      muy pronto celebraremos juntos el logro de aprobar este curso.
+      </p>
+      </div>
+    `;
+
+  // ---NORMAL EVALUATIONS---
+  let chosenSyllabus = syllabusLower.includes("adults")
+    ? "English4Adults"
+    : "English4Kids";
+  const normal_pass_header = `
+      <div class="welcome">
+      <p class="h2">¡Te saludamos de ${chosenSyllabus}!</p>
+      <!-- &#x1F31F; -->
+      <p class="h3"> Esperamos que estés teniendo una excelente semana
+      </p>
+      </div> 
+      `;
+  const normal_fail_header = `
+      <div class="welcome">
+      <p class="h2">¡Te saludamos de ${chosenSyllabus}!</p>
+      <!-- &#x1F31F; -->
+      <p class="h3"> Esperamos que estés teniendo una excelente semana
+      </p>
+      </div>    `;
+
+  const resultado_global_pass_normal = `
+      <div class='resultado-global'>
+      <p class='h2'>Resultado Global: Logrado</p>
+      <p class='h3'>&#127881;¡Felicidades!&#127881; <br> Se está avanzando a un excelente ritmo.</p>
+      <p>A continuación un informe detallado de la evaluación:</p>
+    </div>`;
+  const resultado_global_fail_normal = `
+      <div class='resultado-global'>
+      <p class='h2'>Resultado Global: No Logrado</p>
+      <p class='h3'>Aunque aún no se ha alcanzado el objetivo, el esfuerzo cuenta y seguiremos avanzando juntos.</p>
+      <p>A continuación un informe detallado de la evaluación:</p>
+    </div>`;
+  // ---------- SHOW NOTA FINAL for Exit (only if not juniors) ----------
+  let detalleNotaHTML = "";
   if (isExit && !syllabusLower.startsWith("juniors")) {
     const g = safe(grammarScore) || "-";
     const o = safe(oralScore) || "-";
     const f = safe(finalDisplay) || "-";
-    detailsHTML = `<b><u>Detalles de la nota:</u></b><br><br>
-<b>- Resultado Prueba Gramática:</b> ${g}/10 <em>(equivale a 40% de la nota final)</em><br>
-<b>- Resultado Prueba Oral:</b> ${o}/10 <em>(equivale a 60% de la nota final)</em><br>
-<b>- Nota Global: </b>${f} de 10.0<br><br><hr>`;
 
-    // add CEFR / next steps text for kids/teens/adults depending pass/fail
-    if (
-      (syllabusLower.includes("kids") || syllabusLower.includes("teens")) &&
-      Number(f) >= 7
-    ) {
-      detailsHTML += `<p><b>Tu hijo/a ha alcanzado un nivel intermedio de inglés (B1–B2),</b> según el Marco Común Europeo (CEFR). Esto significa que es capaz de:</p>
-<ul>
-<li>&#10004; Comprender ideas principales en conversaciones claras</li>
-<li>&#10004; Expresar opiniones y relatar experiencias</li>
-<li>&#10004; Participar activamente en interacciones reales con seguridad y autonomía</li>
-</ul>
-<p><b> &#127919; ¡Un gran paso hacia el dominio del idioma! </b>Estamos seguros de que este logro abrirá muchas puertas para su futuro.</p><hr>`;
-    } else if (
-      (syllabusLower.includes("kids") || syllabusLower.includes("teens")) &&
-      Number(f) < 7
-    ) {
-      detailsHTML += `<p>&#128170;<b> Siguientes pasos:</b></p>
-<p>No te desanimes: tu hijo/a tendrá una segunda oportunidad en <b>8 semanas</b>. Será asignado/a nuevamente al mismo nivel, lo que le permitirá <b>repasar los contenidos, reforzar áreas clave y prepararse de la mejor manera </b>para aprobar en la próxima evaluación.</p>
-<p>&#128218; <b>Nivel actual:</b></p>
-<p>Según el Marco Común Europeo de Referencia para las Lenguas (CEFR), tu hijo/a aún no alcanza el nivel intermedio (B1). Actualmente se encuentra en un nivel básico alto (A2) y necesita reforzar estructuras clave, comprensión auditiva y expresión oral fluida para avanzar al siguiente nivel.</p>
-<p>&#128187; <b>Recomendación:</b></p>
-<p>Accede a nuestra plataforma <strong>Pathwright</strong> para repasar los contenidos vistos, realizar actividades prácticas y fortalecer las habilidades necesarias para avanzar con seguridad.</p>
-<p>&#128153; <b>Agradecimiento: </b></p>
-<p>  Gracias por acompañar este proceso. Con práctica constante y apoyo familiar, ¡estamos seguros de que muy pronto alcanzará el siguiente nivel!
-</p>
-hr>`;
-    } else if (syllabusLower.includes("adults") && Number(f) >= 7) {
-      detailsHTML += `<p>&#127757; <b>Has alcanzado un nivel A2 de inglés</b> según el Marco Común Europeo (CEFR), lo que significa que puedes:</p>
-<ul>
-<li>&#10004; Comprender expresiones comunes y frases sobre temas cotidianos</li>
-<li>&#10004; Participar en conversaciones simples y directas</li>
-<li>&#10004; Hablar sobre experiencias personales, rutinas, y necesidades inmediatas</li>
-</ul>
-<p>&#128079; ¡Te animamos a seguir practicando para avanzar al siguiente nivel!</p><hr>`;
-    } else if (syllabusLower.includes("adults") && Number(f) < 7) {
-      detailsHTML += `<p>&#128259; <b>Siguientes pasos:</b></p>
-<p>Tendrás una segunda oportunidad en <b>4 semanas</b>, repitiendo el nivel. Esto te permitirá repasar los contenidos, reforzar áreas específicas y llegar con más seguridad a tu próxima evaluación.</p>
-<p>&#128187; <b>Recomendación:</b></p>
-<p>Accede a nuestra plataforma <b>Pathwright</b> para practicar actividades, revisar el material y fortalecer tus habilidades de forma dirigida.</p>
-<p>&#128153; <b>Mensaje final:</b></p>
-<p>Este resultado no marca el final del camino, sino una nueva oportunidad para avanzar. Con tu constancia y dedicación, estamos seguros de que muy pronto alcanzarás la meta.</p><hr>`;
-    }
+    detalleNotaHTML = `
+      <div class="temas-dominados">
+        <table>
+          <thead>
+            <tr>
+              <th><b>&#128313;Detalles de la nota&#128313;</b></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                &#128204; <b>Resultado Prueba Gramática:</b> ${g}/10<br />
+                <em style="font-size: 0.8rem">&emsp;&emsp;(equivale a 40% de la nota final)</em>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                &#128204; <b>Resultado Prueba Oral:</b> ${o}/10<br />
+                <em style="font-size: 0.8rem">&emsp;&emsp;(equivale a 60% de la nota final)</em>
+              </td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold; text-align: center; border-bottom: 1px dotted #219fa6;">
+              Nota Global: ${f}/10
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    `;
   }
 
-  // ---------- Normal eval: choose simple header ----------
-  // let headerHTML = "";
-  // if (isExit) {
-  //   // choose by syllabus and pass/fail
-  //   const passedExit =
-  //     finalDisplay !== "" &&
-  //     !Number.isNaN(Number(finalDisplay)) &&
-  //     Number(finalDisplay) >= 7;
-  //   if (syllabusLower.includes("kids") || syllabusLower.includes("teens"))
-  //     headerHTML = passedExit ? header_pass_kids_teens : header_fail_kids_teens;
-  //   else if (syllabusLower.includes("adults"))
-  //     headerHTML = passedExit ? header_pass_adults : header_fail_adults;
-  //   else if (syllabusLower.startsWith("juniors"))
-  //     headerHTML = totalScore ? header_pass_juniors : header_fail_juniors;
-  //   else
-  //     headerHTML = passedExit
-  //       ? `<p>&#127881; ¡Felicidades!</p>`
-  //       : `<p>Resultado reprobatorio</p>`;
-  // } else {
-  //   headerHTML =
-  //     Number.isFinite(totalScore) && totalScore < 7
-  //       ? normal_fail_header
-  //       : normal_pass_header;
-  // }
-  let headerHTML = "";
+  let welcomeHTML = "";
+  let resultadoGlobal = "";
   if (isExit) {
     // choose by syllabus and pass/fail
     const passedExit =
@@ -1048,86 +1420,597 @@ hr>`;
       Number(finalDisplay) >= 7;
 
     if (syllabusLower.includes("kids") || syllabusLower.includes("teens")) {
-      headerHTML = passedExit ? header_pass_kids_teens : header_fail_kids_teens;
+      welcomeHTML = passedExit
+        ? header_pass_kids_teens
+        : header_fail_kids_teens;
+      resultadoGlobal = passedExit
+        ? resultado_global_pass_kids_teens
+        : resultado_global_fail_kids_teens;
     } else if (syllabusLower.includes("adults")) {
-      headerHTML = passedExit ? header_pass_adults : header_fail_adults;
+      welcomeHTML = passedExit ? header_pass_adults : header_fail_adults;
+      resultadoGlobal = passedExit
+        ? resultado_global_pass_adults
+        : resultado_global_fail_adults;
     } else if (
       syllabusLower.startsWith("juniors") &&
       levelVal === 10 &&
       weekVal === 8
     ) {
       // Nuevo fix: aprobar/reprobar según el score real
-      headerHTML =
+      welcomeHTML =
         Number.isFinite(totalScore) && totalScore >= 7
           ? header_pass_juniors
           : header_fail_juniors;
+      resultadoGlobal = passedExit
+        ? resultado_global_pass_kids_teens
+        : resultado_global_fail_kids_teens;
     } else {
-      headerHTML = passedExit
-        ? `<p>&#127881; ¡Felicidades!</p>`
-        : `<p></p>`;
+      welcomeHTML = passedExit ? `` : ``;
     }
   } else {
-    headerHTML =
+    welcomeHTML =
       Number.isFinite(totalScore) && totalScore < 7
         ? normal_fail_header
         : normal_pass_header;
+    resultadoGlobal =
+      Number.isFinite(totalScore) && totalScore < 7
+        ? resultado_global_fail_normal
+        : resultado_global_pass_normal;
   }
 
   // ---------- build topics & opportunities HTML ----------
   const dominatedHTML = approvedTopics.length
-    ? approvedTopics.map((t) => `&#9989; ${safe(t)}<br>`).join("") + "<br>"
-    : "Aún no hay temas dominados.<br><br>";
-  const reinforceHTML = reinforceTopics.length
-    ? reinforceTopics.map((t) => `&#10004; ${safe(t)}<br>`).join("") + "<br>"
-    : "¡Ningún tema para reforzar!<br><br>";
-  const opportunityHTML = opportunityTopics.length
-    ? opportunityTopics
-        .map(
-          (o) =>
-            `&#128073; <b>Tema:</b> ${safe(o.title)}<br>${o.answer ? `&#10060; Respuesta: ${safe(o.answer)}<br>` : ""}${o.correction ? `&#9989; Corrección: ${safe(o.correction)}<br>` : ""}<br>`,
-        )
-        .join("")
-    : "¡Ninguno en esta evaluación!<br><br>";
+    ? `<div class="temas-dominados">
+      <table>
+        <thead>
+          <tr>
+            <th><b>&#128313;Temas Dominados&#128313;</b></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${approvedTopics
+            .map((t) => `<tr><td>&#9989; ${safe(t)}</td></tr>`)
+            .join("")}
+        </tbody>
+      </table>
+    </div>`
+    : "";
 
-  const pronunciationSection = pronunciationMistakes
-    ? `${safe(pronunciationMistakes)}<br><br>`
-    : "¡Ninguna en esta evaluación!<br><br>";
+  const reinforceHTML = reinforceTopics.length
+    ? `<div class="temas-reforzar">
+        <table>
+          <thead>
+            <tr>
+              <th>&#128313; <b>Temas que aún necesita reforzar</b>&#128313;</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${reinforceTopics
+              .map((t) => `<tr><td>&#10004; ${safe(t)}</td></tr>`)
+              .join("")}
+          </tbody>
+        </table>
+      </div>`
+    : "";
+  const opportunityHTML = opportunityTopics.length
+    ? `<div class="areas-oportunidad">
+        <table>
+          <thead>
+            <tr>
+              <th>&#128313;<b>Áreas de Oportunidad&#128313;</b></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${opportunityTopics
+              .map(
+                (o) => `
+                  <tr>
+                    <td class="tema-reforzar"><b>Tema:</b> ${safe(o.title)}</td>
+                  </tr>
+                  ${
+                    o.answer
+                      ? `<tr><td class="reforzar-R-C">&#10060; Respuesta: ${safe(
+                          o.answer
+                        )}</td></tr>`
+                      : ""
+                  }
+                  ${
+                    o.correction
+                      ? `<tr><td class="reforzar-R-C">&#9989; Corrección: ${safe(
+                          o.correction
+                        )}</td></tr>`
+                      : ""
+                  }`
+              )
+              .join("")}
+          </tbody>
+        </table>
+      </div>`
+    : "";
+
+  const pronunciationHTML = pronunciationMistakes
+    ? `<div class="pronunciacion-reforzar">
+        <table>
+          <thead>
+            <tr>
+              <th><b>&#128313;Pronunciación a reforzar&#128313;</b></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>${safe(pronunciationMistakes)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>`
+    : "";
   const selectorComments = areaDetails.join("");
   const commentsFinal = selectorComments || extraCommentsFallback || "";
-
+  const commentsHTML = commentsFinal
+    ? `<div class="areas-oportunidad">
+        <table>
+          <thead>
+            <tr>
+              <th>&#128313;<b>Comentarios del evaluador:&#128313;</b></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${commentsFinal}
+            ${isCondicionado ? condicionadoText : ""}
+          </tbody>
+        </table>
+      </div>`
+    : "";
   // evaluator + survey + referidos
- // Determinar si mostramos el nombre del evaluador o lo tratamos como vacío
-const shouldHideEvaluator = evaluatorName && String(evaluatorName).startsWith("━");
+  // Determinar si mostramos el nombre del evaluador o lo tratamos como vacío
+  const shouldHideEvaluator =
+    evaluatorName && String(evaluatorName).startsWith("━");
 
-const surveyBaseFinal = syllabusLower.includes("adults")
-  ? "https://e4cc.typeform.com/to/efJago3L#coach="
-  : "https://e4cc.typeform.com/to/ovOnAdWx#coach=";
+  const surveyBaseFinal = syllabusLower.includes("adults")
+    ? "https://e4cc.typeform.com/to/efJago3L#coach="
+    : "https://e4cc.typeform.com/to/ovOnAdWx#coach=";
 
-const surveyLinkFinal = surveyBaseFinal + encodeURIComponent(evaluatorID || "");
+  const surveyLinkFinal =
+    surveyBaseFinal + encodeURIComponent(evaluatorID || "");
 
-const evaluatorLine = shouldHideEvaluator
-  ? ""
-  : `Tu evaluación fue realizada por <b>${safe(evaluatorName || "error")}</b>. Agradezco tu apoyo completando una breve encuesta de satisfacción para ayudarnos a mejorar nuestro servicio en el siguiente enlace: <a href="${surveyLinkFinal}" target="_blank">Haz clic aquí</a>.<br><br>`;
-
+  const evaluatorLine = shouldHideEvaluator
+    ? ""
+    : `<div class="Evaluator-referidos">
+    <p class="h4">Tu evaluación fue realizada por</p>
+    <p class="eval-name">${safe(evaluatorName || "error")}</p>
+    <p class="body-eval-refer">
+      Agradezco tu apoyo completando una breve encuesta de satisfacción para
+      ayudarnos a mejorar nuestro servicio en el siguiente enlace:
+    </p>
+    <a href="${surveyLinkFinal}" target="_blank" class="evaluatorreferbtn"
+      >Evalúame aquí</a>
+       </div> `;
 
   //referidos text
   const referText = syllabusLower.includes("adults")
-    ? `&#128483; &#10024; <b>¿Te gustan nuestras clases?</b> Puedes invitar a tus amigos o familiares a aprender inglés con nosotros. Por cada referido que se inscriba, obtienes 50% de descuento. Tu referido también obtiene un 50% de descuento en su primer pago. ¡Refiere, ahorra y ayuda a otros a mejorar su futuro!<br><br>&#128073; Tu referido debe agendar una llamada con uno de nuestros asesores en el siguiente enlace: <a href="https://www.english4adultsonline.com/amigo" target="_blank">www.english4adultsonline.com/amigo</a> &#128170;`
-    : `&#129490; &#10024; Si te gustan nuestras clases, puedes ayudar a que más niños aprendan inglés y obtén 50% de descuento por cada referido que se inscriba. Tu referido también obtiene 50% de descuento en su primer pago. &#128073; Agenda llamada: <a href="https://www.english4kidsonline.com/amigo" target="_blank">www.english4kidsonline.com/amigo</a> &#128153;`;
+    ? ` <div class="referidos">
+          <p style="font-weight: bold; font-size: 1.3rem; color: white">
+          Refiere a tus amigos o familiares y obtén un 50% de descuento por cada
+          referido que se inscriba.
+          </p>
+          <p style="font-size: 0.9rem; color: white">
+          &#129490; &#10024; Por cada referido que se inscriba, obtienes 50% de
+          descuento y tu referido también obtiene un 50% de descuento en su
+          primer pago.
+          </p>
+          <p style="font-size: 1.3rem; font-weight: bold; color: white">
+          ¡Entre más refieras, más ahorras y ayudas a otros a mejorar su futuro!
+          </p>
+          <p style="font-size: 0.9rem; color: white">
+          &#128073; Para que tu referido obtenga el descuento, debe agendar una
+          llamada con uno de nuestros asesores
+          </p>
+          <a
+          href="https://www.english4kidsonline.com/amigo"
+          target="_blank"
+          class="referbtn"
+          >
+          REFIERE AQUÍ
+          </a>
+          </div> `
+    : ` <div class="referidos" style="color: white">
+          <p style='font-weight: bold; font-size: 1.3rem; color: white'> Refiere a otros padres y obtén un 50% de descuento por cada referido que se inscriba.</p>
+          <p style='font-size: 0.9rem; color: white'>&#129490; &#10024; Si disfrutas nuestras clases, puedes ayudar a que más niños aprendan inglés y tengan mejores oportunidades en la vida. Tu referido también recibe un 50% de descuento en su primer pago.</p>
+          <p style='font-size: 1.3rem; font-weight: bold; color: white'>Entre más refieras, más ahorras y más ayudas.</p>
+          <p style='font-size: 0.9rem; color: white'>&#128073; Para que tu referido obtenga el descuento, debe agendar una llamada con uno de nuestros asesores</p>
+          <a href='https://www.english4kidsonline.com/amigo' target='_blank' class='referbtn'> REFIERE AQUÍ </a>
+          </div>`;
 
   // ---------- final assembly ----------
   let reportHTML = "";
-  reportHTML += headerHTML;
-  reportHTML += detailsHTML;
-  reportHTML += `&#128313; <b>Desempeño por área:</b><br><br>${desempeñoHTML}<br><hr>`;
-  reportHTML += `<div>&#x1f4d8; <b>Temas Dominados:</b><br><br>${dominatedHTML}</div><hr>`;
-  reportHTML += `<div>&#x1f7e1; <b>Temas que aún necesita reforzar:</b><br><br>${reinforceHTML}</div><hr>`;
-  reportHTML += `<div>&#128204; <b>Áreas de Oportunidad:</b><br><br><b><u>Errores de gramática:</u></b><br><br>${opportunityHTML}</div>`;
-  reportHTML += `<br><b><u>Pronunciación a reforzar:</u></b><br><br>${pronunciationSection}<hr>`;
-  reportHTML += `<b><u>Comentarios del evaluador:</u></b><br><br>${commentsFinal}`;
-  if (isCondicionado) reportHTML += `<br>${condicionadoText}`;
-  reportHTML += `<br>${evaluatorLine}<br>`;
+  reportHTML += `<html lang="en">
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Monthly Evaluation Results</title>
+      <!-- STYLE -->
+      <style>
+      .Evaluation-Results {
+      margin: 0 auto;
+      background: linear-gradient(to bottom,
+      #f5ffff 10%,
+      #aed6d6 60%,
+      #1ca5ab 90%);
+      background-color: #1ca5ab15;
+      }
+
+      .Evaluation-Results ul {
+      list-style-type: circle;
+      }
+
+      .Evaluation-Results table {
+      width: 80%;
+      }
+
+      .Evaluation-Results a {
+      text-decoration: none;
+      font-weight: bold;
+      color: #147b7b;
+      font-family: Verdana;
+      }
+
+      .Evaluation-Results table th {
+      font-size: clamp(0.9rem, calc(50vw * 0.1), 1.6rem);
+      font-family: Serif;
+      font-weight: 800;
+      color: #126064;
+      text-align: center;
+      padding: 1.7rem 0.5rem;
+      border-bottom: 1px dotted #219fa6;
+      }
+
+      .Evaluation-Results table td {
+      font-size: clamp(0.8rem, calc(50vw * 0.06), 0.95rem);
+      font-family: Verdana;
+      font-weight: 500;
+      color: #305254;
+      padding: 0.9rem 0.5rem 0.9rem calc(50vw * 0.13);
+      border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
+      text-align: left;
+      }
+
+      .Evaluation-Results p {
+      font-family: Verdana;
+      font-size: clamp(0.8rem, calc(50vw * 0.06), 0.95rem);
+      }
+
+      /* =================HEADER=============== */
+      .Evaluation-Results .header {
+      background-color: #1ca5ab;
+      text-align: center;
+      height: auto;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 7px;
+      }
+
+      .Evaluation-Results .logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      margin: 0 0 -1rem;
+      }
+
+      .Evaluation-Results .logos img {
+      height: 1.7rem;
+      }
+
+      .Evaluation-Results .header .h1 {
+      font-size: clamp(0.5rem, calc(50vw * 0.08), 1.6rem);
+      font-weight: 800;
+      font-family: Tahoma;
+      color: #ffffff;
+      padding: 1rem 0.7rem;
+      }
+
+      /* =================WELLCOME=============== */
+      .Evaluation-Results .welcome {
+      justify-items: center;
+      padding: 4rem 2rem;
+      text-align: center;
+      margin: 0 auto;
+      }
+
+      .Evaluation-Results .welcome .h2 {
+      font-size: clamp(1.2rem, calc(50vw * 0.15), 2.5rem);
+      font-weight: 800;
+      color: #126064;
+      font-family: Serif;
+      }
+
+      .Evaluation-Results .welcome .h3 {
+      font-size: clamp(0.7rem, calc(50vw * 0.08), 1.2rem);
+      font-weight: 800;
+      color: #126064;
+      padding-bottom: 0.8rem;
+      font-family: Verdana;
+      }
+
+      .Evaluation-Results .welcome .h4 {
+      font-size: clamp(0.95rem, calc(50vw * 0.08), 1rem);
+      font-weight: 500;
+      color: #126064;
+      padding-bottom: 0.8rem;
+      font-family: Verdana;
+      }
+
+      .Evaluation-Results .welcome p {
+      font-weight: 400;
+      color: #273030;
+      padding: 0 1rem;
+      }
+
+      /* =================EMAIL BODY=============== */
+      .Evaluation-Results .email-body {
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 0 15px rgb(14, 126, 134, 0.1);
+      width: 80%;
+      margin: 0 auto;
+      background-color: rgba(255, 255, 255, 0.95);
+      max-width: 1200px;
+      }
+
+      .Evaluation-Results .resultado-global {
+      padding: 0 1rem;
+      text-align: center;
+      }
+
+      .Evaluation-Results .resultado-global .h2 {
+      font-family: Serif;
+      font-size: clamp(1.1rem, calc(50vw * 0.18), 2.1rem);
+      font-weight: bold;
+      color: #297b7f;
+      text-shadow: 0 0 10px rgb(163, 225, 230, 0.15);
+      }
+
+      .Evaluation-Results .resultado-global .h3 {
+      font-size: clamp(0.95rem, calc(50vw * 0.1), 1.2rem);
+      font-weight: 800;
+      font-family: Verdana;
+      color: #42757b;
+      padding: 2.5rem 0;
+      }
+
+      .Evaluation-Results .resultado-global p {
+      font-weight: 500;
+      font-family: Verdana;
+      color: #273030;
+      padding: 0 1rem 0;
+      }
+
+      /* -------DESEMPEÑO POR ÁREA------- */
+      .Evaluation-Results .desempeño {
+      padding: 0 1rem;
+      justify-items: center;
+      }
+
+      .Evaluation-Results .desempeño table {
+      border-radius: 10%;
+      overflow: hidden;
+      }
+
+      .Evaluation-Results .desempeño table td:first-child {
+      font-weight: 500;
+      color: #126064;
+      text-align: center;
+      font-size: clamp(0.5rem, calc(50vw * 0.07), 1.1rem);
+      width: 20%;
+      }
+
+      .Evaluation-Results .desempeño table td:last-child {
+      font-weight: 500;
+      border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
+      }
+
+      /* -------TEMAS DOMINADOS------- */
+
+      .Evaluation-Results .temas-dominados {
+      margin: 2.8rem 0;
+      justify-items: center;
+      }
+
+      .Evaluation-Results .temas-dominados table {
+      border-radius: 10%;
+      overflow: hidden;
+      }
+
+      .Evaluation-Results .temas-dominados table td {
+      color: #044043;
+      text-align: left;
+      }
+
+      .Evaluation-Results .temas-reforzar {
+      margin: 2.8rem 0;
+      justify-items: center;
+      }
+
+      .Evaluation-Results .temas-reforzar table {
+      border-radius: 10%;
+      overflow: hidden;
+      }
+
+      .Evaluation-Results .temas-reforzar table td {
+      color: #044043;
+      }
+
+      .Evaluation-Results .areas-oportunidad {
+      margin: 2.8rem 0;
+      justify-items: center;
+      }
+
+      .Evaluation-Results .areas-oportunidad table {
+      border-radius: 10%;
+      overflow: hidden;
+      }
+
+      .Evaluation-Results .tema-reforzar {
+      color: #126064;
+      text-align: left;
+      padding: 0.9rem 0.5rem 0.9rem 1.5rem;
+      border-bottom: 1px dotted rgb(18, 96, 100, 0.8);
+      }
+
+      .Evaluation-Results .reforzar-R-C {
+      text-align: left;
+      font-family: Verdana;
+      color: #052729;
+      }
+
+      .Evaluation-Results .pronunciacion-reforzar {
+      margin: 2.8rem 0;
+      justify-items: center;
+      }
+
+      .Evaluation-Results .pronunciacion-reforzar table {
+      border-radius: 10%;
+      overflow: hidden;
+      }
+
+      .Evaluation-Results .pronunciacion-reforzar table td {
+      text-align: left;
+      color: #114d50;
+      }
+
+      .Evaluation-Results .pronunciacion-reforzar table tr:first-child td {
+      font-weight: 500;
+      color: #355d5f;
+      text-align: center;
+      padding: 0.95rem 0;
+      }
+
+      /* =================FOOTER=============== */
+      .Evaluation-Results .footer {
+      font-family: verdana;
+      margin: 2.5rem auto;
+      padding: 2rem 0.5rem 2rem 2%;
+      width: 85%;
+      background-color: #1ca5ab30;
+      }
+
+      .Evaluation-Results .footer p {
+      font-weight: bold;
+      font-size: clamp(0.7rem, calc(50vw * 0.09), 1rem);
+      color: #dbfeff;
+      margin-bottom: -1rem;
+      }
+
+      .Evaluation-Results .footer h5 {
+      color: #ffffff;
+      font-size: clamp(0.8rem, calc(50vw * 1.1), 1.1rem);
+      padding: 0 3rem;
+      }
+
+      /* =================REFERIDO=============== */
+      .Evaluation-Results .Evaluator-referidos {
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      width: 50%;
+      margin: 0 auto 4rem;
+      background-color: rgba(255, 255, 255, 0.95);
+      min-width: 300px;
+      max-width: 1000px;
+      text-align: center;
+      }
+
+      .Evaluation-Results .Evaluator-referidos p {
+      color: #147b7b;
+      padding: auto 2rem;
+      }
+
+      .Evaluation-Results .Evaluator-referidos .h4 {
+      font-size: 1.25rem;
+      font-weight: bold;
+      }
+
+      .Evaluation-Results .Evaluator-referidos .eval-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      }
+
+      .Evaluation-Results .Evaluator-referidos .evaluatorreferbtn {
+      background-color: #147b7b;
+      padding: 0.6rem 1.3rem;
+      border-radius: 12px;
+      font-weight: 800;
+      color: white;
+      font-size: 1.3rem;
+      margin: 1rem auto;
+      display: inline-block;
+      }
+
+      .Evaluation-Results .referidos {
+      text-align: center;
+      height: auto;
+      padding: 2rem 0;
+      font-family: Verdana;
+      background-color: #147b7b;
+      color: white;
+      width: 100%;
+      border-radius: 7px;
+      }
+
+      .Evaluation-Results .referidos p {
+      padding: 0 1.8rem;
+      }
+
+      .Evaluation-Results .referbtn {
+      display: inline-block;
+      padding: 0.6rem 1.3rem;
+      background: linear-gradient(to bottom,
+      #aed6d6 0%,
+      #ffffff 15%,
+      #ffffff 85%,
+      #aed6d6 100%);
+      background-color: white;
+      color: #147b7b;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 1.4rem;
+      }
+      </style>
+      </head>
+    <body>
+    <div class="Evaluation-Results">
+      <!-- <!HEADER> -->
+      <div class="header">
+        <!-- <!LOGOS> -->
+        <div class="logos">
+          <img src="https://imgur.com/Qk6oytx.png" />
+          <img src="https://imgur.com/tVvbCqV.png" />
+          <img src="https://imgur.com/Duh9RGt.png" />
+          <img src="https://imgur.com/68ZykjC.png" />
+        </div>
+        <p class="h1">RESULTADOS DE EVALUACIÓN MENSUAL</p>
+      </div>`;
+  reportHTML += welcomeHTML;
+  reportHTML += `<div class="email-body">`;
+  reportHTML += resultadoGlobal;
+  reportHTML += detalleNotaHTML;
+  reportHTML += desempeñoHTML;
+  reportHTML += dominatedHTML;
+  reportHTML += reinforceHTML;
+  reportHTML += opportunityHTML;
+  reportHTML += pronunciationHTML;
+  reportHTML += commentsHTML;
+  reportHTML += `</div>`;
+  reportHTML += `<div class="footer">
+                    <p>Atentamente,</p>
+                    <h5>Departamento de <em>Evaluaciones</em> de English4Kids</h5>
+                    </div>`;
+  reportHTML += evaluatorLine;
   reportHTML += referText;
+  reportHTML += `</div>
+                    </body>
+                  </html>`;
 
   // ---------- preview ----------
   const popupContent = document.querySelector("#popupContent");
@@ -1153,11 +2036,18 @@ const evaluatorLine = shouldHideEvaluator
   // ---------- copy to clipboard ----------
   navigator.clipboard
     .writeText(reportHTML)
-    .then(() => showPopup("<h3>🎉 Success!</h3><p>✅ The Results have been copied to your clipboard!📝 </p>"))
+    .then(() =>
+      showPopup(
+        "<h3>🎉 Success!</h3><p>✅ The Results have been copied to your clipboard!📝 </p>"
+      )
+    )
     .catch(() =>
-      showPopup("<h3>😓 Oops...</h3><p>❌ The results couldn't be copied, please try again or contact Michelle Hernández via Teams.</p>",
-      ),
+      showPopup(
+        "<h3>😓 Oops...</h3><p>❌ The results couldn't be copied, please try again or contact Michelle Hernández via Teams.</p>"
+      )
     );
+}
+
 }
 
 //
