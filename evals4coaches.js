@@ -1974,6 +1974,7 @@ function startTimer(durationSeconds) {
     if (timer <= 300) {
       container.classList.remove("normal");
       container.classList.add("warning");
+      feedbackBtn.disabled = false;
     }
     if (timer <= 60) {
       container.classList.remove("warning");
@@ -1985,7 +1986,6 @@ function startTimer(durationSeconds) {
       container.classList.remove("warning", "danger");
       container.classList.add("over");
       display.classList.add("time-over");
-      feedbackBtn.disabled = false;
     }
   }, 1000);
 }
