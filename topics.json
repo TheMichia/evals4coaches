@@ -136,8 +136,7 @@
         "Presente Simple (3ra persona)",
         "Presente Progresivo (1ra persona)",
         "Presente Progresivo (3ra persona)",
-        "Futuro Simple (Going to)",
-        "Futuro Simple (Will)"
+        "Futuro Simple (Going to)"
       ]
     },
     "9": {
@@ -152,17 +151,7 @@
         "Futuro Simple (Going to)",
         "Futuro Simple (Will)"
       ],
-      "8": [
-        "Información Personal",
-        "Vocabulario General/ Preguntas Básicas",
-        "Verbo ser/estar",
-        "Presente Simple (1ra persona)",
-        "Presente Simple (3ra persona)",
-        "Presente Progresivo (1ra persona)",
-        "Presente Progresivo (3ra persona)",
-        "Futuro Simple (Going to)",
-        "Futuro Simple (Will)"
-      ]
+      "8": []
     },
     "10": {
       "4": [
@@ -252,6 +241,7 @@
         "Presente Simple (1ra y 3ra persona)",
         "Presente Progresivo (1ra y 3ra persona)",
         "Futuro Simple (Going to)",
+        "Futuro Simple (Will)",
         "Pasado Simple"
       ]
     },
@@ -626,7 +616,8 @@
         "Futuro Simple",
         "Pasado Simple",
         "Pasado Progresivo",
-        "Verbos Modales"
+        "Verbos Modales",
+        "Condicionales"
       ]
     },
     "9": {
