@@ -153,7 +153,7 @@
       "Vocabulario General",
       "Presente Simple 1a y 3a",
       "Presente Progresivo 1a y 3a",
-      "Futuro Simple: going to - only"]
+      "Futuro Simple: going to"]
     },
     "10": {
       "4": [
@@ -2048,16 +2048,16 @@
       ]
     },
     "5": {
-      "4": [
-        "Modales: Can/Could/Might/May",
+      "3": [
         "Presente Simple",
-        "Futuro Simple",
         "Presente Progresivo",
+        "Futuro Simple",
         "Pasado Simple",
         "Pasado Progresivo",
+        "Modales",
         "Comparativos",
         "Superlativos",
-        "Condicionales"
+        "Segundo Condicional"
       ]
     },
     "6": {
@@ -2093,15 +2093,14 @@
       ]
     },
     "8": {
-      "4": [
-        "Modales: Can/Could/Must",
+      "3": [
         "Presente Simple",
-        "Futuro Simple",
         "Presente Progresivo",
+        "Futuro Simple",
         "Pasado Simple",
         "Pasado Progresivo",
-        "Condicionales",
         "Presente Perfecto",
+        "Condicionales",
         "Used to",
         "Deseos en Presente y Futuro: I Wish/ If Only"
       ]
@@ -2155,15 +2154,14 @@
       ]
     },
     "12": {
-      "4": [
-        "Información Básica",
+      "3": [
         "Presente Simple",
-        "Futuro Simple",
         "Presente Progresivo",
+        "Futuro Simple",
         "Pasado Simple",
         "Pasado Progresivo",
-        "Condicionales",
         "Presente Perfecto",
+        "Condicionales",
         "Used to",
         "Deseos en Presente y Futuro: I Wish/ If Only"
       ]
@@ -2209,16 +2207,16 @@
       ]
     },
     "5": {
-      "4": [
-        "Modales: Can/Could/Might/May",
+      "3": [
         "Presente Simple",
-        "Futuro Simple",
         "Presente Progresivo",
+        "Futuro Simple",
         "Pasado Simple",
         "Pasado Progresivo",
+        "Modales",
         "Comparativos",
         "Superlativos",
-        "Condicionales"
+        "Segundo Condicional"
       ]
     },
     "6": {
@@ -2252,15 +2250,14 @@
       ]
     },
     "8": {
-      "4": [
-        "Modales: Can/Could/Must",
+      "3": [
         "Presente Simple",
-        "Futuro Simple",
         "Presente Progresivo",
+        "Futuro Simple",
         "Pasado Simple",
         "Pasado Progresivo",
-        "Condicionales",
         "Presente Perfecto",
+        "Condicionales",
         "Used to",
         "Deseos en Presente y Futuro: I Wish/ If Only"
       ]
@@ -2282,15 +2279,14 @@
       ]
     },
     "10": {
-      "4": [
-        "Información Básica",
+      "3": [
         "Presente Simple",
-        "Futuro Simple",
         "Presente Progresivo",
+        "Futuro Simple",
         "Pasado Simple",
         "Pasado Progresivo",
-        "Condicionales",
         "Presente Perfecto",
+        "Condicionales",
         "Used to",
         "Deseos en Presente y Futuro: I Wish/ If Only"
       ]
