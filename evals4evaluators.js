@@ -756,11 +756,11 @@ function evaluatorsCopyResults() {
   const syllabusVal = syllabus || "";
   const isExit =
     // !syllabusVal.toLowerCase().startsWith("juniors") &&
-    (levelVal === 10 && (weekVal === 8 || weekVal === 14)) ||
-    (levelVal === 12 && weekVal === 4) ||
+    (levelVal === 10 && (weekVal === 7 || weekVal === 13)) ||
+    (levelVal === 12 && weekVal === 3) ||
     (syllabusVal.toLowerCase().includes("masters") &&
       levelVal === 10 &&
-      weekVal === 4);
+      weekVal === 3);
 
   // ---------- topics extraction (robust) ----------
   const approvedTopics = [];
@@ -1434,7 +1434,7 @@ function evaluatorsCopyResults() {
     } else if (
       syllabusLower.startsWith("juniors") &&
       levelVal === 10 &&
-      weekVal === 8
+      weekVal === 7
     ) {
       // Nuevo fix: aprobar/reprobar según el score real
       welcomeHTML =
