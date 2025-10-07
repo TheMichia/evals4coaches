@@ -149,11 +149,14 @@
         "Futuro Simple (Will)"
       ],
       "7": [
-      "Preguntas Básicas",
-      "Vocabulario General",
-      "Presente Simple 1a y 3a",
-      "Presente Progresivo 1a y 3a",
-      "Futuro Simple: going to"]
+        "Preguntas Básicas",
+        "Vocabulario General",
+        "Presente Simple (1ra persona)",
+        "Presente Simple (3ra persona)",
+        "Presente Progresivo (1ra persona)",
+        "Presente Progresivo (3ra persona)",
+        "Futuro Simple: going to"
+      ]
     },
     "10": {
       "4": [
@@ -393,7 +396,7 @@
       "13": [
         "Condicionales",
         "Comparatives",
-        "Superlatives (Probing Question)",
+        "Superlatives",
         "Modales",
         "Presente simple 1a persona",
         "Presente simple 3a persona",
@@ -401,7 +404,8 @@
         "Presente Progresivo",
         "Futuro Simple",
         "Pasado Simple",
-        "Pasado Progresivo"
+        "Pasado Progresivo",
+        "Presente Perfecto"
       ]
     },
     "10": {
@@ -416,8 +420,7 @@
         "Pasado Progresivo",
         "Verbos Modales: Can/Should",
         "Condicionales",
-        "Comparativos",
-        "Superlativos",
+        "Comparativos y Superlativos",
         "Presente Perfecto"
       ],
       "13": [
@@ -428,7 +431,7 @@
         "Futuro Simple",
         "Pasado simple",
         "Condicionales",
-        "Comparativos",
+        "Comparativos y Superlativos",
         "Modales",
         "Pasado Progresivo",
         "Presente perfecto"
@@ -657,7 +660,7 @@
         "Futuro Simple",
         "Pasado simple",
         "Condicionales",
-        "Comparativos",
+        "Comparativos y Superlativos",
         "Modales",
         "Pasado Progresivo",
         "Presente perfecto"
@@ -920,7 +923,6 @@
         "Past Perfect",
         "Futuro perfecto",
         "Modales perfectos"
-
       ]
     },
     "9": {
@@ -1167,7 +1169,7 @@
       ],
       "13": [
         "Preguntas Básicas",
-        "Presente Simple 3a Persona",
+        "Presente Simple (1ra y 3ra persona)",
         "Present Progressive",
         "Futuro Simple",
         "Pasado Simple",
@@ -1418,8 +1420,7 @@
         "Condicionales",
         "Presente Perfecto",
         "Comparatives",
-        "Superlatives",
-        "Presente Perfecto"
+        "Superlatives"
       ]
     },
     "10": {
@@ -1708,7 +1709,6 @@
         "Past Perfect",
         "Futuro perfecto",
         "Modales perfectos"
-
       ]
     },
     "9": {
