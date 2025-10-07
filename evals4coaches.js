@@ -419,6 +419,8 @@ function selectButton(button) {
 function checkCompletion() {
   const sections = document.querySelectorAll("#topicsList section");
   const feedbackButton = document.getElementById("feedback");
+  const container = document.getElementById("countdown-timer");
+  
   let allAnswered = true;
 
   sections.forEach((_, index) => {
@@ -427,7 +429,15 @@ function checkCompletion() {
     }
   });
 
-  feedbackButton.disabled = !allAnswered;
+  // Detectar timer
+  const timerIsOver = !container.classList.contains("normal");
+  
+  //Si el timer terminó, el feedback queda habilitado aunque falten topics
+  if (timerIsOver) {
+    feedbackButton.disabled = false;
+  } else {
+    feedbackButton.disabled = !allAnswered;
+  }
 }
 
 //
