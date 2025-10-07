@@ -1076,6 +1076,9 @@ function evaluatorsCopyResults() {
     </p>
     </div>
     `;
+
+  const semanas4kidsteens = syllabusVal.includes("Masters") ? 4 : 8;
+  
   const resultado_global_fail_kids_teens = `
     <div class="areas-oportunidad">
     <table>
@@ -1086,7 +1089,7 @@ function evaluatorsCopyResults() {
     <tr>
     <td class="reforzar-R-C">
     No te desanimes: tu hijo/a tendrá una segunda oportunidad en
-    <b>8 semanas</b>. Será asignado/a nuevamente al mismo nivel,
+    <b>${semanas4kidsteens} semanas</b>. Será asignado/a nuevamente al mismo nivel,
     lo que le permitirá
     <b
     >repasar los contenidos, reforzar áreas clave y prepararse
