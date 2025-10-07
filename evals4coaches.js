@@ -1,6 +1,6 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.3.2";
+  const versionnum = "1.4.0";
   //UPDATE for adults neutral feedback
   const jsonVersion = 1.4;
   window.appVersion = "Coaches";
@@ -532,17 +532,17 @@ function copyAbsentResults() {
       body {
         margin: 0;
       }
-  
+
       .Evaluation-Results {
         margin: 0;
         background: linear-gradient(to bottom, #f5ffff 10%, #AED6D6 50%, #1ca5ab 75%);
         background-color: #1ca5ab15;
       }
-  
+
       .Evaluation-Results table {
         width: 80%;
       }
-  
+
       .Evaluation-Results table th {
         font-size: clamp(0.9rem, calc(50vw*0.1), 1.6rem);
         font-family: Serif;
@@ -552,7 +552,7 @@ function copyAbsentResults() {
         padding: 1.7rem 0.5rem;
         border-bottom: 1px dotted #219fa6;
       }
-  
+
       .Evaluation-Results table td {
         font-size: clamp(0.8rem, calc(50vw*0.06), 0.95rem);
         font-family: Verdana;
@@ -562,12 +562,12 @@ function copyAbsentResults() {
         border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
         text-align: left;
       }
-  
+
       .Evaluation-Results p {
         font-family: Verdana;
         font-size: clamp(0.8rem, calc(50vw*0.06), 0.95rem);
       }
-  
+
       /* =================HEADER=============== */
       .Evaluation-Results .header {
         background-color: #1CA5AB;
@@ -577,7 +577,7 @@ function copyAbsentResults() {
         overflow: hidden;
         border-radius: 7px;
       }
-  
+
       .Evaluation-Results .logos {
         display: flex;
         justify-content: center;
@@ -586,11 +586,11 @@ function copyAbsentResults() {
         padding: 0.5rem;
         margin: 0 0 -1rem;
       }
-  
+
       .Evaluation-Results .logos img {
         height: 1.7rem;
       }
-  
+
       .Evaluation-Results .header .h1 {
         font-size: clamp(0.5rem, calc(50vw*0.08), 1.6rem);
         font-weight: 800;
@@ -598,7 +598,7 @@ function copyAbsentResults() {
         color: #ffffff;
         padding: 1rem 0.7rem;
       }
-  
+
       /* =================WELLCOME=============== */
       .Evaluation-Results .welcome {
         justify-items: center;
@@ -606,14 +606,14 @@ function copyAbsentResults() {
         text-align: center;
         margin: 0 auto;
       }
-  
+
       .Evaluation-Results .welcome .h2 {
         font-size: clamp(1.2rem, calc(50vw*0.15), 2.5rem);
         font-weight: 800;
         color: #126064;
         font-family: Serif;
       }
-  
+
       .Evaluation-Results .welcome .h3 {
         font-size: clamp(0.7rem, calc(50vw*0.08), 1.2rem);
         font-weight: 800;
@@ -621,12 +621,12 @@ function copyAbsentResults() {
         padding-bottom: 0.8rem;
         font-family: Verdana;
       }
-  
+
       .Evaluation-Results .welcome p {
         font-weight: 400;
         color: #273030;
       }
-  
+
       /* =================EMAIL BODY=============== */
       .Evaluation-Results .email-body {
         border-radius: 20px;
@@ -637,13 +637,13 @@ function copyAbsentResults() {
         background-color: rgba(255, 255, 255, 0.95);
         max-width: 1200px;
       }
-  
+
       /* -------RESULTADO GLOBAL------- */
       .Evaluation-Results .resultado-global {
         padding: 0 1rem;
         text-align: center;
       }
-  
+
       .Evaluation-Results .resultado-global .h3 {
         font-size: clamp(0.95rem, calc(50vw*0.1), 1.2rem);
         font-weight: 800;
@@ -651,51 +651,51 @@ function copyAbsentResults() {
         color: #42757b;
         padding: 2.5rem 0;
       }
-  
+
       .Evaluation-Results .resultado-global p {
         font-weight: 500;
         font-family: Verdana;
         color: #273030;
         padding: 0 1rem 0;
       }
-  
+
       /* -------RESULTADO GLOBAL------- */
       .Evaluation-Results .areas-oportunidad {
         margin: 2.8rem 0;
         justify-items: center;
       }
-  
-  
+
+
       .Evaluation-Results .areas-oportunidad table {
         border-radius: 10%;
         overflow: hidden;
       }
-  
-  
+
+
       .Evaluation-Results .tema-reforzar {
         color: #126064;
         text-align: left;
         padding: 0.9rem 0.5rem 0.9rem 1.5rem;
         border-bottom: 1px dotted rgb(18, 96, 100, 0.8)
       }
-  
+
       .Evaluation-Results .reforzar-R-C {
         text-align: left;
         font-family: Verdana;
         color: #052729;
       }
-  
+
       /* -------DESEMPEÑO POR ÁREA------- */
       .Evaluation-Results .desempeño {
         padding: 0 1rem;
         justify-items: center;
       }
-  
+
       .Evaluation-Results .desempeño table {
         border-radius: 10%;
         overflow: hidden;
       }
-  
+
       .Evaluation-Results .desempeño table td:first-child {
         font-weight: 500;
         color: #126064;
@@ -703,12 +703,12 @@ function copyAbsentResults() {
         font-size: clamp(0.5rem, calc(50vw*0.07), 1.1rem);
         width: 20%;
       }
-  
+
       .Evaluation-Results .desempeño table td:last-child {
         font-weight: 500;
         border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
       }
-  
+
       /* =================FOOTER=============== */
       .Evaluation-Results .footer {
         font-family: verdana;
@@ -717,22 +717,22 @@ function copyAbsentResults() {
         width: 85%;
         text-shadow: 0 0 20px rgb(255, 255, 255, 0.1);
       }
-  
+
       .Evaluation-Results .footer p {
         font-weight: bold;
         font-size: clamp(0.7rem, calc(50vw*0.09), 1rem);
         color: #dbfeff;
         margin-bottom: -1rem;
       }
-  
+
       .Evaluation-Results .footer h5 {
         color: #ffffff;
         font-size: clamp(0.8rem, calc(50vw*1.1), 1.1rem);
         padding: 0 3rem;
       }
-  
+
       /* =================REFERIDO=============== */
-  
+
       .Evaluation-Results .referidos {
         text-align: center;
         height: auto;
@@ -743,11 +743,11 @@ function copyAbsentResults() {
         width: 100%;
         border-radius: 7px;
       }
-  
+
       .Evaluation-Results .referidos p {
         padding: 0 1.8rem;
       }
-  
+
       .Evaluation-Results .referbtn {
         display: inline-block;
         padding: 0.6rem 1.3rem;
@@ -762,7 +762,7 @@ function copyAbsentResults() {
       }
     </style>
   </head>
-  
+
   <body>
     <div class="Evaluation-Results">
       <!-- <!HEADER> -->
@@ -825,8 +825,8 @@ function copyAbsentResults() {
           </table>
         </div>
       </div>
-  
-  
+
+
       <!-- footer -->
       <div class="footer">
         <p>Atentamente,</p>
@@ -856,7 +856,7 @@ function copyAbsentResults() {
       </div>
     </div>
   </body>
-  
+
   </html>
   `;
 
@@ -864,16 +864,16 @@ function copyAbsentResults() {
     .writeText(report)
     .then(() => {
       showPopup(
-        "<h3>🎉 All done!</h3><p>✅ Absent-Report-Card has been copied to your clipboard! 📝</p>"
+        "<h3>🎉 All done!</h3><p>✅ Absent-Report-Card has been copied to your clipboard! 📝</p>",
       );
       ["td-gr", "td-pr", "td-en", "td-fl", "td-co"].forEach(
-        (id) => (document.getElementById(id).innerText = "")
+        (id) => (document.getElementById(id).innerText = ""),
       );
     })
     .catch(() =>
       showPopup(
-        "<h3>😓 Oops...</h3><p>❌ We couldn't copy the report, please try again or contact Michelle Hernández via Teams</p>"
-      )
+        "<h3>😓 Oops...</h3><p>❌ We couldn't copy the report, please try again or contact Michelle Hernández via Teams</p>",
+      ),
     );
 
   mainContent.style.display = "block";
@@ -1042,12 +1042,12 @@ function showErrorsSection(perfectAreasList = []) {
   // 2. Construir el HTML de la sección de errores
   let html = `<div class="feedback-container">
       `;
-  
+
   // Agregar header solo si hay mistakes
   if (pronunciationMistakes || rejectedTopics.length) {
     html += `<h2>${headerText}</h2>`;
   }
-  
+
   if (pronunciationMistakes) {
     html += `
       <div class="mistake-section pronunciation">
@@ -1075,8 +1075,6 @@ function showErrorsSection(perfectAreasList = []) {
     `;
   }
 
-
-
   if (!pronunciationMistakes && !rejectedTopics.length) {
     if (syllabusValue.includes("adults")) {
       html += `
@@ -1092,7 +1090,6 @@ function showErrorsSection(perfectAreasList = []) {
         </div>
       `;
     }
-   
   }
 
   html += `</div>`; // cierre feedback-container
@@ -1123,6 +1120,7 @@ function showErrorsSection(perfectAreasList = []) {
 
 function showFinalSection() {
   const VIDEOS = {
+    fail: "VIDEO4EVALS/THX FOR DOING BEST.mp4",
     exit: {
       kids: {
         success: "VIDEO4EVALS/SUCCESFULLY EXIT E4KIDS.mp4",
@@ -1146,6 +1144,7 @@ function showFinalSection() {
       pass: "VIDEO4EVALS/NEXT LEVEL.mp4",
       fail: "VIDEO4EVALS/THX FOR DOING BEST.mp4",
     },
+    juniors: "VIDEO4EVALS/THX FOR DOING BEST.mp4",
   };
 
   // --- HTML container start ---
@@ -1160,19 +1159,21 @@ function showFinalSection() {
   const syllabusDropdown = document.getElementById("syllabusDropdown");
   const syllabus = syllabusDropdown ? syllabusDropdown.value || "" : "";
 
-  // Helpers para matching de syllabus (más robusto que equality)
+  // Helpers para matching de syllabus 
   const isJuniors = syllabus.toLowerCase().startsWith("juniors");
   const isKids = syllabus.toLowerCase().includes("kids");
   const isTeens = syllabus.toLowerCase().includes("teens");
   const isMasters = syllabus.toLowerCase().includes("masters");
   const isAdults = syllabus.toLowerCase().includes("adults");
+  const finalScoreEl = document.getElementById("finalScore");
+  const finalScore = finalScoreEl ? Number(finalScoreEl.textContent || finalScoreEl.value || 0) : 0;
 
   // --- DEFINICIÓN DE BANDERAS ---
   const isExit =
     !isJuniors &&
-    ((level === 10 && (selectedweek === 8 || selectedweek === 14)) ||
-      (level === 12 && selectedweek === 4) ||
-      (isMasters && level === 10 && selectedweek === 4));
+    ((level === 10 && (selectedweek === 7 || selectedweek === 13)) ||
+      (level === 12 && selectedweek === 3) ||
+      (isMasters && level === 10 && selectedweek === 3));
 
   const isMidterm =
     !isExit &&
@@ -1193,13 +1194,11 @@ function showFinalSection() {
     !isExit &&
     !isMidterm &&
     ((level === 0 && (selectedweek === 4 || selectedweek === 6)) ||
-      ((isMasters || isAdults) && selectedweek === 4) ||
       ((syllabus.toLowerCase().includes("kids (intensivo)") ||
         (syllabus.toLowerCase().includes("teens 13-17") &&
           syllabus.toLowerCase().includes("3"))) &&
         selectedweek === 14) ||
-      ((syllabus.toLowerCase().includes("juniors 5-7") ||
-        syllabus.toLowerCase().includes("kids (super intensivo)") ||
+      ((syllabus.toLowerCase().includes("kids (super intensivo)") ||
         (syllabus.toLowerCase().includes("teens 13-17") &&
           syllabus.toLowerCase().includes("5"))) &&
         selectedweek === 8));
@@ -1207,18 +1206,28 @@ function showFinalSection() {
   // --- DETERMINAR VIDEO usando el mapa VIDEOS ---
   let canvavideo = "";
 
-  if (isExit) {
+  //si es juniors, they dont see get told if pass or not
+  if (isJuniors) {
+    canvavideo = VIDEOS.juniors;
+  } else if (isAdults){
+    canvavideo = ""
+    html+= `<h4>Evaluation Finished!</h4>`;
+    } else if (isExit) {
     // Masters tienen videos propios
     if (isMasters) {
       if (syllabus.toLowerCase().includes("kids")) {
-        canvavideo = VIDEOS.exit.kidsMasters;
+        if (finalScore >= 7) canvavideo = VIDEOS.exit.kidsMasters;
+        else canvavideo = VIDEOS.fail 
+          console.log(finalScore);
       } else if (syllabus.toLowerCase().includes("teens")) {
-        canvavideo = VIDEOS.exit.teensMasters;
+        if (finalScore >= 7) canvavideo = VIDEOS.exit.teensMasters;
+        else canvavideo = VIDEOS.fail;
       } else {
-        canvavideo = VIDEOS.exit.mastersGeneric;
+        if (finalScore >= 7) canvavideo = VIDEOS.exit.mastersGeneric;
+        else canvavideo = VIDEOS.fail;
       }
     } else {
-      // Kids / Teens non-Masters: tres outcomes (>=9 success, >=7 pass, <7 fail -> treated as pass video but could be distinct)
+      // Kids / Teens non-Masters: tres outcomes (>=9 success, >=7 pass, <7 fail)
       if (totalScore >= 9) {
         if (isKids) canvavideo = VIDEOS.exit.kids.success;
         else if (isTeens) canvavideo = VIDEOS.exit.teens.success;
@@ -1228,10 +1237,8 @@ function showFinalSection() {
         else if (isTeens) canvavideo = VIDEOS.exit.teens.pass;
         else canvavideo = VIDEOS.exit.mastersGeneric;
       } else {
-        // No pasar -> usar el mismo "pass" exit o mastersGeneric según negocio
-        if (isKids) canvavideo = VIDEOS.exit.kids.pass;
-        else if (isTeens) canvavideo = VIDEOS.exit.teens.pass;
-        else canvavideo = VIDEOS.exit.mastersGeneric;
+        // No pasar
+        canvavideo = VIDEOS.fail;
       }
     }
   } else if (isMidterm) {
@@ -1244,9 +1251,8 @@ function showFinalSection() {
     canvavideo =
       totalScore >= 7 ? VIDEOS.nextLevel.pass : VIDEOS.nextLevel.fail;
   } else {
-    // Fallback: si no cae en ninguna bandera, elegimos NextLevel logic por seguridad
-    canvavideo =
-      totalScore >= 7 ? VIDEOS.nextLevel.pass : VIDEOS.nextLevel.fail;
+    // Fallback: si no cae en ninguna bandera
+    canvavideo = totalScore >= 7 ? VIDEOS.midterm.good : VIDEOS.nextLevel.fail;
   }
 
   // --- INSERTAR HTML DEL VIDEO ---
@@ -1303,7 +1309,7 @@ function copyResults() {
   const approvedTopics = [];
   Object.entries(topicsStatus).forEach(([index, choice]) => {
     const section = document.querySelector(
-      `#topicsList section:nth-child(${parseInt(index) + 1})`
+      `#topicsList section:nth-child(${parseInt(index) + 1})`,
     );
     const title =
       section?.querySelector(".topic-title h3")?.innerText ||
@@ -1338,8 +1344,8 @@ function copyResults() {
     .map(
       (a) =>
         `<tr><td class="evalarea">${a.label}</td><td> ${describeScore(
-          document.getElementById(a.id).value
-        )}</td></tr>`
+          document.getElementById(a.id).value,
+        )}</td></tr>`,
     )
     .join("");
 
@@ -1350,7 +1356,7 @@ function copyResults() {
 
   Object.entries(topicsStatus).forEach(([index, choice]) => {
     const section = document.querySelector(
-      `#topicsList section:nth-child(${parseInt(index) + 1})`
+      `#topicsList section:nth-child(${parseInt(index) + 1})`,
     );
     const title =
       section?.querySelector(".topic-title h3")?.innerText ||
@@ -1468,7 +1474,7 @@ function copyResults() {
                           o.correction
                             ? `<tr><td class='reforzar-R-C'>&#9989; Corrección: ${o.correction}</td></tr>`
                             : ""
-                        }`
+                        }`,
                 )
                 .join("")}
             </tbody>
@@ -1504,7 +1510,7 @@ function copyResults() {
       body {
         margin: 0;
       }
-  
+
       .Evaluation-Results {
         margin: 0;
         background: linear-gradient(to bottom, #f5ffff 10%, #AED6D6 60%, #1ca5ab 90%);
@@ -1868,11 +1874,7 @@ function copyResults() {
               </thead>
               <tbody>
               <tr><td>
-                  ${
-                    comentariosCoach
-                      ? comentariosCoach
-                      : "Muy buen trabajo!"
-                  }
+                  ${comentariosCoach ? comentariosCoach : "Muy buen trabajo!"}
                   </td></tr>
                 </tbody>    
             </table>
@@ -1922,10 +1924,10 @@ function copyResults() {
   navigator.clipboard
     .writeText(reportHTML)
     .then(() =>
-      showPopup("✅ The Results have been copied to you clipboard! ✅")
+      showPopup("✅ The Results have been copied to you clipboard! ✅"),
     )
     .catch(() =>
-      showPopup("Data couldn't be copied, please try again or reload the page")
+      showPopup("Data couldn't be copied, please try again or reload the page"),
     );
 }
 
