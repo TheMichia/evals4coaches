@@ -1989,7 +1989,7 @@ function evaluatorsCopyResults() {
           <img src="https://imgur.com/Duh9RGt.png" />
           <img src="https://imgur.com/68ZykjC.png" />
         </div>
-        <p class="h1">RESULTADOS DE EVALUACIÓN MENSUAL</p>
+        <p class="h1">RESULTADOS DE EVALUACIÓN FILTRO</p>
       </div>`;
   reportHTML += welcomeHTML;
   reportHTML += `<div class="email-body">`;
