@@ -2018,7 +2018,43 @@ function evaluatorsCopyResults() {
   // ---------- preview ----------
   const popupContent = document.querySelector("#popupContent");
   if (popupContent) {
-    popupContent.innerHTML = `<div class="results-preview"><h2>Evaluation Results</h2><div class="preview-wrapper">${reportHTML}</div></div>`;
+  const fp = document.getElementById("fl").value;
+    const gp = document.getElementById("gr").value;
+    const pp = document.getElementById("pr").value;
+    const cp = document.getElementById("co").value;
+    const ip = document.getElementById("in").value;
+    popupContent.innerHTML = `
+    <div class="results-preview">
+      <div class="floating-results">
+        <table>
+        <tr>
+        <th colspan="2">Final Scores</th>
+        </tr>
+        <tr>
+        <td class="ar">Grammar</td>
+        <td class="num">${gp}</td>
+        </tr>
+        <tr>
+        <td class="ar">Pronunciation</td>
+        <td class="num">${pp}</td>
+        </tr>
+        <tr>
+        <td class="ar">Intonation</td>
+        <td class="num">${ip} </td>
+        </tr>
+        <tr>
+        <td class="ar">Comprehension</td>
+        <td class="num">${cp}</td>
+        </tr>
+        <tr>
+        <td class="ar">Fluency</td>
+        <td class="num">${fp}</td>
+        </tr>
+        </table>
+      </div>
+    <h2>Evaluation Results</h2>
+    <div class="preview-wrapper">${reportHTML}</div>
+    </div>`;
 
     // ---------- buttons ----------
     const backBtn = document.createElement("button");
