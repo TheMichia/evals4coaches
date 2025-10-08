@@ -1902,8 +1902,40 @@ function copyResults() {
   </html>`;
 
   // contenedor scrollable
+
+  const fp = document.getElementById("fl").value;
+  const gp = document.getElementById("gr").value;
+  const pp = document.getElementById("pr").value;
+  const cp = document.getElementById("co").value;
+  const ip = document.getElementById("in").value;
   const previewHTML = `
-  <div class="results-preview">
+  <div class="results-preview"><div class="floating-results">
+        <table>
+        <tr>
+        <th colspan="2">Final Scores</th>
+        </tr>
+        <tr>
+        <td class="ar">Grammar</td>
+        <td class="num">${gp}</td>
+        </tr>
+        <tr>
+        <td class="ar">Pronunciation</td>
+        <td class="num">${pp}</td>
+        </tr>
+        <tr>
+        <td class="ar">Intonation</td>
+        <td class="num">${ip} </td>
+        </tr>
+        <tr>
+        <td class="ar">Comprehension</td>
+        <td class="num">${cp}</td>
+        </tr>
+        <tr>
+        <td class="ar">Fluency</td>
+        <td class="num">${fp}</td>
+        </tr>
+        </table>
+      </div>
     <h2 class="previewh2"> Evaluation Results Copied!</h2>
     <h4 class="previewh4">Please review your evaluation result here:</h4>
       <div class="preview-wrapper">
