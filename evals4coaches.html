@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Monthly Evaluations - EVALS4COACHES</title>
+    <title>Evaluation Template</title> 
     <link rel="icon" type="image/png" href="mascot.png">
     <link href="evals4coaches.css" rel="stylesheet" type="text/css" />
     <!-- Google Fonts -->
@@ -47,6 +47,15 @@
           />
         </div>
         <h1>MONTHLY EVALUATIONS</h1>
+
+        <div class="cursor-toggle-wrapper" id="toggle">
+          <img src="https://www.freeiconspng.com/thumbs/cursor-png/download-big-image-png-medium-image-png-small-image-png-microsoft--15.png" style="width: 18px" class="cursor-icon">
+          <label class="switch">
+            <input type="checkbox" id="cursorToggle">
+            <span class="slider round"></span>
+          </label>
+          <img src="cursors/superstarcursor.cur" class="cursor-icon">
+        </div>
         <div class="logos">
           <!-- CONTADOR VISUAL AID -->
           <div id="count-container" class="hidden">
@@ -195,16 +204,21 @@
             ></textarea>
           </div>
           <div>
+            
             <button id="feedback" class="feedbackbutton" disabled>
               Go to Feedback
             </button>
+            
+            
             <button class="feedbackbutton" onclick="showAbsentSection()">
               Absent Student Report
             </button>
+
           </div>
         </main>
       </div>
     </div>
+    <!-- Popup -->
     <div id="popupMistakes" class="popup-mistakes hidden">
       <button id="closePopup" class="close-popup">
         Back to edit Template >
@@ -212,6 +226,7 @@
       <div id="popupContent"></div>
     </div>
 
-   <script src="evals4coaches.js?v=<?= Date.now() ?>"></script>
+    <script src="evals4coaches.js"></script>
+    <script src="updates-manager.js"></script>
   </body>
 </html>
