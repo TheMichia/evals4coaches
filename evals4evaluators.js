@@ -1,6 +1,6 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "1.0.2";
+  const versionnum = "1.1.0";
   //updated for no survey is not good evaluator
   const E4EjsonVersion = 1.1;
   window.appVersion = "Evaluators";
@@ -29,7 +29,6 @@ const absentBtn = document.getElementById("absentBtn");
 const extraInfo = document.getElementById("extra-info");
 const totalScoreEl = document.getElementById("totalscore");
 const skillTest = document.getElementById("skilltest");
-const finalScore = document.getElementById("finalScore");
 const exitevaltable = document.getElementById("exitEvalTable");
 const totalscorerow = document.getElementById("totalScoreRow");
 const prepCommentRowEl = document.getElementById("prepcomment");
@@ -95,75 +94,89 @@ function nearlyEqual(a, b, eps = 1e-6) {
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
-//shows or hides exit evals content and shows condicionado
-// updateExtraInfo (reordenada y defensiva)
+
 function updateExtraInfo() {
   const syllabusVal = syllabusE4E?.value || "";
   const levelVal = parseInt(levelE4E?.value, 10) || 0;
   const weekVal = parseInt(weekE4E?.value, 10) || 0;
 
-  // 1) Preparación (mostrar / poblar)
+  // 1) Mostrar / poblar preparación (solo Masters 2)
   const isprep = !!(
     syllabusVal && syllabusVal.toLowerCase().includes("masters 2")
   );
-
   if (prepCommentRow) {
     if (isprep) {
       prepCommentRow.classList.remove("hidden");
-      // solo repoblar si está vacío (evita resetear)
       if (prepCommentRowEl && prepCommentRowEl.options.length === 0) {
         populatePreparation(prepCommentRowEl);
       }
     } else {
       prepCommentRow.classList.add("hidden");
-      // if (prepCommentRowEl) prepCommentRowEl.innerHTML = "";
     }
   }
 
-  // 2) Regla Exit (Juniors NO es exit)
- const isExit =
+  // 2) Determinar si es Exit Evaluation (Juniors NO es exit)
+  const syllabusLower = (syllabusVal || "").toLowerCase();
+
+  const isExit =
     !syllabusVal.startsWith("Juniors") &&
     ((levelVal === 10 && (weekVal === 7 || weekVal === 13)) ||
       (levelVal === 12 && weekVal === 3) ||
       (syllabusVal.includes("Masters") && levelVal === 10 && weekVal === 3) ||
-      (syllabusVal.toLowerCase().includes("adults (5hrs/week)") &&
+      (syllabusLower.includes("adults (5hrs/week)") &&
         levelVal === 10 &&
-        weekVal === 3));
+        weekVal === 3)) &&
+    !(
+      (syllabusLower.includes("kids intensivo") &&
+        levelVal === 10 &&
+        weekVal === 7) ||
+      (syllabusLower.includes("teens 13-17 (3hrs/week)") &&
+        levelVal === 10 &&
+        weekVal === 7)
+    );
 
-  // 3) Mostrar/ocultar tabla Exit Evaluation
+  // 3) Mostrar/ocultar tabla de Exit Eval
   if (exitevaltable) {
     exitevaltable.classList.toggle("hidden", !isExit);
-
-    // si la tabla se oculta, resetear input de skillTest a vacío
     if (!isExit && skillTest) {
       skillTest.value = "";
       if (typeof calculateFinalScore === "function") calculateFinalScore();
     }
   }
 
-  // 4) Ocultar/mostrar fila de total score cuando corresponde
+  // 4) Mostrar/ocultar fila de total score
   if (totalscorerow) {
     totalscorerow.classList.toggle("hidden", isExit);
   }
 
-  // 5) Determinar condicionado (según isExit usamos finalScore; si no, totalscore)
-  const messages = [];
-
-  if (isExit) {
-    const finalVal = finalScore ? parseFloat(finalScore.textContent) : NaN;
-    if (!Number.isNaN(finalVal) && nearlyEqual(finalVal, 7)) {
-      messages.push("Exit Condicionado ✅");
-    }
-  } else {
-    const totalVal = totalScoreEl ? parseFloat(totalScoreEl.textContent) : NaN;
-    if (!Number.isNaN(totalVal) && nearlyEqual(totalVal, 7)) {
-      messages.push("Condicionado ✅");
-    }
-  }
-
-  // 6) Actualizar DOM
+  // 5) Manejar checkbox "Condicionado"
   if (extraInfo) {
-    extraInfo.innerHTML = messages.length ? messages.join("<br>") : "";
+    let htmlContent = "";
+    let scoreVal = NaN;
+
+    if (isExit) {
+      scoreVal = finalScore ? parseFloat(finalScore.textContent.trim()) : NaN;
+    } else {
+      scoreVal = totalScoreEl
+        ? parseFloat(totalScoreEl.textContent.trim())
+        : NaN;
+    }
+
+    // 🔍 Convertimos, redondeamos y comparamos exacto
+    const fixedScore = Number(scoreVal.toFixed(2)); // redondea a 2 decimales exactos
+    const isCondicionado = fixedScore === 7.0;
+
+    if (isCondicionado) {
+      htmlContent = `
+        <label class="condicionado">
+          ${isExit ? "Exit Condicionado" : "Condicionado"}
+          <input type="checkbox" id="condicionado" checked>
+        </label>`;
+      extraInfo.innerHTML = htmlContent;
+    } else {
+      // si ya no es 7, eliminar el checkbox si existe
+      extraInfo.innerHTML = "";
+    }
   }
 }
 
@@ -244,9 +257,7 @@ function getSyllabusBucket(syllabus) {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-// Normaliza distintos formatos de datos a un array de items:
-// - si data es array -> devuelve array de strings
-// - si data es objeto { resumen: [html...] } -> devuelve array de { label, html }
+// Normaliza distintos formatos de datos a un array de items
 function normalizeCommentsData(data) {
   if (!data) return [];
   if (Array.isArray(data)) return data; // array de strings
@@ -348,9 +359,6 @@ function populateComments(selectElement, category, syllabus) {
 }
 
 //pobla preparation
-// populatePreparation: llena el select de Preparación desde evaluatorsData
-// Populate sólo para "Preparación" (sin placeholder)
-// Populate exclusivo para "Preparación" (preserva selección previa)
 function populatePreparation(selectEl) {
   if (!selectEl) return;
 
@@ -638,7 +646,9 @@ syllabusE4E.addEventListener("change", () => {
 function absentsE4E() {
   const syllabus = syllabusE4E.value || "";
   if (!syllabus) {
-    showPopup("<h3>😓 Oops...</h3><p>Please select a valid syllabus first.</p>");
+    showPopup(
+      "<h3>😓 Oops...</h3><p>Please select a valid syllabus first.</p>",
+    );
     absentBtn.disabled = true;
     return;
   }
@@ -673,7 +683,9 @@ Estimado padre/madre de familia,<br><br>Le informamos que su hijo/a <b>no asisti
   document.execCommand("copy");
   document.body.removeChild(tempEl);
 
-  showPopup(`<h3>🎉 Success!</h3><p>Absent-Report for <b>${syllabus}</b> successfully copied ✅</p>`);
+  showPopup(
+    `<h3>🎉 Success!</h3><p>Absent-Report for <b>${syllabus}</b> successfully copied ✅</p>`,
+  );
 }
 
 //
@@ -755,12 +767,21 @@ function evaluatorsCopyResults() {
   // ---------- isExit logic ----------
   const syllabusVal = syllabus || "";
   const isExit =
-    // !syllabusVal.toLowerCase().startsWith("juniors") &&
-    (levelVal === 10 && (weekVal === 7 || weekVal === 13)) ||
-    (levelVal === 12 && weekVal === 3) ||
-    (syllabusVal.toLowerCase().includes("masters") &&
-      levelVal === 10 &&
-      weekVal === 3);
+    !syllabusVal.startsWith("Juniors") &&
+    ((levelVal === 10 && (weekVal === 7 || weekVal === 13)) ||
+      (levelVal === 12 && weekVal === 3) ||
+      (syllabusVal.includes("Masters") && levelVal === 10 && weekVal === 3) ||
+      (syllabusLower.includes("adults (5hrs/week)") &&
+        levelVal === 10 &&
+        weekVal === 3)) &&
+    !(
+      (syllabusLower.includes("kids intensivo") &&
+        levelVal === 10 &&
+        weekVal === 7) ||
+      (syllabusLower.includes("teens 13-17 (3hrs/week)") &&
+        levelVal === 10 &&
+        weekVal === 7)
+    );
 
   // ---------- topics extraction (robust) ----------
   const approvedTopics = [];
@@ -938,18 +959,12 @@ function evaluatorsCopyResults() {
     "DEBUG isExit, finalDisplay, totalScore:",
     isExit,
     finalDisplay,
-    totalScore
+    totalScore,
   );
 
   // ---------- condicionado logic ----------
   const isCondicionado =
-    (isExit &&
-      ((finalDisplay !== "" && Math.abs(Number(finalDisplay) - 7) < 1e-6) ||
-        (Number.isFinite(totalScore) &&
-          Math.abs(Number(totalScore) - 7) < 1e-6))) ||
-    (!isExit &&
-      Number.isFinite(totalScore) &&
-      Math.abs(Number(totalScore) - 7) < 1e-6);
+    document.getElementById("condicionado")?.checked === true;
 
   const condicionadoText = `
       <tr>
@@ -1078,7 +1093,7 @@ function evaluatorsCopyResults() {
     `;
 
   const semanas4kidsteens = syllabusVal.includes("Masters") ? 4 : 8;
-  
+
   const resultado_global_fail_kids_teens = `
     <div class="areas-oportunidad">
     <table>
@@ -1513,17 +1528,17 @@ function evaluatorsCopyResults() {
                   ${
                     o.answer
                       ? `<tr><td class="reforzar-R-C">&#10060; Respuesta: ${safe(
-                          o.answer
+                          o.answer,
                         )}</td></tr>`
                       : ""
                   }
                   ${
                     o.correction
                       ? `<tr><td class="reforzar-R-C">&#9989; Corrección: ${safe(
-                          o.correction
+                          o.correction,
                         )}</td></tr>`
                       : ""
-                  }`
+                  }`,
               )
               .join("")}
           </tbody>
@@ -1549,8 +1564,9 @@ function evaluatorsCopyResults() {
     : "";
   const selectorComments = areaDetails.join("");
   const commentsFinal = selectorComments || extraCommentsFallback || "";
-  const commentsHTML = commentsFinal
-    ? `<div class="areas-oportunidad">
+  const commentsHTML =
+    commentsFinal || isCondicionado
+      ? `<div class="areas-oportunidad">
         <table>
           <thead>
             <tr>
@@ -1558,12 +1574,12 @@ function evaluatorsCopyResults() {
             </tr>
           </thead>
           <tbody>
-            ${commentsFinal}
+           ${commentsFinal || ""}
             ${isCondicionado ? condicionadoText : ""}
           </tbody>
         </table>
       </div>`
-    : "";
+      : "";
   // evaluator + survey + referidos
   // Determinar si mostramos el nombre del evaluador o lo tratamos como vacío
   const shouldHideEvaluator =
@@ -1624,10 +1640,89 @@ function evaluatorsCopyResults() {
           <a href='https://www.english4kidsonline.com/amigo' target='_blank' class='referbtn'> REFIERE AQUÍ </a>
           </div>`;
 
+  //titulo
+  const isDiagEval = // Kids Masters Level 2
+    (syllabusLower.includes("kids masters") && levelVal === 2) ||
+    // Teens Masters Level 2
+    (syllabusLower.includes("teens masters") && levelVal === 2) ||
+    // Kids Super Intensivos Level 2
+    (syllabusLower.includes("kids (super intensivo)") && levelVal === 2) ||
+    // Teens 5 horas Level 2
+    (syllabusLower.includes("teens 13-17 (5hrs/week)") && levelVal === 2) ||
+    // Juniors Level 4
+    (syllabusLower.includes("juniors") && levelVal === 4);
+
+  const tituloEvaluacion = isDiagEval
+    ? `<p class="h1">RESULTADO DE EVALUACIÓN DIAGNÓSTICA</p>`
+    : `<p class="h1">RESULTADO DE EVALUACIÓN FILTRO</p>`;
+  
+//===================================================
+// Coaching Opportunity in RC
+  const checkedInputs = document.querySelectorAll(".coachingOpportunity input:checked");
+
+
+const links = {
+  futuroGoingTo: "https://view.genially.com/68ae362d32a8126030592eb7",
+  pasadoProgresivo: "https://view.genially.com/68ace62d5a6838e7306b1395",
+  presenteProgresivo: "https://view.genially.com/68ace5b12d712b8b4b642422",
+};
+
+const labels = {
+  futuroGoingTo: "Futuro: Going to",
+  pasadoProgresivo: "Pasado Progresivo",
+  presenteProgresivo: "Presente Progresivo",
+};
+
+let coachingHTML = "";
+
+if (checkedInputs.length) {
+  coachingHTML = `
+    <div class="areas-oportunidad">
+      <table>
+        <thead>
+          <tr><th><b>Condición para avanzar al siguiente nivel</b></th></tr>
+          <tr><td class="reforzar-R-C">
+            Deberás completar el test de certificación en un plazo máximo de <b>5 días</b>.
+          </td></tr>
+        </thead>
+        <tbody>`;
+
+  checkedInputs.forEach(input => {
+    const id = input.id;
+    if (links[id]) {
+      coachingHTML += `
+        <tr><td class="tema-reforzar">
+          Es necesario reforzar el tema de <b>${labels[id]}</b>.
+        </td></tr>
+        <tr><td class="reforzar-R-C">
+          &#128279; <b>Accede al test aquí:</b>
+          <a href="${links[id]}" target="_blank" rel="noopener noreferrer">Test de Certificación</a>
+        </td></tr>`;
+    }
+  });
+
+  coachingHTML += `
+        </tbody>
+        <tfoot>
+          <tr><td>
+            &#128197; Además, te invitamos a ingresar a nuestra plataforma interactiva
+            <a href="https://english4kids.pathwright.com" target="_blank">Pathwright</a>
+            &#128187;&#10024;, donde podrás reforzar tus aprendizajes en cualquier momento y a tu propio ritmo.
+          </td></tr>
+        </tfoot>
+      </table>
+    </div>`;
+}
+
+
+  //
+  //===================================================================
   // ---------- final assembly ----------
+  //===================================================================
+  //
   let reportHTML = "";
   reportHTML += `<html lang="en">
-    <head>
+     <head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>Monthly Evaluation Results</title>
@@ -1991,9 +2086,9 @@ function evaluatorsCopyResults() {
           <img src="https://imgur.com/tVvbCqV.png" />
           <img src="https://imgur.com/Duh9RGt.png" />
           <img src="https://imgur.com/68ZykjC.png" />
-        </div>
-        <p class="h1">RESULTADOS DE EVALUACIÓN FILTRO</p>
-      </div>`;
+  </div>`;
+  reportHTML += tituloEvaluacion;
+  reportHTML += `</div>`;
   reportHTML += welcomeHTML;
   reportHTML += `<div class="email-body">`;
   reportHTML += resultadoGlobal;
@@ -2004,6 +2099,7 @@ function evaluatorsCopyResults() {
   reportHTML += opportunityHTML;
   reportHTML += pronunciationHTML;
   reportHTML += commentsHTML;
+  reportHTML += coachingHTML;
   reportHTML += `</div>`;
   reportHTML += `<div class="footer">
                     <p>Atentamente,</p>
@@ -2017,8 +2113,9 @@ function evaluatorsCopyResults() {
 
   // ---------- preview ----------
   const popupContent = document.querySelector("#popupContent");
+  //const para preview de scores
   if (popupContent) {
-  const fp = document.getElementById("fl").value;
+    const fp = document.getElementById("fl").value;
     const gp = document.getElementById("gr").value;
     const pp = document.getElementById("pr").value;
     const cp = document.getElementById("co").value;
@@ -2050,6 +2147,10 @@ function evaluatorsCopyResults() {
         <td class="ar">Fluency</td>
         <td class="num">${fp}</td>
         </tr>
+        <tr>
+        <td class="ar">Total</td>
+        <td class="num">${totalScore}</td>
+        </tr>
         </table>
       </div>
     <h2>Evaluation Results</h2>
@@ -2077,13 +2178,13 @@ function evaluatorsCopyResults() {
     .writeText(reportHTML)
     .then(() =>
       showPopup(
-        "<h3>🎉 Success!</h3><p>✅ The Results have been copied to your clipboard!📝 </p>"
-      )
+        "<h3>🎉 Success!</h3><p>✅ The Results have been copied to your clipboard!📝 </p>",
+      ),
     )
     .catch(() =>
       showPopup(
-        "<h3>😓 Oops...</h3><p>❌ The results couldn't be copied, please try again or contact Michelle Hernández via Teams.</p>"
-      )
+        "<h3>😓 Oops...</h3><p>❌ The results couldn't be copied, please try again or contact Michelle Hernández via Teams.</p>",
+      ),
     );
 }
 
@@ -2091,8 +2192,7 @@ function evaluatorsCopyResults() {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-//new
-async  function evaluatorsReloadPage() {
+async function evaluatorsReloadPage() {
   const proceed = await confirmPopup(
     "<h3>Start again? 🤔</h3><p>We’ll reset everything so you can begin a fresh evaluation.</p><p><b>Are you sure you want to restart? 👀</b></p>",
   );
@@ -2150,6 +2250,61 @@ async  function evaluatorsReloadPage() {
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
+
+function showCoachingOpportunity() {
+  const syllabus = syllabusE4E?.value || "";
+  const level = levelE4E?.value || "";
+  const totalScore = parseFloat(totalScoreEl?.textContent) || 0; // si quieres score
+
+  // Condición para mostrar coaching
+  const hasCoachingOpportunity =
+    (syllabus.includes("Kids Intensivo") || syllabus.includes("Kids Super Intensivo")) &&
+    ["2", "4", "7"].includes(level) &&
+    totalScore <= 7; // incluye score si aplica
+
+  const popupContent = popup?.querySelector?.("#popupContent");
+
+  if (hasCoachingOpportunity && popupContent) {
+    // HTML de coaching
+    popupContent.innerHTML = `
+      <div class="final-container">
+        <h4>Every Selected item will be added to the RC</h4>
+        <fieldset class="coachingOpportunity">
+          <legend>Coaching Opportunity</legend>
+          <label for="presenteProgresivo">
+            <input type="checkbox" id="presenteProgresivo"/> Presente progresivo
+          </label>
+          <label for="futuroGoingTo">
+            <input type="checkbox" id="futuroGoingTo"/> Futuro con going to
+          </label>
+          <label for="pasadoProgresivo">
+            <input type="checkbox" id="pasadoProgresivo"/> Pasado progresivo
+          </label>
+        </fieldset>
+      </div>`;
+
+    // Botón back
+    const backButton = document.createElement("button");
+    backButton.id = "nextBtn";
+    backButton.innerText = "Back: See feedback";
+    backButton.addEventListener("click", showFinalSection);
+    popupContent.appendChild(backButton);
+
+    // Botón copy results
+    const copyButton = document.createElement("button");
+    copyButton.id = "copyResults";
+    copyButton.classList.add("copybutton");
+    copyButton.innerText = "Next: Copy Results (EVALUATORS ONLY)";
+    copyButton.addEventListener("click", evaluatorsCopyResults);
+    popupContent.appendChild(copyButton);
+
+    if (closeBtn) closeBtn.style.display = "inline-block";
+  } else{
+    console.log("no PASA");
+    evaluatorsCopyResults();
+  }
+}
+
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
