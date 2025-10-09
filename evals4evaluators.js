@@ -2258,7 +2258,7 @@ function showCoachingOpportunity() {
 
   // Condición para mostrar coaching
   const hasCoachingOpportunity =
-    (syllabus.includes("Kids Intensivo") || syllabus.includes("Kids Super Intensivo")) &&
+    (syllabus.includes("Kids Intensivo") || syllabus.includes("Kids (Super Intensivo)")) &&
     ["2", "4", "7"].includes(level) &&
     totalScore <= 7; // incluye score si aplica
 
