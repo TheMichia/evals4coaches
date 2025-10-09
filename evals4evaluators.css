@@ -300,13 +300,17 @@ textarea:focus {
 .extra-info {
     margin: -40px 0 40px 0;
     padding: 0;
-}
-
-.extra-info h3 {
     text-align: center;
     font-size: 0.95rem;
     font-family: Montserrat;
     color: #1CA5AB;
+    font-weight: bold;
+}
+
+input{
+     accent-color: #3ea621; 
+    width: 1rem;
+    height: 1rem;
 }
 
 /*========================  ========================*/
@@ -325,12 +329,56 @@ textarea:focus {
 }
 
 
+/*=================== Condicionados y coaching opportunity =====================*/
 
-/*========================  ========================*/
+fieldset{
+    margin: 12px auto;
+}
 
+label{
+    display: inline-block;
+    color: #25888d;
+    font-size: 1.5rem;
+    font-family: roboto condensed;
+}
 
-/*========================  ========================*/
+legend{
+    font-size: 2rem;
+    color: #25888d;
+    font-weight: bold;
+    text-align: center;
+    font-family: roboto condensed;    
+}
 
+.coachingOpportunity{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 2rem 15px;
+    border: 1px solid #1CA5AB;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+}
+.condicionado{
+    font-size: 1.4rem;
+    color: #25888d;
+    font-weight: bold;
+    text-align: center;
+    font-family: roboto condensed;    
+}
+
+.coachingOpportunity label{
+    font-size: 1.1rem;
+    color: #17787d;
+    font-weight: 500;
+    font-family: Montserrat;
+    text-align: left;
+}
+
+.coachingOpportunity input{
+    margin: 0 20px;
+}
 
 /*========================  ========================*/
 
