@@ -93,8 +93,6 @@ h1 {
   height: 40px;
 }
 
-
-
 /* =============== DROPDOWNS AND SCORES =============== */
 /* contiene todo el contenido desde topbar hasta footer */
 .main {
@@ -242,14 +240,10 @@ p {
   transition: background-color 0.4s ease;
 }
 
-
 .copybutton:hover {
   background-color: #648a1e;
   transition: background-color 0.4s ease;
 }
-
-
-
 
 /* =============== TOPICS =============== */
 /* el div mayor */
@@ -258,7 +252,6 @@ p {
   min-width: 550px;
   overflow-y: auto;
   padding: 0 10px 0 5px;
-
 }
 
 /* contenedor de cada tabla */
@@ -267,23 +260,23 @@ p {
   margin: 20px 0 40px;
   background: linear-gradient(to bottom, #f0ffff 0%, #ffffff 5%);
   border-radius: 12px;
-  border-left: 10px solid #1CA5AB;
+  border-left: 10px solid #1ca5ab;
   /* base sin color */
-  border-right: 10px solid #1CA5AB;
+  border-right: 10px solid #1ca5ab;
   /* base sin color */
   transition: border-color 0.4s ease;
 }
 
 .topic-container.approved {
-  border-left-color: #94C121;
-  border-RIGHT-color: #94C121;
+  border-left-color: #94c121;
+  border-right-color: #94c121;
   background: linear-gradient(to bottom, #f0fff0 0%, #ffffff 3%);
   transition: border-color 0.3s ease, background 0.3s ease;
 }
 
 .topic-container.rejected {
-  border-left-color: #EB5955;
-  border-right-color: #EB5955;
+  border-left-color: #eb5955;
+  border-right-color: #eb5955;
   background: linear-gradient(to bottom, #fff0f0 0%, #ffffff 3%);
   transition: border-color 0.3s ease, background 0.3s ease;
 }
@@ -295,8 +288,6 @@ p {
   margin: 0px;
   border-collapse: collapse;
 }
-
-
 
 /* GRAMMART TOPIC */
 .topic-title {
@@ -312,7 +303,6 @@ p {
   align-items: center;
   gap: 0.5rem;
 }
-
 
 h3 {
   font-family: "Montserrat", sans-serif;
@@ -350,15 +340,12 @@ h3 {
 }
 
 .yes {
-  color: #94C121;
+  color: #94c121;
 }
 
 .no {
-  color: #EB5955;
+  color: #eb5955;
 }
-
-
-
 
 /*=====================HEAD==============*/
 /*tags*/
@@ -387,20 +374,9 @@ h3 {
 
 .topictable td:focus,
 .topictable td:active {
-  outline: 2px solid #1CA5AB;
+  outline: 2px solid #1ca5ab;
   outline-offset: -2px;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 /*=============== FOOTER ===================*/
 footer {
@@ -412,7 +388,6 @@ footer {
   font-weight: 500;
   font-size: 0.85rem;
 }
-
 
 /*=============== SCROLL BAR ===================*/
 /* Aplica a navegadores WebKit (Chrome, Safari, Edge) */
@@ -440,62 +415,57 @@ footer {
   /* color cuando pasa el mouse */
 }
 
-
-
 /*======================== INFO POPUP ========================*/
 /* --- estilo del popup --- */
 .popup-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.35);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
 .popup-box {
-    background: #fff;
-    padding: 1.5rem;
-    border-radius: 16px;
-    text-align: center;
-    max-width: 320px;
-    box-shadow: 0 4px 15px rgb(14, 51, 67, 0.2);
-    font-family: sans-serif;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  text-align: center;
+  max-width: 320px;
+  box-shadow: 0 4px 15px rgb(14, 51, 67, 0.2);
+  font-family: sans-serif;
 }
 
 .popup-box h3 {
-    margin: 0 0 25px;
-    font-size: 1.5rem;
-    color: #1EAEAE;
-    text-align: center;
+  margin: 0 0 25px;
+  font-size: 1.5rem;
+  color: #1eaeae;
+  text-align: center;
 }
 
 .popup-box p {
-    font-size: 0.95rem;
-    color: #0f3939;
-    text-align: center;
+  font-size: 0.95rem;
+  color: #0f3939;
+  text-align: center;
 }
 
 .popup-box button {
-    margin-top: 0.5rem;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 10px;
-    background: #1EAEAE;
-    color: white;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1.2rem;
-    width: 80%;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background: #1eaeae;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.2rem;
+  width: 80%;
 }
 
 .popup-box button:hover {
-    background: #21C0C0;
+  background: #21c0c0;
 }
-
-
-
 
 /* =================POPUP=============== */
 /* Estado inicial */
@@ -601,10 +571,7 @@ footer {
   text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-
-
 @keyframes bounce {
-
   20%,
   100% {
     transform: translateX(0);
@@ -654,7 +621,7 @@ footer {
 
 #nextBtn {
   width: 50%;
-  background-color: #EB5955;
+  background-color: #eb5955;
   color: white;
   height: 3rem;
   min-width: 80px;
@@ -663,7 +630,7 @@ footer {
 #nextBtn,
 #backBtn {
   width: 50%;
-  background-color: #94C121;
+  background-color: #94c121;
   color: white;
   min-width: 80px;
   height: 3rem;
@@ -770,7 +737,7 @@ h4 {
   text-align: center;
   color: white;
   font-family: Arial, sans-serif;
-  background-image: url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGE1eGM5OTd4Z3AyMW5paDd5cWwwZzdyeHRtbzVicDBqZmhtdzlsdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/26BRABnerqonwLHMc/giphy.gif');
+  background-image: url("https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGE1eGM5OTd4Z3AyMW5paDd5cWwwZzdyeHRtbzVicDBqZmhtdzlsdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/26BRABnerqonwLHMc/giphy.gif");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -824,7 +791,6 @@ h4 {
   }
 }
 
-
 .reminder-container h3 {
   font-size: 1rem;
   font-weight: 800;
@@ -843,7 +809,7 @@ h4 {
 
 #time-display {
   font-size: 1.5rem;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   font-weight: 800;
   text-align: center;
   text-justify: center;
@@ -870,7 +836,6 @@ h4 {
 }
 
 @keyframes time-over {
-
   0%,
   100% {
     color: #8d2525;
@@ -955,8 +920,8 @@ h4 {
 
 .absent-container table td:last-child:focus,
 .absent-container table td:last-child:active {
-  outline: 2px solid #1CA5AB;
-  outline-offset: -2px
+  outline: 2px solid #1ca5ab;
+  outline-offset: -2px;
 }
 
 .absent-container table th {
@@ -975,35 +940,33 @@ h4 {
   font-size: 1.2rem;
 }
 
-
 /* =================POPUP 4 adults o kids=============== */
 
-.pop4Adults{
+.pop4Adults {
   background-color: #ffffff;
-  
 }
 
-.pop4kids h2{
+.pop4kids h2 {
   text-align: center;
   margin-bottom: 20px;
   flex-shrink: 0;
   animation: bounce 5s infinite;
-  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.pop4Adults h2{
+.pop4Adults h2 {
   text-align: center;
   margin-bottom: 20px;
   flex-shrink: 0;
-  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .pop4kids {
-  cursor: url('cursors/superstarcursor.cur'), default;
+  cursor:  default;
 }
 
 .pop4kids table {
-  cursor: url('cursors/superstarcursor.cur'), pointer;
+  cursor: pointer;
 }
 
 /*======================== FLOATING RESULTS FOR INET EASY FILL ========================*/
@@ -1060,4 +1023,64 @@ h4 {
   width: 40px;      
 }
 
+/*========================  ========================*/
+
+.cursor-toggle-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: right;
+  gap: 10px; /* espacio entre imagen y toggle */
+  margin: auto 10px;
+  width: auto;
+}
+
+.cursor-icon {
+  width: 30px;  /* tamaño del icono */
+  height: 24px;
+  object-fit: contain;
+}
+
+/* Switch estilo iOS */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #d6d6d6;
+  transition: 0.4s;
+  border-radius: 26px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #e4c986;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
 
