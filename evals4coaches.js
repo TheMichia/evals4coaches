@@ -1,8 +1,8 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.4.0";
+  const versionnum = "1.5.0";
   //UPDATE for adults neutral feedback
-  const jsonVersion = 1.4;
+  const jsonVersion = 1.5;
   window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
   showversion.innerHTML = `${version} ${versionnum} - JSON ${jsonVersion}`;
@@ -21,6 +21,7 @@ const syllabusDropdown = document.getElementById("syllabusDropdown");
 const levelsDropdown = document.getElementById("levelsDropdown");
 const weeksDropdown = document.getElementById("weeksDropdown");
 const topicsList = document.getElementById("topicsList");
+const cursorToggle = document.getElementById("cursorToggle");
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
@@ -95,6 +96,9 @@ syllabusDropdown.addEventListener("change", () => {
   // 3) Feedback button vuelve a disabled + mensaje
   feedbackBtn.disabled = true;
   helperSpan.textContent = "Now choose a level to load the weeks.";
+  cursorToggle.checked = !s.includes("Adults");
+  cursorToggle.dispatchEvent(new Event("change"));
+
 
   // 4) Poblar levels o dejar placeholder
   if (s && topicsData[s]) {
@@ -254,6 +258,7 @@ const popup = document.getElementById("popupMistakes");
 const mainContent = document.getElementById("mainContent");
 const closeBtn = document.getElementById("closePopup");
 const feedbackBtn = document.getElementById("feedback");
+const toggler = document.getElementById("toggle");
 
 feedbackBtn.addEventListener("click", () => {
   mainContent.style.display = "none";
@@ -268,9 +273,11 @@ feedbackBtn.addEventListener("click", () => {
   popup.classList.remove("pop4Adults", "pop4kids");
 
   if (syllabusValue.includes("adults")) {
-    popup.classList.add("pop4Adults");
+    popup.classList.add("pop4Adults")
+      toggler.classList.add("hidden");
   } else {
-    popup.classList.add("pop4kids");
+    popup.classList.add("pop4kids")
+      toggler.classList.remove("hidden");
   }
 
   showKudosSection();
@@ -420,7 +427,7 @@ function checkCompletion() {
   const sections = document.querySelectorAll("#topicsList section");
   const feedbackButton = document.getElementById("feedback");
   const container = document.getElementById("countdown-timer");
-  
+
   let allAnswered = true;
 
   sections.forEach((_, index) => {
@@ -429,10 +436,10 @@ function checkCompletion() {
     }
   });
 
-  // Detectar timer
+  // ✅ Detectar si el timer está en 0 (ya terminó)
   const timerIsOver = !container.classList.contains("normal");
-  
-  //Si el timer terminó, el feedback queda habilitado aunque falten topics
+
+  // ✅ Si el timer terminó, el feedback queda habilitado aunque falten topics
   if (timerIsOver) {
     feedbackButton.disabled = false;
   } else {
@@ -443,6 +450,7 @@ function checkCompletion() {
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
+
 //for counter-visual aid only
 function updateEvaluatedCount() {
   const total = document.querySelectorAll("#topicsList section").length;
@@ -1169,14 +1177,16 @@ function showFinalSection() {
   const syllabusDropdown = document.getElementById("syllabusDropdown");
   const syllabus = syllabusDropdown ? syllabusDropdown.value || "" : "";
 
-  // Helpers para matching de syllabus 
+  // Helpers para matching de syllabus
   const isJuniors = syllabus.toLowerCase().startsWith("juniors");
   const isKids = syllabus.toLowerCase().includes("kids");
   const isTeens = syllabus.toLowerCase().includes("teens");
   const isMasters = syllabus.toLowerCase().includes("masters");
   const isAdults = syllabus.toLowerCase().includes("adults");
   const finalScoreEl = document.getElementById("finalScore");
-  const finalScore = finalScoreEl ? Number(finalScoreEl.textContent || finalScoreEl.value || 0) : 0;
+  const finalScore = finalScoreEl
+    ? Number(finalScoreEl.textContent || finalScoreEl.value || 0)
+    : 0;
 
   // --- DEFINICIÓN DE BANDERAS ---
   const isExit =
@@ -1216,28 +1226,39 @@ function showFinalSection() {
   // --- DETERMINAR VIDEO usando el mapa VIDEOS ---
   let canvavideo = "";
 
-  //si es juniors, they dont see get told if pass or not
+  // Si es Juniors, no se les muestra si pasan o no
   if (isJuniors) {
     canvavideo = VIDEOS.juniors;
-  } else if (isAdults){
-    canvavideo = ""
-    html+= `<h4>Evaluation Finished!</h4>`;
-    } else if (isExit) {
-    // Masters tienen videos propios
+  } else if (isAdults) {
     if (isMasters) {
-      if (syllabus.toLowerCase().includes("kids")) {
-        if (finalScore >= 7) canvavideo = VIDEOS.exit.kidsMasters;
-        else canvavideo = VIDEOS.fail 
-          console.log(finalScore);
-      } else if (syllabus.toLowerCase().includes("teens")) {
-        if (finalScore >= 7) canvavideo = VIDEOS.exit.teensMasters;
-        else canvavideo = VIDEOS.fail;
+      // Adults Masters
+      if (finalScore >= 7) {
+        html += `<img style="height: 90%; width: auto; object-fit: contain;"  src="VIDEO4EVALS/adultspass.png">`;
       } else {
-        if (finalScore >= 7) canvavideo = VIDEOS.exit.mastersGeneric;
-        else canvavideo = VIDEOS.fail;
+        html += `<img style="height: 90%; width: auto; object-fit: contain;"  src="VIDEO4EVALS/adultsfail.png">`;
       }
     } else {
-      // Kids / Teens non-Masters: tres outcomes (>=9 success, >=7 pass, <7 fail)
+      // Adults normales
+      if (totalScore >= 7) {
+        html += `<img style="height: 90%; width: auto; object-fit: contain;" src="VIDEO4EVALS/adultspass.png">`;
+      } else {
+        html += `<img style="height: 90%; width: auto; object-fit: contain;" src="VIDEO4EVALS/adultsfail.png">`;
+      }
+    }
+  } else if (isExit) {
+    // Exit Evaluation
+    if (isMasters) {
+      // Masters tienen videos propios
+      if (syllabus.toLowerCase().includes("kids")) {
+        canvavideo = finalScore >= 7 ? VIDEOS.exit.kidsMasters : VIDEOS.fail;
+        console.log(finalScore);
+      } else if (syllabus.toLowerCase().includes("teens")) {
+        canvavideo = finalScore >= 7 ? VIDEOS.exit.teensMasters : VIDEOS.fail;
+      } else {
+        canvavideo = finalScore >= 7 ? VIDEOS.exit.mastersGeneric : VIDEOS.fail;
+      }
+    } else {
+      // Kids / Teens no Masters → tres outcomes
       if (totalScore >= 9) {
         if (isKids) canvavideo = VIDEOS.exit.kids.success;
         else if (isTeens) canvavideo = VIDEOS.exit.teens.success;
@@ -1247,12 +1268,11 @@ function showFinalSection() {
         else if (isTeens) canvavideo = VIDEOS.exit.teens.pass;
         else canvavideo = VIDEOS.exit.mastersGeneric;
       } else {
-        // No pasar
         canvavideo = VIDEOS.fail;
       }
     }
   } else if (isMidterm) {
-    // Midterm: 4 outcomes
+    // Midterm → 4 posibles outcomes
     if (totalScore < 7) canvavideo = VIDEOS.midterm.fail;
     else if (totalScore < 8) canvavideo = VIDEOS.midterm.good;
     else if (totalScore < 9) canvavideo = VIDEOS.midterm.better;
@@ -1261,17 +1281,20 @@ function showFinalSection() {
     canvavideo =
       totalScore >= 7 ? VIDEOS.nextLevel.pass : VIDEOS.nextLevel.fail;
   } else {
-    // Fallback: si no cae en ninguna bandera
+    // Fallback general
     canvavideo = totalScore >= 7 ? VIDEOS.midterm.good : VIDEOS.nextLevel.fail;
   }
 
   // --- INSERTAR HTML DEL VIDEO ---
-  html += `
-    <video width="100%" autoplay >
-      <source src="${canvavideo}" type="video/mp4" />
-      Your browser doesn't support video feature.
-    </video>
-  </div>`;
+  if (canvavideo) {
+    html += `
+      <video width="100%" autoplay>
+        <source src="${canvavideo}" type="video/mp4" />
+        Your browser doesn't support the video tag.
+      </video>`;
+  }
+
+  html += `</div>`;
 
   // Render
   const popupContent =
@@ -1300,9 +1323,9 @@ function showFinalSection() {
     copybutton.innerText = "Next: Copy Results (COACH ONLY)";
     copybutton.addEventListener("click", () => copyResults());
   } else if (currentVersion === "Evaluators") {
-    copybutton.innerText = "Next: Copy Results (EVALUATORS ONLY)";
+    copybutton.innerText = "Next: EVALUATORS ONLY";
     copybutton.addEventListener("click", () => {
-      evaluatorsCopyResults();
+      showCoachingOpportunity();
     });
   }
 
@@ -1934,6 +1957,10 @@ function copyResults() {
         <td class="ar">Fluency</td>
         <td class="num">${fp}</td>
         </tr>
+        <tr>
+        <td class="ar">Total Score</td>
+        <td class="num">${totalScore}</td>
+        </tr>
         </table>
       </div>
     <h2 class="previewh2"> Evaluation Results Copied!</h2>
@@ -2217,3 +2244,25 @@ async function reloadPage() {
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
+
+cursorToggle.addEventListener("change", () => {
+  const useCustom = cursorToggle.checked;
+
+  if (popup) {
+    // Aplica cursor solo al popup
+    popup.style.cursor = useCustom
+      ? 'url("cursors/superstarcursor.cur"), default'
+      : 'default';
+
+    // Si hay tablas dentro del popup, también cambias su cursor
+    popup.querySelectorAll("table").forEach(t => {
+      t.style.cursor = useCustom
+        ? 'url("cursors/superstarcursor.cur"), pointer'
+        : 'pointer';
+    });
+  }
+});
+
+
+
+
