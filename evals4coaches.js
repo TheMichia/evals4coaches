@@ -222,7 +222,7 @@ weeksDropdown.addEventListener("change", () => {
           <table class="topictable" style="margin-bottom: 20px;">
             <thead>
               <tr>
-                <th colspan="3">Answer</th>
+                <th colspan="3">Wrong Answer</th>
                 <th colspan="3">Correction</th>
               </tr>
             </thead>
