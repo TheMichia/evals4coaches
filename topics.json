@@ -170,12 +170,15 @@
         "Futuro Simple (Going to)",
         "Futuro Simple (Will)"
       ],
-      "7": [
-        "Preguntas Básicas",
+      "7": [    "Preguntas Básicas",
         "Vocabulario General",
-        "Presente Simple 1a y 3a",
-        "Presente Progresivo 1a y 3a",
-        "Futuro Simple: going to - only"
+        "Presente Simple 1ra persona",
+        "Presente Simple 3ra persona",
+        "Presente Progresivo 1ra persona",
+        "Presente Progresivo 3ra persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will"
+
       ]
     }
   },
@@ -215,13 +218,14 @@
         "Presente Progresivo (1ra persona)",
         "Presente Progresivo (3ra persona)"
       ],
-      "13": [
-        "Personal information",
-        "Descriptions",
-        "Basic vocabulary",
-        "Presente simple 1a Persona",
-        "Presente simple 3a Persona",
-        "Presente Progresivo 1st & 3rd person"
+      "13": [    "Información personal",
+        "Descripciones",
+        "Vocabulario básico",
+        "Presente simple 1ra persona",
+        "Presente simple 3ra persona",
+        "Presente Progresivo 1ra persona",
+        "Presente Progresivo 3ra persona"
+
       ]
     },
     "3": {
@@ -257,13 +261,16 @@
         "Pasado Simple",
         "Pasado Progresivo"
       ],
-      "13": [
+      "13": [    "Información personal",
         "Descripciones",
         "Presente simple 1a Persona",
         "Presente simple 3a Persona",
-        "Presente Progresivo 1a & 3a persona",
-        "Futuro Simple: Going to & Will (1st person only)",
+        "Presente Progresivo 1ra persona",
+        "Presente Progresivo 3ra persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
         "Pasado simple"
+
       ]
     },
     "5": {
@@ -335,15 +342,17 @@
         "Superlativos",
         "Presente Perfecto"
       ],
-      "13": [
-        "Presente simple 1a Persona",
-        "Presente simple 3a Persona",
+      "13": [    "Información personal",
         "Descripciones",
-        "Presente Progresivo 1a persona",
-        "Presente Progresivo 3a persona",
-        "Futuro Simple",
+        "Presente simple 1ra Persona",
+        "Presente simple 3ra Persona",
+        "Presente Progresivo 1ra persona",
+        "Presente Progresivo 3ra persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
         "Pasado simple",
         "Pasado progresivo"
+
       ]
     },
     "8": {
@@ -394,19 +403,22 @@
         "Superlativos",
         "Presente Perfecto"
       ],
-      "13": [
+      "13": [    "Información personal",
+        "Descripciones",
+        "Presente simple 1ra persona",
+        "Presente simple 3ra persona",
+        "Presente Progresivo 1ra persona",
+        "Presente Progresivo 3ra persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
+        "Pasado Simple",
+        "Pasado Progresivo",
         "Condicionales",
         "Comparatives",
         "Superlatives",
         "Modales",
-        "Presente simple 1a persona",
-        "Presente simple 3a persona",
-        "Descripciones",
-        "Presente Progresivo",
-        "Futuro Simple",
-        "Pasado Simple",
-        "Pasado Progresivo",
         "Presente Perfecto"
+
       ]
     },
     "10": {
@@ -424,18 +436,20 @@
         "Comparativos y Superlativos",
         "Presente Perfecto"
       ],
-      "13": [
-        "Presente simple 1a persona",
-        "Presente simple 3a persona",
-        "Descripciones",
-        "Presente Progresivo",
-        "Futuro Simple",
-        "Pasado simple",
-        "Condicionales",
-        "Comparativos y Superlativos",
-        "Modales",
+      "13": [    "Descripciones",
+        "Presente simple 1ra persona",
+        "Presente simple 3ra persona",
+        "Presente Progresivo 3ra persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
+        "Pasado Simple",
         "Pasado Progresivo",
-        "Presente perfecto"
+        "Condicionales",
+        "Comparatives",
+        "Superlatives",
+        "Modales",
+        "Presente Perfecto"
+
       ]
     }
   },
@@ -573,15 +587,17 @@
         "Pasado Simple",
         "Pasado Progresivo"
       ],
-      "7": [
-        "Presente simple 1a Persona",
-        "Presente simple 3a Persona",
+      "7": [    "Información personal",
         "Descripciones",
-        "Presente Progresivo 1a persona",
-        "Presente Progresivo 3a persona",
-        "Futuro Simple",
+        "Presente simple 1ra Persona",
+        "Presente simple 3ra Persona",
+        "Presente Progresivo 1ra persona",
+        "Presente Progresivo 3ra persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
         "Pasado simple",
         "Pasado progresivo"
+
       ]
     },
     "8": {
@@ -623,19 +639,22 @@
         "Comparativos y Superlativos",
         "Presente Perfecto"
       ],
-      "7": [
-        "Presente simple 1a persona",
-        "Presente simple 3a persona",
+      "7": [    "Información personal",
         "Descripciones",
-        "Presente Progresivo",
-        "Futuro Simple",
+        "Presente simple 1ra persona",
+        "Presente simple 3ra persona",
+        "Presente Progresivo 1ra persona",
+        "Presente Progresivo 3ra persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
         "Pasado Simple",
         "Pasado Progresivo",
         "Condicionales",
-        "Comparativos",
-        "Superlativos",
+        "Comparatives",
+        "Superlatives",
         "Modales",
         "Presente Perfecto"
+
       ]
     },
     "10": {
@@ -653,18 +672,19 @@
         "Comparativos y Superlativos",
         "Presente Perfecto"
       ],
-      "7": [
-        "Presente simple 1a persona",
-        "Presente simple 3a persona",
-        "Descripciones",
-        "Presente Progresivo",
-        "Futuro Simple",
-        "Pasado simple",
-        "Condicionales",
-        "Comparativos y Superlativos",
-        "Modales",
+      "7": [    "Descripciones",
+        "Presente simple 3ra persona",
+        "Presente Progresivo 3ra persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
+        "Pasado Simple",
         "Pasado Progresivo",
-        "Presente perfecto"
+        "Condicionales",
+        "Comparatives",
+        "Superlatives",
+        "Modales",
+        "Presente Perfecto"
+
       ]
     }
   },
@@ -706,15 +726,18 @@
       ]
     },
     "4": {
-      "3": [
-        "Preguntas Básicas",
-        "Presente Simple",
-        "Presente Progresivo",
-        "Futuro Simple",
-        "Pasado Simple",
-        "Pasado Progresivo",
-        "Modales",
-        "Comparativos"
+      "3": [    "Preguntas básicas",
+    "Presente simple 1ra Persona",
+    "Presente simple 3ra Persona",
+    "Presente Progresivo 1ra persona",
+    "Presente Progresivo 3ra persona",
+    "Futuro Simple: Going to",
+    "Futuro Simple: Will",
+    "Pasado simple",
+    "Pasado progresivo",
+    "Modales",
+    "Comparativos"
+
       ]
     },
     "5": {
@@ -765,19 +788,20 @@
       ]
     },
     "8": {
-      "3": [
-        "Preguntas Básicas",
-        "Presente Simple",
-        "Presente Progresivo",
-        "Futuro Simple",
-        "Pasado Simple",
-        "Pasado Progresivo",
-        "Modales",
-        "Condicionales",
-        "Comparativos",
-        "Superlativos",
-        "Presente Perfecto",
-        "Presente perfecto progresivo"
+      "3": [    "Preguntas Básicas",
+    "Presente simple",
+    "Presente Progresivo",
+    "Futuro Simple: Going to",
+    "Futuro Simple: Will",
+    "Pasado Simple",
+    "Pasado Progresivo",
+    "Condicionales",
+    "Comparatives",
+    "Superlatives",
+    "Modales",
+    "Presente Perfecto",
+    "Presente Perfecto Progresivo"
+
       ]
     },
     "9": {
@@ -799,19 +823,21 @@
       ]
     },
     "10": {
-      "3": [
-        "Preguntas Básicas",
-        "Presente Simple",
-        "Presente Progresivo",
-        "Futuro Simple",
-        "Pasado Simple",
-        "Pasado Progresivo",
-        "Modales",
-        "Presente Perfecto",
-        "Presente perfecto Progresivo",
-        "Comparativos/Superlativos",
-        "Condicionales",
-        "Futuro perfecto"
+      "3": [    "Preguntas Básicas",
+    "Presente simple 3ra persona",
+    "Presente Progresivo 3ra persona",
+    "Futuro Simple: Going to",
+    "Futuro Simple: Will",
+    "Pasado Simple",
+    "Pasado Progresivo",
+    "Condicionales",
+    "Comparatives",
+    "Superlatives",
+    "Modales",
+    "Presente Perfecto",
+    "Presente Perfecto Progresivo",
+    "Futuro Perfecto"
+
       ]
     }
   },
@@ -1108,17 +1134,20 @@
         "Condicionales",
         "Comparativos"
       ],
-      "13": [
-        "Preguntas Básicas",
-        "Presente Simple",
-        "Presente Progresivo",
-        "Futuro Simple",
+      "13": [    "Preguntas Básicas",
+        "Presente Simple 1ra persona",
+        "Presente Simple 3ra persona",
+        "Presente Progresivo 1ra persona",
+        "Presente Progresivo 3ra persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
         "Pasado Simple",
         "Pasado Progresivo",
         "Verbos Modales",
         "Condicionales",
         "Comparatives",
         "Superlatives"
+
       ]
     },
     "8": {
@@ -1168,18 +1197,21 @@
         "Presente Perfecto",
         "Presente Perfecto Progresivo"
       ],
-      "13": [
-        "Preguntas Básicas",
-        "Presente Simple (1ra y 3ra persona)",
-        "Present Progressive",
-        "Futuro Simple",
+      "13": [    "Preguntas Básicas",
+        "Presente simple 1ra persona",
+        "Presente simple 3ra persona",
+        "Presente Progresivo 1ra persona",
+        "Presente Progresivo 3ra persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
         "Pasado Simple",
         "Pasado Progresivo",
-        "Verbos Modales",
         "Condicionales",
         "Comparatives",
         "Superlatives",
+        "Modales",
         "Presente Perfecto"
+
       ]
     },
     "10": {
@@ -1198,18 +1230,20 @@
         "Presente Perfecto",
         "Presente Perfecto Progresivo"
       ],
-      "13": [
-        "Preguntas Básicas",
-        "Presente Simple 3a Persona",
-        "Present Progressive",
-        "Futuro Simple",
+      "13": [    "Preguntas Básicas",
+        "Presente simple 3ra persona",
+        "Presente Progresivo 3ra persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
         "Pasado Simple",
         "Pasado Progresivo",
-        "Verbos Modales",
         "Condicionales",
-        "Comparativos/Superlativos",
+        "Comparatives",
+        "Superlatives",
+        "Modales",
         "Presente Perfecto",
         "Presente Perfecto Progresivo"
+
       ]
     }
   },
@@ -1354,17 +1388,20 @@
         "Pasado Simple",
         "Pasado Progresivo"
       ],
-      "7": [
-        "Preguntas Básicas",
-        "Presente Simple",
-        "Presente Progresivo",
-        "Futuro Simple",
+      "7": [    "Preguntas Básicas",
+        "Presente Simple 1ra persona",
+        "Presente Simple 3ra persona",
+        "Presente Progresivo 1ra persona",
+        "Presente Progresivo 3ra persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
         "Pasado Simple",
         "Pasado Progresivo",
         "Verbos Modales",
         "Condicionales",
         "Comparatives",
         "Superlatives"
+
       ]
     },
     "8": {
@@ -1410,18 +1447,21 @@
         "Comparativos y Superlativos",
         "Presente Perfecto"
       ],
-      "7": [
-        "Preguntas Básicas",
-        "Presente Simple 3a Persona",
-        "Present Progressive",
-        "Futuro Simple",
+      "7": [    "Preguntas Básicas",
+        "Presente simple 1ra persona",
+        "Presente simple 3ra persona",
+        "Presente Progresivo 1ra persona",
+        "Presente Progresivo 3ra persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
         "Pasado Simple",
         "Pasado Progresivo",
-        "Verbos Modales",
         "Condicionales",
-        "Presente Perfecto",
         "Comparatives",
-        "Superlatives"
+        "Superlatives",
+        "Modales",
+        "Presente Perfecto"
+
       ]
     },
     "10": {
@@ -1439,18 +1479,20 @@
         "Comparativos y Superlativos",
         "Presente Perfecto"
       ],
-      "7": [
-        "Preguntas Básicas",
-        "Presente Simple 3a Persona",
-        "Present Progressive",
-        "Futuro Simple",
+      "7": [    "Preguntas Básicas",
+        "Presente simple 3ra persona",
+        "Presente Progresivo 3ra persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
         "Pasado Simple",
         "Pasado Progresivo",
-        "Verbos Modales",
         "Condicionales",
-        "Comparativos/Superlativos",
+        "Comparatives",
+        "Superlatives",
+        "Modales",
         "Presente Perfecto",
         "Presente Perfecto Progresivo"
+
       ]
     }
   },
@@ -1492,15 +1534,18 @@
       ]
     },
     "4": {
-      "3": [
-        "Preguntas Básicas",
-        "Presente Simple",
-        "Presente Progresivo",
-        "Futuro Simple",
-        "Pasado Simple",
-        "Pasado Progresivo",
-        "Modales",
-        "Comparativos"
+      "3": [    "Preguntas básicas",
+    "Presente simple 1ra Persona",
+    "Presente simple 3ra Persona",
+    "Presente Progresivo 1ra persona",
+    "Presente Progresivo 3ra persona",
+    "Futuro Simple: Going to",
+    "Futuro Simple: Will",
+    "Pasado simple",
+    "Pasado progresivo",
+    "Modales",
+    "Comparativos"
+
       ]
     },
     "5": {
@@ -1551,19 +1596,20 @@
       ]
     },
     "8": {
-      "3": [
-        "Preguntas Básicas",
-        "Presente Simple",
-        "Presente Progresivo",
-        "Futuro Simple",
-        "Pasado Simple",
-        "Pasado Progresivo",
-        "Modales",
-        "Condicionales",
-        "Comparativos",
-        "Superlativos",
-        "Presente Perfecto",
-        "Presente perfecto progresivo"
+      "3": [    "Preguntas Básicas",
+    "Presente simple",
+    "Presente Progresivo",
+    "Futuro Simple: Going to",
+    "Futuro Simple: Will",
+    "Pasado Simple",
+    "Pasado Progresivo",
+    "Condicionales",
+    "Comparatives",
+    "Superlatives",
+    "Modales",
+    "Presente Perfecto",
+    "Presente Perfecto Progresivo"
+
       ]
     },
     "9": {
@@ -1585,19 +1631,21 @@
       ]
     },
     "10": {
-      "3": [
-        "Preguntas Básicas",
-        "Presente Simple",
-        "Presente Progresivo",
-        "Futuro Simple",
-        "Pasado Simple",
-        "Pasado Progresivo",
-        "Modales",
-        "Presente Perfecto",
-        "Presente perfecto Progresivo",
-        "Comparativos/Superlativos",
-        "Condicionales",
-        "Futuro perfecto"
+      "3": [    "Preguntas Básicas",
+    "Presente simple 3ra persona",
+    "Presente Progresivo 3ra persona",
+    "Futuro Simple: Going to",
+    "Futuro Simple: Will",
+    "Pasado Simple",
+    "Pasado Progresivo",
+    "Condicionales",
+    "Comparatives",
+    "Superlatives",
+    "Modales",
+    "Presente Perfecto",
+    "Presente Perfecto Progresivo",
+    "Futuro Perfecto"
+
       ]
     }
   },
@@ -1764,14 +1812,15 @@
       ]
     },
     "3": {
-      "4": [
-        "Información Personal",
-        "Vocabulario General/ Preguntas Básicas",
-        "Información sobre terceras personas (Él/Ella)",
-        "Presente Simple (1ra y 3ra persona)",
-        "Presente Progresivo (1ra persona)",
-        "Presente Progresivo (3ra persona)",
-        "Futuro Simple (Going to)"
+      "4": [    "Preguntas Básicas",
+        "Describir Personas",
+        "Presente Simple 1ra Persona",
+        "Presente Simple 3ra Persona",
+        "Presente Progresivo 1ra Persona",
+        "Presente Progresivo 3ra Persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will"
+
       ]
     },
     "4": {
@@ -1823,13 +1872,17 @@
       ]
     },
     "8": {
-      "3": [
-        "Preguntas Básicas",
-        "Presente Progresivo",
-        "Futuro Simple:Going to and Will",
-        "Pasado Progresivo",
-        "Presente Simple",
-        "Pasado Simple"
+      "3": [    "Preguntas Básicas",
+        "Describir Personas",
+        "Presente Simple 1ra Persona",
+        "Presente Simple 3ra Persona",
+        "Presente Progresivo 1ra Persona",
+        "Presente Progresivo 3ra Persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
+        "Pasado Simple",
+        "Pasado Progresivo"
+
       ]
     },
     "9": {
@@ -1882,15 +1935,20 @@
       ]
     },
     "12": {
-      "3": [
-        "Preguntas Básicas",
-        "Presente Progresivo",
-        "Pasado Progresivo",
-        "Modales (Can - Should)",
-        "Comparativos/Superlativos",
-        "Presente Simple",
+      "3": [    "Preguntas Básicas",
+        "Describir Personas",
+        "Presente Simple 1ra Persona",
+        "Presente Simple 3ra Persona",
+        "Presente Progresivo 1ra Persona",
+        "Presente Progresivo 3ra Persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
         "Pasado Simple",
-        "Futuro Simple"
+        "Pasado Progresivo",
+        "Modales (Can / Should)",
+        "Comparativos",
+        "Superlativos"
+
       ]
     }
   },
@@ -1934,12 +1992,15 @@
       ]
     },
     "5": {
-      "3": [
-        "Preguntas Básicas",
+      "3": [    "Preguntas Básicas",
         "Describir Personas",
-        "Presente Simple",
-        "Presente Progresivo",
-        "Futuro Simple:Going to and Will"
+        "Presente Simple 1ra Persona",
+        "Presente Simple 3ra Persona",
+        "Presente Progresivo 1ra Persona",
+        "Presente Progresivo 3ra Persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will"
+
       ]
     },
     "6": {
@@ -1971,13 +2032,17 @@
       ]
     },
     "8": {
-      "3": [
-        "Preguntas Básicas",
-        "Presente Progresivo",
-        "Futuro Simple:Going to and Will",
-        "Pasado Progresivo",
-        "Presente Simple",
-        "Pasado Simple"
+      "3": [    "Preguntas Básicas",
+        "Describir Personas",
+        "Presente Simple 1ra Persona",
+        "Presente Simple 3ra Persona",
+        "Presente Progresivo 1ra Persona",
+        "Presente Progresivo 3ra Persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
+        "Pasado Simple",
+        "Pasado Progresivo"
+
       ]
     },
     "9": {
@@ -1997,15 +2062,20 @@
       ]
     },
     "10": {
-      "3": [
-        "Preguntas Básicas",
-        "Presente Progresivo",
-        "Pasado Progresivo",
-        "Modales (Can - Should)",
-        "Comparativos/Superlativos",
-        "Presente Simple",
+      "3": [    "Preguntas Básicas",
+        "Describir Personas",
+        "Presente Simple 1ra Persona",
+        "Presente Simple 3ra Persona",
+        "Presente Progresivo 1ra Persona",
+        "Presente Progresivo 3ra Persona",
+        "Futuro Simple: Going to",
+        "Futuro Simple: Will",
         "Pasado Simple",
-        "Futuro Simple"
+        "Pasado Progresivo",
+        "Modales (Can / Should)",
+        "Comparativos",
+        "Superlativos"
+
       ]
     }
   },
