@@ -289,6 +289,78 @@ p {
   border-collapse: collapse;
 }
 
+
+/* mistakes in feedback */
+.mistake-section .topictable td::First-letter {
+  text-transform: capitalize;
+}
+
+.mistake-section .topictable td {
+  position: relative;
+  font-size: clamp(1rem, calc(40vw*0.03), 2rem);
+  line-height: 1.5;
+  transition: all 0.4s ease;
+  overflow-wrap: break-word;
+  vertical-align: top;
+  z-index: 0;
+}
+
+/* hover :P */
+.mistake-section .topictable td:hover {
+  font-size: clamp(1.1rem, calc(40vw*0.09), 5rem);
+  overflow: visible;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  padding: 10px 30px;
+  font-weight: 600;
+  color: #15848a;
+
+}
+
+.mistake-section .topictable {
+  table-layout: fixed;
+}
+
+/* colors enfasis */
+.mistake-section .topictable td::before {
+  transition: all 1s ease;
+}
+
+.mistake-section .topictable td:hover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 3px; /*>>grosor*/
+  background: conic-gradient(from var(--angle),
+      #fff0,
+      #1CA5AB50,
+      #94C12150,
+      #F08C2850,
+      #EB595550,
+      #EC661950,
+      #fff0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-ma: xor;
+  mask-composite: exclude;
+  animation: rotate 10s linear infinite;
+  z-index: 1;
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+
+@keyframes rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
+
+
 /* GRAMMART TOPIC */
 .topic-title {
   display: flex;
@@ -491,7 +563,7 @@ footer {
   background: rgba(255, 255, 255, 0.97);
   box-shadow: 0 10px 40px rgb(235, 89, 85, 0.4);
   border-radius: 12px;
-  max-width: 1500px;
+  max-width: 2000px;
   width: 90%;
   z-index: 9999;
   overflow-y: scroll;
@@ -572,6 +644,7 @@ footer {
 }
 
 @keyframes bounce {
+
   20%,
   100% {
     transform: translateX(0);
@@ -836,6 +909,7 @@ h4 {
 }
 
 @keyframes time-over {
+
   0%,
   100% {
     color: #8d2525;
@@ -962,7 +1036,7 @@ h4 {
 }
 
 .pop4kids {
-  cursor:  default;
+  cursor: default;
 }
 
 .pop4kids table {
@@ -981,20 +1055,20 @@ h4 {
   border-radius: 10px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
   z-index: 9999;
-  width: fit-content;     
+  width: fit-content;
   max-width: 220px;
   min-width: 150px;
   backdrop-filter: blur(3px);
 }
 
 .floating-results table {
-  width: auto;           
+  width: auto;
   border-collapse: collapse;
   margin: 0 auto;
 }
 
 .floating-results th {
-    font-size: clamp(1.1rem, calc(40vw*0.04), 1.5rem);
+  font-size: clamp(1.1rem, calc(40vw*0.04), 1.5rem);
   font-family: "Roboto Condensed", sans-serif;
   font-weight: bolder;
   color: #126064;
@@ -1005,9 +1079,9 @@ h4 {
 
 .ar,
 .num {
-    font-size: clamp(0.85rem, calc(40vw*0.04), 1.2rem);
+  font-size: clamp(0.85rem, calc(40vw*0.04), 1.2rem);
   font-weight: 500;
-    font-family: "Roboto Condensed", sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   color: #305254;
   padding: 2px 6px;
   border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
@@ -1015,12 +1089,12 @@ h4 {
 
 .ar {
   text-align: left;
-  white-space: nowrap;      
+  white-space: nowrap;
 }
 
 .num {
-  text-align: right;        
-  width: 40px;      
+  text-align: right;
+  width: 40px;
 }
 
 /*========================  ========================*/
@@ -1030,13 +1104,15 @@ h4 {
   flex-direction: row;
   align-items: center;
   justify-content: right;
-  gap: 10px; /* espacio entre imagen y toggle */
+  gap: 10px;
+  /* espacio entre imagen y toggle */
   margin: auto 10px;
   width: auto;
 }
 
 .cursor-icon {
-  width: 30px;  /* tamaño del icono */
+  width: 30px;
+  /* tamaño del icono */
   height: 24px;
   object-fit: contain;
 }
@@ -1058,7 +1134,10 @@ h4 {
 .slider {
   position: absolute;
   cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #d6d6d6;
   transition: 0.4s;
   border-radius: 26px;
@@ -1076,11 +1155,10 @@ h4 {
   border-radius: 50%;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: #e4c986;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   transform: translateX(24px);
 }
-
