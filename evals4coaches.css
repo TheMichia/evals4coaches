@@ -313,8 +313,11 @@ p {
   overflow-wrap: break-word;
   padding: 10px 30px;
   font-weight: 600;
-  color: #15848a;
+  color: #7ea51d;
 
+}
+.mistake-section .topictable td:first-child:hover{
+  color: #c85551;
 }
 
 .mistake-section .topictable {
