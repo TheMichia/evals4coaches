@@ -307,8 +307,8 @@ textarea:focus {
     font-weight: bold;
 }
 
-input{
-     accent-color: #3ea621; 
+input {
+    accent-color: #3ea621;
     width: 1rem;
     height: 1rem;
 }
@@ -323,7 +323,8 @@ input{
     height: 3rem;
 }
 
-.preview-wrapper, .preview-wrapper p{
+.preview-wrapper,
+.preview-wrapper p {
     color: black;
     font-weight: 500;
 }
@@ -331,26 +332,26 @@ input{
 
 /*=================== Condicionados y coaching opportunity =====================*/
 
-fieldset{
+fieldset {
     margin: 12px auto;
 }
 
-label{
+label {
     display: inline-block;
     color: #25888d;
     font-size: 1.5rem;
     font-family: roboto condensed;
 }
 
-legend{
+legend {
     font-size: 2rem;
     color: #25888d;
     font-weight: bold;
     text-align: center;
-    font-family: roboto condensed;    
+    font-family: roboto condensed;
 }
 
-.coachingOpportunity{
+.coachingOpportunity {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -360,15 +361,16 @@ legend{
     width: 90%;
     max-width: 400px;
 }
-.condicionado{
+
+.condicionado {
     font-size: 1.4rem;
     color: #25888d;
     font-weight: bold;
     text-align: center;
-    font-family: roboto condensed;    
+    font-family: roboto condensed;
 }
 
-.coachingOpportunity label{
+.coachingOpportunity label {
     font-size: 1.1rem;
     color: #17787d;
     font-weight: 500;
@@ -376,11 +378,343 @@ legend{
     text-align: left;
 }
 
-.coachingOpportunity input{
+.coachingOpportunity input {
     margin: 0 20px;
 }
 
-/*========================  ========================*/
+/*======================== SOUNDBOARD ========================*/
+/* floating button */
+.soundboardBtn {
+    position: fixed;
+    top: 10px;
+    left: 0;
+    z-index: 1;
+    width: 50px;
+    height: 45px;
+    border-radius: 0 20px 20px 0;
+    background-color: #1CA5AB50;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+.soundboardBtn img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+/* CLOSE BUTTON */
+.soundboard .close {
+    width: 100%;
+    height: auto;
+    font-size: 15px;
+    border: none;
+    margin-top: -5px;
+    text-shadow: none;
+    cursor: pointer;
+    color: #148e94;
+    background-color: #ecf2f3;
+    transition: all 0.5s ease;
+}
+
+.soundboard .close:hover {
+    background: #148e94;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* ------------- PANEL PRINCIPAL --- */
+.soundboard {
+    position: fixed;
+    top: 10px;
+    left: 0;
+    z-index: 2;
+    width: 100px;
+    height: 300px;
+    border-radius: 0 20px 20px 0;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease-in-out;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+/* contains section btns on open */
+.wrapping {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transition: all 0.4s ease-in-out;
+}
+
+/* --- main BOTONES on open --- */
+.category-btn {
+    width: 100%;
+    height: 100%;
+    background-color: #148e9490;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border: 1px solid #b9dcdf90;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-family: Montserrat;
+    text-shadow: 0 0 10px rgba(27, 111, 97, 0.91);
+}
+
+/* --- EXPANSIÓN AL SELECCIONAR added to soundboard main--- */
+.soundboard.expanded {
+    max-width: 300px;
+    width: 250px;
+    transition: all 0.4s ease-in-out;
+    height: auto;
+    max-height: 90%;
+    min-width: 200px;
+    /* overflow: scroll; */
+    overflow: hidden;
+}
+
+/* category buttons holder when expanded */
+.wrapped {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    width: 100%;
+    height: 100%;
+    transition: all 0.4s ease-in-out;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.soundboard .selected {
+    background-color: #148e94;
+    width: calc(100%/3);
+    color: #fff;
+    transform: scale(1.2);
+    opacity: 1;
+    transition: all 0.3s ease;
+    padding: 10px 5px;
+    box-shadow: 0 0 10px rgb(255, 255, 255, 0.6);
+    font-size: 1rem;
+    z-index: 5;
+}
+
+.soundboard .unselected {
+    background-color: #148e9430;
+    opacity: 0.6;
+    color: #148e94;
+    font-weight: 800;
+    padding: 10px 5px;
+    transition: all 0.3s ease;
+    width: calc(100%/4);
+    text-align: center;
+    text-shadow: none;
+    border: none;
+    font-size: 0.8rem;
+}
+
+/* SCROLL IS HERE */
+/* contains h3 and buttons with tags */
+.category-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    overflow-y: auto;
+}
+
+/* REMOVED H3 */
+.stopSounds{
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      padding: 10px 15px;
+      background: #8d1616;
+      color: white;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+    width: 250px;
+      z-index: 9999;
+    animation: slide-in;
+}
+/* //btn main section */
+.press-button {
+    display: flex;
+    flex-direction: row;
+    padding: 10px 0;
+    gap: 30px 10px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+    animation: fadeIn 0.2s ease;
+    min-height: 200px;
+    overflow-x: hidden;
+}
+
+.press-button div {
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: nowrap;
+    height: 140px;
+}
+
+/* //actual buttons */
+.press-button button {
+    width: 100px;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    background: url('SoundBoard/btnup.png') no-repeat;
+    background-size: 100%;
+    transition: tranform 1s ease-in-out;
+    border: 0;
+    -webkit-tap-highlight-color: transparent;
+    filter: brightness(var(--brightness));
+}
+
+.press-button button img {
+    width: 70%;
+    object-fit: contain;
+    border-radius: 50%;
+    transform: translatey(-15%);
+}
+
+/* text */
+.press-button h5 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #148e94;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    font-family: "Sour Gummy";
+    line-height: 1rem;
+}
+
+.press-button h5 p{
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #148e94;
+    text-align: center;
+    margin: -5px;
+    padding: 0;
+    font-family: "Oswald";
+    
+}
+
+.press-button button:hover {
+    transform: scale(1.02);
+    filter: brightness(1.08);
+}
+
+.press-button button:active {
+    background: url('SoundBoard/btndown.png') no-repeat;
+    background-size: 100%;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.press-button button:active img {
+    transform: translatey(-10%);
+}
+.press-button button:focus{
+    border:none;
+    -webkit-tap-highlight-color: transparent;
+}
+:root {
+    --btn1: #cdb4db;
+    --btn2: #ffafcc;
+    --btn3: #a2d2ff;
+    --btn4: #ffcc8a;
+    --btn5: #ff999c;
+    --brightness: 1.1;
+}
+
+.press-button div:nth-child(5n + 1) button {
+    background-color: var(--btn1);
+}
+
+.press-button div:nth-child(5n + 2) button {
+    background-color: var(--btn2);
+}
+
+.press-button div:nth-child(5n + 3) button {
+    background-color: var(--btn3);
+}
+
+.press-button div:nth-child(5n + 4) button {
+    background-color: var(--btn4);
+}
+
+.press-button div:nth-child(5n + 5) button {
+    background-color: var(--btn5);
+}
+
+
+
+/* --- ANIMACIONES DE ENTRADA Y SALIDA --- */
+.slide-in {
+    animation: slideFromLeft 0.4s ease forwards;
+}
+
+.slide-out {
+    animation: slideToLeft 0.4s ease forwards;
+}
+
+@keyframes slideFromLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideToLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+        transform: translatey(-5%);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+        transform: translatey(0);
+    }
+}
 
 
 /*========================  ========================*/
