@@ -1,6 +1,6 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "1.1.0";
+  const versionnum = "1.2.0";
   //updated for no survey is not good evaluator
   const E4EjsonVersion = 1.1;
   window.appVersion = "Evaluators";
@@ -1655,28 +1655,29 @@ function evaluatorsCopyResults() {
   const tituloEvaluacion = isDiagEval
     ? `<p class="h1">RESULTADO DE EVALUACIÓN DIAGNÓSTICA</p>`
     : `<p class="h1">RESULTADO DE EVALUACIÓN FILTRO</p>`;
-  
-//===================================================
-// Coaching Opportunity in RC
-  const checkedInputs = document.querySelectorAll(".coachingOpportunity input:checked");
 
+  //===================================================
+  // Coaching Opportunity in RC
+  const checkedInputs = document.querySelectorAll(
+    ".coachingOpportunity input:checked",
+  );
 
-const links = {
-  futuroGoingTo: "https://view.genially.com/68ae362d32a8126030592eb7",
-  pasadoProgresivo: "https://view.genially.com/68ace62d5a6838e7306b1395",
-  presenteProgresivo: "https://view.genially.com/68ace5b12d712b8b4b642422",
-};
+  const links = {
+    futuroGoingTo: "https://view.genially.com/68ae362d32a8126030592eb7",
+    pasadoProgresivo: "https://view.genially.com/68ace62d5a6838e7306b1395",
+    presenteProgresivo: "https://view.genially.com/68ace5b12d712b8b4b642422",
+  };
 
-const labels = {
-  futuroGoingTo: "Futuro: Going to",
-  pasadoProgresivo: "Pasado Progresivo",
-  presenteProgresivo: "Presente Progresivo",
-};
+  const labels = {
+    futuroGoingTo: "Futuro: Going to",
+    pasadoProgresivo: "Pasado Progresivo",
+    presenteProgresivo: "Presente Progresivo",
+  };
 
-let coachingHTML = "";
+  let coachingHTML = "";
 
-if (checkedInputs.length) {
-  coachingHTML = `
+  if (checkedInputs.length) {
+    coachingHTML = `
     <div class="areas-oportunidad">
       <table>
         <thead>
@@ -1687,10 +1688,10 @@ if (checkedInputs.length) {
         </thead>
         <tbody>`;
 
-  checkedInputs.forEach(input => {
-    const id = input.id;
-    if (links[id]) {
-      coachingHTML += `
+    checkedInputs.forEach((input) => {
+      const id = input.id;
+      if (links[id]) {
+        coachingHTML += `
         <tr><td class="tema-reforzar">
           Es necesario reforzar el tema de <b>${labels[id]}</b>.
         </td></tr>
@@ -1698,10 +1699,10 @@ if (checkedInputs.length) {
           &#128279; <b>Accede al test aquí:</b>
           <a href="${links[id]}" target="_blank" rel="noopener noreferrer">Test de Certificación</a>
         </td></tr>`;
-    }
-  });
+      }
+    });
 
-  coachingHTML += `
+    coachingHTML += `
         </tbody>
         <tfoot>
           <tr><td>
@@ -1712,8 +1713,7 @@ if (checkedInputs.length) {
         </tfoot>
       </table>
     </div>`;
-}
-
+  }
 
   //
   //===================================================================
@@ -2258,7 +2258,8 @@ function showCoachingOpportunity() {
 
   // Condición para mostrar coaching
   const hasCoachingOpportunity =
-    (syllabus.includes("Kids Intensivo") || syllabus.includes("Kids (Super Intensivo)")) &&
+    (syllabus.includes("Kids Intensivo") ||
+      syllabus.includes("Kids (Super Intensivo)")) &&
     ["2", "4", "7"].includes(level) &&
     totalScore <= 7; // incluye score si aplica
 
@@ -2299,16 +2300,197 @@ function showCoachingOpportunity() {
     popupContent.appendChild(copyButton);
 
     if (closeBtn) closeBtn.style.display = "inline-block";
-  } else{
+  } else {
     console.log("no PASA");
     evaluatorsCopyResults();
   }
 }
 
-
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
+
+// ---open---
+function openSoundboard() {
+  const soundboard = document.createElement("div");
+  soundboard.classList.add("soundboard", "slide-in");
+
+  soundboard.innerHTML = `
+    <button class="close" onclick="closeSoundboard()">✖</button>
+    <div id="wrapping" class="wrapping">
+      <button class="category-btn" onclick="openCategory('actions', this)">Actions</button>
+      <button class="category-btn" onclick="openCategory('sfx', this)">SFX</button>
+      <button class="category-btn" onclick="openCategory('music', this)">Music</button>
+      <button class="category-btn" onclick="openCategory('animals', this)">Animals</button>
+      </div>
+  `;
+
+  document.body.appendChild(soundboard);
+  // Detectar clic fuera para cerrar
+  setTimeout(() => {
+    document.addEventListener("click", handleOutsideClick);
+  }, 0);
+}
+
+// ---close---
+function closeSoundboard() {
+  const soundboard = document.querySelector(".soundboard");
+  if (soundboard) {
+    soundboard.classList.remove("slide-in");
+    soundboard.classList.add("slide-out");
+
+    soundboard.addEventListener(
+      "animationend",
+      () => {
+        soundboard.remove();
+        document.getElementById("soundboardBtn").style.display = "flex";
+        document.removeEventListener("click", handleOutsideClick);
+      },
+      { once: true },
+    );
+  }
+}
+
+// ---category---
+
+function openCategory(category, clickedBtn) {
+  const soundboard = document.querySelector(".soundboard");
+  const buttons = soundboard.querySelectorAll(".category-btn");
+  const wrapping = document.getElementById("wrapping");
+
+  // Eliminar div anterior si existe
+  const existingCategoryDiv = soundboard.querySelector(".category-content");
+  if (existingCategoryDiv) existingCategoryDiv.remove();
+
+  // Expandir panel visualmente
+  soundboard.classList.add("expanded");
+
+  // Crear nuevo div con ID del nombre de la categoría
+  const categoryDiv = document.createElement("div");
+  categoryDiv.classList.add("category-content", "fade-in");
+  categoryDiv.id = category;
+  wrapping.classList.remove("wrapping");
+  wrapping.classList.add("wrapped");
+
+  // Marcar el botón seleccionado
+  buttons.forEach((btn) => {
+    if (btn === clickedBtn) {
+      btn.classList.remove("unselected");
+      btn.classList.add("selected");
+    } else {
+      btn.classList.remove("selected");
+      btn.classList.add("unselected");
+    }
+  });
+
+  // ---DATOS DE CADA CATEGORÍA---
+  const categories = {
+    actions: ["Eat","Bite","Drink","Sleep","Run","Jump","Dance Macarena","Walk"],
+    sfx: ["Impostor Among Us","Buzzer","Chan Chan Chan","Claps","Correct Ding","Crickets","Hoop Ding","Horn","Huh","Sad Meow","Shock Cinematic","Tiny Violin","Victory","Vine Boom","Yipee"],
+    music: ["My Little Soda Pop","dance-remix", "dynamite - bts", "fancy - twice", "jump - blackpink", "just dance - lady gaga", "macarena", "rover - kai", "russian roulette - red velvet", "this is for - twice"],
+    animals: ["Bee","Cat","Chicken","Cow","Crow","Dinosaur","Dog","Dove","Duck","Elephant","Frog","Giraffe","Horse","Whale","Lion","Owl","Panda","Penguin","Pig","Rabbit","Raccoon","Rat","Rattlesnake","Rooster","Sheep","Tiger","Wolf","Zebra"]
+  };
+
+  // Crear HTML dinámicamente según categoría
+  let html = '<section class="press-button">';
+  categories[category].forEach(name => {
+    // convertir a minúsculas y reemplazar caracteres especiales para el archivo
+    let fileName = name.toLowerCase().replace(/ /g, " ");
+    let folder = category.charAt(0).toUpperCase() + category.slice(1); // Actions, SFX, Music, Animals
+    html += `
+      <div>
+        <button data-sound="SoundBoard/${folder}/${fileName}.mp3" onclick="playSound(this)"></button>
+        <h5>${name}</h5>
+      </div>
+    `;
+  });
+  html += '</section>';
+
+  // Insertar HTML al nuevo div
+  categoryDiv.innerHTML = html;
+
+  // Agregar el nuevo div al soundboard
+  soundboard.appendChild(categoryDiv);
+}
+
+
+// ---Cerrar si se hace clic fuera---
+function handleOutsideClick(e) {
+  const soundboard = document.querySelector(".soundboard");
+  if (
+    soundboard &&
+    !soundboard.contains(e.target) &&
+    e.target.id !== "soundboardBtn"
+  ) {
+    closeSoundboard();
+  }
+}
+
+
+// Array global para controlar todos los audios activos
+let activeAudios = [];
+
+// ---PLAY SOUND---
+function playSound(button) {
+  const soundPath = button.getAttribute("data-sound");
+  const audio = new Audio(soundPath);
+
+  // Reproducir audio
+  audio.play();
+
+  // Guardar audio en el array
+  activeAudios.push(audio);
+
+  // Si no existe botón Stop All, lo creamos
+  if (!document.getElementById("stop-all-btn")) {
+    const stopBtn = document.createElement("button");
+    stopBtn.id = "stop-all-btn";
+    stopBtn.textContent = "Stop All Sounds";
+    stopBtn.classList.add("stopSounds", "slide-in");
+    stopBtn.onclick = stopAllSounds;
+    document.body.appendChild(stopBtn);
+  }
+
+  // Cuando el audio termina, se elimina del array
+  audio.addEventListener("ended", () => {
+    activeAudios = activeAudios.filter(a => a !== audio);
+
+    // Si no quedan audios, eliminamos el botón de stop
+    if (activeAudios.length === 0) {
+      const stopBtn = document.getElementById("stop-all-btn");
+      if (stopBtn) {
+          stopBtn.classList.remove("slide-in");
+          stopBtn.classList.add("slide-out");
+
+          stopBtn.addEventListener(
+          "animationend",
+          () => {
+              stopBtn.remove();
+            document.getElementById("soundboardBtn").style.display = "flex";
+            document.removeEventListener("click", handleOutsideClick);
+          },
+          { once: true },
+        );
+      }
+    }
+  });
+}
+
+// ---STOP ALL SOUNDS---
+function stopAllSounds() {
+  activeAudios.forEach(audio => {
+    audio.pause();
+    audio.currentTime = 0; // Reiniciar al inicio
+  });
+  activeAudios = [];
+
+  // Remover botón Stop All
+  const stopBtn = document.getElementById("stop-all-btn");
+  if (stopBtn) stopBtn.remove();
+}
+
+
+
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
