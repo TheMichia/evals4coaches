@@ -2384,10 +2384,10 @@ function openCategory(category, clickedBtn) {
   });
 
   // ---DATOS DE CADA CATEGORÍA---
-  const categories = {
+ const categories = {
     actions: ["Eat","Bite","Drink","Sleep","Run","Jump","Dance Macarena","Walk"],
     sfx: ["Impostor Among Us","Buzzer","Chan Chan Chan","Claps","Correct Ding","Crickets","Hoop Ding","Horn","Huh","Sad Meow","Shock Cinematic","Tiny Violin","Victory","Vine Boom","Yipee"],
-    music: ["My Little Soda Pop","dance-remix", "dynamite - bts", "fancy - twice", "jump - blackpink", "just dance - lady gaga", "macarena", "rover - kai", "russian roulette - red velvet", "this is for - twice"],
+    music: ["My Little Soda Pop","Dance-Remix", "Dynamite - BTS", "Fancy - Twice", "Jump - Blackpink", "Macarena", "Russian Roulette - Red Velvet"],
     animals: ["Bee","Cat","Chicken","Cow","Crow","Dinosaur","Dog","Dove","Duck","Elephant","Frog","Giraffe","Horse","Whale","Lion","Owl","Panda","Penguin","Pig","Rabbit","Raccoon","Rat","Rattlesnake","Rooster","Sheep","Tiger","Wolf","Zebra"]
   };
 
