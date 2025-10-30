@@ -1,7 +1,7 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.5.0";
-  //UPDATE for adults neutral feedback
+  const versionnum = "1.6.0";
+  //UPDATE new RC header and footer
   const jsonVersion = 1.5;
   window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
@@ -98,7 +98,6 @@ syllabusDropdown.addEventListener("change", () => {
   helperSpan.textContent = "Now choose a level to load the weeks.";
   cursorToggle.checked = !s.includes("Adults");
   cursorToggle.dispatchEvent(new Event("change"));
-
 
   // 4) Poblar levels o dejar placeholder
   if (s && topicsData[s]) {
@@ -273,11 +272,11 @@ feedbackBtn.addEventListener("click", () => {
   popup.classList.remove("pop4Adults", "pop4kids");
 
   if (syllabusValue.includes("adults")) {
-    popup.classList.add("pop4Adults")
-      toggler.classList.add("hidden");
+    popup.classList.add("pop4Adults");
+    toggler.classList.add("hidden");
   } else {
-    popup.classList.add("pop4kids")
-      toggler.classList.remove("hidden");
+    popup.classList.add("pop4kids");
+    toggler.classList.remove("hidden");
   }
 
   showKudosSection();
@@ -1532,6 +1531,344 @@ function copyResults() {
         </div>`
       : "";
 
+  // New headers and footers for each syllabus
+  // New headers and footers for each syllabus
+  let imgHeader = "";
+  let imgFooter = "";
+
+  // Define mapping for each syllabus type
+  const imgMap = {
+    juniors: {
+      header:
+        "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Evaluaci%C3%B3n%20Mansual/ResultadoEvaluaci%C3%B3nMensualJuniors.png",
+      footer:
+        "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Footer/footerJuniors.png",
+    },
+    kids: {
+      header:
+        "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Evaluaci%C3%B3n%20Mansual/ResultadoEvaluaci%C3%B3nMensualKids.png",
+      footer:
+        "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Footer/footerKids.png",
+    },
+    teens: {
+      header:
+        "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Evaluaci%C3%B3n%20Mansual/ResultadoEvaluaci%C3%B3nMensualTeens.png",
+      footer:
+        "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Footer/footerteens.png",
+    },
+    adults: {
+      header:
+        "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Evaluaci%C3%B3n%20Mansual/ResultadoEvaluaci%C3%B3nMensualAdults.png",
+      footer:
+        "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Footer/footerAdults.png",
+    },
+  };
+
+  // Match syllabus type dynamically
+  const key = Object.keys(imgMap).find((k) =>
+    syllabus.toLowerCase().includes(k),
+  );
+
+  if (key) {
+    imgHeader = imgMap[key].header;
+    imgFooter = imgMap[key].footer;
+  }
+
+  let styles = `
+  body {
+    margin: 0;
+  }
+
+  .Evaluation-Results {
+    margin: 0;
+    background: linear-gradient(to bottom, #f5ffff 10%, #AED6D6 60%, #1ca5ab 90%);
+    background-color: #1ca5ab15;
+  }
+
+    .Evaluation-Results table {
+      width: 80%;
+    }
+
+    .Evaluation-Results table th {
+      font-size: clamp(0.9rem, calc(50vw*0.1), 1.6rem);
+      font-family: Serif;
+      font-weight: 800;
+      color: #126064;
+      text-align: center;
+      padding: 1.7rem 0.5rem;
+      border-bottom: 1px dotted #219fa6;
+    }
+
+    .Evaluation-Results table td {
+      font-size: clamp(0.8rem, calc(50vw*0.06), 0.95rem);
+      font-family: Verdana;
+      font-weight: 500;
+      color: #305254;
+      padding: 0.9rem 0.5rem 0.9rem calc(50vw*0.13);
+      border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
+      text-align: left;
+    }
+
+    .Evaluation-Results p {
+      font-family: Verdana;
+      font-size: clamp(0.8rem, calc(50vw*0.06), 0.95rem);
+    }
+
+    /* =================HEADER=============== */
+    .Evaluation-Results .header {
+    text-align:center;  
+    background: linear-gradient(to bottom, #fefefe 0%,transparent 70%);
+    }
+
+    .Evaluation-Results .header img {
+      width:100%; 
+      display:block; 
+      border:0;
+    }
+
+    /* =================WELLCOME=============== */
+    .Evaluation-Results .welcome {
+      justify-items: center;
+      padding: 4rem 2rem;
+      text-align: center;
+      margin: 0 auto;
+    }
+
+    .Evaluation-Results .welcome .h2 {
+      font-size: clamp(1.2rem, calc(50vw*0.15), 2.5rem);
+      font-weight: 800;
+      color: #126064;
+      font-family: Serif;
+    }
+
+    .Evaluation-Results .welcome .h3 {
+      font-size: clamp(0.7rem, calc(50vw*0.08), 1.2rem);
+      font-weight: 800;
+      color: #126064;
+      padding-bottom: 0.8rem;
+      font-family: Verdana;
+    }
+
+    .Evaluation-Results .welcome p {
+      font-weight: 400;
+      color: #273030;
+    }
+
+    /* =================EMAIL BODY=============== */
+    .Evaluation-Results .email-body {
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 0 15px rgb(14, 126, 134, 0.1);
+      width: 80%;
+      margin: 0 auto;
+      background-color: rgba(255, 255, 255, 0.95);
+      max-width: 1200px;
+    }
+
+    /* -------RESULTADO GLOBAL------- */
+    .Evaluation-Results .resultado-global {
+      padding: 0 1rem;
+      text-align: center;
+    }
+
+    .Evaluation-Results .resultado-global .h2 {
+      font-family: Serif;
+      font-size: clamp(1.1rem, calc(50vw*0.18), 2.1rem);
+      font-weight: bold;
+      color: #297b7f;
+      text-shadow: 0 0 10px rgb(163, 225, 230, 0.15);
+    }
+
+    .Evaluation-Results .resultado-global .h3 {
+      font-size: clamp(0.95rem, calc(50vw*0.1), 1.2rem);
+      font-weight: 800;
+      font-family: Verdana;
+      color: #42757b;
+      padding: 2.5rem 0;
+    }
+
+    .Evaluation-Results .resultado-global p {
+      font-weight: 500;
+      font-family: Verdana;
+      color: #273030;
+      padding: 0 1rem 0;
+    }
+
+    /* -------DESEMPEÑO POR ÁREA------- */
+    .Evaluation-Results .desempeño {
+      padding: 0 1rem;
+      justify-items: center;
+    }
+
+    .Evaluation-Results .desempeño table {
+      border-radius: 10%;
+      overflow: hidden;
+    }
+
+    .Evaluation-Results .desempeño table td:first-child {
+      font-weight: 500;
+      color: #126064;
+      text-align: center;
+      font-size: clamp(0.5rem, calc(50vw*0.07), 1.1rem);
+      width: 20%;
+    }
+
+    .Evaluation-Results .desempeño table td:last-child {
+      font-weight: 500;
+      border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
+    }
+
+    /* -------TEMAS DOMINADOS------- */
+
+    .Evaluation-Results .temas-dominados {
+      margin: 2.8rem 0;
+      justify-items: center;
+    }
+
+
+    .Evaluation-Results .temas-dominados table {
+      border-radius: 10%;
+      overflow: hidden;
+    }
+
+    .Evaluation-Results .temas-dominados table td {
+      color: #044043;
+      text-align: left;
+    }
+
+
+    /* -------temas a reforzar------- */
+    .Evaluation-Results .temas-reforzar {
+      margin: 2.8rem 0;
+      justify-items: center;
+    }
+
+
+    .Evaluation-Results .temas-reforzar table {
+      border-radius: 10%;
+      overflow: hidden;
+    }
+
+    .Evaluation-Results .temas-reforzar table td {
+      color: #044043;
+    }
+
+    /* -------RESULTADO GLOBAL------- */
+    .Evaluation-Results .areas-oportunidad {
+      margin: 2.8rem 0;
+      justify-items: center;
+    }
+
+
+    .Evaluation-Results .areas-oportunidad table {
+      border-radius: 10%;
+      overflow: hidden;
+    }
+
+
+    .Evaluation-Results .tema-reforzar {
+      color: #126064;
+      text-align: left;
+      padding: 0.9rem 0.5rem 0.9rem 1.5rem;
+      border-bottom: 1px dotted rgb(18, 96, 100, 0.8)
+    }
+
+    .Evaluation-Results .reforzar-R-C {
+      text-align: left;
+      font-family: Verdana;
+      color: #052729;
+    }
+
+    /* -------RESULTADO GLOBAL------- */
+    .Evaluation-Results .pronunciacion-reforzar {
+      margin: 2.8rem 0;
+      justify-items: center;
+    }
+
+
+    .Evaluation-Results .pronunciacion-reforzar table {
+      border-radius: 10%;
+      overflow: hidden;
+    }
+
+    .Evaluation-Results .pronunciacion-reforzar table td {
+      text-align: left;
+      color: #114d50;
+    }
+
+    .Evaluation-Results .pronunciacion-reforzar table tr:first-child td {
+      font-weight: 500;
+      color: #355d5f;
+      text-align: center;
+      padding: 0.95rem 0;
+    }
+
+    /* -------RESULTADO GLOBAL------- */
+    .Evaluation-Results .comentarios-coach {
+      margin: 2.8rem 0;
+      justify-items: center;
+    }
+
+
+    .Evaluation-Results .comentarios-coach table {
+      border-radius: 10%;
+      overflow: hidden;
+    }
+
+    .Evaluation-Results .comentarios-coach table td {
+      font-weight: 500;
+      color: #044043;
+      text-align: center;
+      padding: 0.7rem 0;
+      border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
+    }
+
+    /* =================FOOTER=============== */
+    .Evaluation-Results .footer {
+    text-align:center; 
+    margin:0; 
+    padding:7rem 0 0 0; 
+    width:100%; 
+    font-family:Verdana; 
+    text-shadow:0 0 20px rgba(255,255,255,0.1);
+    }
+
+    .Evaluation-Results .footer img{
+      width: 100%;
+      display: block;
+      border: 0;
+    }
+
+    /* =================REFERIDO=============== */
+
+    .Evaluation-Results .referidos {
+      text-align: center;
+      height: auto;
+      padding: 2rem 0;
+      font-family: Verdana;
+      background-color: #147b7b;
+      color: white;
+      width: 100%;
+      border-radius: 7px;
+    }
+
+    .Evaluation-Results .referidos p {
+      padding: 0 1.8rem;
+    }
+
+    .Evaluation-Results .referbtn {
+      display: inline-block;
+      padding: 0.6rem 1.3rem;
+      background: linear-gradient(to bottom, #AED6D6 0%, #ffffff 15%, #ffffff 85%, #AED6D6 100%);
+      background-color: white;
+      color: #147b7b;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 800;
+      font-family: Verdana;
+      font-size: 1.4rem;
+    }`;
+
   // Construcción del HTML final
   const reportHTML = `
   <html lang='en'>
@@ -1539,337 +1876,14 @@ function copyResults() {
       <meta charset='utf-8' />
       <meta name='viewport' content='width=device-width, initial-scale=1' />
       <title>Evals for Evals Team</title>
-      <style>
-      body {
-        margin: 0;
-      }
-
-      .Evaluation-Results {
-        margin: 0;
-        background: linear-gradient(to bottom, #f5ffff 10%, #AED6D6 60%, #1ca5ab 90%);
-        background-color: #1ca5ab15;
-      }
-
-        .Evaluation-Results table {
-          width: 80%;
-        }
-
-        .Evaluation-Results table th {
-          font-size: clamp(0.9rem, calc(50vw*0.1), 1.6rem);
-          font-family: Serif;
-          font-weight: 800;
-          color: #126064;
-          text-align: center;
-          padding: 1.7rem 0.5rem;
-          border-bottom: 1px dotted #219fa6;
-        }
-
-        .Evaluation-Results table td {
-          font-size: clamp(0.8rem, calc(50vw*0.06), 0.95rem);
-          font-family: Verdana;
-          font-weight: 500;
-          color: #305254;
-          padding: 0.9rem 0.5rem 0.9rem calc(50vw*0.13);
-          border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
-          text-align: left;
-        }
-
-        .Evaluation-Results p {
-          font-family: Verdana;
-          font-size: clamp(0.8rem, calc(50vw*0.06), 0.95rem);
-        }
-
-        /* =================HEADER=============== */
-        .Evaluation-Results .header {
-          background-color: #1CA5AB;
-          text-align: center;
-          height: auto;
-          width: 100%;
-          overflow: hidden;
-          border-radius: 7px;
-        }
-
-        .Evaluation-Results .logos {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.5rem;
-          margin: 0 0 -1rem;
-        }
-
-        .Evaluation-Results .logos img {
-          height: 1.7rem;
-        }
-
-        .Evaluation-Results .header .h1 {
-          font-size: clamp(0.5rem, calc(50vw*0.08), 1.6rem);
-          font-weight: 800;
-          font-family: Tahoma;
-          color: #ffffff;
-          padding: 1rem 0.7rem;
-        }
-
-        /* =================WELLCOME=============== */
-        .Evaluation-Results .welcome {
-          justify-items: center;
-          padding: 4rem 2rem;
-          text-align: center;
-          margin: 0 auto;
-        }
-
-        .Evaluation-Results .welcome .h2 {
-          font-size: clamp(1.2rem, calc(50vw*0.15), 2.5rem);
-          font-weight: 800;
-          color: #126064;
-          font-family: Serif;
-        }
-
-        .Evaluation-Results .welcome .h3 {
-          font-size: clamp(0.7rem, calc(50vw*0.08), 1.2rem);
-          font-weight: 800;
-          color: #126064;
-          padding-bottom: 0.8rem;
-          font-family: Verdana;
-        }
-
-        .Evaluation-Results .welcome p {
-          font-weight: 400;
-          color: #273030;
-        }
-
-        /* =================EMAIL BODY=============== */
-        .Evaluation-Results .email-body {
-          border-radius: 20px;
-          padding: 2rem 1.5rem;
-          box-shadow: 0 0 15px rgb(14, 126, 134, 0.1);
-          width: 80%;
-          margin: 0 auto;
-          background-color: rgba(255, 255, 255, 0.95);
-          max-width: 1200px;
-        }
-
-        /* -------RESULTADO GLOBAL------- */
-        .Evaluation-Results .resultado-global {
-          padding: 0 1rem;
-          text-align: center;
-        }
-
-        .Evaluation-Results .resultado-global .h2 {
-          font-family: Serif;
-          font-size: clamp(1.1rem, calc(50vw*0.18), 2.1rem);
-          font-weight: bold;
-          color: #297b7f;
-          text-shadow: 0 0 10px rgb(163, 225, 230, 0.15);
-        }
-
-        .Evaluation-Results .resultado-global .h3 {
-          font-size: clamp(0.95rem, calc(50vw*0.1), 1.2rem);
-          font-weight: 800;
-          font-family: Verdana;
-          color: #42757b;
-          padding: 2.5rem 0;
-        }
-
-        .Evaluation-Results .resultado-global p {
-          font-weight: 500;
-          font-family: Verdana;
-          color: #273030;
-          padding: 0 1rem 0;
-        }
-
-        /* -------DESEMPEÑO POR ÁREA------- */
-        .Evaluation-Results .desempeño {
-          padding: 0 1rem;
-          justify-items: center;
-        }
-
-        .Evaluation-Results .desempeño table {
-          border-radius: 10%;
-          overflow: hidden;
-        }
-
-        .Evaluation-Results .desempeño table td:first-child {
-          font-weight: 500;
-          color: #126064;
-          text-align: center;
-          font-size: clamp(0.5rem, calc(50vw*0.07), 1.1rem);
-          width: 20%;
-        }
-
-        .Evaluation-Results .desempeño table td:last-child {
-          font-weight: 500;
-          border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
-        }
-
-        /* -------TEMAS DOMINADOS------- */
-
-        .Evaluation-Results .temas-dominados {
-          margin: 2.8rem 0;
-          justify-items: center;
-        }
-
-
-        .Evaluation-Results .temas-dominados table {
-          border-radius: 10%;
-          overflow: hidden;
-        }
-
-        .Evaluation-Results .temas-dominados table td {
-          color: #044043;
-          text-align: left;
-        }
-
-
-        /* -------temas a reforzar------- */
-        .Evaluation-Results .temas-reforzar {
-          margin: 2.8rem 0;
-          justify-items: center;
-        }
-
-
-        .Evaluation-Results .temas-reforzar table {
-          border-radius: 10%;
-          overflow: hidden;
-        }
-
-        .Evaluation-Results .temas-reforzar table td {
-          color: #044043;
-        }
-
-        /* -------RESULTADO GLOBAL------- */
-        .Evaluation-Results .areas-oportunidad {
-          margin: 2.8rem 0;
-          justify-items: center;
-        }
-
-
-        .Evaluation-Results .areas-oportunidad table {
-          border-radius: 10%;
-          overflow: hidden;
-        }
-
-
-        .Evaluation-Results .tema-reforzar {
-          color: #126064;
-          text-align: left;
-          padding: 0.9rem 0.5rem 0.9rem 1.5rem;
-          border-bottom: 1px dotted rgb(18, 96, 100, 0.8)
-        }
-
-        .Evaluation-Results .reforzar-R-C {
-          text-align: left;
-          font-family: Verdana;
-          color: #052729;
-        }
-
-        /* -------RESULTADO GLOBAL------- */
-        .Evaluation-Results .pronunciacion-reforzar {
-          margin: 2.8rem 0;
-          justify-items: center;
-        }
-
-
-        .Evaluation-Results .pronunciacion-reforzar table {
-          border-radius: 10%;
-          overflow: hidden;
-        }
-
-        .Evaluation-Results .pronunciacion-reforzar table td {
-          text-align: left;
-          color: #114d50;
-        }
-
-        .Evaluation-Results .pronunciacion-reforzar table tr:first-child td {
-          font-weight: 500;
-          color: #355d5f;
-          text-align: center;
-          padding: 0.95rem 0;
-        }
-
-        /* -------RESULTADO GLOBAL------- */
-        .Evaluation-Results .comentarios-coach {
-          margin: 2.8rem 0;
-          justify-items: center;
-        }
-
-
-        .Evaluation-Results .comentarios-coach table {
-          border-radius: 10%;
-          overflow: hidden;
-        }
-
-        .Evaluation-Results .comentarios-coach table td {
-          font-weight: 500;
-          color: #044043;
-          text-align: center;
-          padding: 0.7rem 0;
-          border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
-        }
-
-        /* =================FOOTER=============== */
-        .Evaluation-Results .footer {
-          font-family: verdana;
-          margin: 2.5rem auto;
-          padding: 2rem 0.5rem 2rem 2%;
-          width: 85%;
-          text-shadow: 0 0 20px rgb(255, 255, 255, 0.1);
-        }
-
-        .Evaluation-Results .footer p {
-          font-weight: bold;
-          font-size: clamp(0.7rem, calc(50vw*0.09), 1rem);
-          color: #dbfeff;
-          margin-bottom: -1rem;
-        }
-
-        .Evaluation-Results .footer h5 {
-          color: #ffffff;
-          font-size: clamp(0.8rem, calc(50vw*1.1), 1.1rem);
-          padding: 0 3rem;
-        }
-
-        /* =================REFERIDO=============== */
-
-        .Evaluation-Results .referidos {
-          text-align: center;
-          height: auto;
-          padding: 2rem 0;
-          font-family: Verdana;
-          background-color: #147b7b;
-          color: white;
-          width: 100%;
-          border-radius: 7px;
-        }
-
-        .Evaluation-Results .referidos p {
-          padding: 0 1.8rem;
-        }
-
-        .Evaluation-Results .referbtn {
-          display: inline-block;
-          padding: 0.6rem 1.3rem;
-          background: linear-gradient(to bottom, #AED6D6 0%, #ffffff 15%, #ffffff 85%, #AED6D6 100%);
-          background-color: white;
-          color: #147b7b;
-          text-decoration: none;
-          border-radius: 12px;
-          font-weight: 800;
-          font-family: Verdana;
-          font-size: 1.4rem;
-        }
-      </style>
+      <style>${styles}</style>
     </head>
     <body>
       <div class='Evaluation-Results'>
         <div class='header'>
-        <div class='logos'>
-          <img src='https://imgur.com/Qk6oytx.png' />
-          <img src='https://imgur.com/tVvbCqV.png' />
-          <img src='https://imgur.com/Duh9RGt.png' />
-          <img src='https://imgur.com/68ZykjC.png' />
+          <img src="${imgHeader}" alt="Evaluación Mensual" n                    >
         </div>
-        <p class='h1'>RESULTADOS DE EVALUACIÓN MENSUAL</p>
+        <div class='welcome'>
         </div>
         <div class='welcome'>
         ${Welcome}
@@ -1914,8 +1928,7 @@ function copyResults() {
           </div>
         </div>
         <div class='footer'>
-            <p>Atentamente,</p>
-            <h5>Equipo de English4Kids</h5>
+            <img src="${imgFooter}" alt="Atentamente, Equipo de English4Kids">
         </div>
         <div class='referidos'>
         ${Referal}
@@ -1932,7 +1945,7 @@ function copyResults() {
   const cp = document.getElementById("co").value;
   const ip = document.getElementById("in").value;
   const previewHTML = `
-  <div class="results-preview"><div class="floating-results">
+   <div class="results-preview"><div class="floating-results">
         <table>
         <tr>
         <th colspan="2">Final Scores</th>
@@ -2252,17 +2265,13 @@ cursorToggle.addEventListener("change", () => {
     // Aplica cursor solo al popup
     popup.style.cursor = useCustom
       ? 'url("cursors/superstarcursor.cur"), default'
-      : 'default';
+      : "default";
 
     // Si hay tablas dentro del popup, también cambias su cursor
-    popup.querySelectorAll("table").forEach(t => {
+    popup.querySelectorAll("table").forEach((t) => {
       t.style.cursor = useCustom
         ? 'url("cursors/superstarcursor.cur"), pointer'
-        : 'pointer';
+        : "pointer";
     });
   }
 });
-
-
-
-
