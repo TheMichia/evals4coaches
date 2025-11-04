@@ -1,7 +1,7 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.6.2";
-  //UPDATE uptades absent rc
+  const versionnum = "1.6.3";
+  //UPDATE uptades absent rc fixed for img per syllabus
   const jsonVersion = 1.5;
   window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
@@ -536,7 +536,13 @@ function copyAbsentResults() {
   const en = document.getElementById("td-en").innerText.trim();
   const fl = document.getElementById("td-fl").innerText.trim();
   const co = document.getElementById("td-co").innerText.trim();
-  const syllabus = document.getElementById("syllabus")?.innerText.trim().toLowerCase() || "";
+  const syllabus =
+    typeof syllabusDropdown !== "undefined" &&
+    syllabusDropdown &&
+    syllabusDropdown.value
+      ? syllabusDropdown.value
+      : "";
+
 
   let imgHeader = "";
   let imgFooter = "";
@@ -560,7 +566,10 @@ function copyAbsentResults() {
     },
   };
 
-  const key = Object.keys(imgMap).find((k) => syllabus?.toLowerCase().includes(k)) || "kids";
+  const key = Object.keys(imgMap).find((k) =>
+    (syllabus || "").toLowerCase().includes(k),
+  ) || "kids";
+
 
   imgHeader = imgMap[key].header;
   imgFooter = imgMap[key].footer;
@@ -763,7 +772,7 @@ function copyAbsentResults() {
         <img src="${imgHeader}" alt="Reporte de Evaluación Mensual" style="width: 100%; display: block; border: 0">
       </div>
       <div class="welcome">
-        <p class="h2">¡Te saludamos de English4Kids!</p>
+        <p class="h2">¡Hola!</p>
         <p class="h3">Esperamos que estés teniendo una excelente semana</p>
       </div>
       <div class="email-body">
@@ -1444,7 +1453,6 @@ function copyResults() {
         </div>`
       : "";
 
-  // New headers and footers for each syllabus
   // New headers and footers for each syllabus
   let imgHeader = "";
   let imgFooter = "";
