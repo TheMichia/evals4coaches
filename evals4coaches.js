@@ -1,7 +1,7 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.6.0";
-  //UPDATE new RC header and footer
+  const versionnum = "1.6.1";
+  //UPDATE removed clamps and calcs
   const jsonVersion = 1.5;
   window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
@@ -561,7 +561,7 @@ function copyAbsentResults() {
       }
 
       .Evaluation-Results table th {
-        font-size: clamp(0.9rem, calc(50vw*0.1), 1.6rem);
+        font-size: 1.6rem;
         font-family: Serif;
         font-weight: 800;
         color: #126064;
@@ -571,18 +571,18 @@ function copyAbsentResults() {
       }
 
       .Evaluation-Results table td {
-        font-size: clamp(0.8rem, calc(50vw*0.06), 0.95rem);
+        font-size: 0.95rem;
         font-family: Verdana;
         font-weight: 500;
         color: #305254;
-        padding: 0.9rem 0.5rem 0.9rem calc(50vw*0.13);
+        padding: 0.9rem 0.5rem 0.9rem 6.5;
         border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
         text-align: left;
       }
 
       .Evaluation-Results p {
         font-family: Verdana;
-        font-size: clamp(0.8rem, calc(50vw*0.06), 0.95rem);
+        font-size: 0.95rem;
       }
 
       /* =================HEADER=============== */
@@ -609,7 +609,7 @@ function copyAbsentResults() {
       }
 
       .Evaluation-Results .header .h1 {
-        font-size: clamp(0.5rem, calc(50vw*0.08), 1.6rem);
+        font-size: 1.6rem;
         font-weight: 800;
         font-family: Tahoma;
         color: #ffffff;
@@ -625,14 +625,14 @@ function copyAbsentResults() {
       }
 
       .Evaluation-Results .welcome .h2 {
-        font-size: clamp(1.2rem, calc(50vw*0.15), 2.5rem);
+        font-size: 2.5rem;
         font-weight: 800;
         color: #126064;
         font-family: Serif;
       }
 
       .Evaluation-Results .welcome .h3 {
-        font-size: clamp(0.7rem, calc(50vw*0.08), 1.2rem);
+        font-size: 1.2rem;
         font-weight: 800;
         color: #126064;
         padding-bottom: 0.8rem;
@@ -662,7 +662,7 @@ function copyAbsentResults() {
       }
 
       .Evaluation-Results .resultado-global .h3 {
-        font-size: clamp(0.95rem, calc(50vw*0.1), 1.2rem);
+        font-size: 1.2rem;
         font-weight: 800;
         font-family: Verdana;
         color: #42757b;
@@ -717,7 +717,7 @@ function copyAbsentResults() {
         font-weight: 500;
         color: #126064;
         text-align: center;
-        font-size: clamp(0.5rem, calc(50vw*0.07), 1.1rem);
+        font-size: 1.1rem;
         width: 20%;
       }
 
@@ -737,14 +737,14 @@ function copyAbsentResults() {
 
       .Evaluation-Results .footer p {
         font-weight: bold;
-        font-size: clamp(0.7rem, calc(50vw*0.09), 1rem);
+        font-size: 1rem;
         color: #dbfeff;
         margin-bottom: -1rem;
       }
 
       .Evaluation-Results .footer h5 {
         color: #ffffff;
-        font-size: clamp(0.8rem, calc(50vw*1.1), 1.1rem);
+        font-size: 1.1rem;
         padding: 0 3rem;
       }
 
@@ -1590,7 +1590,7 @@ function copyResults() {
     }
 
     .Evaluation-Results table th {
-      font-size: clamp(0.9rem, calc(50vw*0.1), 1.6rem);
+      font-size: 1.6rem;
       font-family: Serif;
       font-weight: 800;
       color: #126064;
@@ -1600,18 +1600,18 @@ function copyResults() {
     }
 
     .Evaluation-Results table td {
-      font-size: clamp(0.8rem, calc(50vw*0.06), 0.95rem);
+      font-size: 0.95rem;
       font-family: Verdana;
       font-weight: 500;
       color: #305254;
-      padding: 0.9rem 0.5rem 0.9rem calc(50vw*0.13);
+      padding: 0.9rem 0.5rem 0.9rem 6.5vw;
       border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
       text-align: left;
     }
 
     .Evaluation-Results p {
       font-family: Verdana;
-      font-size: clamp(0.8rem, calc(50vw*0.06), 0.95rem);
+      font-size: 0.95rem;
     }
 
     /* =================HEADER=============== */
@@ -1635,14 +1635,14 @@ function copyResults() {
     }
 
     .Evaluation-Results .welcome .h2 {
-      font-size: clamp(1.2rem, calc(50vw*0.15), 2.5rem);
+      font-size: 2.5rem;
       font-weight: 800;
       color: #126064;
       font-family: Serif;
     }
 
     .Evaluation-Results .welcome .h3 {
-      font-size: clamp(0.7rem, calc(50vw*0.08), 1.2rem);
+      font-size: 1.2rem;
       font-weight: 800;
       color: #126064;
       padding-bottom: 0.8rem;
@@ -1673,14 +1673,14 @@ function copyResults() {
 
     .Evaluation-Results .resultado-global .h2 {
       font-family: Serif;
-      font-size: clamp(1.1rem, calc(50vw*0.18), 2.1rem);
+      font-size:2.1rem;
       font-weight: bold;
       color: #297b7f;
       text-shadow: 0 0 10px rgb(163, 225, 230, 0.15);
     }
 
     .Evaluation-Results .resultado-global .h3 {
-      font-size: clamp(0.95rem, calc(50vw*0.1), 1.2rem);
+      font-size: 1.2rem;
       font-weight: 800;
       font-family: Verdana;
       color: #42757b;
@@ -1709,7 +1709,7 @@ function copyResults() {
       font-weight: 500;
       color: #126064;
       text-align: center;
-      font-size: clamp(0.5rem, calc(50vw*0.07), 1.1rem);
+      font-size: 1.1rem;
       width: 20%;
     }
 
