@@ -1,7 +1,7 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "1.2.0";
-  //updated for no survey is not good evaluator
+  const versionnum = "1.2.1";
+  //updated for absent evals to have format since they didnt keeping all og content
   const E4EjsonVersion = 1.1;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
@@ -658,18 +658,355 @@ function absentsE4E() {
   if (syllabus.startsWith("Adults")) {
     // ---- mensaje para estudiante ----
     message = `
-Estimado estudiante,<br><br>Te informamos que <b>no asististe a la evaluación filtro</b> correspondiente a tu nivel en <b>${syllabus}</b>. Esta evaluación es  <b>obligatoria para avanzar al siguiente nivel</b> del programa.<br><br>&#9888;&#65039; Dado que te encuentras en un <b>nivel filtro</b>, si no presentas esta evaluación,  serás <b>reprogramado automáticamente para repetir el nivel</b>.<br><br>&#128073; Para evitar retrocesos en tu progreso, te solicitamos  <b>reagendar la evaluación lo antes posible</b> en el siguiente enlace: <a href=https://meetings.hubspot.com/evaluacionese4kidse4adults/evaluaciones target=_blank> Haz clic aquí</a> <br><br>Ahí podrás seleccionar el <b>horario que mejor se acomode</b> y agendarla por tu cuenta de forma rápida y sencilla.<br><hr> &#127919; En <b>English4Adults</b> creemos firmemente en tu potencial.<br><br>Con tu compromiso, podemos asegurarnos de que sigas avanzando con éxito. &#128170;&#127775;
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resultado de Evaluación Filtro</title>
+  <!-- STYLE -->
+
+</head>
+
+<body style="margin: 0 auto; background: linear-gradient(
+          to bottom,
+          #f5ffff 10%,
+          #aed6d6 60%,
+          #1ca5ab 90%
+        ); background-color: #1ca5ab15;">
+  <div class="Evaluation-Results" style="margin: 0 auto; background: linear-gradient(
+          to bottom,
+          #f5ffff 10%,
+          #aed6d6 60%,
+          #1ca5ab 90%
+        ); background-color: #1ca5ab15;">
+    <!-- <!HEADER> -->
+    <div style="
+          text-align: center;
+          background: linear-gradient(to bottom, #f5f0e6 0%, transparent 50%);
+          background-color: transparent;
+        ">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Evaluaci%C3%B3n%20Filtro/filterEvalBannersAdults.png" alt="Resultado - Evaluación Filtro" style="width: 100%; display: block; border: 0">
+    </div>
+    <div class="welcome" style="justify-items: center; padding: 4rem 2rem; text-align: center; margin: 0 auto;">
+      <p class="h2" style="padding: 0 1rem; font-size: 2.5rem; font-weight: 800; color: #126064; font-family: Serif;">
+        Estimado estudiante,</p>
+      <!-- &#x1F31F; -->
+      <p class="h3"
+        style="padding: 0 1rem; font-size: 1.2rem; font-weight: 800; color: #126064; padding-bottom: 0.8rem; font-family: Verdana;">
+        Esperamos que estés teniendo una excelente semana</p>
+    </div>
+    <div class="email-body"
+      style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
+      <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
+        <p
+          style="padding: 4rem 1rem 0; font-size: 1.5rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
+          Te informamos que
+        </p>
+        <p
+          style="padding: 0 1rem 0; font-family: Verdana; font-weight: bold; color: #297b7f; font-size: 1.5rem; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.5rem;">
+          no asististe a tu evaluación filtro
+        </p>
+        <p
+          style="font-size: 1.1rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana; MARGIN: 1rem 0;">
+          correspondiente a tu
+          nivel en
+          <b>${syllabus}</b>.
+        </p>
+      </div>
+      <!-- PORQUE ES IMPORTANTE -->
+      <div style="margin: 2rem 0">
+        <table width="80%" align="center" cellspacing="0" cellpadding="0"
+          style="width: 80%; border-collapse: collapse; border-radius: 10%; border: none; overflow: hidden; margin-top: 1rem; background-color: #f9fafb;"
+          bgcolor="#f9fafb">
+          <tr>
+            <th
+              style="font-weight: 800; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 1.15rem; padding: 1rem; color: #126064; border: none; font-family: verdana;"
+              align="center">
+              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
+              Para evitar retrocesos en tu progreso, te solicitamos
+              <b>reagendar la evaluación lo antes posible</b>
+            </th>
+          </tr>
+          <tr>
+            <td
+              style="font-size: 0.95rem; font-family: Verdana; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); padding: 0.9rem 2rem; font-weight: 500; color: #044043; text-align: center;"
+              align="center">
+              <p style="font-family: Verdana; font-size: 0.95rem; margin: 1rem">
+                Esta evaluación es <b>obligatoria para avanzar al siguiente nivel</b> del programa.<br><br>&#9888;&#65039; Dado que te encuentras en un
+                <b>nivel filtro</b>, si no presentas esta evaluación, serás
+                <b>reprogramado automáticamente para repetir el nivel</b>.
+              </p>
+              <a href=https://meetings.hubspot.com/evaluacionese4kidse4adults/evaluaciones target=_blank
+                style="text-decoration: none; font-family: Verdana; background-color: #147b7b; padding: 1rem 1.3rem; border-radius: 12px; font-weight: 800; color: white; font-size: 1.2rem; margin: 1rem 1rem;; display: inline-block;">
+                Reagenda tu
+                Evaluación Aquí</a>
+              <p style="font-family: Verdana; font-size: 0.85rem; margin: 0">
+                Ahí podrás seleccionar el
+                <b>horario que mejor se acomode</b> y agendarla por tu cuenta de forma rápida y sencilla.<br>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- TU ESFUERXO CUENTA -->
+      <div style="margin: 2rem 0">
+        <table width="80%" align="center" cellspacing="0" cellpadding="0"
+          style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;"
+          bgcolor="#f9fafb">
+          <tr>
+            <TH
+              style="font-size: 1.1rem; font-family: Verdana; padding: 1rem 0.5rem 0; font-weight: 500; color: #044043; text-align: center; border-top: 1px dotted #219fa6;"
+              align="center"> En <b>ENGLISH4ADULTS</b>,</TH>
+          </tr>
+          <tr>
+            <td
+              style="font-size: 1rem; font-family: Verdana; padding: 1rem 0.5rem 0.8rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
+              align="center">
+              Creemos firmemente en tu potencial.<br>
+                Con tu compromiso, podemos asegurarnos de que <b>sigas avanzando con éxito</b>.
+
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="font-size: 0.95rem; font-family: Verdana; font-weight: 500; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5vw; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: center;"
+              align="center">
+              <p style="font-family: Verdana; font-size: 0.95rem; margin: 3rem 4rem;">
+
+              </p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <!-- FOOTER -->
+    <div style="
+          text-align: center;
+          margin: 0;
+          padding: 7rem 0 0 0;
+          width: 100%;
+          font-family: Verdana;
+          text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        ">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Evaluaci%C3%B3n%20Filtro/footerEvaluatorsAdults.png" alt="Atentamente, equipo de English4Kids" style="width: 100%; display: block; border: 0">
+
+    </div>
+    <!-- REFERIDOS -->
+    <div class="referidos"
+      style="text-align: center; height: auto; padding: 2rem 0; font-family: Verdana; background-color: #147b7b; width: 100%; border-radius: 7px; color: white;">
+      <p style="font-family: Verdana; padding: 0 1.8rem; font-weight: bold; font-size: 1.3rem; color: white;">
+        Refiere a otros padres y obtén un 50% de descuento por cada referido
+        que se inscriba.
+      </p>
+      <p style="font-family: Verdana; padding: 0 1.8rem; font-size: 0.9rem; color: white;">
+        &#129490; &#10024; Si disfrutas nuestras clases, puedes ayudar a que
+        más niños aprendan inglés y tengan mejores oportunidades en la vida.
+        Tu referido también recibe un 50% de descuento en su primer pago.
+      </p>
+      <p style="font-family: Verdana; padding: 0 1.8rem; font-size: 1.3rem; font-weight: bold; color: white;">
+        Entre más refieras, más ahorras y más ayudas.
+      </p>
+      <p style="font-family: Verdana; padding: 0 1.8rem; font-size: 0.9rem; color: white;">
+        &#128073; Para que tu referido obtenga el descuento, debe agendar una
+        llamada con uno de nuestros asesores
+      </p>
+      <a href="https://www.english4kidsonline.com/amigo" target="_blank" class="referbtn"
+        style="font-family: Verdana; display: inline-block; padding: 0.6rem 1.3rem; background: linear-gradient(
+          to bottom,
+          #aed6d6 0%,
+          #ffffff 15%,
+          #ffffff 85%,
+          #aed6d6 100%
+        ); background-color: white; color: #147b7b; text-decoration: none; border-radius: 12px; font-weight: 800; font-size: 1.4rem;">
+        REFIERE AQUÍ
+      </a>
+    </div>
+  </div>
+</body>
+
+</html>
     `;
   } else {
     // ---- mensaje para padres ----
     message = `
-Estimado padre/madre de familia,<br><br>Le informamos que su hijo/a <b>no asistió a la evaluación filtro</b> correspondiente a su nivel en <b>${syllabus}</b>. Esta evaluación es <b>obligatoria para avanzar al siguiente nivel</b> del programa.
+<html lang="en">
 
-<p style=""color: #b30000;""> 
-    &#9888;&#65039; Dado que se encuentra en un <strong>nivel filtro</strong>, si no presenta esta evaluación, el estudiante será <b>reprogramado automáticamente para repetir el nivel</b>. 
-</p>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resultado de Evaluación Filtro</title>
+  <!-- STYLE -->
 
-&#128073; Para evitar retrocesos en su progreso, le solicitamos <b>reagendar la evaluación lo antes posible</b> en el siguiente enlace: <a href=https://meetings.hubspot.com/evaluacionese4kidse4adults/evaluaciones target=_blank> Haz clic aquí</a><br><br>Ahí podrá seleccionar el <b>horario que mejor se le acomode</b> y agendarla por su cuenta de forma rápida y sencilla.<br><br><hr> &#127919; En <b>English4Kids</b> creemos firmemente en el potencial de cada estudiante.<br><br>Con su apoyo, podemos asegurar que su hijo/a continúe avanzando con éxito. &#128170;&#127775;
+</head>
+
+<body style="margin: 0 auto; background: linear-gradient(
+          to bottom,
+          #f5ffff 10%,
+          #aed6d6 60%,
+          #1ca5ab 90%
+        ); background-color: #1ca5ab15;">
+  <div class="Evaluation-Results" style="margin: 0 auto; background: linear-gradient(
+          to bottom,
+          #f5ffff 10%,
+          #aed6d6 60%,
+          #1ca5ab 90%
+        ); background-color: #1ca5ab15;">
+    <!-- <!HEADER> -->
+    <div style="
+          text-align: center;
+          background: linear-gradient(to bottom, #f5f0e6 0%, transparent 50%);
+          background-color: transparent;
+        ">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Evaluaci%C3%B3n%20Filtro/filterEvalBannersKids.png" alt="Resultado - Evaluación Filtro" style="width: 100%; display: block; border: 0">
+    </div>
+    <div class="welcome" style="justify-items: center; padding: 4rem 2rem; text-align: center; margin: 0 auto;">
+      <p class="h2" style="padding: 0 1rem; font-size: 2.5rem; font-weight: 800; color: #126064; font-family: Serif;">
+        Estimado padre/madre de familia,</p>
+      <!-- &#x1F31F; -->
+      <p class="h3"
+        style="padding: 0 1rem; font-size: 1.2rem; font-weight: 800; color: #126064; padding-bottom: 0.8rem; font-family: Verdana;">
+        Esperamos que estés teniendo una excelente semana</p>
+    </div>
+    <div class="email-body"
+      style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
+      <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
+        <p
+          style="padding: 4rem 1rem 0; font-size: 1.5rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
+          Te informamos que tu hijo/a
+        </p>
+        <p
+          style="padding: 0 1rem 0; font-family: Verdana; font-weight: bold; color: #297b7f; font-size: 1.5rem; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.5rem;">
+          no asististió a su evaluación filtro
+        </p>
+        <p
+          style="font-size: 1.1rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana; MARGIN: 1rem 0;">
+          correspondiente a su
+          nivel en
+          <b>${syllabus}</b>.
+        </p>
+      </div>
+      <!-- PORQUE ES IMPORTANTE -->
+      <div style="margin: 2rem 0">
+        <table width="80%" align="center" cellspacing="0" cellpadding="0"
+          style="width: 80%; border-collapse: collapse; border-radius: 10%; border: none; overflow: hidden; margin-top: 1rem; background-color: #f9fafb;"
+          bgcolor="#f9fafb">
+          <tr>
+            <th
+              style="font-weight: 800; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 1.15rem; padding: 1rem; color: #126064; border: none; font-family: verdana;"
+              align="center">
+              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
+              Para evitar retrocesos en su progreso, te solicitamos
+              <b>reagendar la evaluación lo antes posible</b>
+            </th>
+          </tr>
+          <tr>
+            <td
+              style="font-size: 0.95rem; font-family: Verdana; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); padding: 0.9rem 2rem; font-weight: 500; color: #044043; text-align: center;"
+              align="center">
+              <p style="font-family: Verdana; font-size: 0.95rem; margin: 1rem">
+                Esta evaluación es <b>obligatoria para avanzar al siguiente nivel</b> del programa.<br><br>&#9888;&#65039; Dado que se encuentra en un
+                <b>nivel filtro</b>, si no presenta esta evaluación, el estudiante será
+                <b>reprogramado automáticamente para repetir el nivel</b>.
+              </p>
+              <a href=https://meetings.hubspot.com/evaluacionese4kidse4adults/evaluaciones target=_blank
+                style="text-decoration: none; font-family: Verdana; background-color: #147b7b; padding: 1rem 1.3rem; border-radius: 12px; font-weight: 800; color: white; font-size: 1.2rem; margin: 1rem 1rem;; display: inline-block;">
+                Reagenda su
+                Evaluación Aquí</a>
+              <p style="font-family: Verdana; font-size: 0.85rem; margin: 0">
+                Ahí podrás seleccionar el
+                <b>horario que mejor se acomode</b> y agendarla por tu cuenta de forma rápida y sencilla.<br>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- TU ESFUERXO CUENTA -->
+      <div style="margin: 2rem 0">
+        <table width="80%" align="center" cellspacing="0" cellpadding="0"
+          style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;"
+          bgcolor="#f9fafb">
+          <tr>
+            <TH
+              style="font-size: 1.1rem; font-family: Verdana; padding: 1rem 0.5rem 0; font-weight: 500; color: #044043; text-align: center; border-top: 1px dotted #219fa6;"
+              align="center">
+              <b>En
+                    <span style="
+                        color: #233046;
+                        font-family: verdana;
+                        font-size: 1.1rem;
+                      ">ENGLISH<span style="color: #ec6619">4</span><span style="color: #95c021">K</span><span style="color: #f18c29">I</span><span style="color: #eb5854">D</span><span style="color: #1da5aa">S</span></b>,
+            </TH>
+          </tr>
+          <tr>
+            <td
+              style="font-size: 1rem; font-family: Verdana; padding: 1rem 0.5rem 0.8rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
+              align="center">
+              Creemos firmemente en el potencial de cada estudiante.
+              <br>
+                Con tu apoyo, podemos asegurar que tu hijo/a <b>siga avanzando con éxito</b>.
+
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="font-size: 0.95rem; font-family: Verdana; font-weight: 500; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5vw; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: center;"
+              align="center">
+              <p style="font-family: Verdana; font-size: 0.95rem; margin: 3rem 4rem;">
+
+              </p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <!-- FOOTER -->
+    <div style="
+          text-align: center;
+          margin: 0;
+          padding: 7rem 0 0 0;
+          width: 100%;
+          font-family: Verdana;
+          text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        ">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Evaluaci%C3%B3n%20Filtro/footerEvaluatorsKids.png" alt="Atentamente, equipo de English4Kids" style="width: 100%; display: block; border: 0">
+
+
+    </div>
+    <!-- REFERIDOS -->
+    <div class="referidos"
+      style="text-align: center; height: auto; padding: 2rem 0; font-family: Verdana; background-color: #147b7b; width: 100%; border-radius: 7px; color: white;">
+      <p style="font-family: Verdana; padding: 0 1.8rem; font-weight: bold; font-size: 1.3rem; color: white;">
+        Refiere a otros padres y obtén un 50% de descuento por cada referido
+        que se inscriba.
+      </p>
+      <p style="font-family: Verdana; padding: 0 1.8rem; font-size: 0.9rem; color: white;">
+        &#129490; &#10024; Si disfrutas nuestras clases, puedes ayudar a que
+        más niños aprendan inglés y tengan mejores oportunidades en la vida.
+        Tu referido también recibe un 50% de descuento en su primer pago.
+      </p>
+      <p style="font-family: Verdana; padding: 0 1.8rem; font-size: 1.3rem; font-weight: bold; color: white;">
+        Entre más refieras, más ahorras y más ayudas.
+      </p>
+      <p style="font-family: Verdana; padding: 0 1.8rem; font-size: 0.9rem; color: white;">
+        &#128073; Para que tu referido obtenga el descuento, debe agendar una
+        llamada con uno de nuestros asesores
+      </p>
+      <a href="https://www.english4kidsonline.com/amigo" target="_blank" class="referbtn"
+        style="font-family: Verdana; display: inline-block; padding: 0.6rem 1.3rem; background: linear-gradient(
+          to bottom,
+          #aed6d6 0%,
+          #ffffff 15%,
+          #ffffff 85%,
+          #aed6d6 100%
+        ); background-color: white; color: #147b7b; text-decoration: none; border-radius: 12px; font-weight: 800; font-size: 1.4rem;">
+        REFIERE AQUÍ
+      </a>
+    </div>
+  </div>
+</body>
+
+</html>
     `;
   }
 
@@ -2384,10 +2721,10 @@ function openCategory(category, clickedBtn) {
   });
 
   // ---DATOS DE CADA CATEGORÍA---
- const categories = {
+  const categories = {
     actions: ["Eat","Bite","Drink","Sleep","Run","Jump","Dance Macarena","Walk"],
     sfx: ["Impostor Among Us","Buzzer","Chan Chan Chan","Claps","Correct Ding","Crickets","Hoop Ding","Horn","Huh","Sad Meow","Shock Cinematic","Tiny Violin","Victory","Vine Boom","Yipee"],
-    music: ["My Little Soda Pop", "Dance-Remix", "Fancy - Twice", "Macarena", "Russian Roulette - Red Velvet"],
+    music: ["My Little Soda Pop","Dance-Remix", "Dynamite - BTS", "Fancy - Twice", "Jump - Blackpink", "Macarena", "Russian Roulette"],
     animals: ["Bee","Cat","Chicken","Cow","Crow","Dinosaur","Dog","Dove","Duck","Elephant","Frog","Giraffe","Horse","Whale","Lion","Owl","Panda","Penguin","Pig","Rabbit","Raccoon","Rat","Rattlesnake","Rooster","Sheep","Tiger","Wolf","Zebra"]
   };
 
