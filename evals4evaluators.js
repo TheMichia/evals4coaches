@@ -1,7 +1,7 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "1.3.3";
-  //new format-exclude unfinished class paths- change later for paths done
+  const versionnum = "1.3.4";
+  //new format-exclude unfinished class paths- change later for paths done --REMOVED EMOJIS FOR UNICODE
   const E4EjsonVersion = 1.1;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
@@ -1992,7 +1992,7 @@ resultado_global_fail_normal += `
           <th
             style="font-family: Serif; font-weight: 800; text-align: center; font-size: 1.5rem; padding: 1rem; color: #126064; border-top: 1px dotted #219fa6; border-bottom: none;"
             align="center">
-            ✨ ¡Tu esfuerzo cuenta! ✨
+            &#10024; ¡Tu esfuerzo cuenta! &#10024;
           </th>
         </tr>
         <tr>
@@ -2300,8 +2300,8 @@ resultado_global_fail_normal += `
       <tr>
         <th
           style="font-family: Serif; font-weight: 800; text-align: center; font-size: 1.5rem; padding: 1rem; color: #126064; border-top: 1px dotted #219fa6; border-bottom: none;"
-          align="center">💫¡Estás avanzando
-          increíblemente en tu camino al inglés!💫
+          align="center">&#128171;¡Estás avanzando
+          increíblemente en tu camino al inglés!&#128171;
         </th>
       </tr>
       <tr>
@@ -2326,8 +2326,8 @@ resultado_global_fail_normal += `
       <tr>
         <th
           style="font-family: Serif; font-weight: 800; text-align: center; font-size: 1.5rem; padding: 1rem; color: #126064; border-top: 1px dotted #219fa6; border-bottom: none;"
-          align="center">💫¡Tu hijo avanza
-          increíblemente en su camino al inglés!💫
+          align="center">&#128171;¡Tu hijo avanza
+          increíblemente en su camino al inglés!&#128171;
         </th>
       </tr>
       <tr>
