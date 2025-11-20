@@ -1,7 +1,7 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "1.2.1";
-  //updated for absent evals to have format since they didnt keeping all og content
+  const versionnum = "1.3.0";
+  //new format
   const E4EjsonVersion = 1.1;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
@@ -69,6 +69,30 @@ fetch("evaluators.json?v=${E4EjsonVersion}")
   .catch((error) => {
     console.error("Error al cargar el JSON:", error);
   });
+
+//
+//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
+//
+
+let topicBreakdown = {};
+let topicBreakdownLoaded = false;
+
+// Carga inicial del JSON
+async function loadTopicBreakdown() {
+  try {
+    const response = await fetch(`topicsBreakdown.json?v=${Date.now()}`);
+    const data = await response.json();
+    console.log("✅ JSON cargado:", data); // Verifica todo el objeto
+    topicBreakdown = data["Topic Breakdown"] || {};
+    topicBreakdownLoaded = true;
+    console.log("📦 topicBreakdown procesado:", topicBreakdown);
+  } catch (err) {
+    console.error("❌ Error loading topic breakdown:", err);
+  }
+}
+
+// Llamamos a la función al inicio
+loadTopicBreakdown();
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
@@ -789,7 +813,7 @@ function absentsE4E() {
           font-family: Verdana;
           text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         ">
-      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Evaluaci%C3%B3n%20Filtro/footerEvaluatorsAdults.png" alt="Atentamente, equipo de English4Kids" style="width: 100%; display: block; border: 0">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Footer/footerEvaluatorsAdults.png" alt="Atentamente, equipo de English4Kids" style="width: 100%; display: block; border: 0">
 
     </div>
     <!-- REFERIDOS -->
@@ -969,7 +993,7 @@ function absentsE4E() {
           font-family: Verdana;
           text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         ">
-      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Evaluaci%C3%B3n%20Filtro/footerEvaluatorsKids.png" alt="Atentamente, equipo de English4Kids" style="width: 100%; display: block; border: 0">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Footer/footerEvaluatorsKids.png" alt="Atentamente, equipo de English4Kids" style="width: 100%; display: block; border: 0">
 
 
     </div>
@@ -1029,7 +1053,14 @@ function absentsE4E() {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-function evaluatorsCopyResults() {
+async function evaluatorsCopyResults() {
+  // Espera hasta que topicBreakdown esté listo
+  while (!topicBreakdownLoaded) {
+    console.log("⏳ Esperando que topicBreakdown cargue...");
+    await new Promise((res) => setTimeout(res, 100)); // espera 100ms
+  }
+
+  console.log("✅ topicBreakdown cargado, generando RC");
   // ---------- helpers ----------
   const safe = (s) =>
     s === null || s === undefined ? "" : String(s).replace(/\n/g, "<br>");
@@ -1175,20 +1206,27 @@ function evaluatorsCopyResults() {
     { id: "co", label: "Comprensión" },
     { id: "in", label: "Entonación" },
   ];
-  const desempeñoHTML = `<div class="desempeño">
-      <table>
-        <thead>
-          <tr>
-            <th colspan="2">&#128313; Desempeño por área&#128313;</th>
-          </tr>
+  const desempeñoHTML = `
+  <div class="desempeño" style="padding: 0 1rem; justify-items: center;">
+    <table style="width: 80%; border-radius: 10%; overflow: hidden;" width="80%">
+      <thead>
+        <tr>
+          <th colspan="2"
+            style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center; padding: 1.7rem 0.5rem; border-bottom: 1px dotted #219fa6;"
+            align="center">&#128313; Desempeño por área&#128313;</th>
+        </tr>
         </thead>
         <tbody>
           ${areas
             .map((a) => {
               const val = document.getElementById(a.id)?.value ?? "";
-              return `<tr><td class="evalarea">${
-                a.label
-              }</td><td> ${describeScore(val)}</td></tr>`;
+              return ` <tr>
+          <td class="evalarea"
+            style="font-family: Verdana; padding: 0.5rem 0.5rem 0.9rem 10%; border-bottom: 1px dotted #DCF8FA; font-weight: 500; color: #126064; text-align: center; font-size: 1.1rem; width=30%"
+            width="40%" align="center">${a.label}</td>
+          <td
+            style="font-size:0.95rem; font-family: Verdana; color: #305254; padding: 0.9rem 0.5rem 0.9rem 10%; text-align: left; font-weight: 500; border-bottom: 1px dotted #DCF8FA;"
+            align="left"> ${describeScore(val)}</td></tr>`;
             })
             .join("")}
         </tbody>
@@ -1293,9 +1331,11 @@ function evaluatorsCopyResults() {
     finalScoreText || (Number.isFinite(totalScore) ? String(totalScore) : "");
 
   console.log(
-    "DEBUG isExit, finalDisplay, totalScore:",
+    "DEBUG isExit:",
     isExit,
+    "finalscore",
     finalDisplay,
+    "totalScore:",
     totalScore,
   );
 
@@ -1699,33 +1739,99 @@ function evaluatorsCopyResults() {
     ? "English4Adults"
     : "English4Kids";
   const normal_pass_header = `
-      <div class="welcome">
-      <p class="h2">¡Te saludamos de ${chosenSyllabus}!</p>
+       <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
+      <p
+        style="padding: 0 1rem; font-size:2rem; font-weight: 800; color: #126064; font-family: Serif; margin: 0.5rem 0;">
+        ¡Te saludamos de ${chosenSyllabus}!</p>
       <!-- &#x1F31F; -->
-      <p class="h3"> Esperamos que estés teniendo una excelente semana
-      </p>
-      </div> 
+      <p
+        style="padding: 0 1rem; font-size: 1rem; font-weight: 800; color: #126064; margin-top: 0;padding-bottom: 0.5rem; font-family: Verdana;">
+        Esperamos que estés teniendo una excelente semana</p>
+    </div>
       `;
   const normal_fail_header = `
-      <div class="welcome">
-      <p class="h2">¡Te saludamos de ${chosenSyllabus}!</p>
+       <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
+      <p
+        style="padding: 0 1rem; font-size:2rem; font-weight: 800; color: #126064; font-family: Serif; margin: 0.5rem 0;">
+        ¡Te saludamos de ${chosenSyllabus}!</p>
       <!-- &#x1F31F; -->
-      <p class="h3"> Esperamos que estés teniendo una excelente semana
-      </p>
-      </div>    `;
+      <p
+        style="padding: 0 1rem; font-size: 1rem; font-weight: 800; color: #126064; margin-top: 0;padding-bottom: 0.5rem; font-family: Verdana;">
+        Esperamos que estés teniendo una excelente semana</p>
+    </div>
+    `;
+  //---CLASS PATHS
+  // Helper: check if syllabus contains ANY of these strings
+  const includesAny = (text, arr) =>
+    arr.some((item) => text.includes(item.toLowerCase()));
 
-  const resultado_global_pass_normal = `
-      <div class='resultado-global'>
-      <p class='h2'>Resultado Global: Logrado</p>
-      <p class='h3'>&#127881;¡Felicidades!&#127881; <br> Se está avanzando a un excelente ritmo.</p>
-      <p>A continuación un informe detallado de la evaluación:</p>
-    </div>`;
+  // Define groups
+  const groupAdults = ["adults (3hrs/week)", "adults masters (3hrs/week)"];
+
+  const groupKidsTeens = [
+    "kids (intensivo) 8-12",
+    "kids (super intensivo) 8-12",
+    "teens 13-17 (3hrs/week)",
+    "teens 13-17 (5hrs/week)",
+  ];
+
+  let classPathLvl;
+
+  // Logic
+  if (includesAny(syllabusLower, groupAdults)) {
+    classPathLvl = "0-12";
+  } else if (includesAny(syllabusLower, groupKidsTeens)) {
+    classPathLvl = "0-10";
+  } else {
+    classPathLvl = "1-10";
+  }
+
+  // Final URLs
+  const S_ClassPath = `https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/S-CP_${classPathLvl}_A${levelVal}.png`;
+
+  const B_ClassPath = `https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/B-CP_${classPathLvl}_A${levelVal}.png`;
+
+  const resultado_global_pass_normal = ` 
+  
+  <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
+        <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem">
+        <p
+          style="font-weight: bold; font-family: Verdana; font-size: 0.85rem; color: #506d6d; margin: 0 0 0.5rem 0; padding: 0 1rem 2.8rem;">
+          ${syllabusVal} | Nivel ${levelVal}
+        </p>
+        <p
+          style="padding: 0 1rem 0; font-size: 2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
+          Evaluación Aprobada
+        </p>
+        <p class="h3"
+          style="font-size: 1.2rem; font-weight: 800; font-family: Verdana; color: #42757b; padding: 2.5rem 0;">
+          &#127881;¡Felicidades!&#127881; <br>
+            Se está avanzando a un excelente ritmo.
+        </p>
+        <p style="font-size:0.95rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana;">
+          A continuación un informe detallado de la evaluación:
+        </p>
+      </div>`;
   const resultado_global_fail_normal = `
-      <div class='resultado-global'>
-      <p class='h2'>Resultado Global: No Logrado</p>
-      <p class='h3'>Aunque aún no se ha alcanzado el objetivo, el esfuerzo cuenta y seguiremos avanzando juntos.</p>
-      <p>A continuación un informe detallado de la evaluación:</p>
-    </div>`;
+  <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
+        <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem">
+        <p
+          style="font-weight: bold; font-family: Verdana; font-size: 0.85rem; color: #506d6d; margin: 0 0 0.5rem 0; padding: 0 1rem 2.8rem;">
+          ${syllabusVal} | Nivel ${levelVal}
+        </p>
+        <p
+          style="padding: 0 1rem 0; font-size: 2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
+          Evaluación No Satisfactoria
+        </p>
+        <p class="h3"
+          style="font-size: 1.2rem; font-weight: 800; font-family: Verdana; color: #42757b; padding: 2.5rem 0;">
+          Aunque aún no se ha alcanzado el objetivo, el esfuerzo cuenta y seguiremos avanzando juntos.
+        </p>
+        <p style="font-size:0.95rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana;">
+          A continuación un informe detallado de la evaluación:
+        </p>
+      </div>`;
+
   // ---------- SHOW NOTA FINAL for Exit (only if not juniors) ----------
   let detalleNotaHTML = "";
   if (isExit && !syllabusLower.startsWith("juniors")) {
@@ -1813,40 +1919,148 @@ function evaluatorsCopyResults() {
         : resultado_global_pass_normal;
   }
 
+  //--extra sections
+  const porqueEsImportante = ` 
+  <!-- PORQUE ES IMPORTANTE -->
+        <div style="margin: 4rem auto; justify-items: center;">
+          <table width="80%" align="center" cellspacing="0" cellpadding="0"
+            style="width: 80%; border-collapse: collapse; border-radius: 10%; border: none; overflow: hidden; margin-top: 1rem; background-color: #f9fafb;"
+            bgcolor="#f9fafb">
+            <tr>
+              <th
+                style="font-weight: 800; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 1.15rem; padding: 1rem; color: #126064; border: none; font-family: verdana;"
+                align="center">
+                <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
+                ¿Por qué es clave saber sus logros?
+              </th>
+            </tr>
+            <tr>
+              <td
+                style="font-size:0.95rem; font-family: Verdana; border-bottom: 1px dotted #DCF8FA; padding: 0.9rem 2rem; font-weight: 500; color: #044043; text-align: center;"
+                align="center">
+                <p style="font-family: Verdana; font-size:0.95rem; margin: 0 0 0.5rem 0;">
+                <p>Te permite <b>ver su progreso</b>, <b>celebrar cada avance</b> y
+                  <b>acompañarlo en su aprendizaje</b>.
+                </p>
+                <p>Cada paso <b>refuerza su confianza</b> y lo prepara para
+                  <b>comunicarse con seguridad</b> y <b>pensar en grande</b>.
+                </p>
+
+                </p>
+              </td>
+            </tr>
+          </table>
+        </div>`;
+
+  const tuEsfuerzoCuenta = `    
+<!-- TU ESFUERZO CUENTA -->
+    <div style="margin: 4rem 0; justify-items: center;">
+      <table width="80%" align="center" cellspacing="0" cellpadding="0"
+        style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 0.5rem; background-color: #f9fafb;"
+        bgcolor="#f9fafb">
+        <tr>
+          <th
+            style="font-family: Serif; font-weight: 800; text-align: center; font-size: 1.5rem; padding: 1rem; color: #126064; border-top: 1px dotted #219fa6; border-bottom: none;"
+            align="center">
+            ✨ ¡Tu esfuerzo cuenta! ✨
+          </th>
+        </tr>
+        <tr>
+          <td
+            style="font-size:0.95rem; font-family: Verdana; padding: 0.7rem 0.5rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
+            align="center">
+            <p style="font-family: Verdana; font-size:0.95rem;">
+              Cada mes tu hijo/a <b>avanza más</b> y estamos
+              <b>muy orgullosos de su progreso</b>.
+            </p>
+            <p style="font-family: Verdana; font-size:0.95rem;">
+              Queremos que
+              <b>aprenda inglés con confianza y entusiasmo</b>, dando un <b>paso firme en cada clase</b>.
+            </p>
+          </td>
+        </tr>
+      </table>
+    </div>`;
+
   // ---------- build topics & opportunities HTML ----------
+
   const dominatedHTML = approvedTopics.length
-    ? `<div class="temas-dominados">
-      <table>
+    ? `
+    <!-- TEMAS DOMINADOS -->
+    <div style="margin: 1.5rem 0; justify-items: center;">
+      <table style="width: 80%; border-radius: 10%; overflow: hidden;" width="80%">
         <thead>
           <tr>
-            <th><b>&#128313;Temas Dominados&#128313;</b></th>
+            <th
+              style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center; padding: 1.7rem 0.5rem; border-bottom: 1px dotted #219fa6;"
+              align="center"><b>&#128313;Temas Dominados&#128313;</b></th>
           </tr>
         </thead>
         <tbody>
           ${approvedTopics
-            .map((t) => `<tr><td>&#9989; ${safe(t)}</td></tr>`)
+            .map((topic) => {
+              const topicDescription = topicBreakdown[topic] || "";
+
+              return `
+                <tr>
+                  <td
+                    style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 1.05rem; font-weight: 600; color: #126064;"
+                    align="left">
+                    &#9989; ${safe(topic)}
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="font-family: Verdana; font-weight: 500; text-align: left; padding: 0.3rem 0 1rem 13%; border-bottom: 1px dotted #DCF8FA; color: #044043; font-size: 0.9rem;"
+                    align="left">
+                    ${topicDescription}
+                  </td>
+                </tr>
+              `;
+            })
+            .join("")}
+        </tbody>
+      </table>
+    </div>
+    ${porqueEsImportante}
+    `
+    : "";
+
+  const reinforceHTML = reinforceTopics.length
+    ? ` <div class="temas-reforzar" style="margin: 1rem 0; justify-items: center;">
+        <table style="width: 80%; border-radius: 10%; overflow: hidden;" width="80%">
+          <thead>
+            <tr>
+              <th
+                style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center; padding: 1.7rem 0.5rem; border-bottom: 1px dotted #219fa6;"
+                align="center">
+                &#128313; <b>Temas que aún necesita reforzar</b>&#128313;
+              </th>
+            </tr>
+          </thead>
+        <tbody>
+          ${reinforceTopics
+            .map((topic) => {
+              const topicDescription =
+                topicBreakdown[topic] || "Descripción no disponible";
+              return `<tr>
+              <td
+                style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 1rem; font-weight: 600; color: #126064;"
+                align="left">
+                &#10004; ${safe(topic)}</td>
+                      </tr>
+                      <tr>
+              <td
+                style="font-family: Verdana; font-weight: 500; text-align: left; padding: 0.3rem 0 1rem 13%; border-bottom: 1px dotted #DCF8FA; color: #044043; font-size: 0.9rem;"
+                align="left">${topicDescription}</td>
+                      </tr>`;
+            })
             .join("")}
         </tbody>
       </table>
     </div>`
     : "";
 
-  const reinforceHTML = reinforceTopics.length
-    ? `<div class="temas-reforzar">
-        <table>
-          <thead>
-            <tr>
-              <th>&#128313; <b>Temas que aún necesita reforzar</b>&#128313;</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${reinforceTopics
-              .map((t) => `<tr><td>&#10004; ${safe(t)}</td></tr>`)
-              .join("")}
-          </tbody>
-        </table>
-      </div>`
-    : "";
   const opportunityHTML = opportunityTopics.length
     ? `<div class="areas-oportunidad">
         <table>
@@ -1880,7 +2094,9 @@ function evaluatorsCopyResults() {
               .join("")}
           </tbody>
         </table>
-      </div>`
+      </div>
+      ${tuEsfuerzoCuenta}
+      `
     : "";
 
   const pronunciationHTML = pronunciationMistakes
@@ -1931,67 +2147,49 @@ function evaluatorsCopyResults() {
 
   const evaluatorLine = shouldHideEvaluator
     ? ""
-    : `<div class="Evaluator-referidos">
-    <p class="h4">Tu evaluación fue realizada por</p>
-    <p class="eval-name">${safe(evaluatorName || "error")}</p>
-    <p class="body-eval-refer">
-      Agradezco tu apoyo completando una breve encuesta de satisfacción para
-      ayudarnos a mejorar nuestro servicio en el siguiente enlace:
-    </p>
-    <a href="${surveyLinkFinal}" target="_blank" class="evaluatorreferbtn"
-      >Evalúame aquí</a>
-       </div> `;
+    : `
+    <!-- EVALUATORS Referal -->
+      <div style="margin: 2rem auto 0; padding: 1rem 0">
+        <div
+          style="border-radius: 20px; padding: 2rem 1.5rem; width: 80%; margin: 2rem auto; background-color: rgba(255, 255, 255, 0.95); min-width: 300px; max-width: 1000px; text-align: center;">
+          <p
+            style="font-family: Verdana; color: #147b7b; padding: auto 2rem; font-size: 1.25rem; font-weight: bold;">
+            Tu
+            evaluación fue realizada por</p>
+          <p
+            style="font-family: Verdana; color: #147b7b; padding: auto 2rem; font-size: 1.5rem; font-weight: 800;">
+                  ${safe(evaluatorName || "error")}</p>
+          <p
+            style="font-family: Verdana; color: #147b7b; padding: auto 2rem; font-size: 1rem; font-weight: bold;">
+            Gracias por tu tiempo y confianza.</p>
+          <p
+            style="font-family: Verdana; font-size:0.95rem; color: #147b7b; padding: auto 2rem;">
+            Te invitamos a completar una breve encuesta de satisfacción para ayudarnos a seguir mejorando nuestro
+            servicio.
+          </p>
+          <a href="${surveyLinkFinal}" target="_blank"
+            style="text-decoration: none; font-family: Verdana; background-color: #147b7b; padding: 0.6rem 1.3rem; border-radius: 12px; font-weight: 800; color: white; font-size: 1.3rem; margin: 1rem auto; display: inline-block;">Evalúame
+            aquí</a>
+        </div>
+      </div> `;
 
   //referidos text
   const referText = syllabusLower.includes("adults")
-    ? ` <div class="referidos">
-          <p style="font-weight: bold; font-size: 1.3rem; color: white">
-          Refiere a tus amigos o familiares y obtén un 50% de descuento por cada
-          referido que se inscriba.
-          </p>
-          <p style="font-size: 0.9rem; color: white">
-          &#129490; &#10024; Por cada referido que se inscriba, obtienes 50% de
-          descuento y tu referido también obtiene un 50% de descuento en su
-          primer pago.
-          </p>
-          <p style="font-size: 1.3rem; font-weight: bold; color: white">
-          ¡Entre más refieras, más ahorras y ayudas a otros a mejorar su futuro!
-          </p>
-          <p style="font-size: 0.9rem; color: white">
-          &#128073; Para que tu referido obtenga el descuento, debe agendar una
-          llamada con uno de nuestros asesores
-          </p>
-          <a
-          href="https://www.english4kidsonline.com/amigo"
-          target="_blank"
-          class="referbtn"
-          >
-          REFIERE AQUÍ
-          </a>
-          </div> `
-    : ` <div class="referidos" style="color: white">
-          <p style='font-weight: bold; font-size: 1.3rem; color: white'> Refiere a otros padres y obtén un 50% de descuento por cada referido que se inscriba.</p>
-          <p style='font-size: 0.9rem; color: white'>&#129490; &#10024; Si disfrutas nuestras clases, puedes ayudar a que más niños aprendan inglés y tengan mejores oportunidades en la vida. Tu referido también recibe un 50% de descuento en su primer pago.</p>
-          <p style='font-size: 1.3rem; font-weight: bold; color: white'>Entre más refieras, más ahorras y más ayudas.</p>
-          <p style='font-size: 0.9rem; color: white'>&#128073; Para que tu referido obtenga el descuento, debe agendar una llamada con uno de nuestros asesores</p>
-          <a href='https://www.english4kidsonline.com/amigo' target='_blank' class='referbtn'> REFIERE AQUÍ </a>
-          </div>`;
-
-  //titulo
-  const isDiagEval = // Kids Masters Level 2
-    (syllabusLower.includes("kids masters") && levelVal === 2) ||
-    // Teens Masters Level 2
-    (syllabusLower.includes("teens masters") && levelVal === 2) ||
-    // Kids Super Intensivos Level 2
-    (syllabusLower.includes("kids (super intensivo)") && levelVal === 2) ||
-    // Teens 5 horas Level 2
-    (syllabusLower.includes("teens 13-17 (5hrs/week)") && levelVal === 2) ||
-    // Juniors Level 4
-    (syllabusLower.includes("juniors") && levelVal === 4);
-
-  const tituloEvaluacion = isDiagEval
-    ? `<p class="h1">RESULTADO DE EVALUACIÓN DIAGNÓSTICA</p>`
-    : `<p class="h1">RESULTADO DE EVALUACIÓN FILTRO</p>`;
+    ? ` <!-- referal -->
+      
+          <a href="https://www.english4kidsonline.com/amigo" target="_blank"
+            style="display:inline-block; margin:0; text-decoration:none;">
+            <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Referal/referalAdults.gif"
+             alt="Refiere Aquí"
+             style="width: 100%; display:block; margin:0 auto; border:0;">
+          </a> `
+    : ` <!-- referal -->
+          <a href="https://www.english4kidsonline.com/amigo" target="_blank"
+            style="display:inline-block; margin:0; text-decoration:none;">
+            <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Referal/refKids.gif"
+             alt="Refiere Aquí"
+             style="width: 100%; display:block; margin:0 auto; border:0;">
+          </a>`;
 
   //===================================================
   // Coaching Opportunity in RC
@@ -2052,138 +2250,487 @@ function evaluatorsCopyResults() {
     </div>`;
   }
 
-  //
+  //headers & footers
+  // ---HEADERS & FOOTERS---
+
+  // Adults vs Kids assets
+  const adultsHeader =
+    "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERADULTS.png";
+  const adultsFooter =
+    "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerAdults.png";
+
+  const kidsHeader =
+    "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERKIDS.png";
+  const kidsFooter =
+    "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerKids.png";
+  const avanceMotivacionAdults = ` <!--avance -->
+  <div style="margin: 4rem 0; justify-items: center; ">
+    <table width="80%" align="center" cellspacing="0" cellpadding="0"
+      style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
+      <tr>
+        <th
+          style="font-family: Serif; font-weight: 800; text-align: center; font-size: 1.5rem; padding: 1rem; color: #126064; border-top: 1px dotted #219fa6; border-bottom: none;"
+          align="center">💫¡Estás avanzando
+          increíblemente en tu camino al inglés!💫
+        </th>
+      </tr>
+      <tr>
+        <td
+          style="font-size:0.95rem; font-family: Verdana; padding: 0.7rem 0.5rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
+          align="center">
+          <p style="font-family: Verdana; font-size:0.95rem;">
+          <p><b>Has avanzado increíblemente</b>, y en el siguiente nivel fortalecerás tu confianza, usarás
+            expresiones naturales y comprenderás conversaciones más fluidas.</p>
+          <p><b>Nuestro objetivo:</b> que aprendas inglés con seguridad y entusiasmo, abriendote puertas a nuevas
+            oportunidades.</p>
+
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>`;
+  const avanceMotivacionKids = ` <!--avance -->
+  <div style="margin: 4rem 0; justify-items: center; ">
+    <table width="80%" align="center" cellspacing="0" cellpadding="0"
+      style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
+      <tr>
+        <th
+          style="font-family: Serif; font-weight: 800; text-align: center; font-size: 1.5rem; padding: 1rem; color: #126064; border-top: 1px dotted #219fa6; border-bottom: none;"
+          align="center">💫¡Tu hijo avanza
+          increíblemente en su camino al inglés!💫
+        </th>
+      </tr>
+      <tr>
+        <td
+          style="font-size:0.95rem; font-family: Verdana; padding: 0.7rem 0.5rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
+          align="center">
+          <p style="font-family: Verdana; font-size:0.95rem;">
+          <p><b>Tu hijo/a ha avanzado increíblemente</b>, y en el siguiente nivel fortalecerá su confianza, usará
+            expresiones naturales y comprenderá conversaciones más fluidas.</p>
+          <p><b>Nuestro objetivo:</b> que aprenda inglés con seguridad y entusiasmo, abriendo puertas a nuevas
+            oportunidades.</p>
+
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>`;
+
+  const avanceMotivacionFailAdults = "";
+  const avanceMotivacionFailKids = "";
+
+  // Final selection
+  let imgHeader = syllabusLower.includes("adults") ? adultsHeader : kidsHeader;
+
+  let imgFooter = syllabusLower.includes("adults") ? adultsFooter : kidsFooter;
+
+  // let avanceMotivacion = syllabusLower.includes("adults") ? avanceMotivacionAdults : avanceMotivacionKids;
+
+  let avanceMotivacion =
+    totalScore >= 7
+      ? syllabusLower.includes("adults")
+        ? avanceMotivacionAdults
+        : avanceMotivacionKids
+      : syllabusLower.includes("adults")
+        ? avanceMotivacionFailAdults
+        : avanceMotivacionFailKids;
+
   //===================================================================
-  // ---------- final assembly ----------
-  //===================================================================
-  //
-  let reportHTML = "";
-  reportHTML += `<html lang="en">
-     <head>
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>Monthly Evaluation Results</title>
-      <!-- STYLE -->
+  //IS FILTER / ISFILTEREVAL LOGIC
+
+  const isFilterEval =
+    (syllabus === "Juniors 5-7" &&
+      [7, 9].includes(levelVal) &&
+      weekVal === 7) ||
+    (syllabus === "Kids (Intensivo) 8-12" &&
+      [2, 4, 7, 9].includes(levelVal) &&
+      weekVal === 13) ||
+    (syllabus === "Kids (Super Intensivo) 8-12" &&
+      [4, 7, 9].includes(levelVal) &&
+      weekVal === 7) ||
+    (syllabus === "Kids Master's" &&
+      [4, 8].includes(levelVal) &&
+      weekVal === 3) ||
+    (syllabus === "Kids Master's 2" &&
+      [4, 8].includes(levelVal) &&
+      weekVal === 3) ||
+    (syllabus === "Teens 13-17 (3hrs/week)" &&
+      [2, 4, 7, 9].includes(levelVal) &&
+      weekVal === 13) ||
+    (syllabus === "Teens 13-17 (5hrs/week)" &&
+      [4, 7, 9].includes(levelVal) &&
+      weekVal === 7) ||
+    (syllabus === "Teens Master's" &&
+      [4, 8].includes(levelVal) &&
+      weekVal === 3) ||
+    (syllabus === "Teens Master's 2" &&
+      [4, 8].includes(levelVal) &&
+      weekVal === 3) ||
+    (syllabus === "Adults (3hrs/week)" &&
+      [5, 8].includes(levelVal) &&
+      weekVal === 3) ||
+    (syllabus === "Adults (5hrs/week)" &&
+      [5, 8].includes(levelVal) &&
+      weekVal === 3) ||
+    (syllabus === "Adults Masters (3hrs/week)" &&
+      [5, 8].includes(levelVal) &&
+      weekVal === 3) ||
+    (syllabus === "Adults Masters (5hrs/week)" &&
+      [5, 8].includes(levelVal) &&
+      weekVal === 3);
+
+  let willLearn = [];
+  let nextFilter = "";
+
+  if (syllabus === "Juniors 5-7") {
+    if (levelVal === 7 && weekVal === 7) {
+      willLearn = ["", "", ""];
+      nextFilter = "9";
+    }
+    if (levelVal === 9 && weekVal === 7) {
+      willLearn = ["", "", ""];
+      nextFilter = "10"; // último
+    }
+  }
+
+  if (syllabus === "Kids (Intensivo) 8-12") {
+    if (levelVal === 2 && weekVal === 13) {
+      willLearn = ["Futuro Simple (Going to)", "Futuro Simple (Will)", "Pasado Simple"];
+      nextFilter = "4";
+    }
+    if (levelVal === 4 && weekVal === 13) {
+      willLearn = ["Pasado Simple", "Pasado Progresivo", "Repaso General"];
+      nextFilter = "7";
+    }
+    if (levelVal === 7 && weekVal === 13) {
+      willLearn = ["Condicionales", "Comparativos y Superlativos", "Modales"];
+      nextFilter = "9";
+    }
+    if (levelVal === 9 && weekVal === 13) {
+      willLearn = ["Presente Perfecto", "Repaso de Tiempos Gramaticales Básicos"];
+      nextFilter = "10"; // último
+    }
+  }
+
+  if (syllabus === "Kids (Super Intensivo) 8-12") {
+    if (levelVal === 4 && weekVal === 7) {
+      willLearn = ["Pasado Simple", "Pasado Progresivo", "Repaso General"];
+      nextFilter = "7";
+    }
+    if (levelVal === 7 && weekVal === 7) {
+      willLearn = ["Condicionales", "Comparativos y Superlativos", "Modales"];
+      nextFilter = "9";
+    }
+    if (levelVal === 9 && weekVal === 7) {
+      willLearn = ["Repaso de Tiempos Gramaticales Básicos"];
+      nextFilter = "10"; // último
+    }
+  }
+
+  if (syllabus === "Kids Master's") {
+    if (levelVal === 4 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "8";
+    }
+    if (levelVal === 8 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "10"; // último
+    }
+  }
+
+  if (syllabus === "Kids Master's 2") {
+    if (levelVal === 4 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "8";
+    }
+    if (levelVal === 8 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "10"; // último
+    }
+  }
+
+  if (syllabus === "Teens 13-17 (3hrs/week)") {
+    if (levelVal === 2 && weekVal === 13) {
+      willLearn = ["", "", ""];
+      nextFilter = "4";
+    }
+    if (levelVal === 4 && weekVal === 13) {
+      willLearn = ["", "", ""];
+      nextFilter = "7";
+    }
+    if (levelVal === 7 && weekVal === 13) {
+      willLearn = ["", "", ""];
+      nextFilter = "9";
+    }
+    if (levelVal === 9 && weekVal === 13) {
+      willLearn = ["", "", ""];
+      nextFilter = "10"; // último
+    }
+  }
+
+  if (syllabus === "Teens 13-17 (5hrs/week)") {
+    if (levelVal === 4 && weekVal === 7) {
+      willLearn = ["", "", ""];
+      nextFilter = "7";
+    }
+    if (levelVal === 7 && weekVal === 7) {
+      willLearn = ["", "", ""];
+      nextFilter = "9";
+    }
+    if (levelVal === 9 && weekVal === 7) {
+      willLearn = ["", "", ""];
+      nextFilter = "10"; // último
+    }
+  }
+
+  if (syllabus === "Teens Master's") {
+    if (levelVal === 4 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "8";
+    }
+    if (levelVal === 8 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "10"; // último
+    }
+  }
+
+  if (syllabus === "Teens Master's 2") {
+    if (levelVal === 4 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "8";
+    }
+    if (levelVal === 8 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "10"; // último
+    }
+  }
+
+  if (syllabus === "Adults (3hrs/week)") {
+    if (levelVal === 5 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "8";
+    }
+    if (levelVal === 8 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "12"; // último
+    }
+  }
+
+  if (syllabus === "Adults (5hrs/week)") {
+    if (levelVal === 5 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "8";
+    }
+    if (levelVal === 8 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "10"; // último
+    }
+  }
+
+  if (syllabus === "Adults Masters (3hrs/week)") {
+    if (levelVal === 5 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "8";
+    }
+    if (levelVal === 8 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "12"; // último
+    }
+  }
+
+  if (syllabus === "Adults Masters (5hrs/week)") {
+    if (levelVal === 5 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "8";
+    }
+    if (levelVal === 8 && weekVal === 3) {
+      willLearn = ["", "", ""];
+      nextFilter = "10"; // último
+    }
+  }
+
+  let loQueAprendera = ``;
+
+  if (
+    isFilterEval &&
+    (syllabus === "Kids (Intensivo) 8-12" ||
+      syllabus === "Kids (Super Intensivo) 8-12")
+  ) {
+    loQueAprendera = `<!-- lo que aprenderá -->
+      <div class="temas-dominados" style="margin: 1rem 0; justify-items: center;">
+        <table style="width: 80%; border-radius: 10%; overflow: hidden; background-color: #FCFCFA;" width="80%">
+          <thead>
+            <tr>
+              <th
+                style="font-size: 1.3rem; font-family: Verdana; font-weight: 800; color: #126064; text-align: center; padding: 1.5rem 0.5rem; border-bottom: 1px dotted #219fa6;"
+                align="center">
+                <b>
+                  <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/bell.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
+                  ¿Qué aprenderá antes del próximo nivel filtro?
+                </b>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            ${willLearn
+              .map((topic) => {
+                const topicDescription = topicBreakdown[topic] || ""; // si tienes descripciones
+                return `
+                <tr>
+                  <td
+                    style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 1.05rem; font-weight: 600; color: #126064;"
+                    align="left">
+                    &#9989; ${topic}
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="font-family: Verdana; font-weight: 500; text-align: left; padding: 0.3rem 0 1rem 13%; border-bottom: 1px dotted #DCF8FA; color: #044043; font-size: 0.9rem;"
+                    align="left">
+                    ${topicDescription}
+                  </td>
+                </tr>
+              `;
+              })
+              .join("")}
+          </tbody>
+        </table>
+      </div>`;
+
+    console.log(
+      "Filter Eval detected:",
+      syllabus,
+      "Level:",
+      levelVal,
+      "Week:",
+      weekVal,
+    );
+  }
+
+  let mapaGrande = ``;
+
+  if (
+    isFilterEval &&
+    (syllabus === "Kids (Intensivo) 8-12" ||
+      syllabus === "Kids (Super Intensivo) 8-12")
+  ) {
+    mapaGrande = ` <!--MAPA GRANDE-->
+        <div style="margin: 4rem 0; justify-items: center; ">
+          <table width="100%" align="center" cellspacing="0" cellpadding="0"
+            style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
+            <tr>
+              <th
+                style="font-size: 1.3rem; font-family: Verdana; font-weight: 800; color: #126064; text-align: center; padding: 1.5rem 0.5rem;"
+                align="center">
+                Progreso Actual
+              </th>
+            </tr>
+            <tr>
+              <td
+                style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 5rem 1rem; font-size: 1.05rem; font-weight: 500; color: #126064;"
+                align="left">
+                <li>El estudiante se encuentra en el <b>nivel ${levelVal}</b>.</li>
+                <li>Su próxima <b>evaluación filtro</b> será en el <b>nivel ${nextFilter}</b>.</li>
+              </td>
+            </tr></table>
+            <img src="${B_ClassPath}" style="width: 100%">
+                  </div>`;
+  }
+
+  // ---------- styles ----------
+
+  const stylesHTML = `
       <style>
-      .Evaluation-Results {
+    .Evaluation-Results {
       margin: 0 auto;
       background: linear-gradient(to bottom,
-      #f5ffff 10%,
-      #aed6d6 60%,
-      #1ca5ab 90%);
-      background-color: #1ca5ab15;
-      }
+          #f5ffff 10%,
+          #aed6d6 60%,
+          #1ca5ab 90%);
+      background-color: #f5ffff;
+      justify-items: center;
+    }
 
-      .Evaluation-Results ul {
+    .Evaluation-Results ul {
       list-style-type: circle;
-      }
+    }
 
-      .Evaluation-Results table {
+    .Evaluation-Results table {
       width: 80%;
-      }
+    }
 
-      .Evaluation-Results a {
+    .Evaluation-Results a {
       text-decoration: none;
       font-weight: bold;
       color: #147b7b;
       font-family: Verdana;
-      }
+    }
 
-      .Evaluation-Results table th {
-      font-size: clamp(0.9rem, calc(50vw * 0.1), 1.6rem);
+    .Evaluation-Results table th {
+      font-size: 1.6rem;
       font-family: Serif;
       font-weight: 800;
       color: #126064;
       text-align: center;
       padding: 1.7rem 0.5rem;
       border-bottom: 1px dotted #219fa6;
-      }
+    }
 
-      .Evaluation-Results table td {
-      font-size: clamp(0.8rem, calc(50vw * 0.06), 0.95rem);
+    .Evaluation-Results table td {
+      font-size: 0.95rem;
       font-family: Verdana;
       font-weight: 500;
       color: #305254;
-      padding: 0.9rem 0.5rem 0.9rem calc(50vw * 0.13);
+      padding: 0.9rem 0.5rem 0.9rem 6.5vw;
       border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
       text-align: left;
-      }
+    }
 
-      .Evaluation-Results p {
+    .Evaluation-Results p {
       font-family: Verdana;
-      font-size: clamp(0.8rem, calc(50vw * 0.06), 0.95rem);
-      }
+      font-size: 0.95rem;
+    }
 
-      /* =================HEADER=============== */
-      .Evaluation-Results .header {
-      background-color: #1ca5ab;
-      text-align: center;
-      height: auto;
-      width: 100%;
-      overflow: hidden;
-      border-radius: 7px;
-      }
 
-      .Evaluation-Results .logos {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem;
-      margin: 0 0 -1rem;
-      }
-
-      .Evaluation-Results .logos img {
-      height: 1.7rem;
-      }
-
-      .Evaluation-Results .header .h1 {
-      font-size: clamp(0.5rem, calc(50vw * 0.08), 1.6rem);
-      font-weight: 800;
-      font-family: Tahoma;
-      color: #ffffff;
-      padding: 1rem 0.7rem;
-      }
-
-      /* =================WELLCOME=============== */
-      .Evaluation-Results .welcome {
+    /* =================WELLCOME=============== */
+    .Evaluation-Results .welcome {
       justify-items: center;
       padding: 4rem 2rem;
       text-align: center;
       margin: 0 auto;
-      }
+    }
 
-      .Evaluation-Results .welcome .h2 {
-      font-size: clamp(1.2rem, calc(50vw * 0.15), 2.5rem);
+    .Evaluation-Results .welcome .h2 {
+      font-size: 2.5rem;
       font-weight: 800;
       color: #126064;
       font-family: Serif;
-      }
+    }
 
-      .Evaluation-Results .welcome .h3 {
-      font-size: clamp(0.7rem, calc(50vw * 0.08), 1.2rem);
+    .Evaluation-Results .welcome .h3 {
+      font-size: 1.2rem;
       font-weight: 800;
       color: #126064;
       padding-bottom: 0.8rem;
       font-family: Verdana;
-      }
+    }
 
-      .Evaluation-Results .welcome .h4 {
-      font-size: clamp(0.95rem, calc(50vw * 0.08), 1rem);
+    .Evaluation-Results .welcome .h4 {
+      font-size: 1rem;
       font-weight: 500;
       color: #126064;
       padding-bottom: 0.8rem;
       font-family: Verdana;
-      }
+    }
 
-      .Evaluation-Results .welcome p {
+    .Evaluation-Results .welcome p {
       font-weight: 400;
       color: #273030;
       padding: 0 1rem;
-      }
+    }
 
-      /* =================EMAIL BODY=============== */
-      .Evaluation-Results .email-body {
+    /* =================EMAIL BODY=============== */
+    .Evaluation-Results .email-body {
       border-radius: 20px;
       padding: 2rem 1.5rem;
       box-shadow: 0 0 15px rgb(14, 126, 134, 0.1);
@@ -2191,243 +2738,177 @@ function evaluatorsCopyResults() {
       margin: 0 auto;
       background-color: rgba(255, 255, 255, 0.95);
       max-width: 1200px;
-      }
+    }
 
-      .Evaluation-Results .resultado-global {
+    .Evaluation-Results .resultado-global {
       padding: 0 1rem;
       text-align: center;
-      }
+    }
 
-      .Evaluation-Results .resultado-global .h2 {
+    .Evaluation-Results .resultado-global .h2 {
       font-family: Serif;
       font-size: clamp(1.1rem, calc(50vw * 0.18), 2.1rem);
       font-weight: bold;
       color: #297b7f;
       text-shadow: 0 0 10px rgb(163, 225, 230, 0.15);
-      }
+    }
 
-      .Evaluation-Results .resultado-global .h3 {
+    .Evaluation-Results .resultado-global .h3 {
       font-size: clamp(0.95rem, calc(50vw * 0.1), 1.2rem);
       font-weight: 800;
       font-family: Verdana;
       color: #42757b;
       padding: 2.5rem 0;
-      }
+    }
 
-      .Evaluation-Results .resultado-global p {
+    .Evaluation-Results .resultado-global p {
       font-weight: 500;
       font-family: Verdana;
       color: #273030;
       padding: 0 1rem 0;
-      }
+    }
 
-      /* -------DESEMPEÑO POR ÁREA------- */
-      .Evaluation-Results .desempeño {
+    /* -------DESEMPEÑO POR ÁREA------- */
+    .Evaluation-Results .desempeño {
       padding: 0 1rem;
       justify-items: center;
-      }
+    }
 
-      .Evaluation-Results .desempeño table {
+    .Evaluation-Results .desempeño table {
       border-radius: 10%;
       overflow: hidden;
-      }
+    }
 
-      .Evaluation-Results .desempeño table td:first-child {
+    .Evaluation-Results .desempeño table td:first-child {
       font-weight: 500;
       color: #126064;
       text-align: center;
-      font-size: clamp(0.5rem, calc(50vw * 0.07), 1.1rem);
+      font-size: 1.1rem;
       width: 20%;
-      }
+    }
 
-      .Evaluation-Results .desempeño table td:last-child {
+    .Evaluation-Results .desempeño table td:last-child {
       font-weight: 500;
       border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
-      }
+    }
 
-      /* -------TEMAS DOMINADOS------- */
+    /* -------TEMAS DOMINADOS------- */
 
-      .Evaluation-Results .temas-dominados {
+    .Evaluation-Results .temas-dominados {
       margin: 2.8rem 0;
       justify-items: center;
-      }
+    }
 
-      .Evaluation-Results .temas-dominados table {
+    .Evaluation-Results .temas-dominados table {
       border-radius: 10%;
       overflow: hidden;
-      }
+    }
 
-      .Evaluation-Results .temas-dominados table td {
+    .Evaluation-Results .temas-dominados table td {
       color: #044043;
       text-align: left;
-      }
+    }
 
-      .Evaluation-Results .temas-reforzar {
+    .Evaluation-Results .temas-reforzar {
       margin: 2.8rem 0;
       justify-items: center;
-      }
+    }
 
-      .Evaluation-Results .temas-reforzar table {
+    .Evaluation-Results .temas-reforzar table {
       border-radius: 10%;
       overflow: hidden;
-      }
+    }
 
-      .Evaluation-Results .temas-reforzar table td {
+    .Evaluation-Results .temas-reforzar table td {
       color: #044043;
-      }
+    }
 
-      .Evaluation-Results .areas-oportunidad {
+    .Evaluation-Results .areas-oportunidad {
       margin: 2.8rem 0;
       justify-items: center;
-      }
+    }
 
-      .Evaluation-Results .areas-oportunidad table {
+    .Evaluation-Results .areas-oportunidad table {
       border-radius: 10%;
       overflow: hidden;
-      }
+    }
 
-      .Evaluation-Results .tema-reforzar {
+    .Evaluation-Results .tema-reforzar {
       color: #126064;
       text-align: left;
       padding: 0.9rem 0.5rem 0.9rem 1.5rem;
       border-bottom: 1px dotted rgb(18, 96, 100, 0.8);
-      }
+    }
 
-      .Evaluation-Results .reforzar-R-C {
+    .Evaluation-Results .reforzar-R-C {
       text-align: left;
       font-family: Verdana;
       color: #052729;
-      }
+    }
 
-      .Evaluation-Results .pronunciacion-reforzar {
+    .Evaluation-Results .pronunciacion-reforzar {
       margin: 2.8rem 0;
       justify-items: center;
-      }
+    }
 
-      .Evaluation-Results .pronunciacion-reforzar table {
+    .Evaluation-Results .pronunciacion-reforzar table {
       border-radius: 10%;
       overflow: hidden;
-      }
+    }
 
-      .Evaluation-Results .pronunciacion-reforzar table td {
+    .Evaluation-Results .pronunciacion-reforzar table td {
       text-align: left;
       color: #114d50;
-      }
+    }
 
-      .Evaluation-Results .pronunciacion-reforzar table tr:first-child td {
+    .Evaluation-Results .pronunciacion-reforzar table tr:first-child td {
       font-weight: 500;
       color: #355d5f;
       text-align: center;
       padding: 0.95rem 0;
-      }
+    }
+  </style>
 
-      /* =================FOOTER=============== */
-      .Evaluation-Results .footer {
-      font-family: verdana;
-      margin: 2.5rem auto;
-      padding: 2rem 0.5rem 2rem 2%;
-      width: 85%;
-      background-color: #1ca5ab30;
-      }
 
-      .Evaluation-Results .footer p {
-      font-weight: bold;
-      font-size: clamp(0.7rem, calc(50vw * 0.09), 1rem);
-      color: #dbfeff;
-      margin-bottom: -1rem;
-      }
+      `;
 
-      .Evaluation-Results .footer h5 {
-      color: #ffffff;
-      font-size: clamp(0.8rem, calc(50vw * 1.1), 1.1rem);
-      padding: 0 3rem;
-      }
+  //
+  //===================================================================
+  // ---------- final assembly ----------
+  //===================================================================
+  //
 
-      /* =================REFERIDO=============== */
-      .Evaluation-Results .Evaluator-referidos {
-      border-radius: 20px;
-      padding: 2rem 1.5rem;
-      width: 50%;
-      margin: 0 auto 4rem;
-      background-color: rgba(255, 255, 255, 0.95);
-      min-width: 300px;
-      max-width: 1000px;
-      text-align: center;
-      }
+  let reportHTML = "";
+  reportHTML += `<html lang="en">
 
-      .Evaluation-Results .Evaluator-referidos p {
-      color: #147b7b;
-      padding: auto 2rem;
-      }
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reporte de Evaluación</title>
+${stylesHTML}
+</head>
 
-      .Evaluation-Results .Evaluator-referidos .h4 {
-      font-size: 1.25rem;
-      font-weight: bold;
-      }
-
-      .Evaluation-Results .Evaluator-referidos .eval-name {
-      font-size: 1.5rem;
-      font-weight: 800;
-      }
-
-      .Evaluation-Results .Evaluator-referidos .evaluatorreferbtn {
-      background-color: #147b7b;
-      padding: 0.6rem 1.3rem;
-      border-radius: 12px;
-      font-weight: 800;
-      color: white;
-      font-size: 1.3rem;
-      margin: 1rem auto;
-      display: inline-block;
-      }
-
-      .Evaluation-Results .referidos {
-      text-align: center;
-      height: auto;
-      padding: 2rem 0;
-      font-family: Verdana;
-      background-color: #147b7b;
-      color: white;
-      width: 100%;
-      border-radius: 7px;
-      }
-
-      .Evaluation-Results .referidos p {
-      padding: 0 1.8rem;
-      }
-
-      .Evaluation-Results .referbtn {
-      display: inline-block;
-      padding: 0.6rem 1.3rem;
-      background: linear-gradient(to bottom,
-      #aed6d6 0%,
-      #ffffff 15%,
-      #ffffff 85%,
-      #aed6d6 100%);
-      background-color: white;
-      color: #147b7b;
-      text-decoration: none;
-      border-radius: 12px;
-      font-weight: 800;
-      font-size: 1.4rem;
-      }
-      </style>
-      </head>
-    <body>
+<body style="margin: 0 auto; background: linear-gradient(to bottom,
+          #f5ffff 10%,
+          #aed6d6 60%,
+          #1ca5ab 90%); background-color: white; text-align: center">
+  <div class="Evaluation-Results" style="margin: 0 auto; background: linear-gradient(to bottom,
+          #f5ffff 10%,
+          #aed6d6 60%,
+          #1ca5ab 90%); background-color: #DCF7F9;">
+    <!-- <!HEADER> -->
     <div class="Evaluation-Results">
       <!-- <!HEADER> -->
-      <div class="header">
-        <!-- <!LOGOS> -->
-        <div class="logos">
-          <img src="https://imgur.com/Qk6oytx.png" />
-          <img src="https://imgur.com/tVvbCqV.png" />
-          <img src="https://imgur.com/Duh9RGt.png" />
-          <img src="https://imgur.com/68ZykjC.png" />
-  </div>`;
-  reportHTML += tituloEvaluacion;
-  reportHTML += `</div>`;
+      <div style="
+            text-align: center;
+            background: linear-gradient(to bottom, #f5f0e6 0%, transparent 50%);
+            background-color: transparent;
+          ">
+        <img src="${imgHeader}" alt="Reporte de Evaluación" style="width: 100%; display: block; border: 0"></div>
+      `;
   reportHTML += welcomeHTML;
-  reportHTML += `<div class="email-body">`;
+  reportHTML += ` <div class="email-body"
+      style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">`;
   reportHTML += resultadoGlobal;
   reportHTML += detalleNotaHTML;
   reportHTML += desempeñoHTML;
@@ -2435,15 +2916,20 @@ function evaluatorsCopyResults() {
   reportHTML += reinforceHTML;
   reportHTML += opportunityHTML;
   reportHTML += pronunciationHTML;
+  // reportHTML += tuEsfuerzoCuenta;
   reportHTML += commentsHTML;
   reportHTML += coachingHTML;
-  reportHTML += `</div>`;
-  reportHTML += `<div class="footer">
-                    <p>Atentamente,</p>
-                    <h5>Departamento de <em>Evaluaciones</em> de English4Kids</h5>
-                    </div>`;
+  reportHTML += loQueAprendera;
+  reportHTML += mapaGrande;
+  reportHTML += avanceMotivacion;
   reportHTML += evaluatorLine;
   reportHTML += referText;
+  reportHTML += `</div>`;
+  reportHTML += `<!--FOOTER -->
+    
+          <img src="${imgFooter}"
+           style="width:100%; display:block; margin:0; padding:0; border:0;">
+        `;
   reportHTML += `</div>
                     </body>
                   </html>`;
@@ -2722,15 +3208,77 @@ function openCategory(category, clickedBtn) {
 
   // ---DATOS DE CADA CATEGORÍA---
   const categories = {
-    actions: ["Eat","Bite","Drink","Sleep","Run","Jump","Dance Macarena","Walk"],
-    sfx: ["Impostor Among Us","Buzzer","Chan Chan Chan","Claps","Correct Ding","Crickets","Hoop Ding","Horn","Huh","Sad Meow","Shock Cinematic","Tiny Violin","Victory","Vine Boom","Yipee"],
-    music: ["My Little Soda Pop","Dance-Remix", "Dynamite - BTS", "Fancy - Twice", "Jump - Blackpink", "Macarena", "Russian Roulette"],
-    animals: ["Bee","Cat","Chicken","Cow","Crow","Dinosaur","Dog","Dove","Duck","Elephant","Frog","Giraffe","Horse","Whale","Lion","Owl","Panda","Penguin","Pig","Rabbit","Raccoon","Rat","Rattlesnake","Rooster","Sheep","Tiger","Wolf","Zebra"]
+    actions: [
+      "Eat",
+      "Bite",
+      "Drink",
+      "Sleep",
+      "Run",
+      "Jump",
+      "Dance Macarena",
+      "Walk",
+    ],
+    sfx: [
+      "Impostor Among Us",
+      "Buzzer",
+      "Chan Chan Chan",
+      "Claps",
+      "Correct Ding",
+      "Crickets",
+      "Hoop Ding",
+      "Horn",
+      "Huh",
+      "Sad Meow",
+      "Shock Cinematic",
+      "Tiny Violin",
+      "Victory",
+      "Vine Boom",
+      "Yipee",
+    ],
+    music: [
+      "My Little Soda Pop",
+      "Dance-Remix",
+      "Dynamite - BTS",
+      "Fancy - Twice",
+      "Jump - Blackpink",
+      "Macarena",
+      "Russian Roulette",
+    ],
+    animals: [
+      "Bee",
+      "Cat",
+      "Chicken",
+      "Cow",
+      "Crow",
+      "Dinosaur",
+      "Dog",
+      "Dove",
+      "Duck",
+      "Elephant",
+      "Frog",
+      "Giraffe",
+      "Horse",
+      "Whale",
+      "Lion",
+      "Owl",
+      "Panda",
+      "Penguin",
+      "Pig",
+      "Rabbit",
+      "Raccoon",
+      "Rat",
+      "Rattlesnake",
+      "Rooster",
+      "Sheep",
+      "Tiger",
+      "Wolf",
+      "Zebra",
+    ],
   };
 
   // Crear HTML dinámicamente según categoría
   let html = '<section class="press-button">';
-  categories[category].forEach(name => {
+  categories[category].forEach((name) => {
     // convertir a minúsculas y reemplazar caracteres especiales para el archivo
     let fileName = name.toLowerCase().replace(/ /g, " ");
     let folder = category.charAt(0).toUpperCase() + category.slice(1); // Actions, SFX, Music, Animals
@@ -2741,7 +3289,7 @@ function openCategory(category, clickedBtn) {
       </div>
     `;
   });
-  html += '</section>';
+  html += "</section>";
 
   // Insertar HTML al nuevo div
   categoryDiv.innerHTML = html;
@@ -2749,7 +3297,6 @@ function openCategory(category, clickedBtn) {
   // Agregar el nuevo div al soundboard
   soundboard.appendChild(categoryDiv);
 }
-
 
 // ---Cerrar si se hace clic fuera---
 function handleOutsideClick(e) {
@@ -2762,7 +3309,6 @@ function handleOutsideClick(e) {
     closeSoundboard();
   }
 }
-
 
 // Array global para controlar todos los audios activos
 let activeAudios = [];
@@ -2790,19 +3336,19 @@ function playSound(button) {
 
   // Cuando el audio termina, se elimina del array
   audio.addEventListener("ended", () => {
-    activeAudios = activeAudios.filter(a => a !== audio);
+    activeAudios = activeAudios.filter((a) => a !== audio);
 
     // Si no quedan audios, eliminamos el botón de stop
     if (activeAudios.length === 0) {
       const stopBtn = document.getElementById("stop-all-btn");
       if (stopBtn) {
-          stopBtn.classList.remove("slide-in");
-          stopBtn.classList.add("slide-out");
+        stopBtn.classList.remove("slide-in");
+        stopBtn.classList.add("slide-out");
 
-          stopBtn.addEventListener(
+        stopBtn.addEventListener(
           "animationend",
           () => {
-              stopBtn.remove();
+            stopBtn.remove();
             document.getElementById("soundboardBtn").style.display = "flex";
             document.removeEventListener("click", handleOutsideClick);
           },
@@ -2815,7 +3361,7 @@ function playSound(button) {
 
 // ---STOP ALL SOUNDS---
 function stopAllSounds() {
-  activeAudios.forEach(audio => {
+  activeAudios.forEach((audio) => {
     audio.pause();
     audio.currentTime = 0; // Reiniciar al inicio
   });
@@ -2825,9 +3371,6 @@ function stopAllSounds() {
   const stopBtn = document.getElementById("stop-all-btn");
   if (stopBtn) stopBtn.remove();
 }
-
-
-
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
