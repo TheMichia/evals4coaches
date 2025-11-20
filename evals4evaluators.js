@@ -1,7 +1,7 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "1.3.0";
-  //new format
+  const versionnum = "1.3.3";
+  //new format-exclude unfinished class paths- change later for paths done
   const E4EjsonVersion = 1.1;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
@@ -1791,46 +1791,76 @@ async function evaluatorsCopyResults() {
 
   const B_ClassPath = `https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/B-CP_${classPathLvl}_A${levelVal}.png`;
 
-  const resultado_global_pass_normal = ` 
+// --- RESULTADO GLOBAL
   
+  let resultado_global_pass_normal = `
+    <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
+  `;
+
+  if (
+    syllabus === "Kids (Intensivo) 8-12" ||
+    syllabus === "Kids (Super Intensivo) 8-12"
+  ) {
+    resultado_global_pass_normal += `
+      <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
+    `;
+  }
+
+  resultado_global_pass_normal += `
+    <p
+      style="font-weight: bold; font-family: Verdana; font-size: 0.85rem; color: #506d6d; margin: 0 0 0.5rem 0; padding: 0 1rem 2.8rem;">
+      ${syllabusVal} | Nivel ${levelVal}
+    </p>
+
+    <p
+      style="padding: 0 1rem 0; font-size: 2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
+      Evaluación Aprobada
+    </p>
+
+    <p class="h3"
+      style="font-size: 1.2rem; font-weight: 800; font-family: Verdana; color: #42757b; padding: 2.5rem 0;">
+      &#127881;¡Felicidades!&#127881; <br>
+      Se está avanzando a un excelente ritmo.
+    </p>
+
+    <p style="font-size:0.95rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana;">
+      A continuación un informe detallado de la evaluación:
+    </p>
+  </div>
+  `;
+
+
+  
+ let resultado_global_fail_normal = `
   <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
-        <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem">
-        <p
-          style="font-weight: bold; font-family: Verdana; font-size: 0.85rem; color: #506d6d; margin: 0 0 0.5rem 0; padding: 0 1rem 2.8rem;">
-          ${syllabusVal} | Nivel ${levelVal}
-        </p>
-        <p
-          style="padding: 0 1rem 0; font-size: 2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
-          Evaluación Aprobada
-        </p>
-        <p class="h3"
-          style="font-size: 1.2rem; font-weight: 800; font-family: Verdana; color: #42757b; padding: 2.5rem 0;">
-          &#127881;¡Felicidades!&#127881; <br>
-            Se está avanzando a un excelente ritmo.
-        </p>
-        <p style="font-size:0.95rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana;">
-          A continuación un informe detallado de la evaluación:
-        </p>
-      </div>`;
-  const resultado_global_fail_normal = `
-  <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
-        <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem">
-        <p
-          style="font-weight: bold; font-family: Verdana; font-size: 0.85rem; color: #506d6d; margin: 0 0 0.5rem 0; padding: 0 1rem 2.8rem;">
-          ${syllabusVal} | Nivel ${levelVal}
-        </p>
-        <p
-          style="padding: 0 1rem 0; font-size: 2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
-          Evaluación No Satisfactoria
-        </p>
-        <p class="h3"
-          style="font-size: 1.2rem; font-weight: 800; font-family: Verdana; color: #42757b; padding: 2.5rem 0;">
-          Aunque aún no se ha alcanzado el objetivo, el esfuerzo cuenta y seguiremos avanzando juntos.
-        </p>
-        <p style="font-size:0.95rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana;">
-          A continuación un informe detallado de la evaluación:
-        </p>
-      </div>`;
+`;
+
+if (
+  syllabus === "Kids (Intensivo) 8-12" ||
+  syllabus === "Kids (Super Intensivo) 8-12"
+) {
+  resultado_global_fail_normal += `
+    <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
+  `;
+}
+
+resultado_global_fail_normal += `
+  <p
+    style="padding: 0 1rem 0; font-size: 2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
+    Evaluación No Satisfactoria
+  </p>
+
+  <p class="h3"
+    style="font-size: 1.2rem; font-weight: 800; font-family: Verdana; color: #42757b; padding: 2.5rem 0;">
+    Aunque aún no se ha alcanzado el objetivo, el esfuerzo cuenta y seguiremos avanzando juntos.
+  </p>
+
+  <p style="font-size:0.95rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana;">
+    A continuación un informe detallado de la evaluación:
+  </p>
+</div>
+`;
+
 
   // ---------- SHOW NOTA FINAL for Exit (only if not juniors) ----------
   let detalleNotaHTML = "";
@@ -2384,11 +2414,11 @@ async function evaluatorsCopyResults() {
 
   if (syllabus === "Juniors 5-7") {
     if (levelVal === 7 && weekVal === 7) {
-      willLearn = ["", "", ""];
+      willLearn = ["Futuro Simple (Going to)", "Futuro Simple (Will)", "Repaso de Tiempos Gramaticales Básicos"];
       nextFilter = "9";
     }
     if (levelVal === 9 && weekVal === 7) {
-      willLearn = ["", "", ""];
+      willLearn = ["Repaso de Tiempos Gramaticales Básicos"];
       nextFilter = "10"; // último
     }
   }
@@ -2429,101 +2459,101 @@ async function evaluatorsCopyResults() {
 
   if (syllabus === "Kids Master's") {
     if (levelVal === 4 && weekVal === 3) {
-      willLearn = ["", "", ""];
+      willLearn = ["Superlativos", "Presente Perfecto", "Presente Perfecto Progresivo"];
       nextFilter = "8";
     }
     if (levelVal === 8 && weekVal === 3) {
-      willLearn = ["", "", ""];
+      willLearn = ["Repaso de Tiempos Gramaticales Básicos"];
       nextFilter = "10"; // último
     }
   }
 
   if (syllabus === "Kids Master's 2") {
     if (levelVal === 4 && weekVal === 3) {
-      willLearn = ["", "", ""];
+      willLearn = ["Presente Perfecto Progresivo", "Repaso de Tiempos Gramaticales Básicos"];
       nextFilter = "8";
     }
     if (levelVal === 8 && weekVal === 3) {
-      willLearn = ["", "", ""];
+      willLearn = ["Futuro Perfecto", "Modales perfectos", "Repaso de Tiempos Gramaticales Básicos"];
       nextFilter = "10"; // último
     }
   }
 
   if (syllabus === "Teens 13-17 (3hrs/week)") {
     if (levelVal === 2 && weekVal === 13) {
-      willLearn = ["", "", ""];
+      willLearn = ["Pasado Simple", "Pasado Progresivo", "Repaso de Tiempos Gramaticales Básicos"];
       nextFilter = "4";
     }
     if (levelVal === 4 && weekVal === 13) {
-      willLearn = ["", "", ""];
+      willLearn = ["Modales", "Condicionales", "Comparativos y Superlativos"];
       nextFilter = "7";
     }
     if (levelVal === 7 && weekVal === 13) {
-      willLearn = ["", "", ""];
+      willLearn = ["Presente Perfecto", "Repaso General"];
       nextFilter = "9";
     }
     if (levelVal === 9 && weekVal === 13) {
-      willLearn = ["", "", ""];
+      willLearn = ["Presente Perfecto Progresivo", "Repaso General"];
       nextFilter = "10"; // último
     }
   }
 
   if (syllabus === "Teens 13-17 (5hrs/week)") {
     if (levelVal === 4 && weekVal === 7) {
-      willLearn = ["", "", ""];
+      willLearn = ["Modales", "Condicionales", "Comparativos y Superlativos"];
       nextFilter = "7";
     }
     if (levelVal === 7 && weekVal === 7) {
-      willLearn = ["", "", ""];
+      willLearn = ["Presente Perfecto", "Repaso General"];
       nextFilter = "9";
     }
     if (levelVal === 9 && weekVal === 7) {
-      willLearn = ["", "", ""];
+      willLearn = ["Presente Perfecto Progresivo", "Repaso de Tiempos Gramaticales Básicos"];
       nextFilter = "10"; // último
     }
   }
 
   if (syllabus === "Teens Master's") {
     if (levelVal === 4 && weekVal === 3) {
-      willLearn = ["", "", ""];
+      willLearn = ["Superlativos", "Presente Perfecto", "Presente Perfecto Progresivo"];
       nextFilter = "8";
     }
     if (levelVal === 8 && weekVal === 3) {
-      willLearn = ["", "", ""];
+      willLearn = ["Futuro Perfecto", "Repaso de Tiempos Gramaticales Básicos"];
       nextFilter = "10"; // último
     }
   }
 
   if (syllabus === "Teens Master's 2") {
     if (levelVal === 4 && weekVal === 3) {
-      willLearn = ["", "", ""];
+      willLearn = ["Superlativos", "Presente Perfecto", "Presente Perfecto Progresivo"];
       nextFilter = "8";
     }
     if (levelVal === 8 && weekVal === 3) {
-      willLearn = ["", "", ""];
+      willLearn = ["Futuro Perfecto", "Repaso de Tiempos Gramaticales Básicos"];
       nextFilter = "10"; // último
     }
   }
 
   if (syllabus === "Adults (3hrs/week)") {
     if (levelVal === 5 && weekVal === 3) {
-      willLearn = ["", "", ""];
+      willLearn = ["Pasado Progresivo", "Pasado Simple", "Repaso General"];
       nextFilter = "8";
     }
     if (levelVal === 8 && weekVal === 3) {
-      willLearn = ["", "", ""];
+      willLearn = ["Modales: Can / Should", "Comparativos y Superlativos", "Repaso General"];
       nextFilter = "12"; // último
     }
   }
 
   if (syllabus === "Adults (5hrs/week)") {
     if (levelVal === 5 && weekVal === 3) {
-      willLearn = ["", "", ""];
+      willLearn = ["Pasado Progresivo", "Pasado Simple", "Repaso General"];
       nextFilter = "8";
     }
     if (levelVal === 8 && weekVal === 3) {
-      willLearn = ["", "", ""];
-      nextFilter = "10"; // último
+      willLearn = ["Modales: Can / Should", "Comparativos y Superlativos", "Repaso General"];
+      nextFilter = "12"; // último
     }
   }
 
@@ -2553,8 +2583,8 @@ async function evaluatorsCopyResults() {
 
   if (
     isFilterEval &&
-    (syllabus === "Kids (Intensivo) 8-12" ||
-      syllabus === "Kids (Super Intensivo) 8-12")
+    syllabus !== "Adults Masters (3hrs/week)" &&
+    syllabus !== "Adults Masters (5hrs/week)"
   ) {
     loQueAprendera = `<!-- lo que aprenderá -->
       <div class="temas-dominados" style="margin: 1rem 0; justify-items: center;">
@@ -2607,35 +2637,41 @@ async function evaluatorsCopyResults() {
     );
   }
 
-  let mapaGrande = ``;
+let mapaGrande = ``;
 
+if (isFilterEval) {
+  mapaGrande = `<!--MAPA GRANDE-->
+    <div style="margin: 4rem 0; justify-items: center;">
+      <table width="100%" align="center" cellspacing="0" cellpadding="0"
+        style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
+        <tr>
+          <th
+            style="font-size: 1.3rem; font-family: Verdana; font-weight: 800; color: #126064; text-align: center; padding: 1.5rem 0.5rem;"
+            align="center">
+            Progreso Actual
+          </th>
+        </tr>
+        <tr>
+          <td
+            style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 5rem 1rem; font-size: 1.05rem; font-weight: 500; color: #126064;"
+            align="left">
+            <li>El estudiante se encuentra en el <b>nivel ${levelVal}</b>.</li>
+            <li>Su próxima <b>evaluación filtro</b> será en el <b>nivel ${nextFilter}</b>.</li>
+          </td>
+        </tr>
+      </table>
+  `;
+
+  // Imagen SOLO para Kids Intensivo + Super Intensivo
   if (
-    isFilterEval &&
-    (syllabus === "Kids (Intensivo) 8-12" ||
-      syllabus === "Kids (Super Intensivo) 8-12")
+    syllabus === "Kids (Intensivo) 8-12" ||
+    syllabus === "Kids (Super Intensivo) 8-12"
   ) {
-    mapaGrande = ` <!--MAPA GRANDE-->
-        <div style="margin: 4rem 0; justify-items: center; ">
-          <table width="100%" align="center" cellspacing="0" cellpadding="0"
-            style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
-            <tr>
-              <th
-                style="font-size: 1.3rem; font-family: Verdana; font-weight: 800; color: #126064; text-align: center; padding: 1.5rem 0.5rem;"
-                align="center">
-                Progreso Actual
-              </th>
-            </tr>
-            <tr>
-              <td
-                style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 5rem 1rem; font-size: 1.05rem; font-weight: 500; color: #126064;"
-                align="left">
-                <li>El estudiante se encuentra en el <b>nivel ${levelVal}</b>.</li>
-                <li>Su próxima <b>evaluación filtro</b> será en el <b>nivel ${nextFilter}</b>.</li>
-              </td>
-            </tr></table>
-            <img src="${B_ClassPath}" style="width: 100%">
-                  </div>`;
+    mapaGrande += `<img src="${B_ClassPath}" style="width: 100%;">`;
   }
+
+  mapaGrande += `</div>`;
+}
 
   // ---------- styles ----------
 
