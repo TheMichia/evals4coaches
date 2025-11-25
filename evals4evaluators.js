@@ -1,7 +1,7 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "1.4.0";
-  //completed formated for all syllabus, filter and normal evals
+  const versionnum = "1.4.1";
+  //added format for absent
   const E4EjsonVersion = 1.1;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
@@ -681,13 +681,12 @@ function absentsE4E() {
 
   if (syllabus.startsWith("Adults")) {
     // ---- mensaje para estudiante ----
-    message = `
-<html lang="en">
+    message = `<html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Resultado de Evaluación Filtro</title>
+  <title>Reporte de evaluación</title>
   <!-- STYLE -->
 
 </head>
@@ -710,10 +709,11 @@ function absentsE4E() {
           background: linear-gradient(to bottom, #f5f0e6 0%, transparent 50%);
           background-color: transparent;
         ">
-      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Evaluaci%C3%B3n%20Filtro/filterEvalBannersAdults.png" alt="Resultado - Evaluación Filtro" style="width: 100%; display: block; border: 0">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERADULTS.png" alt="Resultado - Evaluación Filtro" style="width: 100%; display: block; border: 0">
     </div>
-    <div class="welcome" style="justify-items: center; padding: 4rem 2rem; text-align: center; margin: 0 auto;">
-      <p class="h2" style="padding: 0 1rem; font-size: 2.5rem; font-weight: 800; color: #126064; font-family: Serif;">
+    <div class="welcome" style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
+      <p class="h2"
+        style="padding: 0 1rem; font-size: 2.5rem; font-weight: 800; color: #126064; font-family: Serif; margin: 0;">
         Estimado estudiante,</p>
       <!-- &#x1F31F; -->
       <p class="h3"
@@ -724,12 +724,12 @@ function absentsE4E() {
       style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
       <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
         <p
-          style="padding: 4rem 1rem 0; font-size: 1.5rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
-          Te informamos que
+          style="padding: 1rem 1rem 0; font-size: 1.2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
+          Te informamos que:
         </p>
         <p
           style="padding: 0 1rem 0; font-family: Verdana; font-weight: bold; color: #297b7f; font-size: 1.5rem; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.5rem;">
-          no asististe a tu evaluación filtro
+          No asististe a tu evaluación filtro.
         </p>
         <p
           style="font-size: 1.1rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana; MARGIN: 1rem 0;">
@@ -747,7 +747,7 @@ function absentsE4E() {
             <th
               style="font-weight: 800; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 1.15rem; padding: 1rem; color: #126064; border: none; font-family: verdana;"
               align="center">
-              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
+              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
               Para evitar retrocesos en tu progreso, te solicitamos
               <b>reagendar la evaluación lo antes posible</b>
             </th>
@@ -803,48 +803,26 @@ function absentsE4E() {
           </tr>
         </table>
       </div>
+      <!-- referal -->
+      <a href="https://www.english4kidsonline.com/amigo" target="_blank"
+        style="display:inline-block; margin:0; text-decoration:none;">
+        <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Referal/referalAdults.gif"
+             alt="Refiere Aquí"
+             style="width: 100%; display:block; margin:0 auto; border:0;">
+      </a>
     </div>
     <!-- FOOTER -->
     <div style="
           text-align: center;
           margin: 0;
-          padding: 7rem 0 0 0;
+          padding: 2rem 0 0 0;
           width: 100%;
           font-family: Verdana;
           text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         ">
-      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Footer/footerEvaluatorsAdults.png" alt="Atentamente, equipo de English4Kids" style="width: 100%; display: block; border: 0">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerAdults.png" alt="Atentamente, equipo de English4Adults" style="width: 100%; display: block; border: 0">
 
-    </div>
-    <!-- REFERIDOS -->
-    <div class="referidos"
-      style="text-align: center; height: auto; padding: 2rem 0; font-family: Verdana; background-color: #147b7b; width: 100%; border-radius: 7px; color: white;">
-      <p style="font-family: Verdana; padding: 0 1.8rem; font-weight: bold; font-size: 1.3rem; color: white;">
-        Refiere a otros padres y obtén un 50% de descuento por cada referido
-        que se inscriba.
-      </p>
-      <p style="font-family: Verdana; padding: 0 1.8rem; font-size: 0.9rem; color: white;">
-        &#129490; &#10024; Si disfrutas nuestras clases, puedes ayudar a que
-        más niños aprendan inglés y tengan mejores oportunidades en la vida.
-        Tu referido también recibe un 50% de descuento en su primer pago.
-      </p>
-      <p style="font-family: Verdana; padding: 0 1.8rem; font-size: 1.3rem; font-weight: bold; color: white;">
-        Entre más refieras, más ahorras y más ayudas.
-      </p>
-      <p style="font-family: Verdana; padding: 0 1.8rem; font-size: 0.9rem; color: white;">
-        &#128073; Para que tu referido obtenga el descuento, debe agendar una
-        llamada con uno de nuestros asesores
-      </p>
-      <a href="https://www.english4kidsonline.com/amigo" target="_blank" class="referbtn"
-        style="font-family: Verdana; display: inline-block; padding: 0.6rem 1.3rem; background: linear-gradient(
-          to bottom,
-          #aed6d6 0%,
-          #ffffff 15%,
-          #ffffff 85%,
-          #aed6d6 100%
-        ); background-color: white; color: #147b7b; text-decoration: none; border-radius: 12px; font-weight: 800; font-size: 1.4rem;">
-        REFIERE AQUÍ
-      </a>
+
     </div>
   </div>
 </body>
@@ -853,13 +831,12 @@ function absentsE4E() {
     `;
   } else {
     // ---- mensaje para padres ----
-    message = `
-<html lang="en">
+    message = `<html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Resultado de Evaluación Filtro</title>
+  <title>Reporte de evaluación</title>
   <!-- STYLE -->
 
 </head>
@@ -882,10 +859,11 @@ function absentsE4E() {
           background: linear-gradient(to bottom, #f5f0e6 0%, transparent 50%);
           background-color: transparent;
         ">
-      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Evaluaci%C3%B3n%20Filtro/filterEvalBannersKids.png" alt="Resultado - Evaluación Filtro" style="width: 100%; display: block; border: 0">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERKIDS.png" alt="Resultado - Evaluación Filtro" style="width: 100%; display: block; border: 0">
     </div>
-    <div class="welcome" style="justify-items: center; padding: 4rem 2rem; text-align: center; margin: 0 auto;">
-      <p class="h2" style="padding: 0 1rem; font-size: 2.5rem; font-weight: 800; color: #126064; font-family: Serif;">
+    <div class="welcome" style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
+      <p class="h2"
+        style="padding: 0 1rem; font-size: 2.5rem; font-weight: 800; color: #126064; font-family: Serif; margin: 0;">
         Estimado padre/madre de familia,</p>
       <!-- &#x1F31F; -->
       <p class="h3"
@@ -896,12 +874,12 @@ function absentsE4E() {
       style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
       <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
         <p
-          style="padding: 4rem 1rem 0; font-size: 1.5rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
-          Te informamos que tu hijo/a
+          style="padding: 1rem 1rem 0; font-size: 1.2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
+          Te informamos que:
         </p>
         <p
           style="padding: 0 1rem 0; font-family: Verdana; font-weight: bold; color: #297b7f; font-size: 1.5rem; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.5rem;">
-          no asististió a su evaluación filtro
+          Tu hijo/a no asististió a su evaluación filtro.
         </p>
         <p
           style="font-size: 1.1rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana; MARGIN: 1rem 0;">
@@ -919,7 +897,7 @@ function absentsE4E() {
             <th
               style="font-weight: 800; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 1.15rem; padding: 1rem; color: #126064; border: none; font-family: verdana;"
               align="center">
-              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
+              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="height: 2.5rem; margin-right: 0.2rem"></span>
               Para evitar retrocesos en su progreso, te solicitamos
               <b>reagendar la evaluación lo antes posible</b>
             </th>
@@ -982,50 +960,27 @@ function absentsE4E() {
             </td>
           </tr>
         </table>
+        <!-- referal -->
+        <a href="https://www.english4kidsonline.com/amigo" target="_blank"
+          style="display:inline-block; margin:0; text-decoration:none;">
+          <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Referal/refKids.gif"
+             alt="Refiere Aquí"
+             style="width: 100%; display:block; margin:0 auto; border:0;">
+        </a>
       </div>
     </div>
     <!-- FOOTER -->
     <div style="
           text-align: center;
           margin: 0;
-          padding: 7rem 0 0 0;
+          padding: 2rem 0 0 0;
           width: 100%;
           font-family: Verdana;
           text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         ">
-      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/Material%20Evaluaci%C3%B3nes/Footer/footerEvaluatorsKids.png" alt="Atentamente, equipo de English4Kids" style="width: 100%; display: block; border: 0">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerKids.png" alt="Atentamente, equipo de English4Kids" style="width: 100%; display: block; border: 0">
 
 
-    </div>
-    <!-- REFERIDOS -->
-    <div class="referidos"
-      style="text-align: center; height: auto; padding: 2rem 0; font-family: Verdana; background-color: #147b7b; width: 100%; border-radius: 7px; color: white;">
-      <p style="font-family: Verdana; padding: 0 1.8rem; font-weight: bold; font-size: 1.3rem; color: white;">
-        Refiere a otros padres y obtén un 50% de descuento por cada referido
-        que se inscriba.
-      </p>
-      <p style="font-family: Verdana; padding: 0 1.8rem; font-size: 0.9rem; color: white;">
-        &#129490; &#10024; Si disfrutas nuestras clases, puedes ayudar a que
-        más niños aprendan inglés y tengan mejores oportunidades en la vida.
-        Tu referido también recibe un 50% de descuento en su primer pago.
-      </p>
-      <p style="font-family: Verdana; padding: 0 1.8rem; font-size: 1.3rem; font-weight: bold; color: white;">
-        Entre más refieras, más ahorras y más ayudas.
-      </p>
-      <p style="font-family: Verdana; padding: 0 1.8rem; font-size: 0.9rem; color: white;">
-        &#128073; Para que tu referido obtenga el descuento, debe agendar una
-        llamada con uno de nuestros asesores
-      </p>
-      <a href="https://www.english4kidsonline.com/amigo" target="_blank" class="referbtn"
-        style="font-family: Verdana; display: inline-block; padding: 0.6rem 1.3rem; background: linear-gradient(
-          to bottom,
-          #aed6d6 0%,
-          #ffffff 15%,
-          #ffffff 85%,
-          #aed6d6 100%
-        ); background-color: white; color: #147b7b; text-decoration: none; border-radius: 12px; font-weight: 800; font-size: 1.4rem;">
-        REFIERE AQUÍ
-      </a>
     </div>
   </div>
 </body>
