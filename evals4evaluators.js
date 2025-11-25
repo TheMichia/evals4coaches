@@ -1,7 +1,7 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "1.3.4";
-  //new format-exclude unfinished class paths- change later for paths done --REMOVED EMOJIS FOR UNICODE
+  const versionnum = "1.4.0";
+  //completed formated for all syllabus, filter and normal evals
   const E4EjsonVersion = 1.1;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
@@ -1760,54 +1760,69 @@ async function evaluatorsCopyResults() {
         Esperamos que estés teniendo una excelente semana</p>
     </div>
     `;
-  //---CLASS PATHS
-  // Helper: check if syllabus contains ANY of these strings
-  const includesAny = (text, arr) =>
-    arr.some((item) => text.includes(item.toLowerCase()));
+  // Class Paths
+ // Helper
+const includesAny = (text, arr) =>
+  arr.some((item) => text.includes(item.toLowerCase()));
 
-  // Define groups
-  const groupAdults = ["adults (3hrs/week)", "adults masters (3hrs/week)"];
-
-  const groupKidsTeens = [
-    "kids (intensivo) 8-12",
-    "kids (super intensivo) 8-12",
-    "teens 13-17 (3hrs/week)",
-    "teens 13-17 (5hrs/week)",
-  ];
-
-  let classPathLvl;
-
-  // Logic
-  if (includesAny(syllabusLower, groupAdults)) {
-    classPathLvl = "0-12";
-  } else if (includesAny(syllabusLower, groupKidsTeens)) {
-    classPathLvl = "0-10";
-  } else {
-    classPathLvl = "1-10";
+// Mapping centralizado
+const classGroups = [
+  {
+    match: ["kids (super intensivo) 8-12", "teens 13-17 (3hrs/week)"],
+    B: "SI_0-10",
+    S: "0-10",
+  },
+  {
+    match: ["kids (intensivo) 8-12", "teens 13-17 (3hrs/week)"],
+    B: "I_0-10",
+    S: "0-10",
+  },
+  {
+    match: ["juniors 5-7"],
+    B: "J_1-10",
+    S: "1-10",
+  },
+  {
+    match: ["kids masters", "kids masters 20", "teens masters", "teens masters 2"],
+    B: "M_1-10",
+    S: "1-10",
+  },
+  {
+    match: ["adults (5hrs/week)", "adults masters (5hrs/week)"],
+    B: "A5_1-10",
+    S: "1-10",
+  },
+  {
+    match: ["adults (3hrs/week)", "adults masters (3hrs/week)"],
+    B: "A3_1-12",
+    S: "1-12",
   }
+];
+
+let SclassPathLvl = null;
+let BclassPathLvl = null;
+
+// Resolver
+for (const group of classGroups) {
+  if (includesAny(syllabusLower, group.match)) {
+    BclassPathLvl = group.B;
+    SclassPathLvl = group.S;
+    break;
+  }
+}
+
 
   // Final URLs
-  const S_ClassPath = `https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/S-CP_${classPathLvl}_A${levelVal}.png`;
+  const S_ClassPath = `https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/S-CP_${SclassPathLvl}_A${levelVal}.png`;
 
-  const B_ClassPath = `https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/B-CP_${classPathLvl}_A${levelVal}.png`;
+  const B_ClassPath = `https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/B-CP_${BclassPathLvl}_A${levelVal}.png`;
 
-// --- RESULTADO GLOBAL
-  
+  // --- RESULTADO GLOBAL
+
   let resultado_global_pass_normal = `
     <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
-  `;
-
-  if (
-    syllabus === "Kids (Intensivo) 8-12" ||
-    syllabus === "Kids (Super Intensivo) 8-12"
-  ) {
-    resultado_global_pass_normal += `
-      <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
-    `;
-  }
-
-  resultado_global_pass_normal += `
-    <p
+        <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
+       <p
       style="font-weight: bold; font-family: Verdana; font-size: 0.85rem; color: #506d6d; margin: 0 0 0.5rem 0; padding: 0 1rem 2.8rem;">
       ${syllabusVal} | Nivel ${levelVal}
     </p>
@@ -1829,23 +1844,10 @@ async function evaluatorsCopyResults() {
   </div>
   `;
 
-
-  
- let resultado_global_fail_normal = `
+  let resultado_global_fail_normal = `
   <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
-`;
-
-if (
-  syllabus === "Kids (Intensivo) 8-12" ||
-  syllabus === "Kids (Super Intensivo) 8-12"
-) {
-  resultado_global_fail_normal += `
     <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
-  `;
-}
-
-resultado_global_fail_normal += `
-  <p
+   <p
     style="padding: 0 1rem 0; font-size: 2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
     Evaluación No Satisfactoria
   </p>
@@ -1860,7 +1862,6 @@ resultado_global_fail_normal += `
   </p>
 </div>
 `;
-
 
   // ---------- SHOW NOTA FINAL for Exit (only if not juniors) ----------
   let detalleNotaHTML = "";
@@ -2414,7 +2415,11 @@ resultado_global_fail_normal += `
 
   if (syllabus === "Juniors 5-7") {
     if (levelVal === 7 && weekVal === 7) {
-      willLearn = ["Futuro Simple (Going to)", "Futuro Simple (Will)", "Repaso de Tiempos Gramaticales Básicos"];
+      willLearn = [
+        "Futuro Simple (Going to)",
+        "Futuro Simple (Will)",
+        "Repaso de Tiempos Gramaticales Básicos",
+      ];
       nextFilter = "9";
     }
     if (levelVal === 9 && weekVal === 7) {
@@ -2425,7 +2430,11 @@ resultado_global_fail_normal += `
 
   if (syllabus === "Kids (Intensivo) 8-12") {
     if (levelVal === 2 && weekVal === 13) {
-      willLearn = ["Futuro Simple (Going to)", "Futuro Simple (Will)", "Pasado Simple"];
+      willLearn = [
+        "Futuro Simple (Going to)",
+        "Futuro Simple (Will)",
+        "Pasado Simple",
+      ];
       nextFilter = "4";
     }
     if (levelVal === 4 && weekVal === 13) {
@@ -2437,7 +2446,10 @@ resultado_global_fail_normal += `
       nextFilter = "9";
     }
     if (levelVal === 9 && weekVal === 13) {
-      willLearn = ["Presente Perfecto", "Repaso de Tiempos Gramaticales Básicos"];
+      willLearn = [
+        "Presente Perfecto",
+        "Repaso de Tiempos Gramaticales Básicos",
+      ];
       nextFilter = "10"; // último
     }
   }
@@ -2459,7 +2471,11 @@ resultado_global_fail_normal += `
 
   if (syllabus === "Kids Master's") {
     if (levelVal === 4 && weekVal === 3) {
-      willLearn = ["Superlativos", "Presente Perfecto", "Presente Perfecto Progresivo"];
+      willLearn = [
+        "Superlativos",
+        "Presente Perfecto",
+        "Presente Perfecto Progresivo",
+      ];
       nextFilter = "8";
     }
     if (levelVal === 8 && weekVal === 3) {
@@ -2470,18 +2486,29 @@ resultado_global_fail_normal += `
 
   if (syllabus === "Kids Master's 2") {
     if (levelVal === 4 && weekVal === 3) {
-      willLearn = ["Presente Perfecto Progresivo", "Repaso de Tiempos Gramaticales Básicos"];
+      willLearn = [
+        "Presente Perfecto Progresivo",
+        "Repaso de Tiempos Gramaticales Básicos",
+      ];
       nextFilter = "8";
     }
     if (levelVal === 8 && weekVal === 3) {
-      willLearn = ["Futuro Perfecto", "Modales perfectos", "Repaso de Tiempos Gramaticales Básicos"];
+      willLearn = [
+        "Futuro Perfecto",
+        "Modales perfectos",
+        "Repaso de Tiempos Gramaticales Básicos",
+      ];
       nextFilter = "10"; // último
     }
   }
 
   if (syllabus === "Teens 13-17 (3hrs/week)") {
     if (levelVal === 2 && weekVal === 13) {
-      willLearn = ["Pasado Simple", "Pasado Progresivo", "Repaso de Tiempos Gramaticales Básicos"];
+      willLearn = [
+        "Pasado Simple",
+        "Pasado Progresivo",
+        "Repaso de Tiempos Gramaticales Básicos",
+      ];
       nextFilter = "4";
     }
     if (levelVal === 4 && weekVal === 13) {
@@ -2508,14 +2535,21 @@ resultado_global_fail_normal += `
       nextFilter = "9";
     }
     if (levelVal === 9 && weekVal === 7) {
-      willLearn = ["Presente Perfecto Progresivo", "Repaso de Tiempos Gramaticales Básicos"];
+      willLearn = [
+        "Presente Perfecto Progresivo",
+        "Repaso de Tiempos Gramaticales Básicos",
+      ];
       nextFilter = "10"; // último
     }
   }
 
   if (syllabus === "Teens Master's") {
     if (levelVal === 4 && weekVal === 3) {
-      willLearn = ["Superlativos", "Presente Perfecto", "Presente Perfecto Progresivo"];
+      willLearn = [
+        "Superlativos",
+        "Presente Perfecto",
+        "Presente Perfecto Progresivo",
+      ];
       nextFilter = "8";
     }
     if (levelVal === 8 && weekVal === 3) {
@@ -2526,7 +2560,11 @@ resultado_global_fail_normal += `
 
   if (syllabus === "Teens Master's 2") {
     if (levelVal === 4 && weekVal === 3) {
-      willLearn = ["Superlativos", "Presente Perfecto", "Presente Perfecto Progresivo"];
+      willLearn = [
+        "Superlativos",
+        "Presente Perfecto",
+        "Presente Perfecto Progresivo",
+      ];
       nextFilter = "8";
     }
     if (levelVal === 8 && weekVal === 3) {
@@ -2541,7 +2579,11 @@ resultado_global_fail_normal += `
       nextFilter = "8";
     }
     if (levelVal === 8 && weekVal === 3) {
-      willLearn = ["Modales: Can / Should", "Comparativos y Superlativos", "Repaso General"];
+      willLearn = [
+        "Modales: Can / Should",
+        "Comparativos y Superlativos",
+        "Repaso General",
+      ];
       nextFilter = "12"; // último
     }
   }
@@ -2552,40 +2594,56 @@ resultado_global_fail_normal += `
       nextFilter = "8";
     }
     if (levelVal === 8 && weekVal === 3) {
-      willLearn = ["Modales: Can / Should", "Comparativos y Superlativos", "Repaso General"];
+      willLearn = [
+        "Modales: Can / Should",
+        "Comparativos y Superlativos",
+        "Repaso General",
+      ];
       nextFilter = "12"; // último
     }
   }
 
   if (syllabus === "Adults Masters (3hrs/week)") {
     if (levelVal === 5 && weekVal === 3) {
-      willLearn = ["", "", ""];
+      willLearn = [
+        "Presente Perfecto",
+        "Condicionales",
+        "Deseos (I wish / If only)",
+      ];
       nextFilter = "8";
     }
     if (levelVal === 8 && weekVal === 3) {
-      willLearn = ["", "", ""];
+      willLearn = [
+        "Used to",
+        "Deseos en Presente y Futuro (I wish / If only)",
+        "Voz Pasiva",
+      ];
       nextFilter = "12"; // último
     }
   }
 
   if (syllabus === "Adults Masters (5hrs/week)") {
     if (levelVal === 5 && weekVal === 3) {
-      willLearn = ["", "", ""];
+      willLearn = [
+        "Presente Perfecto",
+        "Condicionales",
+        "Deseos (I wish / If only)",
+      ];
       nextFilter = "8";
     }
     if (levelVal === 8 && weekVal === 3) {
-      willLearn = ["", "", ""];
-      nextFilter = "10"; // último
+      willLearn = [
+        "Used to",
+        "Deseos en Presente y Futuro (I wish / If only)",
+        "Voz Pasiva",
+      ];
+      nextFilter = "12"; // último
     }
   }
 
   let loQueAprendera = ``;
 
-  if (
-    isFilterEval &&
-    syllabus !== "Adults Masters (3hrs/week)" &&
-    syllabus !== "Adults Masters (5hrs/week)"
-  ) {
+  if (isFilterEval) {
     loQueAprendera = `<!-- lo que aprenderá -->
       <div class="temas-dominados" style="margin: 1rem 0; justify-items: center;">
         <table style="width: 80%; border-radius: 10%; overflow: hidden; background-color: #FCFCFA;" width="80%">
@@ -2637,10 +2695,9 @@ resultado_global_fail_normal += `
     );
   }
 
-let mapaGrande = ``;
+  let mapaGrande = ``;
 
-if (isFilterEval) {
-  mapaGrande = `<!--MAPA GRANDE-->
+    mapaGrande = `<!--MAPA GRANDE-->
     <div style="margin: 4rem 0; justify-items: center;">
       <table width="100%" align="center" cellspacing="0" cellpadding="0"
         style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
@@ -2655,24 +2712,14 @@ if (isFilterEval) {
           <td
             style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 5rem 1rem; font-size: 1.05rem; font-weight: 500; color: #126064;"
             align="left">
-            <li>El estudiante se encuentra en el <b>nivel ${levelVal}</b>.</li>
-            <li>Su próxima <b>evaluación filtro</b> será en el <b>nivel ${nextFilter}</b>.</li>
-          </td>
+            <li>El estudiante se encuentra en el <b>nivel ${levelVal}</b>.</li>`;
+           if (isFilterEval){
+             mapaGrande += `<li>El próximo nivel filtro es el <b>nivel ${nextFilter}</b>.</li>`;
+           };
+  mapaGrande +=     `</td>
         </tr>
-      </table>
+      </table><img src="${B_ClassPath}" style="width: 100%;"></div>
   `;
-
-  // Imagen SOLO para Kids Intensivo + Super Intensivo
-  if (
-    syllabus === "Kids (Intensivo) 8-12" ||
-    syllabus === "Kids (Super Intensivo) 8-12"
-  ) {
-    mapaGrande += `<img src="${B_ClassPath}" style="width: 100%;">`;
-  }
-
-  mapaGrande += `</div>`;
-}
-
   // ---------- styles ----------
 
   const stylesHTML = `
