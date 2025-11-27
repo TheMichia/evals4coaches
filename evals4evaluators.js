@@ -1,7 +1,7 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "1.4.1";
-  //added format for absent
+  const versionnum = "1.4.5";
+  //added stuff for not approved RC
   const E4EjsonVersion = 1.1;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
@@ -1716,56 +1716,60 @@ async function evaluatorsCopyResults() {
     </div>
     `;
   // Class Paths
- // Helper
-const includesAny = (text, arr) =>
-  arr.some((item) => text.includes(item.toLowerCase()));
+  // Helper
+  const includesAny = (text, arr) =>
+    arr.some((item) => text.includes(item.toLowerCase()));
 
-// Mapping centralizado
-const classGroups = [
-  {
-    match: ["kids (super intensivo) 8-12", "teens 13-17 (3hrs/week)"],
-    B: "SI_0-10",
-    S: "0-10",
-  },
-  {
-    match: ["kids (intensivo) 8-12", "teens 13-17 (3hrs/week)"],
-    B: "I_0-10",
-    S: "0-10",
-  },
-  {
-    match: ["juniors 5-7"],
-    B: "J_1-10",
-    S: "1-10",
-  },
-  {
-    match: ["kids masters", "kids masters 20", "teens masters", "teens masters 2"],
-    B: "M_1-10",
-    S: "1-10",
-  },
-  {
-    match: ["adults (5hrs/week)", "adults masters (5hrs/week)"],
-    B: "A5_1-10",
-    S: "1-10",
-  },
-  {
-    match: ["adults (3hrs/week)", "adults masters (3hrs/week)"],
-    B: "A3_1-12",
-    S: "1-12",
+  // Mapping centralizado
+  const classGroups = [
+    {
+      match: ["kids (super intensivo) 8-12", "teens 13-17 (3hrs/week)"],
+      B: "SI_0-10",
+      S: "0-10",
+    },
+    {
+      match: ["kids (intensivo) 8-12", "teens 13-17 (3hrs/week)"],
+      B: "I_0-10",
+      S: "0-10",
+    },
+    {
+      match: ["juniors 5-7"],
+      B: "J_1-10",
+      S: "1-10",
+    },
+    {
+      match: [
+        "kids masters",
+        "kids masters 20",
+        "teens masters",
+        "teens masters 2",
+      ],
+      B: "M_1-10",
+      S: "1-10",
+    },
+    {
+      match: ["adults (5hrs/week)", "adults masters (5hrs/week)"],
+      B: "A5_1-10",
+      S: "1-10",
+    },
+    {
+      match: ["adults (3hrs/week)", "adults masters (3hrs/week)"],
+      B: "A3_1-12",
+      S: "1-12",
+    },
+  ];
+
+  let SclassPathLvl = null;
+  let BclassPathLvl = null;
+
+  // Resolver
+  for (const group of classGroups) {
+    if (includesAny(syllabusLower, group.match)) {
+      BclassPathLvl = group.B;
+      SclassPathLvl = group.S;
+      break;
+    }
   }
-];
-
-let SclassPathLvl = null;
-let BclassPathLvl = null;
-
-// Resolver
-for (const group of classGroups) {
-  if (includesAny(syllabusLower, group.match)) {
-    BclassPathLvl = group.B;
-    SclassPathLvl = group.S;
-    break;
-  }
-}
-
 
   // Final URLs
   const S_ClassPath = `https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/S-CP_${SclassPathLvl}_A${levelVal}.png`;
@@ -1778,7 +1782,7 @@ for (const group of classGroups) {
     <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
         <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
        <p
-      style="font-weight: bold; font-family: Verdana; font-size: 0.85rem; color: #506d6d; margin: 0 0 0.5rem 0; padding: 0 1rem 2.8rem;">
+      style="font-weight: bold; font-family: Verdana; font-size: 0.85rem; color: #506d6d; margin: 0 0 0.5rem 0; padding: 0 1rem;">
       ${syllabusVal} | Nivel ${levelVal}
     </p>
 
@@ -1799,23 +1803,26 @@ for (const group of classGroups) {
   </div>
   `;
 
-  let resultado_global_fail_normal = `
+  let resultado_global_fail_normal = ` 
   <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
-    <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
-   <p
-    style="padding: 0 1rem 0; font-size: 2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
-    Evaluación No Satisfactoria
-  </p>
+          <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
+          <p
+            style="font-weight: bold; font-family: Verdana; font-size: 0.85rem; color: #506d6d; margin: 0 0 0.5rem 0; padding: 0 1rem 2.8rem;">
+            ${syllabusVal} | Nivel ${levelVal}
+          </p>
+          <p
+            style="padding: 2rem 1rem 0; font-size: 2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
+            Evaluación No Lograda
+          </p>
 
-  <p class="h3"
-    style="font-size: 1.2rem; font-weight: 800; font-family: Verdana; color: #42757b; padding: 2.5rem 0;">
-    Aunque aún no se ha alcanzado el objetivo, el esfuerzo cuenta y seguiremos avanzando juntos.
-  </p>
+          <p class="h3" style="font-size: 1rem; font-weight: 800; font-family: Verdana; color: #42757b; padding: 0;">
+            Aunque aún no se ha alcanzado el objetivo, el esfuerzo cuenta y seguiremos trabajando para mejorar.
+          </p>
 
-  <p style="font-size:0.95rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana;">
-    A continuación un informe detallado de la evaluación:
-  </p>
-</div>
+          <p style="font-size:0.95rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana;">
+            A continuación un informe detallado de la evaluación:
+          </p>
+        </div>
 `;
 
   // ---------- SHOW NOTA FINAL for Exit (only if not juniors) ----------
@@ -1906,67 +1913,101 @@ for (const group of classGroups) {
   }
 
   //--extra sections
-  const porqueEsImportante = ` 
-  <!-- PORQUE ES IMPORTANTE -->
-        <div style="margin: 4rem auto; justify-items: center;">
-          <table width="80%" align="center" cellspacing="0" cellpadding="0"
-            style="width: 80%; border-collapse: collapse; border-radius: 10%; border: none; overflow: hidden; margin-top: 1rem; background-color: #f9fafb;"
-            bgcolor="#f9fafb">
-            <tr>
-              <th
-                style="font-weight: 800; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 1.15rem; padding: 1rem; color: #126064; border: none; font-family: verdana;"
-                align="center">
-                <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
-                ¿Por qué es clave saber sus logros?
-              </th>
-            </tr>
-            <tr>
-              <td
-                style="font-size:0.95rem; font-family: Verdana; border-bottom: 1px dotted #DCF8FA; padding: 0.9rem 2rem; font-weight: 500; color: #044043; text-align: center;"
-                align="center">
-                <p style="font-family: Verdana; font-size:0.95rem; margin: 0 0 0.5rem 0;">
-                <p>Te permite <b>ver su progreso</b>, <b>celebrar cada avance</b> y
-                  <b>acompañarlo en su aprendizaje</b>.
-                </p>
-                <p>Cada paso <b>refuerza su confianza</b> y lo prepara para
-                  <b>comunicarse con seguridad</b> y <b>pensar en grande</b>.
-                </p>
+  let porqueEsImportante = ``;
+  if (totalScore < 7) {
+    // REPROBADO
+    porqueEsImportante = `  <!-- PORQUE ES IMPORTANTE -->
+      <div style="margin: 4rem auto; justify-items: center;">
+        <table width="80%" align="center" cellspacing="0" cellpadding="0"
+          style="width: 80%; border-collapse: collapse; border-radius: 10%; border: none; overflow: hidden; margin-top: 1rem; background-color: #f9fafb;"
+          bgcolor="#f9fafb">
+          <tr>
+            <th
+              style="font-weight: 800; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 1.15rem; padding: 1rem; color: #126064; border: none; font-family: verdana;"
+              align="center">
+              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
+              ¿Por qué es importante reconocer sus avances?
+            </th>
+          </tr>
+          <tr>
+            <td
+              style="font-size:0.95rem; font-family: Verdana; border-bottom: 1px dotted #DCF8FA; padding: 0.9rem 2rem; font-weight: 500; color: #044043; text-align: center;"
+              align="center">
+              <p style="font-family: Verdana; font-size:0.95rem; margin: 0 0 0.5rem 0;">
+                Porque cada logro, por pequeño que parezca, <B>acerca a tu hijo/a a la meta</B>. <br>Conocer su progreso
+                nos
+                permite seguir celebrando lo que ya domina y, al mismo tiempo, <B>trazar el camino para mejorar lo que
+                aún está en desarrollo</B>.
+              </p>
 
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>`;
+            </td>
+          </tr>
+        </table>
+      </div>`;
+  } else {
+    porqueEsImportante = `<!-- PORQUE ES IMPORTANTE -->
+      <div style="margin: 4rem auto; justify-items: center;">
+        <table width="80%" align="center" cellspacing="0" cellpadding="0"
+          style="width: 80%; border-collapse: collapse; border-radius: 10%; border: none; overflow: hidden; margin-top: 1rem; background-color: #f9fafb;"
+          bgcolor="#f9fafb">
+          <tr>
+            <th
+              style="font-weight: 800; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 1.15rem; padding: 1rem; color: #126064; border: none; font-family: verdana;"
+              align="center">
+              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
+              ¿Por qué es clave saber sus logros?
+            </th>
+          </tr>
+          <tr>
+            <td
+              style="font-size:0.95rem; font-family: Verdana; border-bottom: 1px dotted #DCF8FA; padding: 0.9rem 2rem; font-weight: 500; color: #044043; text-align: center;"
+              align="center">
+              <p style="font-family: Verdana; font-size:0.95rem; margin: 0 0 0.5rem 0;">
+              <p>Te permite <b>ver su progreso</b>, <b>celebrar cada avance</b> y
+                <b>acompañarlo en su aprendizaje</b>.
+              </p>
+              <p>Cada paso <b>refuerza su confianza</b> y lo prepara para
+                <b>comunicarse con seguridad</b> y <b>pensar en grande</b>.
+              </p>
 
-  const tuEsfuerzoCuenta = `    
-<!-- TU ESFUERZO CUENTA -->
-    <div style="margin: 4rem 0; justify-items: center;">
-      <table width="80%" align="center" cellspacing="0" cellpadding="0"
-        style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 0.5rem; background-color: #f9fafb;"
-        bgcolor="#f9fafb">
-        <tr>
-          <th
-            style="font-family: Serif; font-weight: 800; text-align: center; font-size: 1.5rem; padding: 1rem; color: #126064; border-top: 1px dotted #219fa6; border-bottom: none;"
-            align="center">
-            &#10024; ¡Tu esfuerzo cuenta! &#10024;
-          </th>
-        </tr>
-        <tr>
-          <td
-            style="font-size:0.95rem; font-family: Verdana; padding: 0.7rem 0.5rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
-            align="center">
-            <p style="font-family: Verdana; font-size:0.95rem;">
-              Cada mes tu hijo/a <b>avanza más</b> y estamos
-              <b>muy orgullosos de su progreso</b>.
-            </p>
-            <p style="font-family: Verdana; font-size:0.95rem;">
-              Queremos que
-              <b>aprenda inglés con confianza y entusiasmo</b>, dando un <b>paso firme en cada clase</b>.
-            </p>
-          </td>
-        </tr>
-      </table>
-    </div>`;
+              </p>
+            </td>
+          </tr>
+        </table>
+      </div>`;
+  }
+
+  let tuEsfuerzoCuenta = `<!-- TU ESFUERZO CUENTA -->
+      <div style="margin: 4rem 0; justify-items: center;">
+        <table width="80%" align="center" cellspacing="0" cellpadding="0"
+          style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 0.5rem; background-color: #f9fafb;"
+          bgcolor="#f9fafb">
+          <tr>
+            <th
+              style="font-family: Serif; font-weight: 800; text-align: center; font-size: 1.5rem; padding: 1rem; color: #126064; border-top: 1px dotted #219fa6; border-bottom: none;"
+              align="center">
+              &#10024; ¡Tu esfuerzo cuenta! &#10024;
+            </th>
+          </tr>
+          <tr>
+            <td
+              style="font-size:0.95rem; font-family: Verdana; padding: 0.7rem 0.5rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
+              align="center">
+              <p style="font-family: Verdana; font-size:0.95rem;">
+                Cada mes tu hijo/a <b>avanza más</b> y estamos
+                <b>muy orgullosos de su progreso</b>.
+              </p>
+              <p style="font-family: Verdana; font-size:0.95rem;">
+                Queremos que
+                <b>aprenda inglés con confianza y entusiasmo</b>, dando un <b>paso firme en cada clase</b>.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </div>`;
+  if (totalScore < 7) {
+    tuEsfuerzoCuenta = ``;
+  }
 
   // ---------- build topics & opportunities HTML ----------
 
@@ -2367,8 +2408,10 @@ for (const group of classGroups) {
 
   let willLearn = [];
   let nextFilter = "";
+  let weeksToRepeat = "";
 
   if (syllabus === "Juniors 5-7") {
+    weeksToRepeat = "8";
     if (levelVal === 7 && weekVal === 7) {
       willLearn = [
         "Futuro Simple (Going to)",
@@ -2384,6 +2427,7 @@ for (const group of classGroups) {
   }
 
   if (syllabus === "Kids (Intensivo) 8-12") {
+    weeksToRepeat = "8";
     if (levelVal === 2 && weekVal === 13) {
       willLearn = [
         "Futuro Simple (Going to)",
@@ -2410,6 +2454,7 @@ for (const group of classGroups) {
   }
 
   if (syllabus === "Kids (Super Intensivo) 8-12") {
+    weeksToRepeat = "8";
     if (levelVal === 4 && weekVal === 7) {
       willLearn = ["Pasado Simple", "Pasado Progresivo", "Repaso General"];
       nextFilter = "7";
@@ -2425,6 +2470,7 @@ for (const group of classGroups) {
   }
 
   if (syllabus === "Kids Master's") {
+    weeksToRepeat = "4";
     if (levelVal === 4 && weekVal === 3) {
       willLearn = [
         "Superlativos",
@@ -2440,6 +2486,7 @@ for (const group of classGroups) {
   }
 
   if (syllabus === "Kids Master's 2") {
+    weeksToRepeat = "4";
     if (levelVal === 4 && weekVal === 3) {
       willLearn = [
         "Presente Perfecto Progresivo",
@@ -2458,6 +2505,7 @@ for (const group of classGroups) {
   }
 
   if (syllabus === "Teens 13-17 (3hrs/week)") {
+    weeksToRepeat = "8";
     if (levelVal === 2 && weekVal === 13) {
       willLearn = [
         "Pasado Simple",
@@ -2481,6 +2529,7 @@ for (const group of classGroups) {
   }
 
   if (syllabus === "Teens 13-17 (5hrs/week)") {
+    weeksToRepeat = "8";
     if (levelVal === 4 && weekVal === 7) {
       willLearn = ["Modales", "Condicionales", "Comparativos y Superlativos"];
       nextFilter = "7";
@@ -2499,6 +2548,7 @@ for (const group of classGroups) {
   }
 
   if (syllabus === "Teens Master's") {
+    weeksToRepeat = "4";
     if (levelVal === 4 && weekVal === 3) {
       willLearn = [
         "Superlativos",
@@ -2514,6 +2564,7 @@ for (const group of classGroups) {
   }
 
   if (syllabus === "Teens Master's 2") {
+    weeksToRepeat = "4";
     if (levelVal === 4 && weekVal === 3) {
       willLearn = [
         "Superlativos",
@@ -2529,6 +2580,7 @@ for (const group of classGroups) {
   }
 
   if (syllabus === "Adults (3hrs/week)") {
+    weeksToRepeat = "4";
     if (levelVal === 5 && weekVal === 3) {
       willLearn = ["Pasado Progresivo", "Pasado Simple", "Repaso General"];
       nextFilter = "8";
@@ -2544,6 +2596,7 @@ for (const group of classGroups) {
   }
 
   if (syllabus === "Adults (5hrs/week)") {
+    weeksToRepeat = "4";
     if (levelVal === 5 && weekVal === 3) {
       willLearn = ["Pasado Progresivo", "Pasado Simple", "Repaso General"];
       nextFilter = "8";
@@ -2559,6 +2612,7 @@ for (const group of classGroups) {
   }
 
   if (syllabus === "Adults Masters (3hrs/week)") {
+    weeksToRepeat = "4";
     if (levelVal === 5 && weekVal === 3) {
       willLearn = [
         "Presente Perfecto",
@@ -2578,6 +2632,7 @@ for (const group of classGroups) {
   }
 
   if (syllabus === "Adults Masters (5hrs/week)") {
+    weeksToRepeat = "4";
     if (levelVal === 5 && weekVal === 3) {
       willLearn = [
         "Presente Perfecto",
@@ -2649,32 +2704,112 @@ for (const group of classGroups) {
       weekVal,
     );
   }
-
+  let mustPracticeTopics = ``;
   let mapaGrande = ``;
+  if (totalScore < 7 && isFilterEval) {
+    //cuando no aprueban
+    mustPracticeTopics = `
+    ${approvedTopics
+      .map((topic) => {
+        const topicDescription = topicBreakdown[topic] || "";
+        return `
+    <tr>
+      <td
+        style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 10%; font-size: 0.95rem; font-weight: 600; color: #126064;"
+        align="left">
+           &#9744;  ${safe(topic)}
+          </td>
+        </tr>
+       <tr>
+      <td
+        style="font-family: Verdana; font-weight: 500; text-align: left; padding: 0.3rem 0 1rem 20%; border-bottom: 1px dotted #DCF8FA; color: #044043; font-size: 0.85rem;"
+        align="left">
+            ${topicDescription}
+          </td>
+        </tr>
+      `;
+      })
+      .join("")}
+    ${reinforceTopics
+      .map((topic) => {
+        const topicDescription =
+          topicBreakdown[topic] || "Descripción no disponible";
+        return `
+      <tr>
+      <td
+        style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 10%; font-size: 0.95rem; font-weight: 600; color: #126064;"
+        align="left">
+        &#9744; ${safe(topic)}</td>
+              </tr>
+               <tr>
+      <td
+        style="font-family: Verdana; font-weight: 500; text-align: left; padding: 0.3rem 0 1rem 20%; border-bottom: 1px dotted #DCF8FA; color: #044043; font-size: 0.85rem;"
+        align="left">
+        ${topicDescription}</td>
+              </tr>`;
+      })
+      .join("")}
+    `;
 
     mapaGrande = `<!--MAPA GRANDE-->
-    <div style="margin: 4rem 0; justify-items: center;">
-      <table width="100%" align="center" cellspacing="0" cellpadding="0"
-        style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
-        <tr>
-          <th
-            style="font-size: 1.3rem; font-family: Verdana; font-weight: 800; color: #126064; text-align: center; padding: 1.5rem 0.5rem;"
+ <div
+          style="margin: 4rem 0; justify-items: center; width: 100%; justify-self: center; background-color: #FFFFFF; border-radius: 10%; text-align: center; padding:1.5rem 0;">
+          <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/nextStepOutline.png" style="height: 3rem; padding: 0; margin:0;">
+          <p style="font-size: 1.3rem; font-family: Verdana; font-weight: 800; color: #126064; text-align: center; padding:0; margin: 0.5rem auto 2rem;"
             align="center">
-            Progreso Actual
-          </th>
-        </tr>
-        <tr>
-          <td
-            style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 5rem 1rem; font-size: 1.05rem; font-weight: 500; color: #126064;"
-            align="left">
-            <li>El estudiante se encuentra en el <b>nivel ${levelVal}</b>.</li>`;
-           if (isFilterEval){
-             mapaGrande += `<li>El próximo nivel filtro es el <b>nivel ${nextFilter}</b>.</li>`;
-           };
-  mapaGrande +=     `</td>
-        </tr>
-      </table><img src="${B_ClassPath}" style="width: 100%;"></div>
+    Siguientes Pasos</p>
+  <p style="font-family: Verdana; text-align: center; padding: 0rem 3rem; font-size: 0.95rem; font-weight: 500; color: #126064;"
+    align="left">El estudiante <b>continuará reforzando</b> contenidos en su <b>nivel actual</b>
+    (<b>nivel ${levelVal}</b>)
+    durante
+    las
+    próximas <b>${weeksToRepeat}
+          semanas</b>,
+    hasta su siguiente evaluación filtro. </p>
+  <table width="95%" align="center" cellspacing="0" cellpadding="0"
+    style=" border-collapse: collapse; background-color: #FCFCFC; border-radius: 10%; text-align: center; margin: 2rem auto;">
+    <tr>
+      <td>
+        <p style=" border-bottom: 1px dotted #BED5D6; margin: 0 5%; padding: 0.7rem 0; font-family: Verdana; text-align: center; font-size: 1rem; font-weight: 600; color: #126064;">Para apoyar su avance, estos
+          son
+          los
+          temas
+          recomendados
+          para
+          practicar:</p>
+      </td>
+    </tr>
+   ${mustPracticeTopics}
+  </table>
+</div>
+     `;
+  } else {
+    mapaGrande = `
+  <!--MAPA GRANDE-->
+  <div style="margin: 4rem 0; justify-items: center;">
+    <table width="100%" align="center" cellspacing="0" cellpadding="0"
+      style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
+      <tr>
+        <th
+          style="font-size: 1.3rem; font-family: Verdana; font-weight: 800; color: #126064; text-align: center; padding: 1.5rem 0.5rem;"
+          align="center">
+          Progreso Actual
+        </th>
+      </tr>
+      <tr>
+        <td
+          style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 5rem 1rem; font-size: 1.05rem; font-weight: 500; color: #126064;"
+          align="left">
+          <li>El estudiante se encuentra en el <b>nivel ${levelVal}</b>.</li>`;
+    if (isFilterEval) {
+      mapaGrande += `<li>El próximo nivel filtro es el <b>nivel ${nextFilter}</b>.</li>`;
+    }
+    mapaGrande += `</td>
+      </tr>
+    </table><img src="${B_ClassPath}" style="width: 100%;"></div>
   `;
+  }
+
   // ---------- styles ----------
 
   const stylesHTML = `
@@ -2954,7 +3089,6 @@ ${stylesHTML}
   reportHTML += reinforceHTML;
   reportHTML += opportunityHTML;
   reportHTML += pronunciationHTML;
-  // reportHTML += tuEsfuerzoCuenta;
   reportHTML += commentsHTML;
   reportHTML += coachingHTML;
   reportHTML += loQueAprendera;
