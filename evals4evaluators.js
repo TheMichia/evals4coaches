@@ -1,8 +1,8 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "1.4.5";
-  //added stuff for not approved RC
-  const E4EjsonVersion = 1.1;
+  const versionnum = "1.5.0";
+  //fixed isfiltereval logic for master's to masters && topic descriptions matched on lowercase
+  const E4EjsonVersion = 2.0;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
   showversion.innerHTML = `${version} ${versionnum} - JSON ${E4EjsonVersion}`;
@@ -2024,9 +2024,17 @@ async function evaluatorsCopyResults() {
           </tr>
         </thead>
         <tbody>
-          ${approvedTopics
-            .map((topic) => {
-              const topicDescription = topicBreakdown[topic] || "";
+        ${approvedTopics
+  .map((topic) => {
+    const topicKey = topic.toLowerCase();
+
+    // Buscar dentro del breakdown ignorando mayúsculas/minúsculas
+    const matchedKey = Object.keys(topicBreakdown)
+      .find((k) => k.toLowerCase() === topicKey);
+
+    const topicDescription = matchedKey
+      ? topicBreakdown[matchedKey]
+      : "";
 
               return `
                 <tr>
@@ -2067,10 +2075,18 @@ async function evaluatorsCopyResults() {
           </thead>
         <tbody>
           ${reinforceTopics
-            .map((topic) => {
-              const topicDescription =
-                topicBreakdown[topic] || "Descripción no disponible";
-              return `<tr>
+  .map((topic) => {
+    const topicKey = topic.toLowerCase();
+
+    // Match insensible a mayúsculas
+    const matchedKey = Object.keys(topicBreakdown)
+      .find((k) => k.toLowerCase() === topicKey);
+
+    const topicDescription = matchedKey
+      ? topicBreakdown[matchedKey]
+      : "";
+
+    return `<tr>
               <td
                 style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 1rem; font-weight: 600; color: #126064;"
                 align="left">
@@ -2203,7 +2219,10 @@ async function evaluatorsCopyResults() {
   //referidos text
   const referText = syllabusLower.includes("adults")
     ? ` <!-- referal -->
-      
+
+      <h1
+        style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
+        align="center">¡Has recibido un cupón de ahorro!</h1>
           <a href="https://www.english4kidsonline.com/amigo" target="_blank"
             style="display:inline-block; margin:0; text-decoration:none;">
             <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Referal/referalAdults.gif"
@@ -2211,6 +2230,9 @@ async function evaluatorsCopyResults() {
              style="width: 100%; display:block; margin:0 auto; border:0;">
           </a> `
     : ` <!-- referal -->
+        <h1
+          style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
+          align="center">¡Has recibido un cupón de ahorro!</h1>
           <a href="https://www.english4kidsonline.com/amigo" target="_blank"
             style="display:inline-block; margin:0; text-decoration:none;">
             <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Referal/refKids.gif"
@@ -2375,10 +2397,10 @@ async function evaluatorsCopyResults() {
     (syllabus === "Kids (Super Intensivo) 8-12" &&
       [4, 7, 9].includes(levelVal) &&
       weekVal === 7) ||
-    (syllabus === "Kids Master's" &&
+    (syllabus === "Kids Masters" &&
       [4, 8].includes(levelVal) &&
       weekVal === 3) ||
-    (syllabus === "Kids Master's 2" &&
+    (syllabus === "Kids Masters 2" &&
       [4, 8].includes(levelVal) &&
       weekVal === 3) ||
     (syllabus === "Teens 13-17 (3hrs/week)" &&
@@ -2387,10 +2409,10 @@ async function evaluatorsCopyResults() {
     (syllabus === "Teens 13-17 (5hrs/week)" &&
       [4, 7, 9].includes(levelVal) &&
       weekVal === 7) ||
-    (syllabus === "Teens Master's" &&
+    (syllabus === "Teens Masters" &&
       [4, 8].includes(levelVal) &&
       weekVal === 3) ||
-    (syllabus === "Teens Master's 2" &&
+    (syllabus === "Teens Masters 2" &&
       [4, 8].includes(levelVal) &&
       weekVal === 3) ||
     (syllabus === "Adults (3hrs/week)" &&
@@ -2469,7 +2491,7 @@ async function evaluatorsCopyResults() {
     }
   }
 
-  if (syllabus === "Kids Master's") {
+  if (syllabus === "Kids Masters") {
     weeksToRepeat = "4";
     if (levelVal === 4 && weekVal === 3) {
       willLearn = [
@@ -2485,7 +2507,7 @@ async function evaluatorsCopyResults() {
     }
   }
 
-  if (syllabus === "Kids Master's 2") {
+  if (syllabus === "Kids Masters 2") {
     weeksToRepeat = "4";
     if (levelVal === 4 && weekVal === 3) {
       willLearn = [
@@ -2547,7 +2569,7 @@ async function evaluatorsCopyResults() {
     }
   }
 
-  if (syllabus === "Teens Master's") {
+  if (syllabus === "Teens Masters") {
     weeksToRepeat = "4";
     if (levelVal === 4 && weekVal === 3) {
       willLearn = [
@@ -2563,7 +2585,7 @@ async function evaluatorsCopyResults() {
     }
   }
 
-  if (syllabus === "Teens Master's 2") {
+  if (syllabus === "Teens Masters 2") {
     weeksToRepeat = "4";
     if (levelVal === 4 && weekVal === 3) {
       willLearn = [
@@ -2653,7 +2675,7 @@ async function evaluatorsCopyResults() {
 
   let loQueAprendera = ``;
 
-  if (isFilterEval) {
+  if (isFilterEval && totalScore > 6.9) {
     loQueAprendera = `<!-- lo que aprenderá -->
       <div class="temas-dominados" style="margin: 1rem 0; justify-items: center;">
         <table style="width: 80%; border-radius: 10%; overflow: hidden; background-color: #FCFCFA;" width="80%">
@@ -2671,9 +2693,18 @@ async function evaluatorsCopyResults() {
           </thead>
           <tbody>
             ${willLearn
-              .map((topic) => {
-                const topicDescription = topicBreakdown[topic] || ""; // si tienes descripciones
-                return `
+                  .map((topic) => {
+                    const topicKey = topic.toLowerCase();
+
+                    // Match insensible a mayúsculas
+                    const matchedKey = Object.keys(topicBreakdown)
+                      .find((k) => k.toLowerCase() === topicKey);
+
+                    const topicDescription = matchedKey
+                      ? topicBreakdown[matchedKey]
+                      : "";
+
+                    return `
                 <tr>
                   <td
                     style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 1.05rem; font-weight: 600; color: #126064;"
@@ -2706,13 +2737,22 @@ async function evaluatorsCopyResults() {
   }
   let mustPracticeTopics = ``;
   let mapaGrande = ``;
-  if (totalScore < 7 && isFilterEval) {
+  if (isFilterEval && totalScore < 7) {
     //cuando no aprueban
     mustPracticeTopics = `
     ${approvedTopics
-      .map((topic) => {
-        const topicDescription = topicBreakdown[topic] || "";
-        return `
+          .map((topic) => {
+            const topicKey = topic.toLowerCase();
+
+            // Match insensible a mayúsculas
+            const matchedKey = Object.keys(topicBreakdown)
+              .find((k) => k.toLowerCase() === topicKey);
+
+            const topicDescription = matchedKey
+              ? topicBreakdown[matchedKey]
+              : "";
+
+            return `
     <tr>
       <td
         style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 10%; font-size: 0.95rem; font-weight: 600; color: #126064;"
@@ -2731,10 +2771,18 @@ async function evaluatorsCopyResults() {
       })
       .join("")}
     ${reinforceTopics
-      .map((topic) => {
-        const topicDescription =
-          topicBreakdown[topic] || "Descripción no disponible";
-        return `
+          .map((topic) => {
+            const topicKey = topic.toLowerCase();
+
+            // Match insensible a mayúsculas
+            const matchedKey = Object.keys(topicBreakdown)
+              .find((k) => k.toLowerCase() === topicKey);
+
+            const topicDescription = matchedKey
+              ? topicBreakdown[matchedKey]
+              : "";
+
+            return `
       <tr>
       <td
         style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 10%; font-size: 0.95rem; font-weight: 600; color: #126064;"
@@ -2751,7 +2799,7 @@ async function evaluatorsCopyResults() {
       .join("")}
     `;
 
-    mapaGrande = `<!--MAPA GRANDE-->
+    mapaGrande = `<!--SIGUIENTES PASOS-->
  <div
           style="margin: 4rem 0; justify-items: center; width: 100%; justify-self: center; background-color: #FFFFFF; border-radius: 10%; text-align: center; padding:1.5rem 0;">
           <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/nextStepOutline.png" style="height: 3rem; padding: 0; margin:0;">
