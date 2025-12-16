@@ -1554,7 +1554,7 @@ async function evaluatorsCopyResults() {
     </td>
     </tr>
     <tr>
-    <td class="tema-reforzar"><b>Mensaje finalo: </b></td>
+    <td class="tema-reforzar"><b>Mensaje final: </b></td>
     </tr>
     <tr>
     <td class="reforzar-R-C">
