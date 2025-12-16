@@ -1554,7 +1554,7 @@ async function evaluatorsCopyResults() {
     </td>
     </tr>
     <tr>
-    <td class="tema-reforzar"><b>Mensaje final: </b></td>
+    <td class="tema-reforzar"><b>Mensaje finalo: </b></td>
     </tr>
     <tr>
     <td class="reforzar-R-C">
@@ -1926,7 +1926,7 @@ async function evaluatorsCopyResults() {
               style="font-weight: 800; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 1.15rem; padding: 1rem; color: #126064; border: none; font-family: verdana;"
               align="center">
               <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
-              ¿Por qué es importante reconocer sus avances?
+              ¿Por qué es importante reconocer los avances?
             </th>
           </tr>
           <tr>
@@ -1934,10 +1934,7 @@ async function evaluatorsCopyResults() {
               style="font-size:0.95rem; font-family: Verdana; border-bottom: 1px dotted #DCF8FA; padding: 0.9rem 2rem; font-weight: 500; color: #044043; text-align: center;"
               align="center">
               <p style="font-family: Verdana; font-size:0.95rem; margin: 0 0 0.5rem 0;">
-                Porque cada logro, por pequeño que parezca, <B>acerca a tu hijo/a a la meta</B>. <br>Conocer su progreso
-                nos
-                permite seguir celebrando lo que ya domina y, al mismo tiempo, <B>trazar el camino para mejorar lo que
-                aún está en desarrollo</B>.
+                Porque cada progreso cuenta. Identificar lo que ya se domina fortalece la confianza y nos permite enfocar con claridad los próximos pasos para seguir avanzando.
               </p>
 
             </td>
@@ -1955,7 +1952,7 @@ async function evaluatorsCopyResults() {
               style="font-weight: 800; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 1.15rem; padding: 1rem; color: #126064; border: none; font-family: verdana;"
               align="center">
               <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
-              ¿Por qué es clave saber sus logros?
+              ¿Por qué es clave saber los logros?
             </th>
           </tr>
           <tr>
@@ -1963,10 +1960,10 @@ async function evaluatorsCopyResults() {
               style="font-size:0.95rem; font-family: Verdana; border-bottom: 1px dotted #DCF8FA; padding: 0.9rem 2rem; font-weight: 500; color: #044043; text-align: center;"
               align="center">
               <p style="font-family: Verdana; font-size:0.95rem; margin: 0 0 0.5rem 0;">
-              <p>Te permite <b>ver su progreso</b>, <b>celebrar cada avance</b> y
-                <b>acompañarlo en su aprendizaje</b>.
+              <p>Te permite <b>ver el progreso</b>, <b>celebrar cada avance</b> y
+                <b>acompañar el aprendizaje</b> con determinación.
               </p>
-              <p>Cada paso <b>refuerza su confianza</b> y lo prepara para
+              <p>Cada paso <b>refuerza la confianza</b> y prepara para
                 <b>comunicarse con seguridad</b> y <b>pensar en grande</b>.
               </p>
 
@@ -1976,8 +1973,38 @@ async function evaluatorsCopyResults() {
         </table>
       </div>`;
   }
-
-  let tuEsfuerzoCuenta = `<!-- TU ESFUERZO CUENTA -->
+    
+  let tuEsfuerzoCuenta = ``;
+  tuEsfuerzoCuenta += (syllabusLower.includes("adults"))
+  ? `<!-- TU ESFUERZO CUENTA -->
+      <div style="margin: 4rem 0; justify-items: center;">
+        <table width="80%" align="center" cellspacing="0" cellpadding="0"
+          style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 0.5rem; background-color: #f9fafb;"
+          bgcolor="#f9fafb">
+          <tr>
+            <th
+              style="font-family: Serif; font-weight: 800; text-align: center; font-size: 1.5rem; padding: 1rem; color: #126064; border-top: 1px dotted #219fa6; border-bottom: none;"
+              align="center">
+              &#10024; ¡Tu esfuerzo cuenta! &#10024;
+            </th>
+          </tr>
+          <tr>
+            <td
+              style="font-size:0.95rem; font-family: Verdana; padding: 0.7rem 0.5rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
+              align="center">
+              <p style="font-family: Verdana; font-size:0.95rem;">
+                Cada mes estás <b>avanzando más</b> y estamos
+                <b>muy orgullosos de tu progreso</b>.
+              </p>
+              <p style="font-family: Verdana; font-size:0.95rem;">
+                Queremos que
+                <b>aprendas inglés con confianza y entusiasmo</b>, dando un <b>paso firme en cada clase</b>.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </div>`  
+  : `<!-- TU ESFUERZO CUENTA -->
       <div style="margin: 4rem 0; justify-items: center;">
         <table width="80%" align="center" cellspacing="0" cellpadding="0"
           style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 0.5rem; background-color: #f9fafb;"
@@ -2004,7 +2031,9 @@ async function evaluatorsCopyResults() {
             </td>
           </tr>
         </table>
-      </div>`;
+      </div>
+    `;
+  
   if (totalScore < 7) {
     tuEsfuerzoCuenta = ``;
   }
@@ -2025,18 +2054,19 @@ async function evaluatorsCopyResults() {
         </thead>
         <tbody>
         ${approvedTopics
-  .map((topic) => {
-    const topicKey = topic.toLowerCase();
+          .map((topic) => {
+            const topicKey = topic.toLowerCase();
 
-    // Buscar dentro del breakdown ignorando mayúsculas/minúsculas
-    const matchedKey = Object.keys(topicBreakdown)
-      .find((k) => k.toLowerCase() === topicKey);
+            // Buscar dentro del breakdown ignorando mayúsculas/minúsculas
+            const matchedKey = Object.keys(topicBreakdown).find(
+              (k) => k.toLowerCase() === topicKey,
+            );
 
-    const topicDescription = matchedKey
-      ? topicBreakdown[matchedKey]
-      : "";
+            const topicDescription = matchedKey
+              ? topicBreakdown[matchedKey]
+              : "";
 
-              return `
+            return `
                 <tr>
                   <td
                     style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 1.05rem; font-weight: 600; color: #126064;"
@@ -2052,8 +2082,8 @@ async function evaluatorsCopyResults() {
                   </td>
                 </tr>
               `;
-            })
-            .join("")}
+          })
+          .join("")}
         </tbody>
       </table>
     </div>
@@ -2075,18 +2105,19 @@ async function evaluatorsCopyResults() {
           </thead>
         <tbody>
           ${reinforceTopics
-  .map((topic) => {
-    const topicKey = topic.toLowerCase();
+            .map((topic) => {
+              const topicKey = topic.toLowerCase();
 
-    // Match insensible a mayúsculas
-    const matchedKey = Object.keys(topicBreakdown)
-      .find((k) => k.toLowerCase() === topicKey);
+              // Match insensible a mayúsculas
+              const matchedKey = Object.keys(topicBreakdown).find(
+                (k) => k.toLowerCase() === topicKey,
+              );
 
-    const topicDescription = matchedKey
-      ? topicBreakdown[matchedKey]
-      : "";
+              const topicDescription = matchedKey
+                ? topicBreakdown[matchedKey]
+                : "";
 
-    return `<tr>
+              return `<tr>
               <td
                 style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 1rem; font-weight: 600; color: #126064;"
                 align="left">
@@ -2693,18 +2724,19 @@ async function evaluatorsCopyResults() {
           </thead>
           <tbody>
             ${willLearn
-                  .map((topic) => {
-                    const topicKey = topic.toLowerCase();
+              .map((topic) => {
+                const topicKey = topic.toLowerCase();
 
-                    // Match insensible a mayúsculas
-                    const matchedKey = Object.keys(topicBreakdown)
-                      .find((k) => k.toLowerCase() === topicKey);
+                // Match insensible a mayúsculas
+                const matchedKey = Object.keys(topicBreakdown).find(
+                  (k) => k.toLowerCase() === topicKey,
+                );
 
-                    const topicDescription = matchedKey
-                      ? topicBreakdown[matchedKey]
-                      : "";
+                const topicDescription = matchedKey
+                  ? topicBreakdown[matchedKey]
+                  : "";
 
-                    return `
+                return `
                 <tr>
                   <td
                     style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 1.05rem; font-weight: 600; color: #126064;"
@@ -2741,18 +2773,17 @@ async function evaluatorsCopyResults() {
     //cuando no aprueban
     mustPracticeTopics = `
     ${approvedTopics
-          .map((topic) => {
-            const topicKey = topic.toLowerCase();
+      .map((topic) => {
+        const topicKey = topic.toLowerCase();
 
-            // Match insensible a mayúsculas
-            const matchedKey = Object.keys(topicBreakdown)
-              .find((k) => k.toLowerCase() === topicKey);
+        // Match insensible a mayúsculas
+        const matchedKey = Object.keys(topicBreakdown).find(
+          (k) => k.toLowerCase() === topicKey,
+        );
 
-            const topicDescription = matchedKey
-              ? topicBreakdown[matchedKey]
-              : "";
+        const topicDescription = matchedKey ? topicBreakdown[matchedKey] : "";
 
-            return `
+        return `
     <tr>
       <td
         style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 10%; font-size: 0.95rem; font-weight: 600; color: #126064;"
@@ -2771,18 +2802,17 @@ async function evaluatorsCopyResults() {
       })
       .join("")}
     ${reinforceTopics
-          .map((topic) => {
-            const topicKey = topic.toLowerCase();
+      .map((topic) => {
+        const topicKey = topic.toLowerCase();
 
-            // Match insensible a mayúsculas
-            const matchedKey = Object.keys(topicBreakdown)
-              .find((k) => k.toLowerCase() === topicKey);
+        // Match insensible a mayúsculas
+        const matchedKey = Object.keys(topicBreakdown).find(
+          (k) => k.toLowerCase() === topicKey,
+        );
 
-            const topicDescription = matchedKey
-              ? topicBreakdown[matchedKey]
-              : "";
+        const topicDescription = matchedKey ? topicBreakdown[matchedKey] : "";
 
-            return `
+        return `
       <tr>
       <td
         style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 10%; font-size: 0.95rem; font-weight: 600; color: #126064;"
@@ -2853,9 +2883,14 @@ async function evaluatorsCopyResults() {
       mapaGrande += `<li>El próximo nivel filtro es el <b>nivel ${nextFilter}</b>.</li>`;
     }
     mapaGrande += `</td>
-      </tr>
-    </table><img src="${B_ClassPath}" style="width: 100%;"></div>
-  `;
+      </tr>`;
+    mapaGrande += (syllabusLower.includes("adults"))
+  ? ""  
+  : `
+      </table>
+      <img src="${B_ClassPath}" style="width: 100%;">
+    </div>
+    `;
   }
 
   // ---------- styles ----------
