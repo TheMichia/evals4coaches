@@ -1,6 +1,6 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "1.5.0";
+  const versionnum = "1.5.5";
   //fixed isfiltereval logic for master's to masters && topic descriptions matched on lowercase
   const E4EjsonVersion = 2.0;
   window.appVersion = "Evaluators";
@@ -1320,19 +1320,8 @@ async function evaluatorsCopyResults() {
       inglés.
       </li>
       <li>
-      Revisar el contenido disponible en nuestra plataforma de
-      práctica y completar todas las actividades.
-      </li>
-      <li>
       Repetir las oraciones del día al menos 20 veces antes o
       después de clase.
-      </li>
-      <li>
-      <a
-      target="_blank"
-      href="https://english4kids.pathwright.com"
-      >Accede a la plataforma aquí</a
-      >
       </li>
       </ul>
       </td>
@@ -1460,14 +1449,6 @@ async function evaluatorsCopyResults() {
     <td class="tema-reforzar">&#128187; <b>Recomendación:</b></td>
     </tr>
     <tr>
-    <td class="reforzar-R-C">
-    Accede a nuestra plataforma <a href="https://english4kids.pathwright.com/library/" target="_blank"><b>Pathwright</b></a> para repasar
-    los contenidos vistos, realizar actividades prácticas y
-    fortalecer las habilidades necesarias para avanzar con
-    seguridad.
-    </td>
-    </tr>
-    <tr>
     <td class="tema-reforzar">
     &#128153; <b>Agradecimiento: </b>
     </td>
@@ -1540,18 +1521,6 @@ async function evaluatorsCopyResults() {
     </tr>
     <tr>
     <td class="tema-reforzar"><b>Recomendación:</b></td>
-    </tr>
-    <tr>
-    <td class="reforzar-R-C">
-    Accede a nuestra plataforma
-    <a
-    href="https://english4kids.pathwright.com/library/"
-    target="_blank"
-    ><b>Pathwright</b></a
-    >
-    para practicar actividades, revisar el material y fortalecer
-    tus habilidades de forma dirigida.
-    </td>
     </tr>
     <tr>
     <td class="tema-reforzar"><b>Mensaje finalo: </b></td>
@@ -1670,14 +1639,6 @@ async function evaluatorsCopyResults() {
       periodo, trabajará en las áreas clave y, en <b>8 semanas</b>, será
       evaluado/a nuevamente para medir su progreso y confirmar que está
       listo/a para avanzar.
-      </p>
-
-      <p class="h3">&#x1F4DA;<b> Recomendación:</b></p>
-
-      <p class="h4">
-      Les invitamos a motivar a su hijo/a para que ingrese a nuestra
-      plataforma <strong>Pathwright</strong>, donde encontrará actividades y
-      recursos diseñados para reforzar los contenidos trabajados en clase.
       </p>
 
       <p class="h3">&#x1F499;<b> Mensaje final:</b></p>
@@ -1973,10 +1934,10 @@ async function evaluatorsCopyResults() {
         </table>
       </div>`;
   }
-    
+
   let tuEsfuerzoCuenta = ``;
-  tuEsfuerzoCuenta += (syllabusLower.includes("adults"))
-  ? `<!-- TU ESFUERZO CUENTA -->
+  tuEsfuerzoCuenta += syllabusLower.includes("adults")
+    ? `<!-- TU ESFUERZO CUENTA -->
       <div style="margin: 4rem 0; justify-items: center;">
         <table width="80%" align="center" cellspacing="0" cellpadding="0"
           style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 0.5rem; background-color: #f9fafb;"
@@ -2003,8 +1964,8 @@ async function evaluatorsCopyResults() {
             </td>
           </tr>
         </table>
-      </div>`  
-  : `<!-- TU ESFUERZO CUENTA -->
+      </div>`
+    : `<!-- TU ESFUERZO CUENTA -->
       <div style="margin: 4rem 0; justify-items: center;">
         <table width="80%" align="center" cellspacing="0" cellpadding="0"
           style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 0.5rem; background-color: #f9fafb;"
@@ -2033,7 +1994,7 @@ async function evaluatorsCopyResults() {
         </table>
       </div>
     `;
-  
+
   if (totalScore < 7) {
     tuEsfuerzoCuenta = ``;
   }
@@ -2319,13 +2280,6 @@ async function evaluatorsCopyResults() {
 
     coachingHTML += `
         </tbody>
-        <tfoot>
-          <tr><td>
-            &#128197; Además, te invitamos a ingresar a nuestra plataforma interactiva
-            <a href="https://english4kids.pathwright.com" target="_blank">Pathwright</a>
-            &#128187;&#10024;, donde podrás reforzar tus aprendizajes en cualquier momento y a tu propio ritmo.
-          </td></tr>
-        </tfoot>
       </table>
     </div>`;
   }
@@ -2828,7 +2782,17 @@ async function evaluatorsCopyResults() {
       })
       .join("")}
     `;
+    // siguientes pasos for reprobado
+    let approachforMap = "";
+    approachforMap = syllabusLower.includes("adults")
+      ? "<b>Continuarás reforzando</b> contenidos en tu <b>nivel actual</b>"
+      : "El estudiante <b>continuará reforzando</b> contenidos en su <b>nivel actual</b>";
+    let apoyarAvances = "";
+    apoyarAvances = syllabusLower.includes("adults")
+      ? "Para apoyar tu avance"
+      : "Para apoyar su avance";
 
+    // =======================================================
     mapaGrande = `<!--SIGUIENTES PASOS-->
  <div
           style="margin: 4rem 0; justify-items: center; width: 100%; justify-self: center; background-color: #FFFFFF; border-radius: 10%; text-align: center; padding:1.5rem 0;">
@@ -2837,24 +2801,18 @@ async function evaluatorsCopyResults() {
             align="center">
     Siguientes Pasos</p>
   <p style="font-family: Verdana; text-align: center; padding: 0rem 3rem; font-size: 0.95rem; font-weight: 500; color: #126064;"
-    align="left">El estudiante <b>continuará reforzando</b> contenidos en su <b>nivel actual</b>
+    align="left">${approachforMap}
     (<b>nivel ${levelVal}</b>)
     durante
     las
     próximas <b>${weeksToRepeat}
           semanas</b>,
-    hasta su siguiente evaluación filtro. </p>
+    hasta la siguiente evaluación filtro. </p>
   <table width="95%" align="center" cellspacing="0" cellpadding="0"
     style=" border-collapse: collapse; background-color: #FCFCFC; border-radius: 10%; text-align: center; margin: 2rem auto;">
     <tr>
       <td>
-        <p style=" border-bottom: 1px dotted #BED5D6; margin: 0 5%; padding: 0.7rem 0; font-family: Verdana; text-align: center; font-size: 1rem; font-weight: 600; color: #126064;">Para apoyar su avance, estos
-          son
-          los
-          temas
-          recomendados
-          para
-          practicar:</p>
+        <p style=" border-bottom: 1px dotted #BED5D6; margin: 0 5%; padding: 0.7rem 0; font-family: Verdana; text-align: center; font-size: 1rem; font-weight: 600; color: #126064;">${apoyarAvances}, estos son los temas recomendados para practicar:</p>
       </td>
     </tr>
    ${mustPracticeTopics}
@@ -2862,35 +2820,42 @@ async function evaluatorsCopyResults() {
 </div>
      `;
   } else {
-    mapaGrande = `
-  <!--MAPA GRANDE-->
-  <div style="margin: 4rem 0; justify-items: center;">
-    <table width="100%" align="center" cellspacing="0" cellpadding="0"
-      style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
-      <tr>
-        <th
-          style="font-size: 1.3rem; font-family: Verdana; font-weight: 800; color: #126064; text-align: center; padding: 1.5rem 0.5rem;"
-          align="center">
-          Progreso Actual
-        </th>
-      </tr>
-      <tr>
-        <td
-          style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 5rem 1rem; font-size: 1.05rem; font-weight: 500; color: #126064;"
-          align="left">
-          <li>El estudiante se encuentra en el <b>nivel ${levelVal}</b>.</li>`;
+    // for aprobadso and no matter if its filter or not
+    let approachforMap = "";
+    approachforMap = syllabusLower.includes("adults")
+      ? "Te encuentras"
+      : "El estudiante se encuentra";
+    let bigmap = "";
+    bigmap = syllabusLower.includes("adults")
+      ? ""
+      : `
+      <img src="${B_ClassPath}" style="width: 100%;">`;
+
+    // ===============
+    mapaGrande = `<!--MAPA GRANDE-->
+          <div style="margin: 4rem 0; justify-items: center;">
+            <table width="100%" align="center" cellspacing="0" cellpadding="0"
+              style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
+              <tr>
+                <th
+                  style="font-size: 1.3rem; font-family: Verdana; font-weight: 800; color: #126064; text-align: center; padding: 1.5rem 0.5rem;"
+                  align="center">
+                  Progreso Actual
+                </th>
+              </tr>
+              <tr>
+                <td
+                  style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 5rem 1rem; font-size: 1.05rem; font-weight: 500; color: #126064;"
+                  align="left">
+                  <li> ${approachforMap} en el <b>nivel ${levelVal}</b>.</li>`;
     if (isFilterEval) {
       mapaGrande += `<li>El próximo nivel filtro es el <b>nivel ${nextFilter}</b>.</li>`;
     }
     mapaGrande += `</td>
-      </tr>`;
-    mapaGrande += (syllabusLower.includes("adults"))
-  ? ""  
-  : `
-      </table>
-      <img src="${B_ClassPath}" style="width: 100%;">
-    </div>
-    `;
+              </tr>
+              </table>
+              ${bigmap}
+            </div>`;
   }
 
   // ---------- styles ----------
