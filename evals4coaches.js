@@ -2,7 +2,7 @@
   const version = "Coaches";
   const versionnum = "1.7.0";
   //NEW FORMAT UPDATE
-  const jsonVersion = 1.5;
+  const jsonVersion = 1.6;
   window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
   showversion.innerHTML = `${version} ${versionnum} - JSON ${jsonVersion}`;
