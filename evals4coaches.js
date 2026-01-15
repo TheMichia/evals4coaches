@@ -1,8 +1,8 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.7.0";
-  //NEW FORMAT UPDATE
-  const jsonVersion = 1.6;
+  const versionnum = "1.7.5";
+  //NEW FORMAT UPDATE APPROVED BY RJ
+  const jsonVersion = 1.5;
   window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
   showversion.innerHTML = `${version} ${versionnum} - JSON ${jsonVersion}`;
@@ -483,7 +483,7 @@ function showAbsentSection() {
       <h2>Absent Students Report-Card</h2>
       <h3>Write comments in each area based on the trainee’s performance:</h3>
 
-      <table>
+      <table style="width:80%">
         <colgroup>
           <col style="width: 25%;">
           <col style="width: 75%;">
@@ -564,69 +564,68 @@ function copyAbsentResults() {
     </div>
     <div class="welcome" style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
       <p class="h2"
-        style="padding: 0 1rem; font-size: 2.5rem; font-weight: 800; color: #126064; font-family: Serif; margin: 0;">
+        style="padding: 0 1rem; font-size: 2.5rem; font-weight: 700; color: #126064; font-family: Segoe UI; margin: 0;">
         Estimado estudiante,</p>
       <!-- &#x1F31F; -->
       <p class="h3"
-        style="padding: 0 1rem; font-size: 1.2rem; font-weight: 800; color: #126064; padding-bottom: 0.8rem; font-family: Verdana;">
+        style="padding: 0 1rem; font-size: 16px; font-weight: 700; color: #126064; padding-bottom: 0.8rem; font-family: Segoe UI;">
         Esperamos que estés teniendo una excelente semana</p>
     </div>
-    <div class="email-body"
-      style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
+    <div style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
       <div class="resultado-global" style="text-align: center; padding: 0 1rem;">
-        <p class="h3" style="font-size: 1.2rem; font-weight: 800; font-family: Verdana; color: #42757b;">En esta
+        <p class="h3" style="font-size: 16px; font-weight: 700; font-family: Segoe UI; color: #42757b;">En esta
           ocasión<br> No pudiste participar en tu evaluación mensual.</p>
-        <p style=" font-family: Verdana; font-size: 0.95rem;">Este reporte se ha elaborado con base en tu desempeño
+        <p style=" font-family: Segoe UI; font-size: 15px;">Este reporte se ha elaborado con base en tu desempeño
           observado durante clases anteriores.</p>
       </div>
       <div class="desempeño" style="padding: 0 1rem; text-align: center;">
         <table style="width: 100%;" width="100%">
           <thead>
             <tr>
-              <th colspan="2"
-                style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center; padding: 1.7rem 0.5rem; border-bottom: 1px dotted #219fa6;"
+              <th colspan='2'                 style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">
+                style="font-size: 1.6rem; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center; padding: 1.7rem 0.5rem; border-bottom: 1px dotted #219fa6;"
                 align="center">&#128313; Desempeño por área &#128313;</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td
-                style="font-family: Verdana; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 500; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
+                style="font-family: Segoe UI; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 400; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
                 width="40%" align="center">Gramática</td>
               <td
-                style="font-size: 0.95rem; font-family: Verdana; font-weight: 500; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
+                style="font-size: 15px; font-family: Segoe UI; font-weight: 400; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
                 align="left">${gr}</td>
             </tr>
             <tr>
               <td
-                style="font-family: Verdana; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 500; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
+                style="font-family: Segoe UI; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 400; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
                 width="40%" align="center">Fluidez</td>
               <td
-                style="font-size: 0.95rem; font-family: Verdana; font-weight: 500; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
+                style="font-size: 15px; font-family: Segoe UI; font-weight: 400; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
                 align="left">${fl}</td>
             </tr>
             <tr>
               <td
-                style="font-family: Verdana; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 500; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
+                style="font-family: Segoe UI; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 400; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
                 width="40%" align="center">Pronunciación</td>
               <td
-                style="font-size: 0.95rem; font-family: Verdana; font-weight: 500; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
+                style="font-size: 15px; font-family: Segoe UI; font-weight: 400; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
                 align="left">${pr}</td>
             </tr>
             <tr>
               <td
-                style="font-family: Verdana; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 500; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
+                style="font-family: Segoe UI; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 400; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
                 width="40%" align="center">Comprensión</td>
               <td
-                style="font-size: 0.95rem; font-family: Verdana; font-weight: 500; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
+                style="font-size: 15px; font-family: Segoe UI; font-weight: 400; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
                 align="left">${co}</td>
             </tr>
             <tr>
               <td
-                style="font-family: Verdana; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 500; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
+                style="font-family: Segoe UI; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 400; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
                 width="40%" align="center">Entonación</td>
               <td
-                style="font-size: 0.95rem; font-family: Verdana; font-weight: 500; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
+                style="font-size: 15px; font-family: Segoe UI; font-weight: 400; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
                 align="left">${en}</td>
             </tr>
           </tbody>
@@ -636,7 +635,7 @@ function copyAbsentResults() {
       <!-- referal -->
       <div>
         <h1
-          style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
+          style="font-size: 1.6rem; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
           align="center">¡Has recibido un cupón de ahorro!</h1>
         <a href="https://www.english4kidsonline.com/amigo" target="_blank"
           style="display:inline-block;  text-decoration:none;">
@@ -652,7 +651,7 @@ function copyAbsentResults() {
           margin: 0;
           padding: 2rem 0 0 0;
           width: 100%;
-          font-family: Verdana;
+          font-family: Segoe UI;
           text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         ">
       <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerAdults.png" alt="Atentamente, equipo de English4Adults" style="width: 100%; display: block; border: 0">
@@ -683,24 +682,24 @@ function copyAbsentResults() {
     </div>
     <div class="welcome" style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
       <p class="h2"
-        style="padding: 0 1rem; font-size: 2.5rem; font-weight: 800; color: #126064; font-family: Serif; margin: 0;">
+        style="padding: 0 1rem; font-size: 2.5rem; font-weight: 700; color: #126064; font-family: Segoe UI; margin: 0;">
         Estimado padre/madre de familia,</p>
       <!-- &#x1F31F; -->
       <p class="h3"
-        style="padding: 0 1rem; font-size: 1.2rem; font-weight: 800; color: #126064; padding-bottom: 0.8rem; font-family: Verdana;">
+        style="padding: 0 1rem; font-size: 16px; font-weight: 700; color: #126064; padding-bottom: 0.8rem; font-family: Segoe UI;">
         Esperamos que estés teniendo una excelente semana</p>
     </div>
-    <div class="email-body"
+    <div
       style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
-      <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
+      <div style="padding: 0 1rem; text-align: center;">
         <p
-          style="padding: 0.5rem; font-size: 1.3rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
+          style="padding: 0.5rem; font-size: 15px; text-decoration: none; font-family: Segoe UI; color: #297b7f; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
           Te informamos que:
         </p>
-        <p class="h3" style="font-size: 1.2rem; font-weight: 800; font-family: Verdana; color: #42757b; margin:0;">Tu
+        <p class="h3" style="font-size: 16px; font-weight: 700; font-family: Segoe UI; color: #42757b; margin:0;">Tu
           hijo/a no
           asististió a su evaluación mensual.
-        <p style=" font-family: Verdana; font-size: 0.95rem; color: #126064; padding: 1.5rem 3rem 0.2rem;">Este reporte
+        <p style=" font-family: Segoe UI; font-size: 15px; color: #126064; padding: 1.5rem 3rem 0.2rem;">Este reporte
           se
           ha
           elaborado con base en
@@ -712,50 +711,50 @@ function copyAbsentResults() {
         <table style="width: 100%;" width="100%">
           <thead>
             <tr>
-              <th colspan="2"
-                style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center; padding: 1.7rem 0.5rem; border-bottom: 1px dotted #219fa6;"
+              <th colspan='2'                 style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">
+                style="font-size: 1.6rem; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center; padding: 1.7rem 0.5rem; border-bottom: 1px dotted #219fa6;"
                 align="center">&#128313; Desempeño por área &#128313;</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td
-                style="font-family: Verdana; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 500; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
+                style="font-family: Segoe UI; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 400; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
                 width="40%" align="center">Gramática</td>
               <td
-                style="font-size: 0.95rem; font-family: Verdana; font-weight: 500; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
+                style="font-size: 15px; font-family: Segoe UI; font-weight: 400; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
                 align="left">${gr}</td>
             </tr>
             <tr>
               <td
-                style="font-family: Verdana; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 500; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
+                style="font-family: Segoe UI; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 400; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
                 width="40%" align="center">Fluidez</td>
               <td
-                style="font-size: 0.95rem; font-family: Verdana; font-weight: 500; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
+                style="font-size: 15px; font-family: Segoe UI; font-weight: 400; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
                 align="left">${fl}</td>
             </tr>
             <tr>
               <td
-                style="font-family: Verdana; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 500; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
+                style="font-family: Segoe UI; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 400; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
                 width="40%" align="center">Pronunciación</td>
               <td
-                style="font-size: 0.95rem; font-family: Verdana; font-weight: 500; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
+                style="font-size: 15px; font-family: Segoe UI; font-weight: 400; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
                 align="left">${pr}</td>
             </tr>
             <tr>
               <td
-                style="font-family: Verdana; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 500; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
+                style="font-family: Segoe UI; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 400; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
                 width="40%" align="center">Comprensión</td>
               <td
-                style="font-size: 0.95rem; font-family: Verdana; font-weight: 500; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
+                style="font-size: 15px; font-family: Segoe UI; font-weight: 400; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
                 align="left">${co}</td>
             </tr>
             <tr>
               <td
-                style="font-family: Verdana; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 500; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
+                style="font-family: Segoe UI; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); font-weight: 400; color: #126064; text-align: center; font-size: 1.1rem; width: 40%; padding: 0.7rem;"
                 width="40%" align="center">Entonación</td>
               <td
-                style="font-size: 0.95rem; font-family: Verdana; font-weight: 500; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
+                style="font-size: 15px; font-family: Segoe UI; font-weight: 400; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: left;"
                 align="left">${en}</td>
             </tr>
           </tbody>
@@ -765,7 +764,7 @@ function copyAbsentResults() {
       <!-- referal -->
       <div>
         <h1
-          style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
+          style="font-size: 1.6rem; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
           align="center">¡Has recibido un cupón de ahorro!</h1>
         <a href="https://www.english4kidsonline.com/amigo" target="_blank"
           style="display:inline-block;  text-decoration:none;">
@@ -781,7 +780,7 @@ function copyAbsentResults() {
           margin: 0;
           padding: 2rem 0 0 0;
           width: 100%;
-          font-family: Verdana;
+          font-family: Segoe UI;
           text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         ">
       <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerKids.png" alt="Atentamente, equipo de English4Adults" style="width: 100%; display: block; border: 0">
@@ -1292,9 +1291,9 @@ function copyResults() {
   const desempeñoHTML = areas
     .map(
       (a) =>
-        `<tr><td class="evalarea">${a.label}</td><td> ${describeScore(
-          document.getElementById(a.id).value,
-        )}</td></tr>`,
+        `<tr><td 
+                  style="font-family:  Segoe UI, Roboto; padding:  0.5rem 0.5rem 0.9rem 10%; border-bottom: 1px dotted #DCF8FA; font-weight: 600; color: #126064; text-align: center; font-size: 16px;">${a.label}</td>               
+        <td style="font-size: 16px; font-family:  Segoe UI, Roboto; color: #305254; padding: 0.9rem 0.5rem 0.9rem 10%; text-align: left; font-weight: 400; border-bottom: 1px dotted #DCF8FA;"> ${describeScore(document.getElementById(a.id).value,)}</td></tr>`,
     )
     .join("");
 
@@ -1364,32 +1363,74 @@ function copyResults() {
   let Referal = "";
 
   if (syllabus.startsWith("Adults")) {
-    Welcome =
-      '          <div class="Evaluation-Results"          style="margin: 0; background: linear-gradient(to bottom, #f5ffff 10%, #AED6D6 60%, #1ca5ab 90%); background-color: #f5ffff;">          <div class="header" style="text-align: center;">            <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERADULTS.png" alt="Evaluación Mensual" n="" style="width: 100%; display: block; border: 0;">          </div>          <div class="welcome" style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">            <p class="h2"              style="font-size: 2.5rem; font-weight: 800; color: #126064; font-family: Serif; margin:1rem auto 0;">              ¡Te              saludamos de              English4Adults!</p>            <p class="h3" style="font-size: 1.1rem; font-weight: 800; color: #126064; font-family: Verdana;">              Esperamos que estés teniendo una excelente semana</p>            <p style="font-family: Verdana; font-size: 0.95rem; font-weight: 400; color: #273030; padding: 1rem;">Queremos              informarte sobre              tu desempeño en tu última evaluación mensual.</p>          </div>';
-    Referal =
-      ' <!-- referal -->                    <div>                      <h1                        style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"                        align="center">¡Has recibido un cupón de ahorro!</h1> <a href="https://www.english4kidsonline.com/amigo"                        target="_blank" style="display:inline-block;  text-decoration:none;"> <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Referal/referalAdults.gif" alt="Refiere Aquí" style="width: 100%; display:block; margin:0 auto; border:0;">                      </a>                    </div>';
-    footer =
-      '      <!-- footer -->      <div        style="text-align: center; margin: 0; padding: 2rem 0 0 0; width: 100%; font-family: Verdana; text-shadow: 0 0 20px rgba(255,255,255,0.1);">        <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerKids.png" alt="Atentamente, Equipo de English4Adults" style="width: 100%; display: block; border: 0;">      </div>';
+    // ______
+    Welcome = `          <div class="Evaluation-Results"
+  style="margin: 0; background: linear-gradient(to bottom, #f5ffff 10%, #AED6D6 60%, #1ca5ab 90%); background-color: #f5ffff;">
+  <div class="header" style="text-align: center;"> <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERADULTS.png" alt="Evaluación Mensual" n="" style="width: 100%; display: block; border: 0;">
+  </div>
+  <div class="welcome" style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
+    <p class="h2" style="font-size: 26px; font-weight: 700; color: #126064; font-family: Segoe UI; margin:1rem auto 0;">
+      ¡Te saludamos de English4Adults!</p>
+    <p class="h3" style="font-size: 15px; font-weight: 400; color: #126064; font-family: Segoe UI;"> Esperamos que estés
+      teniendo una excelente semana</p>
+    <p style="font-family: Segoe UI; font-size: 15px; font-weight: 400; color: #273030; padding: 1rem;">Queremos
+      informarte sobre tu desempeño en tu última evaluación mensual.</p>
+  </div>`;
+    // ______
+    Referal = ` <!-- referal -->
+<div>
+  <h1
+    style="font-size: 26px; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
+    align="center">¡Has recibido un cupón de ahorro!</h1> <a href="https://www.english4kidsonline.com/amigo"
+    target="_blank" style="display:inline-block;  text-decoration:none;"> <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Referal/referalAdults.gif" alt="Refiere Aquí" style="width: 100%; display:block; margin:0 auto; border:0;">
+  </a>
+</div>`;
+    // ______
+    footer = `     <!-- footer -->
+<div style="text-align: center; margin: 0; padding: 2rem 0 0; width: 100%"> <img src=" https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerKids.png"        alt="Atentamente, Equipo de English4Adults" style="width: 100%; display: block; border: 0;">
+</div>`;
   }
+  // ______
   //for kids, teens and juniors
   else {
-    Welcome =
-      '     <div class="Evaluation-Results"         style="margin: 0; background: linear-gradient(to bottom, #f5ffff 10%, #AED6D6 60%, #1ca5ab 90%); background-color: #f5ffff;">         <div class="header" style="text-align: center;">           <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERKIDS.png" alt="Evaluación Mensual" n="" style="width: 100%; display: block; border: 0;">          </div>          <div class="welcome" style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">            <p class="h2"              style="font-size: 2.5rem; font-weight: 800; color: #126064; font-family: Serif; margin:1rem auto 0;">              ¡Te              saludamos de              English4Kids!</p>            <p class="h3" style="font-size: 1.2rem; font-weight: 800; color: #126064; font-family: Verdana;">              Esperamos que estés teniendo una excelente semana</p>            <p style="font-family: Verdana; font-size: 0.95rem; font-weight: 400; color: #273030; margin: 2rem auto;">Queremos              informarte sobre              el desempeño de tu hijo/a en su última evaluación mensual.</p>          </div>';
-    Referal =
-      ' <!-- referal -->                    <div>                      <h1                        style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"                        align="center">¡Has recibido un cupón de ahorro!</h1> <a href="https://www.english4kidsonline.com/amigo"                        target="_blank" style="display:inline-block;  text-decoration:none;"> <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Referal/refKids.gif" alt="Refiere Aquí" style="width: 100%; display:block; margin:0 auto; border:0;">                      </a>                    </div>';
-    footer =
-      '      <!-- footer -->      <div        style="text-align: center; margin: 0; padding: 2rem 0 0 0; width: 100%; font-family: Verdana; text-shadow: 0 0 20px rgba(255,255,255,0.1);">        <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerKids.png" alt="Atentamente, Equipo de English4Kids" style="width: 100%; display: block; border: 0;">      </div>';
+    // ______
+    Welcome = `     <div class="Evaluation-Results"
+  style="margin: 0; background: linear-gradient(to bottom, #f5ffff 10%, #AED6D6 60%, #1ca5ab 90%); background-color: #f5ffff;">
+  <div class="header" style="text-align: center;"> <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERKIDS.png" alt="Evaluación Mensual" n="" style="width: 100%; display: block; border: 0;">
+  </div>
+  <div class="welcome" style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
+    <p class="h2" style="font-size: 26px; font-weight: 700; color: #126064; font-family: Segoe UI; margin:1rem auto 0;">
+      ¡Te saludamos de English4Kids!</p>
+    <p class="h3" style="font-size: 15px; font-weight: 400; color: #126064; font-family: Segoe UI;"> Esperamos que
+      estés teniendo una excelente semana</p>
+    <p style="font-family: Segoe UI; font-size: 15px; font-weight: 400; color: #273030; margin: 2rem auto;">Queremos
+      informarte sobre el desempeño de tu hijo/a en su última evaluación mensual.</p>
+  </div>`;
+    // ______
+    Referal = ` <!-- referal -->
+<div>
+  <h1
+    style="font-size: 26px; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
+    align="center">¡Has recibido un cupón de ahorro!</h1> <a href="https://www.english4kidsonline.com/amigo"
+    target="_blank" style="display:inline-block;  text-decoration:none;"> <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Referal/refKids.gif" alt="Refiere Aquí" style="width: 100%; display:block; margin:0 auto; border:0;">
+  </a>
+</div>`;
+    // ______
+    footer = `     <!-- footer -->
+<div style="text-align: center; margin: 0; padding: 2rem 0 0 0; width: 100%;">
+  <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerKids.png" alt="Atentamente, Equipo de English4Kids" style="width: 100%; display: block; border: 0;">
+</div>`;
   }
 
   const temasDominadosSection = approvedTopics.length
-    ? `<div class='temas-dominados'>
-          <table>
+    ? `<div style="margin: 2.8rem 0;  justify-items: center;">
+          <table style="width:80%">
             <thead>
-              <tr><th><b>&#128313;Temas Dominados&#128313;</b></th></tr>
+              <tr><th  style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">&#128313;Temas Dominados&#128313;</th></tr>
             </thead>
             <tbody>
               ${approvedTopics
-                .map((t) => `<tr><td>&#9989; ${t}</td></tr>`)
+                .map((t) => `<tr>               <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 10%;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15);>&#9989; ${t}</td></tr>`)
                 .join("")}
             </tbody>
           </table>
@@ -1398,13 +1439,13 @@ function copyResults() {
 
   const temasReforzarSection = reinforceTopics.length
     ? `<div class='temas-reforzar'>
-          <table>
+          <table style="width:80%">
             <thead>
-              <tr><th>&#128313; <b>Temas a Reforzar</b>&#128313;</th></tr>
+              <tr><th  style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">&#128313; Temas a Reforzar&#128313;</th></tr>
             </thead>
             <tbody>
               ${reinforceTopics
-                .map((t) => `<tr><td>&#10004; ${t}</td></tr>`)
+                .map((t) => `<tr>               <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 6.5vw;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15);>&#10004; ${t}</td></tr>`)
                 .join("")}
             </tbody>
           </table>
@@ -1413,14 +1454,14 @@ function copyResults() {
 
   const areasOportunidadSection = opportunityTopics.length
     ? `<div class='areas-oportunidad'>
-          <table>
+          <table style="width:80%">
             <thead>
-              <tr><th>&#128313;<b>Áreas de Oportunidad&#128313;</b></th></tr>
+              <tr><th  style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">&#128313;Áreas de Oportunidad&#128313;</th></tr>
             </thead>
             <tbody>
               ${opportunityTopics
                 .map(
-                  (o) => `<tr><td>&#10004; ${o.title}</td></tr>
+                  (o) => `<tr>               <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 6.5vw;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15);>&#10004; ${o.title}</td></tr>
                         ${
                           o.answer
                             ? `<tr><td class='reforzar-R-C'>&#10060; Respuesta: ${o.answer}</td></tr>`
@@ -1441,14 +1482,14 @@ function copyResults() {
   const pronunciacionSection =
     pronunciationMistakes && pronunciationMistakes.trim()
       ? `<div class='pronunciacion-reforzar'>
-          <table>
+          <table style="width:80%">
             <thead>
-              <tr><th><b>&#128313;Pronunciación a Reforzar&#128313;</b></th></tr>
+              <tr><th  style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">&#128313;Pronunciación a Reforzar&#128313;</th></tr>
             </thead>
             <tbody>
               ${pronunciationMistakes
                 .split(/\r?\n/)
-                .map((ln) => `<tr><td>${ln}</td></tr>`)
+                .map((ln) => `<tr>               <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 6.5vw;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15);>${ln}</td></tr>`)
                 .join("")}
             </tbody>
           </table>
@@ -1471,9 +1512,9 @@ function copyResults() {
     }
 
     .Evaluation-Results table th {
-      font-size: 1.6rem;
-      font-family: Serif;
-      font-weight: 800;
+      font-size: 16px;
+      font-family: Segoe UI;
+      font-weight: 600;
       color: #126064;
       text-align: center;
       padding: 1.7rem 0.5rem;
@@ -1481,9 +1522,9 @@ function copyResults() {
     }
 
     .Evaluation-Results table td {
-      font-size: 0.95rem;
-      font-family: Verdana;
-      font-weight: 500;
+      font-size: 15px;
+      font-family: Segoe UI;
+      font-weight: 400;
       color: #305254;
       padding: 0.9rem 0.5rem 0.9rem 6.5vw;
       border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
@@ -1491,8 +1532,8 @@ function copyResults() {
     }
 
     .Evaluation-Results p {
-      font-family: Verdana;
-      font-size: 0.95rem;
+      font-family: Segoe UI;
+      font-size: 15px;
     }
 
 
@@ -1515,24 +1556,24 @@ function copyResults() {
     }
 
     .Evaluation-Results .resultado-global .h2 {
-      font-family: Serif;
-      font-size:2.1rem;
-      font-weight: bold;
+      font-family: Segoe UI;
+      font-size:22px;
+      font-weight: 700;
       color: #297b7f;
       text-shadow: 0 0 10px rgb(163, 225, 230, 0.15);
     }
 
     .Evaluation-Results .resultado-global .h3 {
-      font-size: 1.2rem;
-      font-weight: 800;
-      font-family: Verdana;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: Segoe UI;
       color: #42757b;
       padding: 2.5rem 0;
     }
 
     .Evaluation-Results .resultado-global p {
-      font-weight: 500;
-      font-family: Verdana;
+      font-weight: 400;
+      font-family: Segoe UI;
       color: #273030;
       padding: 0 1rem 0;
     }
@@ -1544,20 +1585,20 @@ function copyResults() {
     }
 
     .Evaluation-Results .desempeño table {
-      border-radius: 10%;
+      border-radius: 15px;
       overflow: hidden;
     }
 
     .Evaluation-Results .desempeño table td:first-child {
-      font-weight: 500;
+      font-weight: 400;
       color: #126064;
       text-align: center;
-      font-size: 1.1rem;
-      width: 20%;
+      font-size: 15px;
+      width: 30%;
     }
 
     .Evaluation-Results .desempeño table td:last-child {
-      font-weight: 500;
+      font-weight: 400;
       border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
     }
 
@@ -1570,7 +1611,7 @@ function copyResults() {
 
 
     .Evaluation-Results .temas-dominados table {
-      border-radius: 10%;
+      border-radius: 15px;
       overflow: hidden;
     }
 
@@ -1588,7 +1629,7 @@ function copyResults() {
 
 
     .Evaluation-Results .temas-reforzar table {
-      border-radius: 10%;
+      border-radius: 15px;
       overflow: hidden;
     }
 
@@ -1604,7 +1645,7 @@ function copyResults() {
 
 
     .Evaluation-Results .areas-oportunidad table {
-      border-radius: 10%;
+      border-radius: 15px;
       overflow: hidden;
     }
 
@@ -1618,7 +1659,7 @@ function copyResults() {
 
     .Evaluation-Results .reforzar-R-C {
       text-align: left;
-      font-family: Verdana;
+      font-family: Segoe UI;
       color: #052729;
     }
 
@@ -1630,7 +1671,7 @@ function copyResults() {
 
 
     .Evaluation-Results .pronunciacion-reforzar table {
-      border-radius: 10%;
+      border-radius: 15px;
       overflow: hidden;
     }
 
@@ -1640,7 +1681,7 @@ function copyResults() {
     }
 
     .Evaluation-Results .pronunciacion-reforzar table tr:first-child td {
-      font-weight: 500;
+      font-weight: 400;
       color: #355d5f;
       text-align: center;
       padding: 0.95rem 0;
@@ -1654,12 +1695,12 @@ function copyResults() {
 
 
     .Evaluation-Results .comentarios-coach table {
-      border-radius: 10%;
+      border-radius: 15px;
       overflow: hidden;
     }
 
     .Evaluation-Results .comentarios-coach table td {
-      font-weight: 500;
+      font-weight: 400;
       color: #044043;
       text-align: center;
       padding: 0.7rem 0;
@@ -1668,19 +1709,20 @@ function copyResults() {
 `;
 
   const ResultadoGlobalRC = `  
-  <div class='resultado-global'>   
-  <p style="padding: 0 1rem 0; font-family: Serif; font-size: 2.1rem; font-weight: bold; color: #297b7f; text-shadow: 0 0 10px rgb(163, 225, 230, 0.15);">${
+  <div style='padding: 0 1rem;  text-align: center;'> 
+  <p style="padding: 0 1rem 0; font-family: Segoe UI; font-size: 26px; font-weight: 700; color: #297b7f; text-shadow: 0 0 10px rgb(163, 225, 230, 0.15);">${
     resultadoGlobal.mensajeResultado
   }</p>  
-   <p style="font-size: 1.2rem; font-weight: 800; font-family: Verdana; color: #42757b; padding: 0;">${resultadoGlobal.descripcionResultado}</p>   
-   <p style="font-size: 0.95rem; font-weight: 500; font-family: Verdana; color: #273030; padding: 0 1rem 0;">A continuación un informe detallado de la evaluación:</p>  
+   <p style="font-size: 16px; font-weight: 700; font-family: Segoe UI; color: #42757b; padding: 0;">${resultadoGlobal.descripcionResultado}</p>   
+   <p style="font-size: 15px; font-weight: 400; font-family: Segoe UI; color: #273030; padding: 0 1rem 0;">A continuación un informe detallado de la evaluación:</p>  
   </div>`;
 
-  const DesempeñoRC = `  <div class='desempeño'>  
-  <table>      
+  const DesempeñoRC = `  
+      <div style='  padding: 0 1rem;  justify-items: center;'>
+  <table style="width:80%">      
   <thead>    
   <tr>        
-  <th colspan='2'>&#128313; Desempeño por área&#128313;</th>  
+  <th colspan='2'  style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">&#128313; Desempeño por área&#128313;</th>  
   </tr>    
   </thead>     
   <tbody>       
@@ -1690,15 +1732,15 @@ function copyResults() {
   </div>`;
 
   const CoachCommentRC = ` <div class="comentarios-coach">
-    <table>    
+    <table style="width:80%">    
     <thead>     
       <tr>     
-        <th>&#128221; 
-          <b>Comentarios del Coach&#128221;</b></th>  
+        <th  style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">&#128221; 
+          Comentarios del Coach&#128221;</th>  
       </tr>   
     </thead>   
     <tbody>     
-    <tr><td>     
+    <tr>               <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 6.5vw;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15);>     
       ${comentariosCoach ? comentariosCoach : "Muy buen trabajo!"}       
     </td></tr>      
     </tbody>      
@@ -1706,11 +1748,11 @@ function copyResults() {
     </div>`;
 
   // ------------------------------------------
-    // NEW FORMAT MAPS
+  // NEW FORMAT MAPS
   const includesAny = (text, arr) =>
-    arr.some((item) => text.includes(item.toLowerCase())); 
+    arr.some((item) => text.includes(item.toLowerCase()));
 
-  // Mapping claro, orden corporativo y sin novelas
+  // Mapping 4maps
   const classGroups = [
     {
       match: ["kids (super intensivo) 8-12", "teens 13-17 (3hrs/week)"],
@@ -1728,7 +1770,12 @@ function copyResults() {
       S: "1-10",
     },
     {
-      match: ["kids masters", "kids masters 20", "teens masters", "teens masters 2"],
+      match: [
+        "kids masters",
+        "kids masters 20",
+        "teens masters",
+        "teens masters 2",
+      ],
       B: "M_1-10",
       S: "1-10",
     },
@@ -1741,16 +1788,21 @@ function copyResults() {
       match: ["adults (3hrs/week)", "adults masters (3hrs/week)"],
       B: "A3_1-12",
       S: "1-12",
-    }
+    },
   ];
 
   let SclassPathLvl = null;
   let BclassPathLvl = null;
 
-  const syllabusLower = syllabus?.toLowerCase() || ""; // blindaje militar
+  const syllabusLower = syllabus?.toLowerCase() || ""; 
 
   for (const group of classGroups) {
-    if (includesAny(syllabusLower, group.match.map(m => m.toLowerCase()))) {
+    if (
+      includesAny(
+        syllabusLower,
+        group.match.map((m) => m.toLowerCase()),
+      )
+    ) {
       BclassPathLvl = group.B;
       SclassPathLvl = group.S;
       break;
@@ -1760,29 +1812,29 @@ function copyResults() {
   const levelsDropdown = document.getElementById("levelsDropdown");
   const levelVal = levelsDropdown?.value || 0;
 
-  // Final URLs con naming bien amarrado
+  // Final URLs 
   const S_ClassPath = `<!--MAPA PEQUEÑA-->
   <div style="text-align: center;">
   <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/S-CP_${SclassPathLvl}_A${levelVal}.png" style="width:80%; margin-bottom: 1rem;"> <p
-      style="font-weight: bold; font-family: Verdana; font-size: 0.85rem; color: #506d6d; margin: 0 0 0.5rem 0; padding: 0 1rem;">
+      style="font-weight: 600; font-family: Segoe UI; font-size: 14px; color: #506d6d; margin: 0 0 0.5rem 0; padding: 0 1rem;">
       ${syllabus} | Nivel ${levelVal}
     </p>
     </div>`;
-  
+
   const B_ClassPath = `  <!--MAPA GRANDE-->
       <div style="margin: 1rem auto; justify-items: center;">
         <table width="100%" align="center" cellspacing="0" cellpadding="0"
-          style="width: 100%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
+          style="width: 100%; border-collapse: collapse; border-radius: 15px; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
           <tr>
             <th
-              style="border-bottom: none; border-top: 1px dotted #219fa6; font-size: 1.3rem; font-family: Verdana; font-weight: 800; color: #126064; text-align: center; padding: 1.5rem 0.5rem;"
+              style="border-bottom: none; border-top: 1px dotted #219fa6; font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center; padding: 1.5rem 0.5rem;"
               align="center">
               Progreso Actual
             </th>
           </tr>
           <tr>
             <td
-              style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 5rem 1rem; font-size: 1.05rem; font-weight: 500; color: #126064;"
+              style="font-family: Segoe UI; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 5rem 1rem; font-size: 16px; font-weight: 400; color: #126064;"
               align="left">
               <li>El estudiante se encuentra en el <b>nivel ${levelVal}</b>.</li>
             </td>
@@ -1790,10 +1842,8 @@ function copyResults() {
         </table> <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/B-CP_${BclassPathLvl}_A${levelVal}.png" style="width:100%; margin-bottom: 1rem; border-bottom: 1px dotted #219fa6; ">
       </div>`;
 
-
   // ------------------------------------------
 
-  
   // Construcción del HTML final
   const reportHTML = `
   <html lang='en'>
@@ -1801,11 +1851,11 @@ function copyResults() {
       <meta charset='utf-8' />
       <meta name='viewport' content='width=device-width, initial-scale=1' />
       <title>Reporte de Evaluación</title>
-      <style>${styles}</style>
+      <style></style>
     </head>
      <body style="margin: 0 auto;">
           ${Welcome}
-          <div class='email-body'>  
+              <div style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;"> 
           ${S_ClassPath}
           ${ResultadoGlobalRC}
           ${DesempeñoRC}
@@ -1822,7 +1872,6 @@ function copyResults() {
     </body>
   </html>`;
 
-
   // ------------------------------------------
   const fp = document.getElementById("fl").value;
   const gp = document.getElementById("gr").value;
@@ -1831,7 +1880,7 @@ function copyResults() {
   const ip = document.getElementById("in").value;
   const previewHTML = `
    <div class="results-preview"><div class="floating-results">
-        <table>
+        <table style="width:80%">
         <tr>
         <th colspan="2">Final Scores</th>
         </tr>
