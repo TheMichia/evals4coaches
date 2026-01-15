@@ -1,7 +1,7 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.7.5";
-  //NEW FORMAT UPDATE APPROVED BY RJ
+  const versionnum = "1.7.6";
+  //NEW FORMAT UPDATE APPROVED BY RJ -- fixed one incident of missing " in ;>
   const jsonVersion = 1.5;
   window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
@@ -1430,7 +1430,7 @@ function copyResults() {
               ${approvedTopics
                 .map(
                   (t) =>
-                    `<tr>               <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 10%;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15);>&#9989; ${t}</td></tr>`,
+                    `<tr>               <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 10%;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15);">&#9989; ${t}</td></tr>`,
                 )
                 .join("")}
             </tbody>
