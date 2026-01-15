@@ -1,7 +1,7 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.7.5";
-  //NEW FORMAT UPDATE APPROVED BY RJ
+  const versionnum = "1.7.0";
+  //NEW FORMAT UPDATE
   const jsonVersion = 1.5;
   window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
@@ -483,7 +483,7 @@ function showAbsentSection() {
       <h2>Absent Students Report-Card</h2>
       <h3>Write comments in each area based on the trainee’s performance:</h3>
 
-      <table style="width:80%">
+      <table>
         <colgroup>
           <col style="width: 25%;">
           <col style="width: 75%;">
@@ -563,17 +563,17 @@ function copyAbsentResults() {
       <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERADULTS.png" alt="Reporte de Evaluación Mensual" style="width: 100%; display: block; border: 0">
     </div>
     <div class="welcome" style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
-      <p class="h2"
-        style="padding: 0 1rem; font-size: 2.5rem; font-weight: 700; color: #126064; font-family: Segoe UI; margin: 0;">
+      <p 
+        style="padding: 0 1rem; font-size: 22px; font-weight: 600; color: #126064; font-family: Segoe UI; margin: 0;">
         Estimado estudiante,</p>
       <!-- &#x1F31F; -->
-      <p class="h3"
-        style="padding: 0 1rem; font-size: 16px; font-weight: 700; color: #126064; padding-bottom: 0.8rem; font-family: Segoe UI;">
+     
+      <p         style="padding: 0 1rem; font-size: 16px; font-weight: 400; color: #126064; padding-bottom: 0.8rem; font-family: Segoe UI;">
         Esperamos que estés teniendo una excelente semana</p>
     </div>
     <div style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
       <div class="resultado-global" style="text-align: center; padding: 0 1rem;">
-        <p class="h3" style="font-size: 16px; font-weight: 700; font-family: Segoe UI; color: #42757b;">En esta
+        <p class="h3" style="font-size: 22px; font-weight: 600; font-family: Segoe UI; color: #42757b;">En esta
           ocasión<br> No pudiste participar en tu evaluación mensual.</p>
         <p style=" font-family: Segoe UI; font-size: 15px;">Este reporte se ha elaborado con base en tu desempeño
           observado durante clases anteriores.</p>
@@ -582,8 +582,7 @@ function copyAbsentResults() {
         <table style="width: 100%;" width="100%">
           <thead>
             <tr>
-              <th colspan='2'                 style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">
-                style="font-size: 1.6rem; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center; padding: 1.7rem 0.5rem; border-bottom: 1px dotted #219fa6;"
+              <th colspan='2' style="font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center; padding: 1.7rem 0.5rem; border-bottom: 1px dotted #219fa6;"
                 align="center">&#128313; Desempeño por área &#128313;</th>
             </tr>
           </thead>
@@ -633,7 +632,8 @@ function copyAbsentResults() {
       </div>
 
       <!-- referal -->
-      <div>
+
+      <div style=" margin: 2.8rem 0; text-align: center; width: 100%">
         <h1
           style="font-size: 1.6rem; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
           align="center">¡Has recibido un cupón de ahorro!</h1>
@@ -682,21 +682,20 @@ function copyAbsentResults() {
     </div>
     <div class="welcome" style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
       <p class="h2"
-        style="padding: 0 1rem; font-size: 2.5rem; font-weight: 700; color: #126064; font-family: Segoe UI; margin: 0;">
+        style="padding: 0 1rem; font-size: 22px; font-weight: 600; color: #126064; font-family: Segoe UI; margin: 0;">
         Estimado padre/madre de familia,</p>
       <!-- &#x1F31F; -->
-      <p class="h3"
-        style="padding: 0 1rem; font-size: 16px; font-weight: 700; color: #126064; padding-bottom: 0.8rem; font-family: Segoe UI;">
+      <p         style="padding: 0 1rem; font-size: 16px; font-weight: 400; color: #126064; padding-bottom: 0.8rem; font-family: Segoe UI;">
         Esperamos que estés teniendo una excelente semana</p>
     </div>
     <div
       style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
       <div style="padding: 0 1rem; text-align: center;">
         <p
-          style="padding: 0.5rem; font-size: 15px; text-decoration: none; font-family: Segoe UI; color: #297b7f; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
+          style="padding: 0.5rem; font-size: 22px; text-decoration: none; font-family: Segoe UI; color: #297b7f; font-weight: 600; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
           Te informamos que:
         </p>
-        <p class="h3" style="font-size: 16px; font-weight: 700; font-family: Segoe UI; color: #42757b; margin:0;">Tu
+        <p class="h3" style="font-size: 16px; font-weight: 400; font-family: Segoe UI; color: #42757b; margin:0;">Tu
           hijo/a no
           asististió a su evaluación mensual.
         <p style=" font-family: Segoe UI; font-size: 15px; color: #126064; padding: 1.5rem 3rem 0.2rem;">Este reporte
@@ -711,9 +710,8 @@ function copyAbsentResults() {
         <table style="width: 100%;" width="100%">
           <thead>
             <tr>
-              <th colspan='2'                 style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">
-                style="font-size: 1.6rem; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center; padding: 1.7rem 0.5rem; border-bottom: 1px dotted #219fa6;"
-                align="center">&#128313; Desempeño por área &#128313;</th>
+              <th colspan='2'                 style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 700;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">
+                  &#128313; Desempeño por área &#128313;</th>
             </tr>
           </thead>
           <tbody>
@@ -1293,7 +1291,7 @@ function copyResults() {
       (a) =>
         `<tr><td 
                   style="font-family:  Segoe UI, Roboto; padding:  0.5rem 0.5rem 0.9rem 10%; border-bottom: 1px dotted #DCF8FA; font-weight: 600; color: #126064; text-align: center; font-size: 16px;">${a.label}</td>               
-        <td style="font-size: 16px; font-family:  Segoe UI, Roboto; color: #305254; padding: 0.9rem 0.5rem 0.9rem 10%; text-align: left; font-weight: 400; border-bottom: 1px dotted #DCF8FA;"> ${describeScore(document.getElementById(a.id).value,)}</td></tr>`,
+        <td style="font-size: 16px; font-family:  Segoe UI, Roboto; color: #305254; padding: 0.9rem 0.5rem 0.9rem 10%; text-align: left; font-weight: 400; border-bottom: 1px dotted #DCF8FA;"> ${describeScore(document.getElementById(a.id).value)}</td></tr>`,
     )
     .join("");
 
@@ -1430,7 +1428,10 @@ function copyResults() {
             </thead>
             <tbody>
               ${approvedTopics
-                .map((t) => `<tr>               <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 10%;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15);>&#9989; ${t}</td></tr>`)
+                .map(
+                  (t) =>
+                    `<tr>               <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 10%;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15);>&#9989; ${t}</td></tr>`,
+                )
                 .join("")}
             </tbody>
           </table>
@@ -1438,14 +1439,27 @@ function copyResults() {
     : "";
 
   const temasReforzarSection = reinforceTopics.length
-    ? `<div class='temas-reforzar'>
+    ? `
+      <div style="  margin: 2.8rem 0;  justify-items: center;">
           <table style="width:80%">
             <thead>
-              <tr><th  style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">&#128313; Temas a Reforzar&#128313;</th></tr>
+              <tr>
+              <th style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">
+                &#128313; Temas a Reforzar &#128313;
+                </th>
+                </tr>
             </thead>
             <tbody>
               ${reinforceTopics
-                .map((t) => `<tr>               <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 6.5vw;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15);>&#10004; ${t}</td></tr>`)
+                .map(
+                  (t) => `
+                <tr>               
+                <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 6.5vw;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15);">
+                &#10004; ${t}
+                </td>
+                </tr>
+                `,
+                )
                 .join("")}
             </tbody>
           </table>
@@ -1453,23 +1467,42 @@ function copyResults() {
     : "";
 
   const areasOportunidadSection = opportunityTopics.length
-    ? `<div class='areas-oportunidad'>
+    ? `
+      <div style=" margin: 2.8rem 0; justify-items: center;">
           <table style="width:80%">
             <thead>
-              <tr><th  style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">&#128313;Áreas de Oportunidad&#128313;</th></tr>
+              <tr>
+              <th  style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">
+              &#128313;Áreas de Oportunidad&#128313;
+              </th>
+              </tr>
             </thead>
             <tbody>
               ${opportunityTopics
                 .map(
-                  (o) => `<tr>               <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 6.5vw;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15);>&#10004; ${o.title}</td></tr>
+                  (o) => `<tr>   
+                  <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 10%;">
+                  &#10004; ${o.title}
+                  </td>
+                  </tr>
                         ${
                           o.answer
-                            ? `<tr><td class='reforzar-R-C'>&#10060; Respuesta: ${o.answer}</td></tr>`
+                            ? `<tr>
+              <td
+                style="  text-align: left;  color: #126064;  padding: 0.5rem 0.5rem 0.5rem 15%; font-family: Segoe UI;">
+                            &#10060; Respuesta: ${o.answer}
+                            </td>
+                            </tr>`
                             : ""
                         }
                         ${
                           o.correction
-                            ? `<tr><td class='reforzar-R-C'>&#9989; Corrección: ${o.correction}</td></tr>`
+                            ? `<tr>
+              <td
+                style="  text-align: left;  color: #126064;  padding: 0.5rem 0.5rem 0.5rem 15%;  border-bottom: 1px dotted rgb(18, 96, 100, 0.2);  font-family: Segoe UI;">
+                            &#9989; Corrección: ${o.correction}
+                            </td>
+                            </tr>`
                             : ""
                         }`,
                 )
@@ -1481,7 +1514,8 @@ function copyResults() {
 
   const pronunciacionSection =
     pronunciationMistakes && pronunciationMistakes.trim()
-      ? `<div class='pronunciacion-reforzar'>
+      ? `
+      <div style=" margin: 2.8rem 0; justify-items: center;">
           <table style="width:80%">
             <thead>
               <tr><th  style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">&#128313;Pronunciación a Reforzar&#128313;</th></tr>
@@ -1489,224 +1523,21 @@ function copyResults() {
             <tbody>
               ${pronunciationMistakes
                 .split(/\r?\n/)
-                .map((ln) => `<tr>               <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 6.5vw;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15);>${ln}</td></tr>`)
+                .map(
+                  (ln) =>
+                    `<tr>               
+              
+    <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.7rem 0;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: center;">   
+                ${ln}</td>
+                </tr>`,
+                )
                 .join("")}
             </tbody>
           </table>
         </div>`
       : "";
 
-  let styles = `
-  body {
-    margin: 0;
-  }
 
-  .Evaluation-Results {
-    margin: 0;
-    background: linear-gradient(to bottom, #f5ffff 10%, #AED6D6 60%, #1ca5ab 90%);
-    background-color: #1ca5ab15;
-  }
-
-    .Evaluation-Results table {
-      width: 80%;
-    }
-
-    .Evaluation-Results table th {
-      font-size: 16px;
-      font-family: Segoe UI;
-      font-weight: 600;
-      color: #126064;
-      text-align: center;
-      padding: 1.7rem 0.5rem;
-      border-bottom: 1px dotted #219fa6;
-    }
-
-    .Evaluation-Results table td {
-      font-size: 15px;
-      font-family: Segoe UI;
-      font-weight: 400;
-      color: #305254;
-      padding: 0.9rem 0.5rem 0.9rem 6.5vw;
-      border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
-      text-align: left;
-    }
-
-    .Evaluation-Results p {
-      font-family: Segoe UI;
-      font-size: 15px;
-    }
-
-
-
-    /* =================EMAIL BODY=============== */
-    .Evaluation-Results .email-body {
-      border-radius: 20px;
-      padding: 2rem 1.5rem;
-      box-shadow: 0 0 15px rgb(14, 126, 134, 0.1);
-      width: 80%;
-      margin: 0 auto;
-      background-color: rgba(255, 255, 255, 0.95);
-      max-width: 1200px;
-    }
-
-    /* -------RESULTADO GLOBAL------- */
-    .Evaluation-Results .resultado-global {
-      padding: 0 1rem;
-      text-align: center;
-    }
-
-    .Evaluation-Results .resultado-global .h2 {
-      font-family: Segoe UI;
-      font-size:22px;
-      font-weight: 700;
-      color: #297b7f;
-      text-shadow: 0 0 10px rgb(163, 225, 230, 0.15);
-    }
-
-    .Evaluation-Results .resultado-global .h3 {
-      font-size: 16px;
-      font-weight: 600;
-      font-family: Segoe UI;
-      color: #42757b;
-      padding: 2.5rem 0;
-    }
-
-    .Evaluation-Results .resultado-global p {
-      font-weight: 400;
-      font-family: Segoe UI;
-      color: #273030;
-      padding: 0 1rem 0;
-    }
-
-    /* -------DESEMPEÑO POR ÁREA------- */
-    .Evaluation-Results .desempeño {
-      padding: 0 1rem;
-      justify-items: center;
-    }
-
-    .Evaluation-Results .desempeño table {
-      border-radius: 15px;
-      overflow: hidden;
-    }
-
-    .Evaluation-Results .desempeño table td:first-child {
-      font-weight: 400;
-      color: #126064;
-      text-align: center;
-      font-size: 15px;
-      width: 30%;
-    }
-
-    .Evaluation-Results .desempeño table td:last-child {
-      font-weight: 400;
-      border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
-    }
-
-    /* -------TEMAS DOMINADOS------- */
-
-    .Evaluation-Results .temas-dominados {
-      margin: 2.8rem 0;
-      justify-items: center;
-    }
-
-
-    .Evaluation-Results .temas-dominados table {
-      border-radius: 15px;
-      overflow: hidden;
-    }
-
-    .Evaluation-Results .temas-dominados table td {
-      color: #044043;
-      text-align: left;
-    }
-
-
-    /* -------temas a reforzar------- */
-    .Evaluation-Results .temas-reforzar {
-      margin: 2.8rem 0;
-      justify-items: center;
-    }
-
-
-    .Evaluation-Results .temas-reforzar table {
-      border-radius: 15px;
-      overflow: hidden;
-    }
-
-    .Evaluation-Results .temas-reforzar table td {
-      color: #044043;
-    }
-
-    /* -------RESULTADO GLOBAL------- */
-    .Evaluation-Results .areas-oportunidad {
-      margin: 2.8rem 0;
-      justify-items: center;
-    }
-
-
-    .Evaluation-Results .areas-oportunidad table {
-      border-radius: 15px;
-      overflow: hidden;
-    }
-
-
-    .Evaluation-Results .tema-reforzar {
-      color: #126064;
-      text-align: left;
-      padding: 0.9rem 0.5rem 0.9rem 1.5rem;
-      border-bottom: 1px dotted rgb(18, 96, 100, 0.8)
-    }
-
-    .Evaluation-Results .reforzar-R-C {
-      text-align: left;
-      font-family: Segoe UI;
-      color: #052729;
-    }
-
-    /* -------RESULTADO GLOBAL------- */
-    .Evaluation-Results .pronunciacion-reforzar {
-      margin: 2.8rem 0;
-      justify-items: center;
-    }
-
-
-    .Evaluation-Results .pronunciacion-reforzar table {
-      border-radius: 15px;
-      overflow: hidden;
-    }
-
-    .Evaluation-Results .pronunciacion-reforzar table td {
-      text-align: left;
-      color: #114d50;
-    }
-
-    .Evaluation-Results .pronunciacion-reforzar table tr:first-child td {
-      font-weight: 400;
-      color: #355d5f;
-      text-align: center;
-      padding: 0.95rem 0;
-    }
-
-    /* -------RESULTADO GLOBAL------- */
-    .Evaluation-Results .comentarios-coach {
-      margin: 2.8rem 0;
-      justify-items: center;
-    }
-
-
-    .Evaluation-Results .comentarios-coach table {
-      border-radius: 15px;
-      overflow: hidden;
-    }
-
-    .Evaluation-Results .comentarios-coach table td {
-      font-weight: 400;
-      color: #044043;
-      text-align: center;
-      padding: 0.7rem 0;
-      border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
-    }
-`;
 
   const ResultadoGlobalRC = `  
   <div style='padding: 0 1rem;  text-align: center;'> 
@@ -1731,7 +1562,8 @@ function copyResults() {
   </table>   
   </div>`;
 
-  const CoachCommentRC = ` <div class="comentarios-coach">
+  const CoachCommentRC = ` 
+      <div style=" margin: 2.8rem 0; justify-items: center;">
     <table style="width:80%">    
     <thead>     
       <tr>     
@@ -1740,8 +1572,9 @@ function copyResults() {
       </tr>   
     </thead>   
     <tbody>     
-    <tr>               <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.9rem 0.5rem 0.9rem 6.5vw;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15);>     
-      ${comentariosCoach ? comentariosCoach : "Muy buen trabajo!"}       
+    <tr>              
+    <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.7rem 0;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: center;">   
+      ${comentariosCoach ? comentariosCoach : "¡Muy buen trabajo!"}       
     </td></tr>      
     </tbody>      
     </table>  
@@ -1794,7 +1627,7 @@ function copyResults() {
   let SclassPathLvl = null;
   let BclassPathLvl = null;
 
-  const syllabusLower = syllabus?.toLowerCase() || ""; 
+  const syllabusLower = syllabus?.toLowerCase() || "";
 
   for (const group of classGroups) {
     if (
@@ -1812,7 +1645,7 @@ function copyResults() {
   const levelsDropdown = document.getElementById("levelsDropdown");
   const levelVal = levelsDropdown?.value || 0;
 
-  // Final URLs 
+  // Final URLs
   const S_ClassPath = `<!--MAPA PEQUEÑA-->
   <div style="text-align: center;">
   <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/S-CP_${SclassPathLvl}_A${levelVal}.png" style="width:80%; margin-bottom: 1rem;"> <p
@@ -1822,12 +1655,11 @@ function copyResults() {
     </div>`;
 
   const B_ClassPath = `  <!--MAPA GRANDE-->
-      <div style="margin: 1rem auto; justify-items: center;">
-        <table width="100%" align="center" cellspacing="0" cellpadding="0"
-          style="width: 100%; border-collapse: collapse; border-radius: 15px; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
+      <div style=" margin: 5rem 0 0.5rem; justify-items: center; background-color: #F9FAFB; text-align:center;">
+        <table width="90%" align="center" cellspacing="0" cellpadding="0" style="width: 90%; border-collapse: collapse; ">
           <tr>
             <th
-              style="border-bottom: none; border-top: 1px dotted #219fa6; font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center; padding: 1.5rem 0.5rem;"
+              style="border-bottom: none; border-top: 1px dotted #219fa6; font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center; padding: 0.5rem;"
               align="center">
               Progreso Actual
             </th>
@@ -1839,7 +1671,7 @@ function copyResults() {
               <li>El estudiante se encuentra en el <b>nivel ${levelVal}</b>.</li>
             </td>
           </tr>
-        </table> <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/B-CP_${BclassPathLvl}_A${levelVal}.png" style="width:100%; margin-bottom: 1rem; border-bottom: 1px dotted #219fa6; ">
+        </table> <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/B-CP_${BclassPathLvl}_A${levelVal}.png" style="width:90%; margin-bottom: 1rem; border-bottom: 1px dotted #219fa6; ">
       </div>`;
 
   // ------------------------------------------
@@ -1851,7 +1683,6 @@ function copyResults() {
       <meta charset='utf-8' />
       <meta name='viewport' content='width=device-width, initial-scale=1' />
       <title>Reporte de Evaluación</title>
-      <style></style>
     </head>
      <body style="margin: 0 auto;">
           ${Welcome}
@@ -1880,7 +1711,7 @@ function copyResults() {
   const ip = document.getElementById("in").value;
   const previewHTML = `
    <div class="results-preview"><div class="floating-results">
-        <table style="width:80%">
+        <table>
         <tr>
         <th colspan="2">Final Scores</th>
         </tr>
