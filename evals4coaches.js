@@ -1,7 +1,7 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.7.0";
-  //NEW FORMAT UPDATE
+  const versionnum = "1.7.5";
+  //NEW FORMAT UPDATE APPROVED BY RJ
   const jsonVersion = 1.5;
   window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
