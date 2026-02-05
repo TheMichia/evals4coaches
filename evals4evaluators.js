@@ -1298,34 +1298,171 @@ async function evaluatorsCopyResults() {
   const isCondicionado =
     document.getElementById("condicionado")?.checked === true;
 
-  const condicionadoText = `
-      <tr>
-      <td class="tema-reforzar">
-      <b>Condicionado/a:</b>
-      </td>
-      </tr>
-      <tr>
-      <td class="reforzar-R-C">
+    let condicionadoText = ``;
+  if (syllabusVal.includes("Juniors")) {
+    condicionadoText = `
+        <tr>
+                <td
+                  style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+                  &#128680; <b> Condicionado/a:</b>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+       <p>
+     El estudiante avanza al siguiente nivel de manera condicionada. Cuenta con las bases mínimas necesarias para avanzar, pero requiere refuerzo para seguir el ritmo del grupo y consolidar su aprendizaje.
+       </p>
+
+       <p><b>Recomendaciones:</b></p>
+       <ul>
+                    <li style=" padding: 0 0 0.5rem">
+      Practicar vocabulario básico (colores, animales, acciones) de forma diaria mediante juegos, canciones o imágenes.
+       </li>
+                    <li style=" padding: 0 0 0.5rem">
+      Reforzar las estructuras gramaticales trabajadas hasta el nivel promoviendo el uso de oraciones completas para expresarse. 
+       </li>
+                    <li style=" padding: 0 0 0.5rem">
+                    Practicar expresión oral corta y guiada en la plataforma de tareas con Coach Isabela, simulando intercambios sencillos.
+       </li>
+                    <li style=" padding: 0 0 0.5rem">
+           Realizar prácticas cortas y constantes (5–10 minutos diarios), con acompañamiento de un adulto.
+       </li>
+       </ul>
+       </td>
+       </tr>`;
+  } else if (syllabusVal.includes("Kids")) {
+    condicionadoText = `  <tr>
+                <td
+                  style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+                  &#128680; <b> Condicionado/a:</b>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
       <p>
-      El estudiante pasa de nivel de manera condicionada, esto
-      significa que debe practicar lo mencionado arriba para poder
-      estar al día con sus compañeros del siguiente nivel. Por
-      favor, lea cuidadosamente las recomendaciones.
+       El estudiante avanza al siguiente nivel de manera condicionada. Demuestra conocimientos del nivel, pero necesita reforzar algunas áreas para comunicarse con mayor claridad y seguridad.
       </p>
 
       <p><b>Recomendaciones:</b></p>
       <ul>
-      <li>
-      Escuchar música en inglés y ver videos o películas en
-      inglés.
+                    <li style=" padding: 0 0 0.5rem">
+     Practicar respuestas orales completas (sujeto + verbo + complemento), evitando respuestas muy cortas.
       </li>
-      <li>
-      Repetir las oraciones del día al menos 20 veces antes o
-      después de clase.
+                    <li style=" padding: 0 0 0.5rem">
+      Reforzar el uso correcto de los tiempos verbales trabajados en el nivel.
+      </li>
+                    <li style=" padding: 0 0 0.5rem">
+          Practicar conversaciones guiadas en la plataforma de tareas con Coach Isabela, enfocadas en rutinas, experiencias y opiniones.
+      </li>
+                    <li style=" padding: 0 0 0.5rem">
+          Utilizar conectores básicos como and, because, but para ampliar sus respuestas.
       </li>
       </ul>
       </td>
-      </tr>`;
+      </tr>
+`;
+  } else if (syllabusVal.includes("Teens")) {
+    condicionadoText = `  <tr>
+                <td
+                  style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+                  &#128680; <b> Condicionado/a:</b>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+      <p>
+     El estudiante avanza al siguiente nivel de manera condicionada. Cuenta con el nivel esperado, pero requiere fortalecer la fluidez, la precisión gramatical y la organización de ideas al comunicarse.
+      </p>
+
+      <p><b>Recomendaciones:</b></p>
+      <ul>
+                    <li style=" padding: 0 0 0.5rem">
+    Practicar expresión oral utilizando ideas completas y organizadas, no frases aisladas.
+      </li>
+                    <li style=" padding: 0 0 0.5rem">
+      Reforzar estructuras gramaticales clave del nivel (tiempos verbales, opiniones y situaciones hipotéticas).
+      </li>
+                    <li style=" padding: 0 0 0.5rem">
+          Simular conversaciones tipo evaluación en la plataforma de tareas con Coach Isabela para ganar fluidez y confianza.
+      </li>
+                    <li style=" padding: 0 0 0.5rem">
+         Justificar opiniones usando expresiones como I think… because… o In my opinion….
+      </li>
+      </ul>
+      </td>
+      </tr>
+      `;
+  } else if(syllabusVal.includes("Adults")){
+    if(syllabusVal.includes("Masters")){
+      condicionadoText = `
+       
+        <tr>
+                <td
+                  style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+                  &#128680; <b> Condicionado/a:</b>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+       <p>
+  Avanzas al siguiente nivel de manera condicionada. Cuentas con una base funcional del idioma; sin embargo, es necesario reforzar algunas áreas clave para desempeñarte de forma más consistente y alineada con los descriptores esperados de un nivel B1–B2.
+       </p>
+
+       <p><b>Recomendaciones:</b></p>
+       <ul>
+                    <li style=" padding: 0 0 0.5rem">Reforzar el uso preciso de tiempos verbales intermedios (Past Simple vs. Present Perfect, Future forms), aplicándolos en contextos reales.
+       </li>
+                    <li style=" padding: 0 0 0.5rem">Desarrollar respuestas orales más completas y estructuradas, incorporando justificación de ideas y ejemplos.
+       </li>
+                    <li style=" padding: 0 0 0.5rem">Practicar conversaciones tipo evaluación en la plataforma de tareas con la inteligencia artificial Coach Isabela, enfocadas en opiniones, experiencias y situaciones hipotéticas.
+       </li>
+                    <li style=" padding: 0 0 0.5rem">Mantener una práctica constante y autónoma (15–20 minutos diarios) para fortalecer fluidez, coherencia y seguridad al comunicarse.
+       </li>
+       </ul>
+       <p>
+Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor seguridad en el siguiente nivel.</p>
+       </td>
+       </tr>`;
+    }
+    condicionadoText = `      <tr>
+                <td
+                  style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+                  &#128680; <b> Condicionado/a:</b>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+       <p>
+   Avanzas al siguiente nivel de manera condicionada. Cuentas con las bases mínimas necesarias para avanzar, sin embargo, requieres reforzar algunas áreas para comunicarte con mayor claridad, fluidez y precisión en situaciones cotidianas.
+       </p>
+
+       <p><b>Recomendaciones:</b></p>
+       <ul>
+                    <li style=" padding: 0 0 0.5rem">
+Reforzar el uso de estructuras gramaticales, aplicándolos en oraciones completas y funcionales.
+       </li>
+                    <li style=" padding: 0 0 0.5rem">
+Ampliar respuestas orales, evitando frases muy cortas y desarrollando ideas con mayor claridad. 
+       </li>
+                    <li style=" padding: 0 0 0.5rem">
+Practicar conversaciones guiadas en la plataforma de tareas con la inteligencia artificial Coach Isabela, enfocadas en rutinas, experiencias y planes cercanos.
+       </li>
+                    <li style=" padding: 0 0 0.5rem">
+Realizar prácticas constantes (10–15 minutos diarios) para consolidar vocabulario y estructuras del nivel.
+       </li>
+       </ul>
+       <p>
+Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor seguridad en el siguiente nivel.</p>
+       </td>
+       </tr>
+       
+`;
+  }
 
   // ---------- Build full headers (complete texts) ----------
   // ---***EXIT*** Kids and teens---
