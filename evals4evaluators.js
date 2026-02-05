@@ -1428,40 +1428,42 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
        </td>
        </tr>`;
     }
-    condicionadoText = `      <tr>
-                <td
-                  style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
-                  &#128680; <b> Condicionado/a:</b>
-                </td>
-              </tr>
-              <tr>
-                <td
-                  style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
-       <p>
-   Avanzas al siguiente nivel de manera condicionada. Cuentas con las bases mínimas necesarias para avanzar, sin embargo, requieres reforzar algunas áreas para comunicarte con mayor claridad, fluidez y precisión en situaciones cotidianas.
-       </p>
+    else{
+          condicionadoText = `      <tr>
+                      <td
+                        style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+                        &#128680; <b> Condicionado/a:</b>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+             <p>
+         Avanzas al siguiente nivel de manera condicionada. Cuentas con las bases mínimas necesarias para avanzar, sin embargo, requieres reforzar algunas áreas para comunicarte con mayor claridad, fluidez y precisión en situaciones cotidianas.
+             </p>
 
-       <p><b>Recomendaciones:</b></p>
-       <ul>
-                    <li style=" padding: 0 0 0.5rem">
-Reforzar el uso de estructuras gramaticales, aplicándolos en oraciones completas y funcionales.
-       </li>
-                    <li style=" padding: 0 0 0.5rem">
-Ampliar respuestas orales, evitando frases muy cortas y desarrollando ideas con mayor claridad. 
-       </li>
-                    <li style=" padding: 0 0 0.5rem">
-Practicar conversaciones guiadas en la plataforma de tareas con la inteligencia artificial Coach Isabela, enfocadas en rutinas, experiencias y planes cercanos.
-       </li>
-                    <li style=" padding: 0 0 0.5rem">
-Realizar prácticas constantes (10–15 minutos diarios) para consolidar vocabulario y estructuras del nivel.
-       </li>
-       </ul>
-       <p>
-Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor seguridad en el siguiente nivel.</p>
-       </td>
-       </tr>
-       
-`;
+             <p><b>Recomendaciones:</b></p>
+             <ul>
+                          <li style=" padding: 0 0 0.5rem">
+      Reforzar el uso de estructuras gramaticales, aplicándolos en oraciones completas y funcionales.
+             </li>
+                          <li style=" padding: 0 0 0.5rem">
+      Ampliar respuestas orales, evitando frases muy cortas y desarrollando ideas con mayor claridad. 
+             </li>
+                          <li style=" padding: 0 0 0.5rem">
+      Practicar conversaciones guiadas en la plataforma de tareas con la inteligencia artificial Coach Isabela, enfocadas en rutinas, experiencias y planes cercanos.
+             </li>
+                          <li style=" padding: 0 0 0.5rem">
+      Realizar prácticas constantes (10–15 minutos diarios) para consolidar vocabulario y estructuras del nivel.
+             </li>
+             </ul>
+             <p>
+      Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor seguridad en el siguiente nivel.</p>
+             </td>
+             </tr>
+
+      `;
+    }
   }
 
   // ---------- Build full headers (complete texts) ----------
