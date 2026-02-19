@@ -259,14 +259,22 @@
               id="pronunciationMistakes"
               placeholder="e.g. cat, clothes, vegetable"
             ></textarea>
+            </div>
+<!-- FOR DIAGNOSTIC EVALS ONLY -->
+          <div id="diagnosticEvals" class="hidden">
+          <div class= twocols><h2>AOI:</h2>
+          <p id="counter">0/3 seleccionadas</p></div>
+          <fieldset id="optionsGroup" class="diagnosticEval">
 
-            <!-- <h2>Extra Comments:</h2>
-            <textarea
-              class="autoresize"
-              id="extraComments"
-              placeholder="Your comments here"
-            ></textarea> -->
-          </div>
+            <label class="option"><input type="checkbox" name="option"> Construcción de oraciones completas</label>
+            <label class="option"><input type="checkbox" name="option"> Fluidez al responder preguntas</label>
+            <label class="option"><input type="checkbox" name="option"> Uso de vocab en nuevos contextos</label>
+            <label class="option"><input type="checkbox" name="option"> Uso correcto del presente simple</label>
+            <label class="option"><input type="checkbox" name="option"> Pronunciación de palabras frecuentes</label>
+            <label class="option"><input type="checkbox" name="option"> Comprensión y seguimiento de preguntas</label>
+          </fieldset>
+            </div>
+
           <div>
             <button id="feedback" class="feedbackbutton" disabled>
               Go to Feedback
