@@ -332,18 +332,18 @@ input {
 
 /*=================== Condicionados y coaching opportunity =====================*/
 
-fieldset {
+.final-container fieldset {
     margin: 12px auto;
 }
 
-label {
+.coachingOpportunity label {
     display: inline-block;
     color: #25888d;
     font-size: 1.5rem;
     font-family: roboto condensed;
 }
 
-legend {
+.coachingOpportunity legend {
     font-size: 2rem;
     color: #25888d;
     font-weight: bold;
@@ -381,6 +381,78 @@ legend {
 .coachingOpportunity input {
     margin: 0 20px;
 }
+
+
+/*=================== Diagnostic Evaluations =====================*/
+/* fieldset */
+.diagnosticEval{
+    margin: 0 auto 1.5rem;
+    padding: 0.3rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    border-radius: 25px;
+    border: none;
+}
+
+.twocols{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+/* AOI text */
+.twocols h2{
+    width: auto;
+}
+
+.twocols p{
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #0f4a4d;
+    font-family: "Segoe UI";
+    width: 1fr;
+}
+
+/* displayed name */
+.diagnosticEval label{
+    display: inline-block;
+    font-size: 0.8rem;
+    color: var(--turquesa-oscuro);
+    font-family: "Montserrat";
+    font-weight: 600;
+    text-align: center;
+    background-color: rgba(var(--turquesa),0.1);
+    user-select: none;
+    border-radius: 20px;
+    padding: 1rem 0.7rem;
+    height: 1fr;
+    transition: all 0.3s ease;
+    align-content: center;
+}
+
+.diagnosticEval .selected{
+  background-color: rgba(var(--turquesa), 0.8);
+  color: white;
+    transition: all 0.3s ease;
+    font-weight: 700;
+}
+.diagnosticEval .unselected{
+    background-color: rgb(138, 138, 138, .1);
+    color: #919191;
+    transition: all 0.3s ease;
+    font-weight: 400;
+    
+}
+/* checkbox */
+.diagnosticEval input{
+        display: none;
+    
+}
+
 
 /*======================== SOUNDBOARD ========================*/
 /* floating button */
@@ -604,6 +676,7 @@ legend {
     color: #148e94;
     text-align: center;
     margin: 0;
+    width: 95%;
     padding: 0;
     font-family: "Sour Gummy";
     line-height: 1rem;
