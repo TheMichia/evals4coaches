@@ -1,7 +1,7 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "1.5.5";
-  //fixed isfiltereval logic for master's to masters && topic descriptions matched on lowercase
+  const versionnum = "2.0.0";
+  //NEW FORMAT APPROVED BY RJ & diag evals changes
   const E4EjsonVersion = 2.0;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
@@ -35,6 +35,7 @@ const prepCommentRowEl = document.getElementById("prepcomment");
 const prepCommentRow = prepCommentRowEl
   ? prepCommentRowEl.parentElement.parentElement
   : null;
+const diagnosticEvals = document.getElementById("diagnosticEvals");
 
 // ---------- Estado global ----------
 let evaluatorsData = {}; // se llena con fetch
@@ -109,6 +110,43 @@ if (syllabusE4E) {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
+// función para chequear si es diagnóstico
+function isDiagnosticEval(syllabusVal, levelVal) {
+  return (
+    (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 2) ||
+    (syllabusVal === "Teens 13-17 (5 horas/semana)" && levelVal === 2) ||
+    (syllabusVal === "Kids Masters" && levelVal === 2) ||
+    (syllabusVal === "Teens Masters" && levelVal === 2)
+  );
+}
+
+// función para ocultar/mostrar las tablas topictable
+function hideTopicTables(diagnostic) {
+  const tables = document.querySelectorAll(".topictable");
+  tables.forEach((table) => {
+    table.style.display = diagnostic ? "none" : "";
+  });
+}
+
+// listener en el dropdown de weeks
+weekE4E.addEventListener("change", () => {
+  const syllabusVal = syllabusE4E.value; // obtiene syllabus seleccionado
+  const levelVal = parseInt(levelE4E.value, 10); // convierte a número
+
+  const diagnostic = isDiagnosticEval(syllabusVal, levelVal);
+
+  hideTopicTables(diagnostic);
+
+  // opcional: también puedes mostrar/ocultar tu sección diagnosticEvals
+  if (diagnosticEvals) {
+    diagnosticEvals.style.display = diagnostic ? "" : "none";
+  }
+});
+
+//
+//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
+//
+
 // helper para comparar floats con tolerancia
 function nearlyEqual(a, b, eps = 1e-6) {
   if (!Number.isFinite(a) || !Number.isFinite(b)) return false;
@@ -159,47 +197,62 @@ function updateExtraInfo() {
         weekVal === 7)
     );
 
-  // 3) Mostrar/ocultar tabla de Exit Eval
-  if (exitevaltable) {
-    exitevaltable.classList.toggle("hidden", !isExit);
-    if (!isExit && skillTest) {
-      skillTest.value = "";
-      if (typeof calculateFinalScore === "function") calculateFinalScore();
-    }
-  }
-
-  // 4) Mostrar/ocultar fila de total score
-  if (totalscorerow) {
-    totalscorerow.classList.toggle("hidden", isExit);
-  }
-
-  // 5) Manejar checkbox "Condicionado"
-  if (extraInfo) {
-    let htmlContent = "";
-    let scoreVal = NaN;
-
-    if (isExit) {
-      scoreVal = finalScore ? parseFloat(finalScore.textContent.trim()) : NaN;
-    } else {
-      scoreVal = totalScoreEl
-        ? parseFloat(totalScoreEl.textContent.trim())
-        : NaN;
+  // MEGA 3 handle diag evals if Deval no fl, int comments or condicionado
+  if (isDiagnosticEval(syllabusVal, levelVal)) {
+    diagnosticEvals.classList.toggle(
+      "hidden",
+      !isDiagnosticEval(syllabusVal, levelVal),
+    );
+  } else {
+    if (diagnosticEvals) {
+      diagnosticEvals.classList.toggle(
+        "hidden",
+        !isDiagnosticEval(syllabusVal, levelVal),
+      );
     }
 
-    // 🔍 Convertimos, redondeamos y comparamos exacto
-    const fixedScore = Number(scoreVal.toFixed(2)); // redondea a 2 decimales exactos
-    const isCondicionado = fixedScore === 7.0;
+    // 3) Mostrar/ocultar tabla de Exit Eval
+    if (exitevaltable) {
+      exitevaltable.classList.toggle("hidden", !isExit);
+      if (!isExit && skillTest) {
+        skillTest.value = "";
+        if (typeof calculateFinalScore === "function") calculateFinalScore();
+      }
+    }
 
-    if (isCondicionado) {
-      htmlContent = `
+    // 4) Mostrar/ocultar fila de total score
+    if (totalscorerow) {
+      totalscorerow.classList.toggle("hidden", isExit);
+    }
+
+    // 5) Manejar checkbox "Condicionado"
+    if (extraInfo) {
+      let htmlContent = "";
+      let scoreVal = NaN;
+
+      if (isExit) {
+        scoreVal = finalScore ? parseFloat(finalScore.textContent.trim()) : NaN;
+      } else {
+        scoreVal = totalScoreEl
+          ? parseFloat(totalScoreEl.textContent.trim())
+          : NaN;
+      }
+
+      // 🔍 Convertimos, redondeamos y comparamos exacto
+      const fixedScore = Number(scoreVal.toFixed(2)); // redondea a 2 decimales exactos
+      const isCondicionado = fixedScore === 7.0;
+
+      if (isCondicionado) {
+        htmlContent = `
         <label class="condicionado">
           ${isExit ? "Exit Condicionado" : "Condicionado"}
           <input type="checkbox" id="condicionado" checked>
         </label>`;
-      extraInfo.innerHTML = htmlContent;
-    } else {
-      // si ya no es 7, eliminar el checkbox si existe
-      extraInfo.innerHTML = "";
+        extraInfo.innerHTML = htmlContent;
+      } else {
+        // si ya no es 7, eliminar el checkbox si existe
+        extraInfo.innerHTML = "";
+      }
     }
   }
 }
@@ -424,6 +477,10 @@ function populatePreparation(selectEl) {
 
 // ---------- Eventos: FLUENCY / INTONATION ----------
 fluency.addEventListener("change", () => {
+  const syllabusVal = syllabusE4E.value;
+  const levelVal = parseInt(levelE4E.value, 10);
+  if (isDiagnosticEval(syllabusVal, levelVal)) return;
+
   const value = parseFloat(fluency.value);
   const select = document.getElementById("flcomment");
   const syllabus = syllabusE4E.value;
@@ -442,6 +499,10 @@ fluency.addEventListener("change", () => {
 //
 
 intonation.addEventListener("change", () => {
+  const syllabusVal = syllabusE4E.value;
+  const levelVal = parseInt(levelE4E.value, 10);
+  if (isDiagnosticEval(syllabusVal, levelVal)) return;
+
   const value = parseFloat(intonation.value);
   const select = document.getElementById("incomment");
   const syllabus = syllabusE4E.value;
@@ -538,7 +599,7 @@ syllabusE4E.addEventListener("change", () => {
   async function showEvaluatorModal() {
     await waitForEvaluatorReady();
 
-    // overlay + box (usamos clases CSS)
+    // overlay + box
     const overlay = document.createElement("div");
     overlay.className = "modal-overlay";
     const box = document.createElement("div");
@@ -681,7 +742,8 @@ function absentsE4E() {
 
   if (syllabus.startsWith("Adults")) {
     // ---- mensaje para estudiante ----
-    message = `<html lang="en">
+    message = `
+    <html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -713,39 +775,38 @@ function absentsE4E() {
     </div>
     <div class="welcome" style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
       <p class="h2"
-        style="padding: 0 1rem; font-size: 2.5rem; font-weight: 800; color: #126064; font-family: Serif; margin: 0;">
+        style="padding: 0 1rem; font-size: 22px; font-weight: 700; color: #126064; font-family: Segoe UI; margin: 0;">
         Estimado estudiante,</p>
       <!-- &#x1F31F; -->
       <p class="h3"
-        style="padding: 0 1rem; font-size: 1.2rem; font-weight: 800; color: #126064; padding-bottom: 0.8rem; font-family: Verdana;">
+        style="padding: 0 1rem; font-size: 16px; font-weight: 400; color: #126064; padding-bottom: 0.8rem; font-family: Segoe UI;">
         Esperamos que estés teniendo una excelente semana</p>
     </div>
     <div class="email-body"
-      style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
+      style="border-radius: 20px; padding: 1rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
       <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
         <p
-          style="padding: 1rem 1rem 0; font-size: 1.2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
+          style="padding: 1rem 1rem 0; font-size: 18px; text-decoration: none; font-family: Segoe UI; color: #297b7f; font-weight: 600; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
           Te informamos que:
         </p>
         <p
-          style="padding: 0 1rem 0; font-family: Verdana; font-weight: bold; color: #297b7f; font-size: 1.5rem; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.5rem;">
+          style="padding: 0 1rem 0; font-family: Segoe UI; font-weight: 700; color: #297b7f; font-size: 22px; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.5rem;">
           No asististe a tu evaluación filtro.
         </p>
         <p
-          style="font-size: 1.1rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana; MARGIN: 1rem 0;">
+          style="font-size: 16px; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Segoe UI; MARGIN: 1rem 0;">
           correspondiente a tu
           nivel en
           <b>${syllabus}</b>.
         </p>
       </div>
-      <!-- PORQUE ES IMPORTANTE -->
+      <!-- next steps -->
       <div style="margin: 2rem 0">
         <table width="80%" align="center" cellspacing="0" cellpadding="0"
-          style="width: 80%; border-collapse: collapse; border-radius: 10%; border: none; overflow: hidden; margin-top: 1rem; background-color: #f9fafb;"
-          bgcolor="#f9fafb">
+          style="width: 80%; border-collapse: collapse; border: none; margin-top: 0.5rem; background-color: #f9fafb;">
           <tr>
             <th
-              style="font-weight: 800; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 1.15rem; padding: 1rem; color: #126064; border: none; font-family: verdana;"
+              style="font-weight: 600; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 15px; padding: 0.5rem 1rem; color: #126064; border: none; font-family: Segoe UI;"
               align="center">
               <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
               Para evitar retrocesos en tu progreso, te solicitamos
@@ -754,18 +815,18 @@ function absentsE4E() {
           </tr>
           <tr>
             <td
-              style="font-size: 0.95rem; font-family: Verdana; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); padding: 0.9rem 2rem; font-weight: 500; color: #044043; text-align: center;"
+              style="font-size: 15px; font-family: Segoe UI; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); padding: 0.9rem 2rem; font-weight: 400; color: #044043; text-align: center;"
               align="center">
-              <p style="font-family: Verdana; font-size: 0.95rem; margin: 1rem">
+              <p style="font-family: Segoe UI; font-size: 15px; margin: 1rem">
                 Esta evaluación es <b>obligatoria para avanzar al siguiente nivel</b> del programa.<br><br>&#9888;&#65039; Dado que te encuentras en un
                 <b>nivel filtro</b>, si no presentas esta evaluación, serás
                 <b>reprogramado automáticamente para repetir el nivel</b>.
               </p>
               <a href=https://meetings.hubspot.com/evaluacionese4kidse4adults/evaluaciones target=_blank
-                style="text-decoration: none; font-family: Verdana; background-color: #147b7b; padding: 1rem 1.3rem; border-radius: 12px; font-weight: 800; color: white; font-size: 1.2rem; margin: 1rem 1rem;; display: inline-block;">
+                style="text-decoration: none; font-family: Segoe UI; background-color: #147b7b; padding: 1rem 1.3rem; border-radius: 15px; font-weight: 700; color: white; font-size: 22px; margin: 1rem 1rem; display: inline-block;">
                 Reagenda tu
                 Evaluación Aquí</a>
-              <p style="font-family: Verdana; font-size: 0.85rem; margin: 0">
+              <p style="font-family: Segoe UI; font-size: 14px; margin: 0">
                 Ahí podrás seleccionar el
                 <b>horario que mejor se acomode</b> y agendarla por tu cuenta de forma rápida y sencilla.<br>
               </p>
@@ -776,34 +837,27 @@ function absentsE4E() {
       <!-- TU ESFUERXO CUENTA -->
       <div style="margin: 2rem 0">
         <table width="80%" align="center" cellspacing="0" cellpadding="0"
-          style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;"
-          bgcolor="#f9fafb">
+          style="width: 80%; border-collapse: collapse; margin-top: 2rem; background-color: #f9fafb;">
           <tr>
             <TH
-              style="font-size: 1.1rem; font-family: Verdana; padding: 1rem 0.5rem 0; font-weight: 500; color: #044043; text-align: center; border-top: 1px dotted #219fa6;"
-              align="center"> En <b>ENGLISH4ADULTS</b>,</TH>
+              style="font-size: 16px; font-family: Segoe UI; padding: 1rem 0.5rem 0; font-weight: 400; color: #044043; text-align: center; border-top: 1px dotted #219fa6;"
+              align="center"> En <b>English4Adults</b>,</TH>
           </tr>
           <tr>
             <td
-              style="font-size: 1rem; font-family: Verdana; padding: 1rem 0.5rem 0.8rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
+              style="font-size: 16px; font-family: Segoe UI; padding: 0.5rem 0.5rem 0.8rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
               align="center">
               Creemos firmemente en tu potencial.<br>
                 Con tu compromiso, podemos asegurarnos de que <b>sigas avanzando con éxito</b>.
 
             </td>
           </tr>
-          <tr>
-            <td
-              style="font-size: 0.95rem; font-family: Verdana; font-weight: 500; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5vw; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: center;"
-              align="center">
-              <p style="font-family: Verdana; font-size: 0.95rem; margin: 3rem 4rem;">
-
-              </p>
-            </td>
-          </tr>
         </table>
       </div>
       <!-- referal -->
+      <h1
+        style="font-size: 26px; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:3rem auto 0.5rem;"
+        align="center">¡Has recibido un cupón de ahorro!</h1>
       <a href="https://www.english4kidsonline.com/amigo" target="_blank"
         style="display:inline-block; margin:0; text-decoration:none;">
         <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Referal/referalAdults.gif"
@@ -811,13 +865,14 @@ function absentsE4E() {
              style="width: 100%; display:block; margin:0 auto; border:0;">
       </a>
     </div>
+    </div>
     <!-- FOOTER -->
     <div style="
           text-align: center;
           margin: 0;
           padding: 2rem 0 0 0;
           width: 100%;
-          font-family: Verdana;
+          font-family: Segoe UI;
           text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         ">
       <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerAdults.png" alt="Atentamente, equipo de English4Adults" style="width: 100%; display: block; border: 0">
@@ -831,7 +886,8 @@ function absentsE4E() {
     `;
   } else {
     // ---- mensaje para padres ----
-    message = `<html lang="en">
+    message = `
+    <html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -859,63 +915,62 @@ function absentsE4E() {
           background: linear-gradient(to bottom, #f5f0e6 0%, transparent 50%);
           background-color: transparent;
         ">
-      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERKIDS.png" alt="Resultado - Evaluación Filtro" style="width: 100%; display: block; border: 0">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERADULTS.png" alt="Resultado - Evaluación Filtro" style="width: 100%; display: block; border: 0">
     </div>
     <div class="welcome" style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
       <p class="h2"
-        style="padding: 0 1rem; font-size: 2.5rem; font-weight: 800; color: #126064; font-family: Serif; margin: 0;">
+        style="padding: 0 1rem; font-size: 22px; font-weight: 700; color: #126064; font-family: Segoe UI; margin: 0;">
         Estimado padre/madre de familia,</p>
       <!-- &#x1F31F; -->
       <p class="h3"
-        style="padding: 0 1rem; font-size: 1.2rem; font-weight: 800; color: #126064; padding-bottom: 0.8rem; font-family: Verdana;">
+        style="padding: 0 1rem; font-size: 16px; font-weight: 400; color: #126064; padding-bottom: 0.8rem; font-family: Segoe UI;">
         Esperamos que estés teniendo una excelente semana</p>
     </div>
     <div class="email-body"
-      style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
+      style="border-radius: 20px; padding: 1rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
       <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
         <p
-          style="padding: 1rem 1rem 0; font-size: 1.2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
+          style="padding: 1rem 1rem 0; font-size: 18px; text-decoration: none; font-family: Segoe UI; color: #297b7f; font-weight: 600; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
           Te informamos que:
         </p>
         <p
-          style="padding: 0 1rem 0; font-family: Verdana; font-weight: bold; color: #297b7f; font-size: 1.5rem; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.5rem;">
-          Tu hijo/a no asististió a su evaluación filtro.
+          style="padding: 0 1rem 0; font-family: Segoe UI; font-weight: 700; color: #297b7f; font-size: 22px; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.5rem;">
+         Tu hijo/a no asististió a su evaluación filtro.
         </p>
         <p
-          style="font-size: 1.1rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana; MARGIN: 1rem 0;">
+          style="font-size: 16px; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Segoe UI; MARGIN: 1rem 0;">
           correspondiente a su
           nivel en
           <b>${syllabus}</b>.
         </p>
       </div>
-      <!-- PORQUE ES IMPORTANTE -->
+      <!-- next steps -->
       <div style="margin: 2rem 0">
         <table width="80%" align="center" cellspacing="0" cellpadding="0"
-          style="width: 80%; border-collapse: collapse; border-radius: 10%; border: none; overflow: hidden; margin-top: 1rem; background-color: #f9fafb;"
-          bgcolor="#f9fafb">
+          style="width: 80%; border-collapse: collapse; border: none; margin-top: 0.5rem; background-color: #f9fafb;">
           <tr>
             <th
-              style="font-weight: 800; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 1.15rem; padding: 1rem; color: #126064; border: none; font-family: verdana;"
+              style="font-weight: 600; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 15px; padding: 0.5rem 1rem; color: #126064; border: none; font-family: Segoe UI;"
               align="center">
-              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="height: 2.5rem; margin-right: 0.2rem"></span>
+              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
               Para evitar retrocesos en su progreso, te solicitamos
-              <b>reagendar la evaluación lo antes posible</b>
+              <b>reagendar la evaluación lo antes posible.</b>
             </th>
           </tr>
           <tr>
             <td
-              style="font-size: 0.95rem; font-family: Verdana; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); padding: 0.9rem 2rem; font-weight: 500; color: #044043; text-align: center;"
+              style="font-size: 15px; font-family: Segoe UI; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); padding: 0.9rem 2rem; font-weight: 400; color: #044043; text-align: center;"
               align="center">
-              <p style="font-family: Verdana; font-size: 0.95rem; margin: 1rem">
-                Esta evaluación es <b>obligatoria para avanzar al siguiente nivel</b> del programa.<br><br>&#9888;&#65039; Dado que se encuentra en un
-                <b>nivel filtro</b>, si no presenta esta evaluación, el estudiante será
+              <p style="font-family: Segoe UI; font-size: 15px; margin: 1rem">
+                Esta evaluación es <b>obligatoria para avanzar al siguiente nivel</b> del programa.<br><br>&#9888;&#65039; Dado que tu hijo/a se encuentra en un
+                <b>nivel filtro</b>, si no presenta esta evaluación, será
                 <b>reprogramado automáticamente para repetir el nivel</b>.
               </p>
               <a href=https://meetings.hubspot.com/evaluacionese4kidse4adults/evaluaciones target=_blank
-                style="text-decoration: none; font-family: Verdana; background-color: #147b7b; padding: 1rem 1.3rem; border-radius: 12px; font-weight: 800; color: white; font-size: 1.2rem; margin: 1rem 1rem;; display: inline-block;">
-                Reagenda su
+                style="text-decoration: none; font-family: Segoe UI; background-color: #147b7b; padding: 1rem 1.3rem; border-radius: 15px; font-weight: 700; color: white; font-size: 22px; margin: 1rem 1rem; display: inline-block;">
+                Reagenda la
                 Evaluación Aquí</a>
-              <p style="font-family: Verdana; font-size: 0.85rem; margin: 0">
+              <p style="font-family: Segoe UI; font-size: 14px; margin: 0">
                 Ahí podrás seleccionar el
                 <b>horario que mejor se acomode</b> y agendarla por tu cuenta de forma rápida y sencilla.<br>
               </p>
@@ -926,48 +981,33 @@ function absentsE4E() {
       <!-- TU ESFUERXO CUENTA -->
       <div style="margin: 2rem 0">
         <table width="80%" align="center" cellspacing="0" cellpadding="0"
-          style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;"
-          bgcolor="#f9fafb">
+          style="width: 80%; border-collapse: collapse; margin-top: 2rem; background-color: #f9fafb;">
           <tr>
             <TH
-              style="font-size: 1.1rem; font-family: Verdana; padding: 1rem 0.5rem 0; font-weight: 500; color: #044043; text-align: center; border-top: 1px dotted #219fa6;"
-              align="center">
-              <b>En
-                    <span style="
-                        color: #233046;
-                        font-family: verdana;
-                        font-size: 1.1rem;
-                      ">ENGLISH<span style="color: #ec6619">4</span><span style="color: #95c021">K</span><span style="color: #f18c29">I</span><span style="color: #eb5854">D</span><span style="color: #1da5aa">S</span></b>,
-            </TH>
+              style="font-size: 16px; font-family: Segoe UI; padding: 1rem 0.5rem 0; font-weight: 400; color: #044043; text-align: center; border-top: 1px dotted #219fa6;"
+              align="center"> En <b>English4Kids</b>,</TH>
           </tr>
           <tr>
             <td
-              style="font-size: 1rem; font-family: Verdana; padding: 1rem 0.5rem 0.8rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
+              style="font-size: 16px; font-family: Segoe UI; padding: 0.5rem 0.5rem 0.8rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
               align="center">
-              Creemos firmemente en el potencial de cada estudiante.
-              <br>
+             Creemos firmemente en el potencial de cada estudiante.<br>
                 Con tu apoyo, podemos asegurar que tu hijo/a <b>siga avanzando con éxito</b>.
 
             </td>
           </tr>
-          <tr>
-            <td
-              style="font-size: 0.95rem; font-family: Verdana; font-weight: 500; color: #305254; padding: 0.9rem 0.5rem 0.9rem 6.5vw; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: center;"
-              align="center">
-              <p style="font-family: Verdana; font-size: 0.95rem; margin: 3rem 4rem;">
-
-              </p>
-            </td>
-          </tr>
         </table>
-        <!-- referal -->
-        <a href="https://www.english4kidsonline.com/amigo" target="_blank"
-          style="display:inline-block; margin:0; text-decoration:none;">
-          <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Referal/refKids.gif"
+      </div>
+      <!-- referal -->
+      <h1
+        style="font-size: 26px; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:3rem auto 0.5rem;"
+        align="center">¡Has recibido un cupón de ahorro!</h1>
+      <a href="https://www.english4kidsonline.com/amigo" target="_blank"
+        style="display:inline-block; margin:0; text-decoration:none;">
+        <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Referal/referalAdults.gif"
              alt="Refiere Aquí"
              style="width: 100%; display:block; margin:0 auto; border:0;">
-        </a>
-      </div>
+      </a>
     </div>
     <!-- FOOTER -->
     <div style="
@@ -975,10 +1015,10 @@ function absentsE4E() {
           margin: 0;
           padding: 2rem 0 0 0;
           width: 100%;
-          font-family: Verdana;
+          font-family: Segoe UI;
           text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         ">
-      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerKids.png" alt="Atentamente, equipo de English4Kids" style="width: 100%; display: block; border: 0">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerAdults.png" alt="Atentamente, equipo de English4Adults" style="width: 100%; display: block; border: 0">
 
 
     </div>
@@ -986,6 +1026,7 @@ function absentsE4E() {
 </body>
 
 </html>
+    
     `;
   }
 
@@ -1162,26 +1203,29 @@ async function evaluatorsCopyResults() {
     { id: "in", label: "Entonación" },
   ];
   const desempeñoHTML = `
-  <div class="desempeño" style="padding: 0 1rem; justify-items: center;">
-    <table style="width: 80%; border-radius: 10%; overflow: hidden;" width="80%">
+  <div class="desempeño"
+    style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
+    <table style="width: 80%; overflow: hidden;" width="80%; table-layout: fixed;">
       <thead>
         <tr>
           <th colspan="2"
-            style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center; padding: 1.7rem 0.5rem; border-bottom: 1px dotted #219fa6;"
-            align="center">&#128313; Desempeño por área&#128313;</th>
+            style="font-size: 22px; font-family:  Segoe UI, Roboto; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
+            align="center"> Desempeño por área </th>
         </tr>
-        </thead>
-        <tbody>
+      </thead>
+      <tbody>
           ${areas
             .map((a) => {
               const val = document.getElementById(a.id)?.value ?? "";
-              return ` <tr>
-          <td class="evalarea"
-            style="font-family: Verdana; padding: 0.5rem 0.5rem 0.9rem 10%; border-bottom: 1px dotted #DCF8FA; font-weight: 500; color: #126064; text-align: center; font-size: 1.1rem; width=30%"
-            width="40%" align="center">${a.label}</td>
+              return ` 
+        <tr>
           <td
-            style="font-size:0.95rem; font-family: Verdana; color: #305254; padding: 0.9rem 0.5rem 0.9rem 10%; text-align: left; font-weight: 500; border-bottom: 1px dotted #DCF8FA;"
-            align="left"> ${describeScore(val)}</td></tr>`;
+            style="font-family: Segoe UI; padding: 10px 10px 10px; font-weight: 400; color: #1C5457; text-align: right; font-size: 15px; width=30%">
+            ${a.label}:</td>
+          <td
+            style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
+            ${describeScore(val)}</td>
+        </tr>`;
             })
             .join("")}
         </tbody>
@@ -1201,68 +1245,98 @@ async function evaluatorsCopyResults() {
   if (!Number.isNaN(inVal) && inVal <= 1.0) {
     const txt = document.getElementById("incomment")?.value?.trim() || "";
     if (txt)
-      areaDetails.push(`<tr><td class="tema-reforzar">Detalle de <b>Entonación:</b></td>
-    </tr> <tr><td class="reforzar-R-C"> ${safe(txt)}</td></tr>`);
+      areaDetails.push(
+        ` <tr>
+          <td
+            style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0.9rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+            &#x24D8; Detalle de Entonación:</td>
+        </tr>
+        <tr>
+          <td
+            style="  color: #497275;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+            ${safe(txt)}</td>
+        </tr>`,
+      );
   }
   if (!Number.isNaN(flVal) && flVal <= 1.0) {
     const txt = document.getElementById("flcomment")?.value?.trim() || "";
     if (txt)
-      areaDetails.push(`<tr><td class="tema-reforzar">Detalle de <b>fluidez:</b></td>
-    </tr> <tr><td class="reforzar-R-C"> ${safe(txt)}</td></tr>`);
+      areaDetails.push(` 
+     
+        <tr>
+          <td
+            style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0.9rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+            &#x24D8; Detalle de fluidez:</td>
+        </tr>
+        <tr>
+          <td
+            style="  color: #497275;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+            ${safe(txt)}</td>
+        </tr>
+                `);
   }
   // === Preparación (Masters 2) – versión larga sin leer JSON ===
   const PREPARACION_MAP = {
     "No se preparó": `
+        
         <tr>
-        <td class="tema-reforzar">
-        <b>Preparación para la exposición:</b> No se preparó
-        </td>
+          <td
+            style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0.9rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+            &#x24D8; Preparación para la exposición: No se preparó
+          </td>
         </tr>
         <tr>
-        <td class="reforzar-R-C">
-        Recuerda que la práctica es clave para mejorar tu inglés.
-        Para la próxima,
-        intenta revisar cada tema con anticipación y practicar hablando en voz
-        alta.Puedes hacer resúmenes o responder preguntas sobre cada tema para
-        sentirte más seguro. <br/>
+          <td
+            style="  color: #497275;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+            Recuerda que la práctica es clave para mejorar tu inglés.
+            Para la próxima,
+            intenta revisar cada tema con anticipación y practicar hablando en voz
+            alta. Puedes hacer resúmenes o responder preguntas sobre cada tema para
+            sentirte más seguro. <br/><br/>
         ¡Anímate a prepararte mejor la próxima vez!
-        </td>
+          </td>
         </tr>`,
     "Se preparó, pero pudo hacerlo mejor": `
-      <tr>
-      <td class="tema-reforzar">
-      <b>Preparación para la exposición:</b> Se preparó, pero pudo hacerlo mejor
-      </td>
-      </tr>
-      <tr>
-      <td class="reforzar-R-C">
-      Hubo preparación de parte del estudiante, pero podría haber sido más claro
-      y organizado en su exposición.
-      Intenta practicar más con ejemplos y conectar mejor los temas.      
-      Puedes hacer una lista de frases clave para cada estructura gramatical y
-      repasarlas en voz alta antes de hablar.<br/>
-      ¡Sigue practicando, estás mejorando!
-      </td>
-      </tr>`,
-    "Se preparó bien y logró integrar la mitad o más de los temas": `
+    
         <tr>
-        <td class="tema-reforzar">
-        <b>Preparación para la exposición:</b> Se preparó bien y logró integrar la
-        mitad o más de los temas
-        </td>
+          <td
+            style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0.9rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+            &#x24D8; Preparación para la exposición: Se preparó, pero pudo hacerlo mejor
+          </td>
         </tr>
         <tr>
-        <td class="reforzar-R-C">
-        ¡Excelente trabajo! <br/>
+          <td
+            style="  color: #497275;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+            Hubo preparación de parte del estudiante, pero podría haber sido más claro
+            y organizado en su exposición.
+            Intenta practicar más con ejemplos y conectar mejor los temas.
+            Puedes hacer una lista de frases clave para cada estructura gramatical y
+            repasarlas en voz alta antes de hablar.<br/><br/>
+      ¡Sigue practicando, estás mejorando!
+          </td>
+        </tr>`,
+    "Se preparó bien y logró integrar la mitad o más de los temas": `
+        
+        <tr>
+          <td
+            style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0.9rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+            &#x24D8; Preparación para la exposición: Se preparó bien y logró integrar la
+            mitad o más de los temas
+          </td>
+        </tr>
+        <tr>
+          <td
+            style="  color: #497275;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+            ¡Excelente trabajo! <br/><br/>
         Lograste integrar varios temas gramaticales en tu
           exposición de manera clara y organizada.
         Tu uso de los tiempos verbales
           fue acertado, y tu fluidez ha mejorado mucho.
          Sigue practicando para
-          perfeccionar tu entonación y confianza al hablar. <br/>
+          perfeccionar tu entonación y confianza al hablar. <br/><br/>
         ¡Sigue así, vas por muy
           buen camino!
-        </td>
+          </td>
         </tr>`,
   };
 
@@ -1298,495 +1372,567 @@ async function evaluatorsCopyResults() {
   const isCondicionado =
     document.getElementById("condicionado")?.checked === true;
 
-    let condicionadoText = ``;
+  let condicionadoText = ``;
   if (syllabusVal.includes("Juniors")) {
     condicionadoText = `
+       
         <tr>
-                <td
-                  style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
-                  &#128680; <b> Condicionado/a:</b>
-                </td>
-              </tr>
-              <tr>
-                <td
-                  style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
-       <p>
-     El estudiante avanza al siguiente nivel de manera condicionada. Cuenta con las bases mínimas necesarias para avanzar, pero requiere refuerzo para seguir el ritmo del grupo y consolidar su aprendizaje.
-       </p>
-
-       <p><b>Recomendaciones:</b></p>
-       <ul>
-                    <li style=" padding: 0 0 0.5rem">
-      Practicar vocabulario básico (colores, animales, acciones) de forma diaria mediante juegos, canciones o imágenes.
-       </li>
-                    <li style=" padding: 0 0 0.5rem">
-      Reforzar las estructuras gramaticales trabajadas hasta el nivel promoviendo el uso de oraciones completas para expresarse. 
-       </li>
-                    <li style=" padding: 0 0 0.5rem">
-                    Practicar expresión oral corta y guiada en la plataforma de tareas con Coach Isabela, simulando intercambios sencillos.
-       </li>
-                    <li style=" padding: 0 0 0.5rem">
-           Realizar prácticas cortas y constantes (5–10 minutos diarios), con acompañamiento de un adulto.
-       </li>
-       </ul>
-       </td>
-       </tr>`;
+          <td
+            style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+            <span style="color: #E87373; font-weight: bold; margin-right: 5px;">&#9888;</span>
+            Condicionado/a:
+          </td>
+        </tr>
+        <tr>
+          <td
+            style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+              El estudiante <b>avanza al siguiente nivel de manera condicionada</b>. Cuenta con las bases mínimas
+              necesarias
+              para avanzar, pero <b>requiere refuerzo para seguir el ritmo del grupo y consolidar su aprendizaje</b>.<br><br>
+<b>Recomendaciones:</b>
+            <ul>
+              <li style=" padding: 0 0 0.5rem">
+                Practicar vocabulario básico (colores, animales, acciones) de forma diaria mediante juegos, canciones o
+                imágenes.
+              </li>
+              <li style=" padding: 0 0 0.5rem">
+                Reforzar las estructuras gramaticales trabajadas hasta el nivel promoviendo el uso de oraciones
+                completas para expresarse.
+              </li>
+              <li style=" padding: 0 0 0.5rem">
+                Practicar expresión oral corta y guiada en la plataforma de tareas con Coach Isabela, simulando
+                intercambios sencillos.
+              </li>
+              <li style=" padding: 0 0 0.5rem">
+                Realizar prácticas cortas y constantes (5–10 minutos diarios), con acompañamiento de un adulto.
+              </li>
+            </ul>
+          </td>
+        </tr>`;
   } else if (syllabusVal.includes("Kids")) {
-    condicionadoText = `  <tr>
-                <td
-                  style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
-                  &#128680; <b> Condicionado/a:</b>
-                </td>
-              </tr>
-              <tr>
-                <td
-                  style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
-      <p>
-       El estudiante avanza al siguiente nivel de manera condicionada. Demuestra conocimientos del nivel, pero necesita reforzar algunas áreas para comunicarse con mayor claridad y seguridad.
-      </p>
+    condicionadoText = ` <tr>
+          <td
+            style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
 
-      <p><b>Recomendaciones:</b></p>
-      <ul>
-                    <li style=" padding: 0 0 0.5rem">
-     Practicar respuestas orales completas (sujeto + verbo + complemento), evitando respuestas muy cortas.
-      </li>
-                    <li style=" padding: 0 0 0.5rem">
-      Reforzar el uso correcto de los tiempos verbales trabajados en el nivel.
-      </li>
-                    <li style=" padding: 0 0 0.5rem">
-          Practicar conversaciones guiadas en la plataforma de tareas con Coach Isabela, enfocadas en rutinas, experiencias y opiniones.
-      </li>
-                    <li style=" padding: 0 0 0.5rem">
-          Utilizar conectores básicos como and, because, but para ampliar sus respuestas.
-      </li>
-      </ul>
-      </td>
-      </tr>
+            <span style="color: #E87373; font-weight: bold; margin-right: 5px;">&#9888;</span> Condicionado/a:
+          </td>
+        </tr>
+        <tr>
+          <td
+            style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+              El estudiante <b>avanza al siguiente nivel de manera condicionada</b>. Demuestra conocimientos del nivel,
+              pero
+              <b> necesita reforzar algunas áreas para comunicarse con mayor claridad y seguridad</b>.<br><br>
+<b>Recomendaciones:</b>
+            <ul>
+              <li style=" padding: 0 0 0.5rem">
+                Practicar respuestas orales completas (sujeto + verbo + complemento), evitando respuestas muy cortas.
+              </li>
+              <li style=" padding: 0 0 0.5rem">
+                Reforzar el uso correcto de los tiempos verbales trabajados en el nivel.
+              </li>
+              <li style=" padding: 0 0 0.5rem">
+                Practicar conversaciones guiadas en la plataforma de tareas con Coach Isabela, enfocadas en rutinas,
+                experiencias y opiniones.
+              </li>
+              <li style=" padding: 0 0 0.5rem">
+                Utilizar conectores básicos como and, because, but para ampliar sus respuestas.
+              </li>
+            </ul>
+          </td>
+        </tr>
 `;
   } else if (syllabusVal.includes("Teens")) {
-    condicionadoText = `  <tr>
-                <td
-                  style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
-                  &#128680; <b> Condicionado/a:</b>
-                </td>
-              </tr>
-              <tr>
-                <td
-                  style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
-      <p>
-     El estudiante avanza al siguiente nivel de manera condicionada. Cuenta con el nivel esperado, pero requiere fortalecer la fluidez, la precisión gramatical y la organización de ideas al comunicarse.
-      </p>
-
-      <p><b>Recomendaciones:</b></p>
-      <ul>
-                    <li style=" padding: 0 0 0.5rem">
-    Practicar expresión oral utilizando ideas completas y organizadas, no frases aisladas.
-      </li>
-                    <li style=" padding: 0 0 0.5rem">
-      Reforzar estructuras gramaticales clave del nivel (tiempos verbales, opiniones y situaciones hipotéticas).
-      </li>
-                    <li style=" padding: 0 0 0.5rem">
-          Simular conversaciones tipo evaluación en la plataforma de tareas con Coach Isabela para ganar fluidez y confianza.
-      </li>
-                    <li style=" padding: 0 0 0.5rem">
-         Justificar opiniones usando expresiones como I think… because… o In my opinion….
-      </li>
-      </ul>
-      </td>
-      </tr>
+    condicionadoText = ` <tr>
+          <td
+            style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+            <span style="color: #E87373; font-weight: bold; margin-right: 5px;">&#9888;</span>
+            Condicionado/a:
+          </td>
+        </tr>
+        <tr>
+          <td
+            style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+              El estudiante <b>avanza al siguiente nivel de manera condicionada</b>. Cuenta con el nivel esperado, pero
+              <b>requiere fortalecer la fluidez, la precisión gramatical y la organización de ideas al comunicarse</b>.<br><br>
+              <b>Recomendaciones:</b>
+            <ul>
+              <li style=" padding: 0 0 0.5rem">
+                Practicar expresión oral utilizando ideas completas y organizadas, no frases aisladas.
+              </li>
+              <li style=" padding: 0 0 0.5rem">
+                Reforzar estructuras gramaticales clave del nivel (tiempos verbales, opiniones y situaciones
+                hipotéticas).
+              </li>
+              <li style=" padding: 0 0 0.5rem">
+                Simular conversaciones tipo evaluación en la plataforma de tareas con Coach Isabela para ganar fluidez y
+                confianza.
+              </li>
+              <li style=" padding: 0 0 0.5rem">
+                Justificar opiniones usando expresiones como I think… because… o In my opinion….
+              </li>
+            </ul>
+          </td>
+        </tr>
       `;
-  } else if(syllabusVal.includes("Adults")){
-    if(syllabusVal.includes("Masters")){
+  } else if (syllabusVal.includes("Adults")) {
+    if (syllabusVal.includes("Masters")) {
       condicionadoText = `
        
         <tr>
-                <td
-                  style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
-                  &#128680; <b> Condicionado/a:</b>
-                </td>
-              </tr>
-              <tr>
-                <td
-                  style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
-       <p>
-  Avanzas al siguiente nivel de manera condicionada. Cuentas con una base funcional del idioma; sin embargo, es necesario reforzar algunas áreas clave para desempeñarte de forma más consistente y alineada con los descriptores esperados de un nivel B1–B2.
-       </p>
+          <td
+            style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+            <span style="color: #E87373; font-weight: bold; margin-right: 5px;">&#9888;</span>
+            Condicionado/a:
+          </td>
+        </tr>
+        <tr>
+          <td
+            style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+              Avanzas al siguiente nivel de <b>manera condicionada</b>. Cuentas con una base funcional del idioma; sin
+              embargo,
+              <b>es necesario reforzar algunas áreas clave para desempeñarte de forma más consistente y alineada</b> con
+              los
+              descriptores esperados de un nivel B1–B2.<br><br>
+              <b>Recomendaciones:</b>
+            <ul>
+              <li style=" padding: 0 0 0.5rem">Reforzar el uso preciso de tiempos verbales intermedios (Past Simple vs.
+                Present Perfect, Future forms), aplicándolos en contextos reales.
+              </li>
+              <li style=" padding: 0 0 0.5rem">Desarrollar respuestas orales más completas y estructuradas, incorporando
+                justificación de ideas y ejemplos.
+              </li>
+              <li style=" padding: 0 0 0.5rem">Practicar conversaciones tipo evaluación en la plataforma de tareas con
+                la inteligencia artificial Coach Isabela, enfocadas en opiniones, experiencias y situaciones
+                hipotéticas.
+              </li>
+              <li style=" padding: 0 0 0.5rem">Mantener una práctica constante y autónoma (15–20 minutos diarios) para
+                fortalecer fluidez, coherencia y seguridad al comunicarse.
+              </li>
+            </ul><br><br>
+              Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor seguridad en el siguiente
+              nivel.
+          </td>
+        </tr>`;
+    } else {
+      condicionadoText = `    <tr>
+          <td
+            style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+            <span style="color: #E87373; font-weight: bold; margin-right: 5px;">&#9888;</span>
+            Condicionado/a:
+          </td>
+        </tr>
+        <tr>
+          <td
+            style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
+              Avanzas al siguiente nivel de <b>manera condicionada</b>. Cuentas con las bases mínimas necesarias para
+              avanzar,
+              sin embargo, <b>requieres reforzar </b>algunas áreas para comunicarte con mayor claridad, fluidez y
+              precisión en
+              situaciones cotidianas.<br><br>
 
-       <p><b>Recomendaciones:</b></p>
-       <ul>
-                    <li style=" padding: 0 0 0.5rem">Reforzar el uso preciso de tiempos verbales intermedios (Past Simple vs. Present Perfect, Future forms), aplicándolos en contextos reales.
-       </li>
-                    <li style=" padding: 0 0 0.5rem">Desarrollar respuestas orales más completas y estructuradas, incorporando justificación de ideas y ejemplos.
-       </li>
-                    <li style=" padding: 0 0 0.5rem">Practicar conversaciones tipo evaluación en la plataforma de tareas con la inteligencia artificial Coach Isabela, enfocadas en opiniones, experiencias y situaciones hipotéticas.
-       </li>
-                    <li style=" padding: 0 0 0.5rem">Mantener una práctica constante y autónoma (15–20 minutos diarios) para fortalecer fluidez, coherencia y seguridad al comunicarse.
-       </li>
-       </ul>
-       <p>
-Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor seguridad en el siguiente nivel.</p>
-       </td>
-       </tr>`;
-    }
-    else{
-          condicionadoText = `      <tr>
-                      <td
-                        style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
-                        &#128680; <b> Condicionado/a:</b>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="  color: #126064;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
-             <p>
-         Avanzas al siguiente nivel de manera condicionada. Cuentas con las bases mínimas necesarias para avanzar, sin embargo, requieres reforzar algunas áreas para comunicarte con mayor claridad, fluidez y precisión en situaciones cotidianas.
-             </p>
-
-             <p><b>Recomendaciones:</b></p>
-             <ul>
-                          <li style=" padding: 0 0 0.5rem">
-      Reforzar el uso de estructuras gramaticales, aplicándolos en oraciones completas y funcionales.
-             </li>
-                          <li style=" padding: 0 0 0.5rem">
-      Ampliar respuestas orales, evitando frases muy cortas y desarrollando ideas con mayor claridad. 
-             </li>
-                          <li style=" padding: 0 0 0.5rem">
-      Practicar conversaciones guiadas en la plataforma de tareas con la inteligencia artificial Coach Isabela, enfocadas en rutinas, experiencias y planes cercanos.
-             </li>
-                          <li style=" padding: 0 0 0.5rem">
-      Realizar prácticas constantes (10–15 minutos diarios) para consolidar vocabulario y estructuras del nivel.
-             </li>
-             </ul>
-             <p>
-      Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor seguridad en el siguiente nivel.</p>
-             </td>
-             </tr>
+            <b>Recomendaciones:</b>
+            <ul>
+              <li style=" padding: 0 0 0.5rem">
+                Reforzar el uso de estructuras gramaticales, aplicándolos en oraciones completas y funcionales.
+              </li>
+              <li style=" padding: 0 0 0.5rem">
+                Ampliar respuestas orales, evitando frases muy cortas y desarrollando ideas con mayor claridad.
+              </li>
+              <li style=" padding: 0 0 0.5rem">
+                Practicar conversaciones guiadas en la plataforma de tareas con la inteligencia artificial Coach
+                Isabela, enfocadas en rutinas, experiencias y planes cercanos.
+              </li>
+              <li style=" padding: 0 0 0.5rem">
+                Realizar prácticas constantes (10–15 minutos diarios) para consolidar vocabulario y estructuras del
+                nivel.
+              </li>
+            </ul><br><br>
+              Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor seguridad en el siguiente
+              nivel.
+          </td>
+        </tr>
 
       `;
     }
   }
-
+  // all condicionados updated
   // ---------- Build full headers (complete texts) ----------
   // ---***EXIT*** Kids and teens---
+  // updated
   const header_pass_kids_teens = `
-    <div class="welcome">
-    <p class="h2">&#127881; ¡Felicidades, papás y mamás!</p>
-    <!-- &#x1F31F; -->
-    <p class="h3">Hoy celebramos juntos un <b>logro extraordinario</b></p>
-    <p class="h4">
-    Su hijo/a ha completado con éxito su curso de inglés, <br />
+    <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
+  <p
+    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
+    &#127881; ¡Felicidades, papás y mamás!</p>
+  <!-- &#x1F31F; -->
+  <p
+    style="padding: 1rem 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
+    Hoy celebramos juntos un <b>logro extraordinario</b><br /><br />
+    Su hijo/a ha completado con éxito su curso de inglés,
     superando cada reto con
-    <b>dedicación, alegría y una constancia admirable.</b></p>
-    <p class="h4">
+    <b>dedicación, alegría y una constancia admirable.</b>
     Durante este tiempo, no solo adquirió nuevas habilidades lingüísticas,
     sino que también desarrolló
     <b>confianza, disciplina y una mentalidad de superación</b> que le
-    acompañará toda la vida.
-    </p>
-    <p class="h4">
+    acompañará toda la vida.<br /><br />
     Este avance es fruto de su esfuerzo, del acompañamiento de ustedes y
-    del compromiso de todo nuestro equipo English4kids. ¡Gracias por ser
+    del compromiso de todo nuestro equipo English4kids.<br /><br />
+     ¡Gracias por ser
     parte activa de este viaje y por inspirar a su pequeño/a a alcanzar la
     meta!
-    </p>
-    <p class="h4">
-    <b>
+    <b><br><br />
     &#127775; Hoy, más que un curso terminado, celebramos el inicio de
-    un futuro lleno de oportunidades.</b
-    >
-    </p>
-    </div>
+    un futuro lleno de oportunidades.</b>
+  </p>
+</div>
       `;
+  // upd
   const resultado_global_pass_kids_teens = `
-    <div class="resultado-global">
-    <p class="h2">¡Un gran paso hacia el dominio del idioma!</p>
-    <p class="h3">
-    Tu hijo/a ha alcanzado un nivel <br />
-    intermedio de inglés (B1–B2)<br />
-    <em style="font-size: 0.8rem; font-weight: 500"
-    >Según el Marco Común Europeo (CEFR)</em
-    >
-    </p>
-    <p>
-    Estamos seguros de que este logro abrirá <br />muchas puertas para
-    su futuro.
-    </p>
-    <div class="temas-dominados">
-    <table>
+    <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
+
+  <p
+    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
+    ¡Un gran paso hacia el dominio del idioma!
+  </p>
+
+  <p style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 0;">
+    Tu hijo/a ha alcanzado un nivel
+    intermedio de inglés (B1–B2)<br>
+    <span style="font-size: 13px; font-weight: 400; color: #497275;">Según el Marco Común Europeo (CEFR)</span>
+  </p>
+
+  <p style="font-size:15px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
+    Estamos seguros de que este logro abrirá
+    muchas puertas para su futuro.
+
+
+  </p>
+</div>
+<div class="desempeño"
+  style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
+  <table style="width: 80%; overflow: hidden;" width="80%">
     <thead>
-    <th>Esto significa que es capaz de:</th>
+      <tr>
+        <th colspan="2"
+          style="font-size: 22px; font-family:  Segoe UI, Roboto; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
+          align="center">
+          Esto significa que es capaz de: </th>
+      </tr>
     </thead>
-    <tr>
-    <td>
-    &#10004; Comprender ideas principales en conversaciones claras
-    </td>
-    </tr>
-    <tr>
-    <td>&#10004; Expresar opiniones y relatar experiencias</td>
-    </tr>
-    <tr>
-    <td>
-    &#10004; Participar activamente en interacciones reales con
-    seguridad y autonomía
-    </td>
-    </tr>
-    </table>
-    </div>
-    </div>`;
+    <tbody>
+      <tr>
+        <td
+          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
+          &#10004; Comprender ideas principales en conversaciones claras
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
+          &#10004; Expresar opiniones y relatar experiencias
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
+
+          &#10004; Participar activamente en interacciones reales con
+          seguridad y autonomía</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+    `;
+  // updated
   const header_fail_kids_teens = `
-    <div class="welcome">
-    <p class="h2">
+ <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
+  <p
+    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
+
     &#127919; Queremos reconocer la dedicación y el esfuerzo
-    </p>
-    <!-- &#x1F31F; -->
-    <p class="h3">Tu hijo/a ha mostrado compromiso y participación en cada etapa del
-    aprendizaje del inglés. ¡Cada paso cuenta! &#10024;</p>
-    <p class="h4">
+  </p>
+  <!-- &#x1F31F; -->
+  <p
+    style="padding: 1rem 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
+    Tu hijo/a ha mostrado compromiso y participación en cada etapa del
+    aprendizaje del inglés. ¡Cada paso cuenta! &#10024;<br><br>
     En esta evaluación final,
     <b
     >aún no se ha alcanzado el nivel de dominio necesario para cerrar el
-    curso satisfactoriamente</b
-    >. Esto significa que algunas habilidades clave todavía están en proceso
+    curso satisfactoriamente</b>. Esto significa que algunas habilidades clave todavía están en proceso
     de fortalecimiento.
-    </p>
-    </div>
+  </p>
+</div>
     `;
 
   const semanas4kidsteens = syllabusVal.includes("Masters") ? 4 : 8;
-
+  // upd
   const resultado_global_fail_kids_teens = `
-    <div class="areas-oportunidad">
-    <table>
-    <tbody>
-    <tr>
-    <td class="tema-reforzar"><b>Siguientes Pasos</b></td>
-    </tr>
-    <tr>
-    <td class="reforzar-R-C">
-    No te desanimes: tu hijo/a tendrá una segunda oportunidad en
-    <b>${semanas4kidsteens} semanas</b>. Será asignado/a nuevamente al mismo nivel,
+   <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
+
+  <p
+    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0; ">
+    Siguientes Pasos
+  </p>
+
+  <p style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 0 0; ">
+    No te desanimes:<br>
+    <span style="font-size: 14px; font-weight: 400; color: #497275;">tu hijo/a tendrá una segunda oportunidad en
+          <b>${semanas4kidsteens} semanas</b>. </span>
+  </p>
+
+  <p style="font-size:14px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
+    Será asignado/a nuevamente al mismo nivel,
     lo que le permitirá
     <b
     >repasar los contenidos, reforzar áreas clave y prepararse
-    de la mejor manera </b
-    >para aprobar en la próxima evaluación.
-    </td>
-    </tr>
-    <tr>
-    <td class="tema-reforzar">&#128218; <b>Nivel actual:</b></td>
-    </tr>
-    <tr>
-    <td class="reforzar-R-C">
-    Según el Marco Común Europeo de Referencia para las Lenguas
-    (CEFR), tu hijo/a aún no alcanza el nivel intermedio (B1).
-    Actualmente se encuentra en un nivel básico alto (A2) y
-    necesita reforzar estructuras clave, comprensión auditiva y
-    expresión oral fluida para avanzar al siguiente nivel.
-    </td>
-    </tr>
-    <tr>
-    <td class="tema-reforzar">&#128187; <b>Recomendación:</b></td>
-    </tr>
-    <tr>
-    <td class="tema-reforzar">
-    &#128153; <b>Agradecimiento: </b>
-    </td>
-    </tr>
-    <tr>
-    <td class="reforzar-R-C">
+    de la mejor manera </b>para aprobar en la próxima evaluación.
+
+  </p>
+</div>
+<div class="desempeño"
+  style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
+  <table style="width: 80%; overflow: hidden;" width="80%">
+    <thead>
+      <tr>
+        <th colspan="2"
+          style="font-size: 18px; font-family:  Segoe UI, Roboto; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
+          align="center">
+          Nivel actual: </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td
+          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px;text-align: left; font-weight: 400; ">
+          Según el Marco Común Europeo de Referencia para las Lenguas
+          (CEFR), tu hijo/a aún no alcanza el nivel intermedio (B1).<br><br>
+          Actualmente se encuentra en un nivel básico alto (A2) y
+          necesita reforzar estructuras clave, comprensión auditiva y
+          expresión oral fluida para avanzar al siguiente nivel.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p
+    style="font-size:15px; font-weight: 500; padding: 2rem 1rem 0; color: #497275; font-family: Segoe UI; text-align:center;">
     Gracias por acompañar este proceso. Con práctica constante y
     apoyo familiar, ¡estamos seguros de que muy pronto alcanzará
     el siguiente nivel!
-    </td>
-    </tr>
-    </tbody>
-    </table>
-    </div>`;
+  </p>
+</div>
+`;
   // ---***EXIT***ADULTS---
+  // upd
   const header_pass_adults = `
-      <div class="welcome">
-      <p class="h2">&#127881; ¡Felicidades!</p>
-      <!-- &#x1F31F; -->
-      <p class="h3">Hoy celebramos contigo un logro extraordinario</p>
-      <p class="h4">
-      Has completado con éxito tu curso de inglés, superando cada reto con
-      dedicación, constancia y una admirable voluntad de aprendizaje.
-      &#127942;&#10024;
-      </p>
-      <p class="h4">
-      Durante este tiempo, no solo has fortalecido tus habilidades
-      lingüísticas para desenvolverte en situaciones cotidianas con mayor
-      seguridad y fluidez, sino que también has desarrollado confianza,
-      disciplina y una mentalidad de superación que te acompañará en cada
-      meta que te propongas.
-      </p>
-      <p class="h4">
-      &#127775; Este avance es fruto de tu esfuerzo, de tu compromiso y de
-      la determinación de seguir creciendo. Hoy no solo celebramos un curso
-      terminado, sino el inicio de un futuro lleno de nuevas oportunidades
-      para comunicarte, conectar y alcanzar tus sueños.
-      </p>
-      </div>   `;
+      <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
+  <p
+    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
 
+    &#127881; ¡Felicidades!
+  </p>
+  <!-- &#x1F31F; -->
+  <p
+    style="padding: 1rem 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
+    Hoy celebramos contigo un <b>logro extraordinario</b>.<br><br>
+
+Has completado con éxito tu curso de inglés, superando cada reto con
+    <b>dedicación, constancia y una admirable voluntad de aprendizaje</b>.
+    &#127942;&#10024;<br><br>
+
+Durante este tiempo, no solo has fortalecido tus <b>habilidades lingüísticas</b> para desenvolverte en situaciones
+    cotidianas con mayor <b>seguridad y fluidez</b>, sino que también has desarrollado
+    <b>confianza, disciplina y una mentalidad de superación</b> que te acompañará en cada meta que te propongas.<br><br>
+
+&#127775; Este avance es fruto de tu <b>esfuerzo</b>, de tu <b>compromiso</b> y de la
+    <b>determinación de seguir creciendo</b>.
+    Hoy no solo celebramos un curso terminado, sino el inicio de un <b>futuro lleno de nuevas oportunidades</b> para
+    comunicarte, conectar y alcanzar tus sueños.
+
+  </p>
+</div>
+`;
+  // u
   const header_fail_adults = `
-    <div class="welcome">
-    <p class="h2">Reconocemos tu esfuerzo y tu participación</p>
-    <p class="h3">Cada paso que das en tu aprendizaje del inglés suma y te acerca
-    más a tu meta.
-    </p>
-    <p class="h4"> En esta evaluación final,
-    <b
-    >aún no se ha alcanzado el nivel de dominio necesario para cerrar el
-    curso satisfactoriamente</b
-    >. Esto indica que algunas habilidades clave siguen en proceso de
-    desarrollo.
-    </p>
-    </div>  `;
+   <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
+  <p
+    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
 
+    Reconocemos tu esfuerzo y tu participación
+  </p>
+  <!-- &#x1F31F; -->
+  <p
+    style="padding: 1rem 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
+    Cada paso que das en tu aprendizaje del inglés suma y te acerca
+    más a tu meta. <br><br>
+    En esta evaluación final, <b
+    >aún no se ha alcanzado el nivel de dominio necesario para cerrar el
+    curso satisfactoriamente</b>. Esto indica que algunas habilidades clave siguen en proceso de
+    desarrollo.
+  </p>
+</div>
+`;
+  // upd
   const resultado_global_fail_adults = `
-    <div class="areas-oportunidad">
-    <table>
-    <tbody>
-    <tr>
-    <td class="tema-reforzar"><b>Siguientes Pasos</b></td>
-    </tr>
-    <tr>
-    <td class="reforzar-R-C">
-    No te desanimes, tendrás una segunda oportunidad en
-    <b>4 semanas</b> mientras repites el nivel. Esto te permitirá
+    <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
+
+  <p
+    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0; ">
+    Siguientes Pasos
+  </p>
+
+  <p style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 0 0; ">
+    No te desanimes:<br>
+    <span style="font-size: 15px; font-weight: 400; color: #497275;">tendrás una segunda oportunidad en
+          <b>4 semanas</b> mientras repites el nivel.</span>
+  </p>
+
+  <p style="font-size:15px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
+    Esto te permitirá
     repasar los contenidos, reforzar áreas específicas y llegar
     con más seguridad a tu próxima evaluación.
-    </td>
-    </tr>
-    <tr>
-    <td class="tema-reforzar"><b>Recomendación:</b></td>
-    </tr>
-    <tr>
-    <td class="tema-reforzar"><b>Mensaje finalo: </b></td>
-    </tr>
-    <tr>
-    <td class="reforzar-R-C">
+
+  </p>
+  <p style="font-size:15px; font-weight: 500; padding: 1rem; color: #497275; font-family: Segoe UI; text-align:center;">
+
     Este resultado <b>no marca el final del camino</b>, sino una
     nueva oportunidad para avanzar. Con tu constancia y
     dedicación, estamos seguros de que muy pronto alcanzarás la
     meta.
-    </td>
-    </tr>
-    </tbody>
-    </table>
-   </div>`;
+  </p>
+</div>`;
+  // upd
   const resultado_global_pass_adults = `
-    <div class="resultado-global">
-    <p class="h2">¡Un gran paso hacia el dominio del idioma!</p>
-    <p class="h3">
-    Has alcanzado un nivel<br />
-    A2 de inglés<br />
-    <em style="font-size: 0.8rem; font-weight: 500"
-    >Según el Marco Común Europeo (CEFR)</em
-    >
-    </p>
-    <p>
-    Estamos seguros de que este logro abrirá muchas puertas para tu
-    futuro.
-    </p>
-    <div class="temas-dominados">
-    <table>
-    <thead>
-    <th>Esto significa que puedes:</th>
-    </thead>
-    <tr>
-    <td>
-    &#10004; Comprender expresiones comunes y frases sobre temas
-    cotidianos
-    </td>
-    </tr>
-    <tr>
-    <td>
-    &#10004; Participar en conversaciones simples y directas
-    </td>
-    </tr>
-    <tr>
-    <td>
-    &#10004; Hablar sobre experiencias personales, rutinas, y
-    necesidades inmediatas
-    </td>
-    </tr>
-    </table>
-    </div>
-    <p>
-    ¡Te animamos a seguir practicando para avanzar al siguiente nivel!
-    </p>
-    </div>`;
-  // ---***EXIT***JUNIORS---
-  const header_pass_juniors = `
-      <div class="welcome">
-      <p class="h2">&#127881; ¡Felicidades, papás y mamás!</p>
-      <!-- &#x1F31F; -->
-      <p class="h3">Hoy celebramos junto a ustedes un logro muy especial</p>
-      <p class="h4">
-      Su hijo/a ha completado con éxito su curso de inglés, <br />
-      superando cada reto con
-      <b> compromiso, entusiasmo y constancia.</b>
-      </p>
-      <p class="h4">
-      Durante este tiempo, ha demostrado un crecimiento notable en sus
-      habilidades lingüísticas, ganando seguridad y confianza para
-      comunicarse en inglés.
-      </p>
-      <p class="h4">
-      &#x1F393; ¡Estamos muy orgullosos de su esfuerzo y dedicación!
-      </p>
-      <p class="h3">&#x1F4E2; Gran noticia:</p>
-      <p class="h4">
-      Su hijo/a ha alcanzado un nivel básico alto de inglés (A2), lo que
-      significa que puede comprender conversaciones simples, participar en
-      intercambios cortos y expresar ideas sobre su vida diaria e intereses
-      de forma clara y sencilla.
-      </p>
-      <p class="h4">
-      &#x1F3AF; Este es un paso firme hacia el dominio del idioma, y sienta
-      una base sólida para seguir avanzando hacia niveles más altos.
-      </p>
-      </div>
-    `;
+    <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
 
+  <p
+    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
+    ¡Un gran paso hacia el dominio del idioma!
+  </p>
+
+  <p style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 0;">
+    Has alcanzado un nivel
+    A2 de inglés<br>
+    <span style="font-size: 13px; font-weight: 400; color: #497275;">Según el Marco Común Europeo (CEFR)</span>
+  </p>
+
+  <p style="font-size:15px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
+    Estamos seguros de que este logro abrirá muchas puertas para tu futuro.
+
+
+  </p>
+</div>
+<div class="desempeño"
+  style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
+  <table style="width: 80%; overflow: hidden;" width="80%">
+    <thead>
+      <tr>
+        <th colspan="2"
+          style="font-size: 22px; font-family:  Segoe UI, Roboto; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
+          align="center">
+          Esto significa que puedes: </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td
+          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
+          &#10004; Comprender expresiones comunes y frases sobre temas
+          cotidianos
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
+          &#10004; Participar en conversaciones simples y directas
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
+
+          &#10004; Hablar sobre experiencias personales, rutinas, y
+          necesidades inmediatas
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:15px; font-weight: 500; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
+    ¡Te animamos a seguir practicando para avanzar al siguiente nivel!
+  </p>
+</div>`;
+  // ---***EXIT***JUNIORS---
+  // u
+  const header_pass_juniors = `
+     <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
+  <p
+    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
+
+    &#127881; ¡Felicidades, papás y mamás!
+  </p>
+  <!-- &#x1F31F; -->
+  <p
+    style="padding: 1rem 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
+
+    Hoy celebramos junto a ustedes un <b>logro muy especial</b><br><br>
+
+Su hijo/a ha completado con éxito su curso de inglés, superando cada reto con
+    <b>compromiso, entusiasmo y constancia.</b><br><br>
+
+Durante este tiempo, ha demostrado un <b>crecimiento notable</b> en sus <b>habilidades lingüísticas</b>, ganando
+    <b>seguridad y confianza</b> para comunicarse en inglés.<br><br>
+
+&#x1F393; ¡Estamos <b>muy orgullosos de su esfuerzo y dedicación</b>!<br><br>
+    &#x1F4E2; <b>Gran noticia:</b><br>
+
+Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que significa que puede
+    <b>comprender conversaciones simples</b>, <b>participar en intercambios cortos</b> y
+    <b>expresar ideas sobre su vida diaria e intereses</b> de forma clara y sencilla.<br><br>
+
+&#x1F3AF; Este es un <b>paso firme hacia el dominio del idioma</b>, y sienta una <b>base sólida</b> para seguir avanzando
+    hacia niveles más altos.
+
+  </p>
+</div>
+    `;
+  // u
   const header_fail_juniors = `
 
-      <div class="welcome">
-      <p class="h2">Queridos papás y mamás</p>
-      <!-- &#x1F31F; -->
-      <p class="h3">
-      Tu hijo/a ha mostrado compromiso y participación en cada etapa del
-      aprendizaje del inglés. ¡Cada paso cuenta! &#10024;
-      </p>
-      <p class="h4">
-      En esta ocasión, su hijo/a
-      <b>no logró aprobar la evaluación final del curso</b>, pero queremos
-      reconocer el esfuerzo, la constancia y el compromiso que ha demostrado
-      durante todo el programa. Cada intento es una oportunidad para
-      aprender y avanzar.
-      </p>
-      <p class="h4">
-      &#x1F4D8; Con práctica constante y refuerzo en las áreas clave,
-      estamos seguros de que podrá superar este reto y alcanzar su meta.
-      </p>
+    <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
+  <p
+    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
 
-      <p class="h3">&#x1F504;<b> Siguientes pasos:</b></p>
-      <p class="h4">
-      Su hijo/a será asignado/a nuevamente al mismo nivel para reforzar los
-      contenidos y habilidades que necesitan fortalecerse. Durante este
-      periodo, trabajará en las áreas clave y, en <b>8 semanas</b>, será
-      evaluado/a nuevamente para medir su progreso y confirmar que está
-      listo/a para avanzar.
-      </p>
+    Queridos papás y mamás
+  </p>
+  <!-- &#x1F31F; -->
+  <p
+    style="padding: 1rem 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
 
-      <p class="h3">&#x1F499;<b> Mensaje final:</b></p>
 
-      <p class="h4">
-      Con apoyo en casa y dedicación en el estudio, estamos seguros de que
-      muy pronto celebraremos juntos el logro de aprobar este curso.
-      </p>
-      </div>
+    Tu hijo/a ha mostrado compromiso y participación en cada etapa del
+    aprendizaje del inglés. ¡Cada paso cuenta! &#10024;<br><br>
+    En esta ocasión, su hijo/a
+    <b>no logró aprobar la evaluación final del curso</b>, pero queremos
+    reconocer el esfuerzo, la constancia y el compromiso que ha demostrado
+    durante todo el programa. Cada intento es una oportunidad para
+    aprender y avanzar.<br><br>
+    &#x1F4D8; Con práctica constante y refuerzo en las áreas clave,
+    estamos seguros de que podrá superar este reto y alcanzar su meta. <br><br>
+    &#x1F504;<b> Siguientes pasos:</b>
+    Su hijo/a será asignado/a nuevamente al mismo nivel para reforzar los
+    contenidos y habilidades que necesitan fortalecerse. Durante este
+    periodo, trabajará en las áreas clave y en <b>8 semanas</b>, será
+    evaluado/a nuevamente para medir su progreso y confirmar que está
+    listo/a para avanzar.<br><br>
+    &#x1F499;<b> Mensaje final:</b>
+    Con apoyo en casa y dedicación en el estudio, estamos seguros de que
+    muy pronto celebraremos juntos el logro de aprobar este curso.
+
+  </p>
+</div>
     `;
 
   // ---NORMAL EVALUATIONS---
@@ -1794,26 +1940,26 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
     ? "English4Adults"
     : "English4Kids";
   const normal_pass_header = `
-       <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
-      <p
-        style="padding: 0 1rem; font-size:2rem; font-weight: 800; color: #126064; font-family: Serif; margin: 0.5rem 0;">
-        ¡Te saludamos de ${chosenSyllabus}!</p>
-      <!-- &#x1F31F; -->
-      <p
-        style="padding: 0 1rem; font-size: 1rem; font-weight: 800; color: #126064; margin-top: 0;padding-bottom: 0.5rem; font-family: Verdana;">
-        Esperamos que estés teniendo una excelente semana</p>
-    </div>
+      <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
+  <p
+    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
+    ¡Te saludamos de ${chosenSyllabus}!</p>
+  <!-- &#x1F31F; -->
+  <p
+    style="padding: 0 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
+    Esperamos que estés teniendo una excelente semana</p>
+</div>
       `;
   const normal_fail_header = `
        <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
-      <p
-        style="padding: 0 1rem; font-size:2rem; font-weight: 800; color: #126064; font-family: Serif; margin: 0.5rem 0;">
-        ¡Te saludamos de ${chosenSyllabus}!</p>
-      <!-- &#x1F31F; -->
-      <p
-        style="padding: 0 1rem; font-size: 1rem; font-weight: 800; color: #126064; margin-top: 0;padding-bottom: 0.5rem; font-family: Verdana;">
-        Esperamos que estés teniendo una excelente semana</p>
-    </div>
+  <p
+    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
+    ¡Te saludamos de ${chosenSyllabus}!</p>
+  <!-- &#x1F31F; -->
+  <p
+    style="padding: 0 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
+    Esperamos que estés teniendo una excelente semana</p>
+</div>
     `;
   // Class Paths
   // Helper
@@ -1840,7 +1986,7 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
     {
       match: [
         "kids masters",
-        "kids masters 20",
+        "kids masters 2",
         "teens masters",
         "teens masters 2",
       ],
@@ -1877,54 +2023,90 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
   const B_ClassPath = `https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/B-CP_${BclassPathLvl}_A${levelVal}.png`;
 
   // --- RESULTADO GLOBAL
-
+  // upd
   let resultado_global_pass_normal = `
     <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
-        <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
-       <p
-      style="font-weight: bold; font-family: Verdana; font-size: 0.85rem; color: #506d6d; margin: 0 0 0.5rem 0; padding: 0 1rem;">
-      ${syllabusVal} | Nivel ${levelVal}
-    </p>
+  <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
+  <p
+    style="font-weight: 600; font-family: Segoe UI; font-size: 15px; color: #497275; margin: 0 0 0.5rem 0; padding: 0 1rem;">
+    ${syllabusVal} | Nivel ${levelVal}
+  </p>
 
-    <p
-      style="padding: 0 1rem 0; font-size: 2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
-      Evaluación Aprobada
-    </p>
+  <p
+    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
+    Evaluación Aprobada
+  </p>
 
-    <p class="h3"
-      style="font-size: 1.2rem; font-weight: 800; font-family: Verdana; color: #42757b; padding: 2.5rem 0;">
-      &#127881;¡Felicidades!&#127881; <br>
-      Se está avanzando a un excelente ritmo.
-    </p>
+  <p class="h3"
+    style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 0;">
+    &#127881;¡Felicidades!&#127881; <br>
+        Se está avanzando a un excelente ritmo.
+  </p>
 
-    <p style="font-size:0.95rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana;">
-      A continuación un informe detallado de la evaluación:
-    </p>
-  </div>
+  <p style="font-size:15px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
+    A continuación un informe detallado de la evaluación:
+  </p>
+</div>
   `;
-
+  // upd
   let resultado_global_fail_normal = ` 
   <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
+  <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
+  <p
+    style="font-weight: 600; font-family: Segoe UI; font-size: 15px; color: #497275; margin: 0 0 0.5rem 0; padding: 0 1rem;">
+    ${syllabusVal} | Nivel ${levelVal}
+  </p>
+
+  <p
+    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
+    Evaluación No Lograda
+  </p>
+
+  <p class="h3"
+    style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 20%;">
+    Aunque aún no se ha alcanzado el objetivo, el esfuerzo cuenta y seguiremos trabajando para mejorar.
+  </p>
+
+  <p style="font-size:15px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
+    A continuación un informe detallado de la evaluación:
+  </p>
+</div>
+`;
+  
+let resultadoGlobalDiagEval = `
+<div class="resultado-global" style="padding: 0 1rem; text-align: center;">
           <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
           <p
-            style="font-weight: bold; font-family: Verdana; font-size: 0.85rem; color: #506d6d; margin: 0 0 0.5rem 0; padding: 0 1rem 2.8rem;">
-            ${syllabusVal} | Nivel ${levelVal}
+            style="font-weight: 500; font-family: Segoe UI; font-size: 14px; color: #497275; margin: 0 0 0.5rem 0; padding: 0 1rem;">
+            
+    ${syllabusVal} | Nivel ${levelVal}
           </p>
+
+
           <p
-            style="padding: 2rem 1rem 0; font-size: 2rem; text-decoration: none; font-family: verdana; color: #297b7f; font-weight: bold; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
-            Evaluación No Lograda
+            style="padding: 1rem 1rem; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; margin: 0;">
+            Evaluación Diagnóstica
+          </p>
+          <div style="margin: 1rem auto 2rem; justify-items: center;">
+            <table width="80%" align="center" cellspacing="0" cellpadding="0"
+              style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #f9fafb; table-layout:fixed;">
+              <tr>
+                <td
+                  style="font-size: 15px; font-family: Segoe UI;  padding: 1rem 2rem; font-weight: 500; color: #497275; text-align: center;"
+                  align="center">
+                  Esta evaluación es diagnóstica, su propósito es medir avances, identificar fortalezas actuales y
+                  definir
+                  áreas a reforzar para continuar acompañando el aprendizaje de tu hijo/a de forma efectiva.
+                </td>
+              </tr>
+            </table>
+          </div>
+          <p style="font-size:14px; font-weight: 400; padding: 0 10% 0; color: #497275; font-family: Segoe UI;">
+            A continuación, compartimos el reporte de evaluación diagnóstica realizada en el <b>Nivel ${levelVal}</b> del curso
+            <b>${syllabusVal}</b>.
           </p>
 
-          <p class="h3" style="font-size: 1rem; font-weight: 800; font-family: Verdana; color: #42757b; padding: 0;">
-            Aunque aún no se ha alcanzado el objetivo, el esfuerzo cuenta y seguiremos trabajando para mejorar.
-          </p>
-
-          <p style="font-size:0.95rem; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Verdana;">
-            A continuación un informe detallado de la evaluación:
-          </p>
-        </div>
-`;
-
+        </div>`;
   // ---------- SHOW NOTA FINAL for Exit (only if not juniors) ----------
   let detalleNotaHTML = "";
   if (isExit && !syllabusLower.startsWith("juniors")) {
@@ -1932,41 +2114,52 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
     const o = safe(oralScore) || "-";
     const f = safe(finalDisplay) || "-";
 
-    detalleNotaHTML = `
-      <div class="temas-dominados">
-        <table>
-          <thead>
-            <tr>
-              <th><b>&#128313;Detalles de la nota&#128313;</b></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                &#128204; <b>Resultado Prueba Gramática:</b> ${g}/10<br />
-                <em style="font-size: 0.8rem">&emsp;&emsp;(equivale a 40% de la nota final)</em>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                &#128204; <b>Resultado Prueba Oral:</b> ${o}/10<br />
-                <em style="font-size: 0.8rem">&emsp;&emsp;(equivale a 60% de la nota final)</em>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-weight: bold; text-align: center; border-bottom: 1px dotted #219fa6;">
-              Nota Global: ${f}/10
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    detalleNotaHTML = `<div class="desempeño"
+  style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
+  <table style="width: 80%; overflow: hidden;" width="80%">
+    <thead>
+      <tr>
+        <th colspan="2"
+          style="font-size: 22px; font-family:  Segoe UI, Roboto; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
+          align="center">Detalles de la nota</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td
+          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
+
+          <b>Resultado Prueba Gramática:</b> ${g}/10<br />
+          <em style="font-size: 0.8rem">&emsp;&emsp;(equivale a 40% de la nota final)</em>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
+          <b>Resultado Prueba Oral:</b> ${o}/10<br />
+          <em style="font-size: 0.8rem">&emsp;&emsp;(equivale a 60% de la nota final)</em>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-size: 16px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 5%;text-align: left; font-weight: 400; border-top: 1px dotted #14767B;">
+          &#10151; <b>Nota Global:</b> ${f}/10
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
     `;
   }
 
   let welcomeHTML = "";
   let resultadoGlobal = "";
-  if (isExit) {
+  
+  // Prioridad máxima: Diagnostic Eval
+  if (isDiagnosticEval(syllabusVal, levelVal)) {
+    resultadoGlobal = resultadoGlobalDiagEval;
+
+  } else  if (isExit) {
     // choose by syllabus and pass/fail
     const passedExit =
       finalDisplay !== "" &&
@@ -1990,7 +2183,7 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
       levelVal === 10 &&
       weekVal === 7
     ) {
-      // Nuevo fix: aprobar/reprobar según el score real
+      // normal
       welcomeHTML =
         Number.isFinite(totalScore) && totalScore >= 7
           ? header_pass_juniors
@@ -2016,122 +2209,111 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
   let porqueEsImportante = ``;
   if (totalScore < 7) {
     // REPROBADO
+    // upd
     porqueEsImportante = `  <!-- PORQUE ES IMPORTANTE -->
-      <div style="margin: 4rem auto; justify-items: center;">
-        <table width="80%" align="center" cellspacing="0" cellpadding="0"
-          style="width: 80%; border-collapse: collapse; border-radius: 10%; border: none; overflow: hidden; margin-top: 1rem; background-color: #f9fafb;"
-          bgcolor="#f9fafb">
-          <tr>
-            <th
-              style="font-weight: 800; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 1.15rem; padding: 1rem; color: #126064; border: none; font-family: verdana;"
-              align="center">
-              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
-              ¿Por qué es importante reconocer los avances?
-            </th>
-          </tr>
-          <tr>
-            <td
-              style="font-size:0.95rem; font-family: Verdana; border-bottom: 1px dotted #DCF8FA; padding: 0.9rem 2rem; font-weight: 500; color: #044043; text-align: center;"
-              align="center">
-              <p style="font-family: Verdana; font-size:0.95rem; margin: 0 0 0.5rem 0;">
-                Porque cada progreso cuenta. Identificar lo que ya se domina fortalece la confianza y nos permite enfocar con claridad los próximos pasos para seguir avanzando.
-              </p>
-
-            </td>
-          </tr>
-        </table>
-      </div>`;
+<div style="margin: 4rem auto; justify-items: center;">
+  <table width="80%" align="center" cellspacing="0" cellpadding="0"
+    style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #f9fafb; table-layout:fixed;">
+    <tr>
+      <th
+        style="font-weight: 700; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 22px; padding: 1rem; color: #14767B; border: none; font-family: Segoe UI;"
+        align="center">
+        <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 35px; margin-right: 0.2rem"></span>
+        ¿Por qué es importante reconocer los avances?
+      </th>
+    </tr>
+    <tr>
+      <td
+        style="font-size: 15px; font-family: Segoe UI;  padding: 0 15%; font-weight: 400; color: #497275; text-align: center;"
+        align="center">
+        
+          Porque <b>cada progreso cuenta</b>. Identificar lo que ya se domina <b>fortalece la confianza</b> y nos
+          permite
+          <b>enfocar</b> con
+          claridad los <b>próximos pasos</b> para seguir avanzando.
+      
+      </td>
+    </tr>
+  </table>
+</div>`;
   } else {
+    // upd
     porqueEsImportante = `<!-- PORQUE ES IMPORTANTE -->
-      <div style="margin: 4rem auto; justify-items: center;">
-        <table width="80%" align="center" cellspacing="0" cellpadding="0"
-          style="width: 80%; border-collapse: collapse; border-radius: 10%; border: none; overflow: hidden; margin-top: 1rem; background-color: #f9fafb;"
-          bgcolor="#f9fafb">
-          <tr>
-            <th
-              style="font-weight: 800; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 1.15rem; padding: 1rem; color: #126064; border: none; font-family: verdana;"
-              align="center">
-              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
-              ¿Por qué es clave saber los logros?
-            </th>
-          </tr>
-          <tr>
-            <td
-              style="font-size:0.95rem; font-family: Verdana; border-bottom: 1px dotted #DCF8FA; padding: 0.9rem 2rem; font-weight: 500; color: #044043; text-align: center;"
-              align="center">
-              <p style="font-family: Verdana; font-size:0.95rem; margin: 0 0 0.5rem 0;">
-              <p>Te permite <b>ver el progreso</b>, <b>celebrar cada avance</b> y
-                <b>acompañar el aprendizaje</b> con determinación.
-              </p>
-              <p>Cada paso <b>refuerza la confianza</b> y prepara para
-                <b>comunicarse con seguridad</b> y <b>pensar en grande</b>.
-              </p>
-
-              </p>
-            </td>
-          </tr>
-        </table>
-      </div>`;
+  <div style="margin: 4rem auto; justify-items: center;">
+    <table width="80%" align="center" cellspacing="0" cellpadding="0"
+      style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #f9fafb; table-layout:fixed;">
+      <tr>
+        <th
+          style="font-weight: 700; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 22px; padding: 1rem; color: #14767B; border: none; font-family: Segoe UI;"
+          align="center">
+          <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 35px; margin-right: 0.2rem"></span>
+          ¿Por qué es clave saber los logros?
+        </th>
+      </tr>
+      <tr>
+        <td
+          style="font-size: 15px; font-family: Segoe UI;  padding: 0 15%; font-weight: 400; color: #497275; text-align: center;"
+          align="center">
+          Te permite <b>ver el progreso</b>, <b>celebrar cada avance</b> y
+            <b>acompañar el aprendizaje</b> con determinación.
+          <br><br>
+          Cada paso <b>refuerza la confianza</b> y prepara para
+            <b>comunicarse con seguridad</b> y <b>pensar en grande</b>.
+        
+        </td>
+      </tr>
+    </table>
+  </div>`;
   }
-
+  // both upd
   let tuEsfuerzoCuenta = ``;
   tuEsfuerzoCuenta += syllabusLower.includes("adults")
     ? `<!-- TU ESFUERZO CUENTA -->
-      <div style="margin: 4rem 0; justify-items: center;">
-        <table width="80%" align="center" cellspacing="0" cellpadding="0"
-          style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 0.5rem; background-color: #f9fafb;"
-          bgcolor="#f9fafb">
-          <tr>
-            <th
-              style="font-family: Serif; font-weight: 800; text-align: center; font-size: 1.5rem; padding: 1rem; color: #126064; border-top: 1px dotted #219fa6; border-bottom: none;"
-              align="center">
-              &#10024; ¡Tu esfuerzo cuenta! &#10024;
-            </th>
-          </tr>
-          <tr>
-            <td
-              style="font-size:0.95rem; font-family: Verdana; padding: 0.7rem 0.5rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
-              align="center">
-              <p style="font-family: Verdana; font-size:0.95rem;">
-                Cada mes estás <b>avanzando más</b> y estamos
-                <b>muy orgullosos de tu progreso</b>.
-              </p>
-              <p style="font-family: Verdana; font-size:0.95rem;">
-                Queremos que
-                <b>aprendas inglés con confianza y entusiasmo</b>, dando un <b>paso firme en cada clase</b>.
-              </p>
-            </td>
-          </tr>
-        </table>
-      </div>`
+<div style="margin: 4rem auto; justify-items: center;">
+  <table width="80%" align="center" cellspacing="0" cellpadding="0"
+    style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #f9fafb;  table-layout:fixed;">
+    <tr>
+      <th
+        style="font-weight: 700; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 22px; padding: 1rem; color: #14767B; border: none; font-family: Segoe UI;"
+        align="center">
+        &#10024; ¡Tu esfuerzo cuenta! &#10024;
+      </th>
+    </tr>
+    <tr>
+      <td
+        style="font-size: 14px; font-family: Segoe UI; padding: 0 15%; font-weight: 400; color: #1C5457; text-align: center;"
+        align="center">
+          Cada mes estás <b>avanzando más</b> y estamos
+          <b>muy orgullosos de tu progreso</b>.
+          Queremos que
+          <b>aprendas inglés con confianza y entusiasmo</b>, dando un <b>paso firme en cada clase</b>.
+      </td>
+    </tr>
+  </table>
+</div>`
     : `<!-- TU ESFUERZO CUENTA -->
-      <div style="margin: 4rem 0; justify-items: center;">
-        <table width="80%" align="center" cellspacing="0" cellpadding="0"
-          style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 0.5rem; background-color: #f9fafb;"
-          bgcolor="#f9fafb">
-          <tr>
-            <th
-              style="font-family: Serif; font-weight: 800; text-align: center; font-size: 1.5rem; padding: 1rem; color: #126064; border-top: 1px dotted #219fa6; border-bottom: none;"
-              align="center">
-              &#10024; ¡Tu esfuerzo cuenta! &#10024;
-            </th>
-          </tr>
-          <tr>
-            <td
-              style="font-size:0.95rem; font-family: Verdana; padding: 0.7rem 0.5rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
-              align="center">
-              <p style="font-family: Verdana; font-size:0.95rem;">
-                Cada mes tu hijo/a <b>avanza más</b> y estamos
-                <b>muy orgullosos de su progreso</b>.
-              </p>
-              <p style="font-family: Verdana; font-size:0.95rem;">
-                Queremos que
-                <b>aprenda inglés con confianza y entusiasmo</b>, dando un <b>paso firme en cada clase</b>.
-              </p>
-            </td>
-          </tr>
-        </table>
-      </div>
+<div style="margin: 4rem auto; justify-items: center;">
+  <table width="80%" align="center" cellspacing="0" cellpadding="0"
+    style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #f9fafb;  table-layout:fixed;">
+    <tr>
+      <th
+        style="font-weight: 700; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 22px; padding: 1rem; color: #14767B; border: none; font-family: Segoe UI;"
+        align="center">
+        &#10024; ¡Tu esfuerzo cuenta! &#10024;
+      </th>
+    </tr>
+    <tr>
+      <td
+        style="font-size: 14px; font-family: Segoe UI; padding: 0 15%; font-weight: 400; color: #1C5457; text-align: center;"
+        align="center">
+          Cada mes tu hijo/a <b>avanza más</b> y estamos
+          <b>muy orgullosos de su progreso</b>.
+          Queremos que
+          <b>aprenda inglés con confianza y entusiasmo</b>, dando un <b>paso firme en cada clase</b>.
+      </td>
+    </tr>
+  </table>
+</div>
     `;
 
   if (totalScore < 7) {
@@ -2139,20 +2321,33 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
   }
 
   // ---------- build topics & opportunities HTML ----------
-
-  const dominatedHTML = approvedTopics.length
+  // upd
+  let dominatedHTML = approvedTopics.length
     ? `
     <!-- TEMAS DOMINADOS -->
-    <div style="margin: 1.5rem 0; justify-items: center;">
-      <table style="width: 80%; border-radius: 10%; overflow: hidden;" width="80%">
-        <thead>
-          <tr>
-            <th
-              style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center; padding: 1.7rem 0.5rem; border-bottom: 1px dotted #219fa6;"
-              align="center"><b>&#128313;Temas Dominados&#128313;</b></th>
-          </tr>
+    <div style="margin: 3rem 0; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
+  <table style="width: 80%;" width="80%">
+    <thead>
+      <tr>
+        <th
+          style="font-size: 22px; font-family:  Segoe UI, Roboto; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
+          align="center"> Temas Dominados </th>
+      </tr> 
+      ${
+        isDiagnosticEval(syllabusVal, levelVal)
+          ? `<tr>
+          <th
+            style="font-family: Segoe UI;  text-align: center; padding: 0.5rem 5% 1rem; font-size: 16px; font-weight: 500; color: #497275;"
+            align="left">
+            Durante el curso, el estudiante ha desarrollado conocimientos y habilidades en los
+            siguientes
+            temas:
+          </th>
+        </tr>`
+          : ""
+      }
         </thead>
-        <tbody>
+    <tbody>
         ${approvedTopics
           .map((topic) => {
             const topicKey = topic.toLowerCase();
@@ -2167,43 +2362,67 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
               : "";
 
             return `
-                <tr>
-                  <td
-                    style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 1.05rem; font-weight: 600; color: #126064;"
-                    align="left">
-                    &#9989; ${safe(topic)}
-                  </td>
-                </tr>
-                <tr>
-                  <td
-                    style="font-family: Verdana; font-weight: 500; text-align: left; padding: 0.3rem 0 1rem 13%; border-bottom: 1px dotted #DCF8FA; color: #044043; font-size: 0.9rem;"
-                    align="left">
-                    ${topicDescription}
-                  </td>
-                </tr>
+                 <tr>
+        <td
+          style="font-family: Segoe UI;  text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 15px; font-weight: 600; color: #1C5457;"
+          align="left">
+          <span style="font-weight: bold; margin-right: 5px;"> &#10004;</span>${safe(topic)}
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-family: Segoe UI; font-weight: 400; text-align: left; padding: 0.3rem 0 1rem 13%;  color: #275B60; font-size: 14px"
+          align="left">
+          ${topicDescription}
+        </td>
+      </tr>
               `;
           })
           .join("")}
         </tbody>
       </table>
     </div>
-    ${porqueEsImportante}
+      ${
+        isDiagnosticEval(syllabusVal, levelVal)
+          ? `
+      <div style="margin: 4rem auto; justify-items: center;">
+        <table width="80%" align="center" cellspacing="0" cellpadding="0"
+          style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #F5FAFA; table-layout:fixed;">
+          <tr>
+            <th
+              style="font-weight: 700; border-bottom: 1px dotted #219fa6; text-align: right; font-size: 22px; padding: 1rem; color: #14767B; border: none; font-family: Segoe UI; width: 60px"
+              align="center">
+              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 35px; margin-right: 0.2rem"></span>
+
+            </th>
+            <td
+              style="font-size: 15px; font-family: Segoe UI;  padding: 1rem 1rem 1rem 0; font-weight: 500; color: #497275; text-align: left;"
+              align="center">Estos resultados reflejan el estado actual del aprendizaje y nos ayudan a guiar los
+                siguientes
+                pasos.
+            </td>
+          </tr>
+        </table>
+      </div>`
+          : `${porqueEsImportante}`
+      }
+    
     `
     : "";
-
+  // upd
   const reinforceHTML = reinforceTopics.length
-    ? ` <div class="temas-reforzar" style="margin: 1rem 0; justify-items: center;">
-        <table style="width: 80%; border-radius: 10%; overflow: hidden;" width="80%">
-          <thead>
-            <tr>
-              <th
-                style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center; padding: 1.7rem 0.5rem; border-bottom: 1px dotted #219fa6;"
-                align="center">
-                &#128313; <b>Temas que aún necesita reforzar</b>&#128313;
-              </th>
-            </tr>
-          </thead>
-        <tbody>
+    ? ` <!--temas a reforzar-->
+  <div style="margin: 4rem auto; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
+    <table style="width: 80%; overflow: hidden;" width="80%">
+      <thead>
+        <tr>
+          <th
+            style="font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
+            align="center">
+            Temas que aún necesita reforzar </th>
+        </tr>
+      </thead>
+      <tbody>
           ${reinforceTopics
             .map((topic) => {
               const topicKey = topic.toLowerCase();
@@ -2217,16 +2436,16 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
                 ? topicBreakdown[matchedKey]
                 : "";
 
-              return `<tr>
-              <td
-                style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 1rem; font-weight: 600; color: #126064;"
-                align="left">
-                &#10004; ${safe(topic)}</td>
-                      </tr>
-                      <tr>
-              <td
-                style="font-family: Verdana; font-weight: 500; text-align: left; padding: 0.3rem 0 1rem 13%; border-bottom: 1px dotted #DCF8FA; color: #044043; font-size: 0.9rem;"
-                align="left">${topicDescription}</td>
+              return ` <tr>
+          <td
+            style="font-family: Segoe UI;  text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 15px; font-weight: 600; color: #1C5457;"
+            align="left">
+            <span style="font-weight: bold; margin-right: 5px;"> &#9744;</span> ${safe(topic)}</td>
+        </tr>
+        <tr>
+          <td
+            style="font-family: Segoe UI; font-weight: 400; text-align: left; padding: 0.3rem 0 1rem 13%;  color: #1C5457; font-size: 14px;"
+            align="left">${topicDescription}</td>
                       </tr>`;
             })
             .join("")}
@@ -2234,73 +2453,183 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
       </table>
     </div>`
     : "";
+  // upd
 
-  const opportunityHTML = opportunityTopics.length
-    ? `<div class="areas-oportunidad">
-        <table>
+  let opportunityHTML = "";
+
+  if (isDiagnosticEval(syllabusVal, levelVal)) {
+    // DIAGNOSTIC: revisamos cuáles checkboxes están checked
+    // Mapa de AOIs para diagnóstico
+    const diagAOIs = [
+      {
+        checkboxLabel: "Construcción de oraciones completas",
+        title: "Construcción de oraciones completas",
+        desc: "Reforzar el uso de frases con sujeto + verbo + complemento para expresar ideas con mayor claridad.",
+      },
+      {
+        checkboxLabel: "Fluidez al responder preguntas",
+        title: "Fluidez al responder preguntas",
+        desc: "Desarrollar mayor continuidad al hablar, reduciendo pausas largas y ganando seguridad al responder.",
+      },
+      {
+        checkboxLabel: "Uso de vocab en nuevos contextos",
+        title: "Uso del vocabulario aprendido en nuevos contextos",
+        desc: "Aplicar palabras conocidas en diferentes situaciones y preguntas, no solo en ejemplos memorizados.",
+      },
+      {
+        checkboxLabel: "Uso correcto del presente simple",
+        title: "Uso correcto del presente simple",
+        desc: "Fortalecer la estructura del presente simple, especialmente en la tercera persona (he / she).",
+      },
+      {
+        checkboxLabel: "Pronunciación de palabras frecuentes",
+        title: "Pronunciación de palabras frecuentes",
+        desc: "Mejorar la claridad al pronunciar palabras de uso común para facilitar la comprensión.",
+      },
+      {
+        checkboxLabel: "Comprensión y seguimiento de preguntas",
+        title: "Comprensión y seguimiento de preguntas",
+        desc: "Reforzar la comprensión auditiva para responder de forma más precisa a lo que se pregunta.",
+      },
+    ];
+
+    // HTML dinámico para diagnostic eval
+    const checkboxes = document.querySelectorAll(
+      '#optionsGroup input[type="checkbox"]',
+    );
+    const checkedHTML = [];
+
+    checkboxes.forEach((cb) => {
+      if (cb.checked) {
+        const labelText = cb.closest("label").textContent.trim();
+        const match = diagAOIs.find((o) => o.checkboxLabel === labelText);
+        if (match) {
+          checkedHTML.push(`
+        <tr>
+          <td style="font-size:15px; font-family:Segoe UI; font-weight:600; color:#1C5457; padding:10px 10px 3px 5%; text-align:left; margin:0;">
+            <span style="font-weight:400; margin-right:5px; color:#14767B; font-size:12px;">&#9745;</span>${match.title}
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align:left; color:#1C5457; font-weight:400; padding:3px 10px 5px 15%; font-family:Segoe UI; font-size:14px; margin:0;">
+            ${match.desc}
+          </td>
+        </tr>
+      `);
+        }
+      }
+    });
+
+    opportunityHTML = `
+  <div style="margin:4rem auto; justify-items:center; background-color:rgba(252,250,250,0.1); border-radius:25px;">
+    <table width="80%">
+      <thead>
+        <tr>
+          <th style="font-size:22px; font-family:Segoe UI; font-weight:700; color:#14767B; text-align:center; padding:0.5rem; border-bottom:1px dotted #219fa6;">
+            Áreas de Oportunidad
+          </th>
+        </tr>
+        <tr>
+          <th style="font-family:Segoe UI; text-align:center; padding:0.5rem 5% 1rem; font-size:16px; font-weight:500; color:#497275;" align="left">
+            Estas áreas se trabajarán progresivamente en las siguientes clases.
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        ${checkedHTML.join("")}
+      </tbody>
+    </table>
+  </div>
+`;
+  } else {
+    // NO ES DIAGNOSTIC: logica normal
+    opportunityHTML = opportunityTopics.length
+      ? `
+      <div style="margin:4rem auto; justify-items:center; background-color:rgba(252,250,250,0.1); border-radius:25px;">
+        <table width="80%">
           <thead>
             <tr>
-              <th>&#128313;<b>Áreas de Oportunidad&#128313;</b></th>
+              <th style="font-size:22px; font-family:Segoe UI; font-weight:700; color:#14767B; text-align:center; padding:0.5rem; border-bottom:1px dotted #219fa6;">
+                Áreas de Oportunidad
+              </th>
             </tr>
           </thead>
           <tbody>
             ${opportunityTopics
               .map(
                 (o) => `
-                  <tr>
-                    <td class="tema-reforzar"><b>Tema:</b> ${safe(o.title)}</td>
-                  </tr>
-                  ${
-                    o.answer
-                      ? `<tr><td class="reforzar-R-C">&#10060; Respuesta: ${safe(
-                          o.answer,
-                        )}</td></tr>`
-                      : ""
-                  }
-                  ${
-                    o.correction
-                      ? `<tr><td class="reforzar-R-C">&#9989; Corrección: ${safe(
-                          o.correction,
-                        )}</td></tr>`
-                      : ""
-                  }`,
+                <tr>
+                  <td style="font-size:15px; font-family:Segoe UI; font-weight:400; color:#1C5457; padding:10px 10px 10px 5%; text-align:left;">
+                    <b>Tema:</b> ${safe(o.title)}
+                  </td>
+                </tr>
+                ${
+                  o.answer
+                    ? `<tr>
+                  <td style="text-align:left; color:#1C5457; font-weight:400; padding:5px 10px 5px 15%; font-family:Segoe UI; font-size:14px;">
+                    <span style="color:#E87373; font-weight:bold; margin-right:5px;">&#10006;</span>
+                    Respuesta: ${safe(o.answer)}
+                  </td>
+                </tr>`
+                    : ""
+                }
+                ${
+                  o.correction
+                    ? `<tr>
+                  <td style="text-align:left; color:#1C5457; font-weight:400; padding:5px 10px 5px 15%; font-family:Segoe UI; font-size:14px;">
+                    <span style="color:#89C287; font-weight:bold; margin-right:5px;">&#10004;</span>
+                    Corrección: ${safe(o.correction)}
+                  </td>
+                </tr>`
+                    : ""
+                }
+              `,
               )
               .join("")}
           </tbody>
         </table>
       </div>
       ${tuEsfuerzoCuenta}
-      `
-    : "";
+    `
+      : "";
+  }
 
+  // upd
   const pronunciationHTML = pronunciationMistakes
-    ? `<div class="pronunciacion-reforzar">
-        <table>
-          <thead>
-            <tr>
-              <th><b>&#128313;Pronunciación a reforzar&#128313;</b></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>${safe(pronunciationMistakes)}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>`
+    ? `  <div style="margin: 4rem auto; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
+    <table width="80%">
+      <thead>
+        <tr>
+          <th
+            style="font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;">
+            Pronunciación a reforzar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td
+            style="font-family: Segoe UI; font-weight: 400; text-align: center; padding: 0.3rem 1rem 1rem;  color: #1C5457; font-size: 14px;"
+            align="center">${safe(pronunciationMistakes)}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>`
     : "";
+  // upd
   const selectorComments = areaDetails.join("");
   const commentsFinal = selectorComments || extraCommentsFallback || "";
   const commentsHTML =
     commentsFinal || isCondicionado
-      ? `<div class="areas-oportunidad">
-        <table>
-          <thead>
-            <tr>
-              <th>&#128313;<b>Comentarios del evaluador:&#128313;</b></th>
-            </tr>
-          </thead>
-          <tbody>
+      ? `
+        <div style="margin: 4rem auto; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
+    <table width="80%">
+      <thead>
+        <th
+          style="font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;">
+          Comentarios del evaluador </th>
+        </tr>
+      </thead>
+      <tbody>
            ${commentsFinal || ""}
             ${isCondicionado ? condicionadoText : ""}
           </tbody>
@@ -2318,41 +2647,37 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
 
   const surveyLinkFinal =
     surveyBaseFinal + encodeURIComponent(evaluatorID || "");
-
+  // upd
   const evaluatorLine = shouldHideEvaluator
     ? ""
     : `
-    <!-- EVALUATORS Referal -->
-      <div style="margin: 2rem auto 0; padding: 1rem 0">
-        <div
-          style="border-radius: 20px; padding: 2rem 1.5rem; width: 80%; margin: 2rem auto; background-color: rgba(255, 255, 255, 0.95); min-width: 300px; max-width: 1000px; text-align: center;">
-          <p
-            style="font-family: Verdana; color: #147b7b; padding: auto 2rem; font-size: 1.25rem; font-weight: bold;">
-            Tu
-            evaluación fue realizada por</p>
-          <p
-            style="font-family: Verdana; color: #147b7b; padding: auto 2rem; font-size: 1.5rem; font-weight: 800;">
-                  ${safe(evaluatorName || "error")}</p>
-          <p
-            style="font-family: Verdana; color: #147b7b; padding: auto 2rem; font-size: 1rem; font-weight: bold;">
-            Gracias por tu tiempo y confianza.</p>
-          <p
-            style="font-family: Verdana; font-size:0.95rem; color: #147b7b; padding: auto 2rem;">
-            Te invitamos a completar una breve encuesta de satisfacción para ayudarnos a seguir mejorando nuestro
-            servicio.
-          </p>
-          <a href="${surveyLinkFinal}" target="_blank"
-            style="text-decoration: none; font-family: Verdana; background-color: #147b7b; padding: 0.6rem 1.3rem; border-radius: 12px; font-weight: 800; color: white; font-size: 1.3rem; margin: 1rem auto; display: inline-block;">Evalúame
-            aquí</a>
-        </div>
-      </div> `;
+    
+  <!-- EVALUATORS Referal -->
+  <div style="margin: 4rem auto 0; padding: 0;">
+    <div
+      style="border-radius: 20px; padding: 2rem 1.5rem; width: 80%; margin: 0 auto;  background-color: rgba(216, 241, 244, 0.2); min-width: 300px; max-width: 1000px; text-align: center;">
+      <p style="font-family: Segoe UI; color: #497275; padding: 0 2rem; font-size: 16px; font-weight: 700;">
+        Tu
+        evaluación fue realizada por</p>
+      <p style="font-family: Segoe UI; color: #14767B; padding: 0 2rem; font-size: 22px; font-weight: 700;">
+        ${safe(evaluatorName || "English4Kids")}</p>
+      <p style="font-family: Segoe UI; color: #497275; padding: 0 2rem; font-size: 15px; font-weight: 700;">
+        Gracias por tu tiempo y confianza.</p>
+      <p style="font-family: Segoe UI; font-size: 14px; color: #1C5457; padding: auto 2rem;">
+        Te invitamos a completar una breve encuesta de satisfacción para ayudarnos a seguir mejorando nuestro
+        servicio.
+      </p>
+      <a href="${surveyLinkFinal}" target="_blank"
+        style="text-decoration: none; font-family: Segoe UI; background-color: #14767B; padding: 0.6rem 1.3rem; border-radius: 12px; font-weight: 700; color: white; font-size: 22px; margin: 1rem auto; display: inline-block;">Evalúame
+        aquí</a>
+    </div> `;
 
-  //referidos text
+  //referidos text- its alr no need to upd
   const referText = syllabusLower.includes("adults")
     ? ` <!-- referal -->
 
       <h1
-        style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
+        style="font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
         align="center">¡Has recibido un cupón de ahorro!</h1>
           <a href="https://www.english4kidsonline.com/amigo" target="_blank"
             style="display:inline-block; margin:0; text-decoration:none;">
@@ -2362,7 +2687,7 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
           </a> `
     : ` <!-- referal -->
         <h1
-          style="font-size: 1.6rem; font-family: Serif; font-weight: 800; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
+          style="font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
           align="center">¡Has recibido un cupón de ahorro!</h1>
           <a href="https://www.english4kidsonline.com/amigo" target="_blank"
             style="display:inline-block; margin:0; text-decoration:none;">
@@ -2393,27 +2718,44 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
 
   if (checkedInputs.length) {
     coachingHTML = `
-    <div class="areas-oportunidad">
-      <table>
-        <thead>
-          <tr><th><b>Condición para avanzar al siguiente nivel</b></th></tr>
-          <tr><td class="reforzar-R-C">
-            Deberás completar el test de certificación en un plazo máximo de <b>5 días</b>.
-          </td></tr>
-        </thead>
-        <tbody>`;
+    <div style="margin: 4rem auto; justify-items: center; border-radius: 25px; background-color:rgba(252,250,250,0.1);">
+    <table width="100%" align="center" cellspacing="0" cellpadding="0" style="width: 80%; border-collapse: collapse;">
+      <tr>
+        <th
+          style="border-bottom: none; font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6; "
+          align="center">Condición para avanzar al siguiente nivel</th>
+      </tr>
+      <tr>
+        <td
+          style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0 0.3rem; font-family: Segoe UI; font-size:16px; font-weight: 500;">
+          &#x24D8; Deberás completar el test de certificación en un plazo máximo de <b>5 días</b>.
+        </td>
+      </tr>
+      </thead>
+      <tbody>`;
 
     checkedInputs.forEach((input) => {
       const id = input.id;
       if (links[id]) {
         coachingHTML += `
-        <tr><td class="tema-reforzar">
-          Es necesario reforzar el tema de <b>${labels[id]}</b>.
-        </td></tr>
-        <tr><td class="reforzar-R-C">
-          &#128279; <b>Accede al test aquí:</b>
-          <a href="${links[id]}" target="_blank" rel="noopener noreferrer">Test de Certificación</a>
-        </td></tr>`;
+        <tr>
+          <td
+            style="font-family: Segoe UI;  text-align: left; padding: 0.9rem 0.5rem 0 5%; font-size: 16px; font-weight: 400; color: #1C5457; margin:0;"
+            align="left">
+            Es necesario reforzar el tema de <b>${labels[id]}</b>.
+          </td>
+        </tr>
+        <tr>
+          <td
+            style="font-family: Segoe UI;  text-align: left; padding: 0.5rem 0 20px 10%; font-size: 14px; font-weight: 400; color: white;"
+            align="left">
+            <a style="text-decoration: none; background-color: rgba(235, 242, 242, 0.5); padding: 5px 10px; border-radius: 8px; color: #275B60; margin: 0; display: inline-block;"
+              href="${links[id]}" target="_blank" rel="noopener noreferrer">
+              <span style="color: #14767B; font-weight: bold; margin-right: 5px; font-size: 18px;">&#9741;</span> Test
+              de
+              Certificación ${labels[id]}</a>
+          </td>
+        </tr>`;
       }
     });
 
@@ -2436,59 +2778,74 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
     "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERKIDS.png";
   const kidsFooter =
     "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerKids.png";
-  const avanceMotivacionAdults = ` <!--avance -->
-  <div style="margin: 4rem 0; justify-items: center; ">
+  const avanceMotivacionAdults = `  <!--avance -->
+   <div style="margin: 4rem auto; justify-items: center; ">
     <table width="80%" align="center" cellspacing="0" cellpadding="0"
-      style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
+      style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #f9fafb;  table-layout:fixed;">
       <tr>
         <th
-          style="font-family: Serif; font-weight: 800; text-align: center; font-size: 1.5rem; padding: 1rem; color: #126064; border-top: 1px dotted #219fa6; border-bottom: none;"
+          style="font-family: Segoe UI; font-weight: 700; text-align: center; font-size: 22px; padding: 1rem; color: #14767B; border-bottom: none;"
           align="center">&#128171;¡Estás avanzando
           increíblemente en tu camino al inglés!&#128171;
         </th>
       </tr>
       <tr>
         <td
-          style="font-size:0.95rem; font-family: Verdana; padding: 0.7rem 0.5rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
-          align="center">
-          <p style="font-family: Verdana; font-size:0.95rem;">
-          <p><b>Has avanzado increíblemente</b>, y en el siguiente nivel fortalecerás tu confianza, usarás
-            expresiones naturales y comprenderás conversaciones más fluidas.</p>
-          <p><b>Nuestro objetivo:</b> que aprendas inglés con seguridad y entusiasmo, abriendote puertas a nuevas
-            oportunidades.</p>
-
-          </p>
+          style="font-size: 14px; font-family: Segoe UI; padding: 0 15%; font-weight: 400; color: #1C5457; text-align: center;"
+          align="center"><b>Has avanzado increíblemente</b>, y en el siguiente nivel fortalecerás tu confianza, usarás
+            expresiones naturales y comprenderás conversaciones más fluidas.
+         &#9733; <b>Nuestro objetivo:</b> que aprendas inglés con seguridad y entusiasmo, abriendote puertas a
+            nuevas
+            oportunidades.
         </td>
       </tr>
     </table>
   </div>`;
   const avanceMotivacionKids = ` <!--avance -->
-  <div style="margin: 4rem 0; justify-items: center; ">
+    <div style="margin: 4rem auto; justify-items: center; ">
     <table width="80%" align="center" cellspacing="0" cellpadding="0"
-      style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
+      style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #f9fafb;  table-layout:fixed;">
       <tr>
         <th
-          style="font-family: Serif; font-weight: 800; text-align: center; font-size: 1.5rem; padding: 1rem; color: #126064; border-top: 1px dotted #219fa6; border-bottom: none;"
+          style="font-family: Segoe UI; font-weight: 700; text-align: center; font-size: 22px; padding: 1rem; color: #14767B; border-bottom: none;"
           align="center">&#128171;¡Tu hijo avanza
           increíblemente en su camino al inglés!&#128171;
         </th>
       </tr>
       <tr>
         <td
-          style="font-size:0.95rem; font-family: Verdana; padding: 0.7rem 0.5rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
+          style="font-size: 14px; font-family: Segoe UI; padding: 0 15%; font-weight: 400; color: #1C5457; text-align: center;"
           align="center">
-          <p style="font-family: Verdana; font-size:0.95rem;">
-          <p><b>Tu hijo/a ha avanzado increíblemente</b>, y en el siguiente nivel fortalecerá su confianza, usará
-            expresiones naturales y comprenderá conversaciones más fluidas.</p>
-          <p><b>Nuestro objetivo:</b> que aprenda inglés con seguridad y entusiasmo, abriendo puertas a nuevas
-            oportunidades.</p>
-
-          </p>
+         <b>Tu hijo/a ha avanzado increíblemente</b>, y en el siguiente nivel fortalecerá su confianza, usará
+            expresiones naturales y comprenderá conversaciones más fluidas.
+            &#9733; <b>Nuestro objetivo:</b> que aprenda inglés con seguridad y entusiasmo, abriendo puertas a
+            nuevas
+            oportunidades.
         </td>
       </tr>
     </table>
   </div>`;
+  const avanceMotivacionDiagEvals = `<div style="margin: 4rem auto; justify-items: center;">
+    <table width="80%" align="center" cellspacing="0" cellpadding="0"
+      style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #F5FAFA; table-layout:fixed;">
+      <tr>
+        <th
+          style="font-weight: 700; border-bottom: 1px dotted #219fa6; text-align: right; font-size: 22px; padding: 1rem; color: #14767B; border: none; font-family: Segoe UI; width: 60px"
+          align="center">
+          <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 35px; margin-right: 0.2rem"></span>
 
+        </th>
+        <td
+          style="font-size: 15px; font-family: Segoe UI;  padding: 1rem 1rem 1rem 0; font-weight: 500; color: #497275; text-align: left;"
+          align="center">
+          Nuestro compromiso es que aprenda inglés con seguridad, entusiasmo y sentido de logro,
+          preparándolo
+          para
+          comunicarse cada vez mejor.
+        </td>
+      </tr>
+    </table>
+  </div>`;
   const avanceMotivacionFailAdults = "";
   const avanceMotivacionFailKids = "";
 
@@ -2499,8 +2856,9 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
 
   // let avanceMotivacion = syllabusLower.includes("adults") ? avanceMotivacionAdults : avanceMotivacionKids;
 
-  let avanceMotivacion =
-    totalScore >= 7
+  let avanceMotivacion = isDiagnosticEval(syllabusVal, levelVal)
+    ? avanceMotivacionDiagEvals
+    : totalScore >= 7
       ? syllabusLower.includes("adults")
         ? avanceMotivacionAdults
         : avanceMotivacionKids
@@ -2800,22 +3158,19 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
   let loQueAprendera = ``;
 
   if (isFilterEval && totalScore > 6.9) {
-    loQueAprendera = `<!-- lo que aprenderá -->
-      <div class="temas-dominados" style="margin: 1rem 0; justify-items: center;">
-        <table style="width: 80%; border-radius: 10%; overflow: hidden; background-color: #FCFCFA;" width="80%">
-          <thead>
-            <tr>
-              <th
-                style="font-size: 1.3rem; font-family: Verdana; font-weight: 800; color: #126064; text-align: center; padding: 1.5rem 0.5rem; border-bottom: 1px dotted #219fa6;"
-                align="center">
-                <b>
-                  <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/bell.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
-                  ¿Qué aprenderá antes del próximo nivel filtro?
-                </b>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+    loQueAprendera = `  <!-- lo que aprenderá -->
+  <div style="margin: 4rem auto; justify-items: center; border-radius: 25px; background-color:rgba(252,250,250,0.1);">
+    <table width="100%" align="center" cellspacing="0" cellpadding="0" style="width: 80%; border-collapse: collapse;">
+      <tr>
+        <th
+          style="border-bottom: none; font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6; "
+          align="center">
+          <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/bell.png" style="height: 25px; margin-right: 0.2rem"></span>
+          ¿Qué aprenderá antes del próximo nivel filtro?
+        </th>
+      </tr>
+      </thead>
+      <tbody>
             ${willLearn
               .map((topic) => {
                 const topicKey = topic.toLowerCase();
@@ -2830,20 +3185,20 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
                   : "";
 
                 return `
-                <tr>
-                  <td
-                    style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 1.05rem; font-weight: 600; color: #126064;"
-                    align="left">
-                    &#9989; ${topic}
-                  </td>
-                </tr>
-                <tr>
-                  <td
-                    style="font-family: Verdana; font-weight: 500; text-align: left; padding: 0.3rem 0 1rem 13%; border-bottom: 1px dotted #DCF8FA; color: #044043; font-size: 0.9rem;"
-                    align="left">
-                    ${topicDescription}
-                  </td>
-                </tr>
+                
+        <tr>
+          <td
+            style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #1C5457;  padding: 10px 10px 10px 5%; text-align: left;">
+            <b>Tema:</b> ${topic}
+          </td>
+        </tr>
+        <tr>
+          <td
+            style="font-family: Segoe UI; font-weight: 400; text-align: left; padding: 0.3rem 0 1rem 13%;  color: #1C5457; font-size: 14px;"
+            align="left">
+            ${topicDescription}
+          </td>
+        </tr>
               `;
               })
               .join("")}
@@ -2877,17 +3232,18 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
         const topicDescription = matchedKey ? topicBreakdown[matchedKey] : "";
 
         return `
-    <tr>
-      <td
-        style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 10%; font-size: 0.95rem; font-weight: 600; color: #126064;"
-        align="left">
-           &#9744;  ${safe(topic)}
+    
+        <tr>
+          <td
+            style="font-family: Segoe UI;  text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 15px; font-weight: 600; color: #1C5457;"
+            align="left">
+            <span style="font-weight: bold; margin-right: 5px;"> &#9744;</span>  ${safe(topic)}
           </td>
         </tr>
        <tr>
-      <td
-        style="font-family: Verdana; font-weight: 500; text-align: left; padding: 0.3rem 0 1rem 20%; border-bottom: 1px dotted #DCF8FA; color: #044043; font-size: 0.85rem;"
-        align="left">
+          <td
+            style="font-family: Segoe UI; font-weight: 400; text-align: left; padding: 0.3rem 0 1rem 13%;  color: #1C5457; font-size: 14px;"
+            align="left">
             ${topicDescription}
           </td>
         </tr>
@@ -2907,15 +3263,15 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
 
         return `
       <tr>
-      <td
-        style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 0 0.2rem 10%; font-size: 0.95rem; font-weight: 600; color: #126064;"
-        align="left">
-        &#9744; ${safe(topic)}</td>
+          <td
+            style="font-family: Segoe UI;  text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 15px; font-weight: 600; color: #1C5457;"
+            align="left">
+            <span style="font-weight: bold; margin-right: 5px;"> &#9744;</span> ${safe(topic)}</td>
               </tr>
                <tr>
-      <td
-        style="font-family: Verdana; font-weight: 500; text-align: left; padding: 0.3rem 0 1rem 20%; border-bottom: 1px dotted #DCF8FA; color: #044043; font-size: 0.85rem;"
-        align="left">
+          <td
+            style="font-family: Segoe UI; font-weight: 400; text-align: left; padding: 0.3rem 0 1rem 13%;  color: #1C5457; font-size: 14px;"
+            align="left">
         ${topicDescription}</td>
               </tr>`;
       })
@@ -2932,305 +3288,103 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
       : "Para apoyar su avance";
 
     // =======================================================
-    mapaGrande = `<!--SIGUIENTES PASOS-->
- <div
-          style="margin: 4rem 0; justify-items: center; width: 100%; justify-self: center; background-color: #FFFFFF; border-radius: 10%; text-align: center; padding:1.5rem 0;">
-          <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/nextStepOutline.png" style="height: 3rem; padding: 0; margin:0;">
-          <p style="font-size: 1.3rem; font-family: Verdana; font-weight: 800; color: #126064; text-align: center; padding:0; margin: 0.5rem auto 2rem;"
-            align="center">
-    Siguientes Pasos</p>
-  <p style="font-family: Verdana; text-align: center; padding: 0rem 3rem; font-size: 0.95rem; font-weight: 500; color: #126064;"
-    align="left">${approachforMap}
-    (<b>nivel ${levelVal}</b>)
-    durante
-    las
-    próximas <b>${weeksToRepeat}
+    mapaGrande = ` <!--SIGUIENTES PASOS-->
+  <div style="margin: 4rem auto; justify-items: center; border-radius: 25px; background-color:rgba(252,250,250,0.1);">
+    <table width="100%" align="center" cellspacing="0" cellpadding="0" style="width: 80%; border-collapse: collapse;">
+      <tr>
+        <th
+          style="border-bottom: none; font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
+          align="center">
+          <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/nextStepOutline.png" style="height: 25px; padding: 0; margin-right:5px;"></span>
+
+          Siguientes Pasos
+        </th>
+      <tr>
+        <td
+          style="  color: #497275;  text-align: left;  padding: 10px; font-family: Segoe UI; font-size:15px; font-weight: 400;">
+          ${approachforMap}
+          (<b>nivel ${levelVal}</b>)
+          durante
+          las
+          próximas <b>${weeksToRepeat}
           semanas</b>,
-    hasta la siguiente evaluación filtro. </p>
-  <table width="95%" align="center" cellspacing="0" cellpadding="0"
-    style=" border-collapse: collapse; background-color: #FCFCFC; border-radius: 10%; text-align: center; margin: 2rem auto;">
-    <tr>
-      <td>
-        <p style=" border-bottom: 1px dotted #BED5D6; margin: 0 5%; padding: 0.7rem 0; font-family: Verdana; text-align: center; font-size: 1rem; font-weight: 600; color: #126064;">${apoyarAvances}, estos son los temas recomendados para practicar:</p>
-      </td>
-    </tr>
-   ${mustPracticeTopics}
-  </table>
-</div>
+          hasta la siguiente evaluación filtro.
+        </td>
+
+      </tr>
+
+      <tr>
+        <td
+          style="font-family: Segoe UI;  text-align: left; padding: 1rem; font-size: 16px; font-weight: 400; color: #1C5457;"
+          align="left">
+          ${apoyarAvances}, estos son los temas recomendados para practicar:
+        </td>
+      </tr>
+      ${mustPracticeTopics}
+    </table>
+  </div>
      `;
   } else {
     // for aprobadso and no matter if its filter or not
     let approachforMap = "";
     approachforMap = syllabusLower.includes("adults")
-      ? "Te encuentras"
-      : "El estudiante se encuentra";
+      ? "Te encuentras en el"
+      : "El estudiante se encuentra en el";
+
+    let diagevalapproachformap = "";
+      diagevalapproachformap = syllabusLower.includes("adults")
+    ? "Continúas desarrollando las competencias del"
+    : "El estudiante continúa desarrollando las competencias del";
+    
     let bigmap = "";
     bigmap = syllabusLower.includes("adults")
       ? ""
       : `
-      <img src="${B_ClassPath}" style="width: 100%;">`;
+      <img src="${B_ClassPath}" style="width: 90%; margin-bottom: 1rem;">`;
 
     // ===============
-    mapaGrande = `<!--MAPA GRANDE-->
-          <div style="margin: 4rem 0; justify-items: center;">
-            <table width="100%" align="center" cellspacing="0" cellpadding="0"
-              style="width: 80%; border-collapse: collapse; border-radius: 10%; overflow: hidden; margin-top: 2rem; background-color: #f9fafb;">
+    mapaGrande = ` <!--MAPA GRANDE-->
+  <div
+    style="margin: 4rem auto; justify-items: center; border-radius: 25px; background-color:rgba(252,250,250,0.1); text-align:center;">
+    <table width="100%" align="center" cellspacing="0" cellpadding="0" style="width: 80%; border-collapse: collapse;">
+      <tr>
+        <th
+          style="border-bottom: none; font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6; "
+          align="center">
+          Progreso Actual
+        </th>
+      </tr>
               <tr>
-                <th
-                  style="font-size: 1.3rem; font-family: Verdana; font-weight: 800; color: #126064; text-align: center; padding: 1.5rem 0.5rem;"
-                  align="center">
-                  Progreso Actual
-                </th>
-              </tr>
-              <tr>
-                <td
-                  style="font-family: Verdana; border-bottom: 1px dotted #DCF8FA; text-align: left; padding: 1rem 5rem 1rem; font-size: 1.05rem; font-weight: 500; color: #126064;"
-                  align="left">
-                  <li> ${approachforMap} en el <b>nivel ${levelVal}</b>.</li>`;
+        <td
+          style="font-family: Segoe UI;  text-align: left; padding: 1rem; font-size: 15px; font-weight: 400; color: #1C5457;"
+          align="left">
+          &#9733; ${isDiagnosticEval(syllabusVal, levelVal)
+          ? `${diagevalapproachformap}`
+          : `${approachforMap}`
+      }  <b>nivel ${levelVal}</b>.
+      ${isDiagnosticEval(syllabusVal, levelVal)
+      ? `<br> <br>
+                &#9733; Seguirá consolidando bases importantes para
+                avanzar con confianza hacia estructuras más complejas.`
+      : ``}
+        </td>
+      </tr>`;
     if (isFilterEval) {
-      mapaGrande += `<li>El próximo nivel filtro es el <b>nivel ${nextFilter}</b>.</li>`;
+      mapaGrande += `<tr>
+        <td
+          style="font-family: Segoe UI;  text-align: left; padding: 0 1rem 1rem; font-size: 16px; font-weight: 400; color: #1C5457;"
+          align="left">&#9733; El próximo nivel filtro es el
+          <b>nivel ${nextFilter}</b>.
+        </td>
+      </tr>`;
     }
-    mapaGrande += `</td>
-              </tr>
+    mapaGrande += `
               </table>
               ${bigmap}
             </div>`;
   }
 
-  // ---------- styles ----------
-
-  const stylesHTML = `
-      <style>
-    .Evaluation-Results {
-      margin: 0 auto;
-      background: linear-gradient(to bottom,
-          #f5ffff 10%,
-          #aed6d6 60%,
-          #1ca5ab 90%);
-      background-color: #f5ffff;
-      justify-items: center;
-    }
-
-    .Evaluation-Results ul {
-      list-style-type: circle;
-    }
-
-    .Evaluation-Results table {
-      width: 80%;
-    }
-
-    .Evaluation-Results a {
-      text-decoration: none;
-      font-weight: bold;
-      color: #147b7b;
-      font-family: Verdana;
-    }
-
-    .Evaluation-Results table th {
-      font-size: 1.6rem;
-      font-family: Serif;
-      font-weight: 800;
-      color: #126064;
-      text-align: center;
-      padding: 1.7rem 0.5rem;
-      border-bottom: 1px dotted #219fa6;
-    }
-
-    .Evaluation-Results table td {
-      font-size: 0.95rem;
-      font-family: Verdana;
-      font-weight: 500;
-      color: #305254;
-      padding: 0.9rem 0.5rem 0.9rem 6.5vw;
-      border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
-      text-align: left;
-    }
-
-    .Evaluation-Results p {
-      font-family: Verdana;
-      font-size: 0.95rem;
-    }
-
-
-    /* =================WELLCOME=============== */
-    .Evaluation-Results .welcome {
-      justify-items: center;
-      padding: 4rem 2rem;
-      text-align: center;
-      margin: 0 auto;
-    }
-
-    .Evaluation-Results .welcome .h2 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: #126064;
-      font-family: Serif;
-    }
-
-    .Evaluation-Results .welcome .h3 {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #126064;
-      padding-bottom: 0.8rem;
-      font-family: Verdana;
-    }
-
-    .Evaluation-Results .welcome .h4 {
-      font-size: 1rem;
-      font-weight: 500;
-      color: #126064;
-      padding-bottom: 0.8rem;
-      font-family: Verdana;
-    }
-
-    .Evaluation-Results .welcome p {
-      font-weight: 400;
-      color: #273030;
-      padding: 0 1rem;
-    }
-
-    /* =================EMAIL BODY=============== */
-    .Evaluation-Results .email-body {
-      border-radius: 20px;
-      padding: 2rem 1.5rem;
-      box-shadow: 0 0 15px rgb(14, 126, 134, 0.1);
-      width: 80%;
-      margin: 0 auto;
-      background-color: rgba(255, 255, 255, 0.95);
-      max-width: 1200px;
-    }
-
-    .Evaluation-Results .resultado-global {
-      padding: 0 1rem;
-      text-align: center;
-    }
-
-    .Evaluation-Results .resultado-global .h2 {
-      font-family: Serif;
-      font-size: clamp(1.1rem, calc(50vw * 0.18), 2.1rem);
-      font-weight: bold;
-      color: #297b7f;
-      text-shadow: 0 0 10px rgb(163, 225, 230, 0.15);
-    }
-
-    .Evaluation-Results .resultado-global .h3 {
-      font-size: clamp(0.95rem, calc(50vw * 0.1), 1.2rem);
-      font-weight: 800;
-      font-family: Verdana;
-      color: #42757b;
-      padding: 2.5rem 0;
-    }
-
-    .Evaluation-Results .resultado-global p {
-      font-weight: 500;
-      font-family: Verdana;
-      color: #273030;
-      padding: 0 1rem 0;
-    }
-
-    /* -------DESEMPEÑO POR ÁREA------- */
-    .Evaluation-Results .desempeño {
-      padding: 0 1rem;
-      justify-items: center;
-    }
-
-    .Evaluation-Results .desempeño table {
-      border-radius: 10%;
-      overflow: hidden;
-    }
-
-    .Evaluation-Results .desempeño table td:first-child {
-      font-weight: 500;
-      color: #126064;
-      text-align: center;
-      font-size: 1.1rem;
-      width: 20%;
-    }
-
-    .Evaluation-Results .desempeño table td:last-child {
-      font-weight: 500;
-      border-bottom: 1px dotted rgba(28, 165, 171, 0.15);
-    }
-
-    /* -------TEMAS DOMINADOS------- */
-
-    .Evaluation-Results .temas-dominados {
-      margin: 2.8rem 0;
-      justify-items: center;
-    }
-
-    .Evaluation-Results .temas-dominados table {
-      border-radius: 10%;
-      overflow: hidden;
-    }
-
-    .Evaluation-Results .temas-dominados table td {
-      color: #044043;
-      text-align: left;
-    }
-
-    .Evaluation-Results .temas-reforzar {
-      margin: 2.8rem 0;
-      justify-items: center;
-    }
-
-    .Evaluation-Results .temas-reforzar table {
-      border-radius: 10%;
-      overflow: hidden;
-    }
-
-    .Evaluation-Results .temas-reforzar table td {
-      color: #044043;
-    }
-
-    .Evaluation-Results .areas-oportunidad {
-      margin: 2.8rem 0;
-      justify-items: center;
-    }
-
-    .Evaluation-Results .areas-oportunidad table {
-      border-radius: 10%;
-      overflow: hidden;
-    }
-
-    .Evaluation-Results .tema-reforzar {
-      color: #126064;
-      text-align: left;
-      padding: 0.9rem 0.5rem 0.9rem 1.5rem;
-      border-bottom: 1px dotted rgb(18, 96, 100, 0.8);
-    }
-
-    .Evaluation-Results .reforzar-R-C {
-      text-align: left;
-      font-family: Verdana;
-      color: #052729;
-    }
-
-    .Evaluation-Results .pronunciacion-reforzar {
-      margin: 2.8rem 0;
-      justify-items: center;
-    }
-
-    .Evaluation-Results .pronunciacion-reforzar table {
-      border-radius: 10%;
-      overflow: hidden;
-    }
-
-    .Evaluation-Results .pronunciacion-reforzar table td {
-      text-align: left;
-      color: #114d50;
-    }
-
-    .Evaluation-Results .pronunciacion-reforzar table tr:first-child td {
-      font-weight: 500;
-      color: #355d5f;
-      text-align: center;
-      padding: 0.95rem 0;
-    }
-  </style>
-
-
-      `;
+  // ---------- styles removed ----------
 
   //
   //===================================================================
@@ -3239,33 +3393,31 @@ Con este refuerzo, podrás fortalecer tu base comunicativa y avanzar con mayor s
   //
 
   let reportHTML = "";
-  reportHTML += `<html lang="en">
+  reportHTML += `
+ <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Reporte de Evaluación</title>
-${stylesHTML}
 </head>
 
 <body style="margin: 0 auto; background: linear-gradient(to bottom,
           #f5ffff 10%,
           #aed6d6 60%,
-          #1ca5ab 90%); background-color: white; text-align: center">
+          #1ca5ab 90%); background-color: #f5ffff; text-align: center">
   <div class="Evaluation-Results" style="margin: 0 auto; background: linear-gradient(to bottom,
           #f5ffff 10%,
           #aed6d6 60%,
           #1ca5ab 90%); background-color: #DCF7F9;">
-    <!-- <!HEADER> -->
-    <div class="Evaluation-Results">
       <!-- <!HEADER> -->
       <div style="
             text-align: center;
             background: linear-gradient(to bottom, #f5f0e6 0%, transparent 50%);
             background-color: transparent;
           ">
-        <img src="${imgHeader}" alt="Reporte de Evaluación" style="width: 100%; display: block; border: 0"></div>
-      `;
+        <img src="${imgHeader}" alt="Reporte de Evaluación" style="width: 100%; display: block; border: 0">
+      </div>`;
   reportHTML += welcomeHTML;
   reportHTML += ` <div class="email-body"
       style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">`;
@@ -3283,6 +3435,7 @@ ${stylesHTML}
   reportHTML += avanceMotivacion;
   reportHTML += evaluatorLine;
   reportHTML += referText;
+  reportHTML += `</div>`;
   reportHTML += `</div>`;
   reportHTML += `<!--FOOTER -->
     
@@ -3380,6 +3533,28 @@ async function evaluatorsReloadPage() {
   );
 
   if (proceed) {
+    // Uncheck all AOI checkboxes
+    const fieldset = document.querySelector("#optionsGroup");
+
+    if (fieldset) {
+      const checkboxes = fieldset.querySelectorAll('input[type="checkbox"]');
+
+      checkboxes.forEach((cb) => {
+        cb.checked = false;
+
+        const label = cb.closest("label");
+        if (label) {
+          label.classList.remove("selected");
+          label.classList.remove("unselected");
+        }
+      });
+      const counter = document.querySelector("#counter");
+
+      if (counter) {
+        counter.textContent = `0/${maxAllowed} seleccionadas`;
+      }
+    }
+
     // Refrescar topics como si el usuario hubiera cambiado la semana
     if (weeksDropdown) {
       weeksDropdown.dispatchEvent(new Event("change"));
@@ -3734,6 +3909,43 @@ function stopAllSounds() {
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
+// AOIS FOR DIAG EVALS
+const fieldset = document.querySelector("#optionsGroup");
+const checkboxes = fieldset.querySelectorAll('input[type="checkbox"]');
+const counter = document.querySelector("#counter");
+const maxAllowed = 3;
+
+checkboxes.forEach((cb) => {
+  cb.addEventListener("change", () => {
+    const checked = fieldset.querySelectorAll('input[type="checkbox"]:checked');
+    const count = checked.length;
+
+    // actualiza contador
+    counter.textContent = `${count}/${maxAllowed} seleccionadas`;
+
+    // bloquea/desbloquea inputs y actualiza clase unselected
+    checkboxes.forEach((box) => {
+      const label = box.closest("label");
+      if (count >= maxAllowed && !box.checked) {
+        box.disabled = true;
+        label.classList.add("unselected");
+      } else {
+        box.disabled = false;
+        label.classList.remove("unselected");
+      }
+    });
+
+    // toggle clase selected en labels
+    checkboxes.forEach((box) => {
+      const label = box.closest("label");
+      if (box.checked) {
+        label.classList.add("selected");
+      } else {
+        label.classList.remove("selected");
+      }
+    });
+  });
+});
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
