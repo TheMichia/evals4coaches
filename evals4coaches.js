@@ -1145,7 +1145,7 @@ function showFinalSection() {
   } else if (isAdults) {
     if (isMasters) {
       // Adults Masters
-      if (finalScore >= 7) {
+      if (totalScore >= 7) {
         html += `<img style="height: 90%; width: auto; object-fit: contain;"  src="VIDEO4EVALS/adultspass.png">`;
       } else {
         html += `<img style="height: 90%; width: auto; object-fit: contain;"  src="VIDEO4EVALS/adultsfail.png">`;
