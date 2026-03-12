@@ -1,7 +1,7 @@
 (() => {
   const version = "Coaches";
-  const versionnum = "1.7.6";
-  //NEW FORMAT UPDATE APPROVED BY RJ -- fixed one incident of missing " in ;>
+  const versionnum = "1.8.1";
+  //fixed tables format outside of style=""
   const jsonVersion = 1.5;
   window.appVersion = "Coaches";
   const showversion = document.getElementById("version");
@@ -218,7 +218,7 @@ weeksDropdown.addEventListener("change", () => {
             </div>
           </div>
 
-          <table class="topictable" style="margin-bottom: 20px;">
+          <table width="80%" align="center" cellspacing="0"  class="topictable" style="margin-bottom: 20px;">
             <thead>
               <tr>
                 <th colspan="3">Wrong Answer</th>
@@ -567,7 +567,7 @@ function copyAbsentResults() {
         style="padding: 0 1rem; font-size: 22px; font-weight: 600; color: #126064; font-family: Segoe UI; margin: 0;">
         Estimado estudiante,</p>
       <!-- &#x1F31F; -->
-     
+
       <p         style="padding: 0 1rem; font-size: 16px; font-weight: 400; color: #126064; padding-bottom: 0.8rem; font-family: Segoe UI;">
         Esperamos que estés teniendo una excelente semana</p>
     </div>
@@ -579,7 +579,7 @@ function copyAbsentResults() {
           observado durante clases anteriores.</p>
       </div>
       <div class="desempeño" style="padding: 0 1rem; text-align: center;">
-        <table style="width: 100%;" width="100%">
+        <table width="80%" align="center" cellspacing="0"  style="width: 100%;" width="100%">
           <thead>
             <tr>
               <th colspan='2' style="font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center; padding: 1.7rem 0.5rem; border-bottom: 1px dotted #219fa6;"
@@ -707,7 +707,7 @@ function copyAbsentResults() {
           observado durante clases anteriores.</p>
       </div>
       <div class="desempeño" style="padding: 0 1rem; text-align: center;">
-        <table style="width: 100%;" width="100%">
+        <table width="80%" align="center" cellspacing="0"  style="width: 100%;" width="100%">
           <thead>
             <tr>
               <th colspan='2'                 style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 700;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">
@@ -1422,7 +1422,7 @@ function copyResults() {
 
   const temasDominadosSection = approvedTopics.length
     ? `<div style="margin: 2.8rem 0;  justify-items: center;">
-          <table style="width:80%">
+          <table width="80%" align="center" cellspacing="0"  style="width:80%">
             <thead>
               <tr><th  style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">&#128313;Temas Dominados&#128313;</th></tr>
             </thead>
@@ -1441,7 +1441,7 @@ function copyResults() {
   const temasReforzarSection = reinforceTopics.length
     ? `
       <div style="  margin: 2.8rem 0;  justify-items: center;">
-          <table style="width:80%">
+          <table width="80%" align="center" cellspacing="0"  style="width:80%">
             <thead>
               <tr>
               <th style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">
@@ -1469,7 +1469,7 @@ function copyResults() {
   const areasOportunidadSection = opportunityTopics.length
     ? `
       <div style=" margin: 2.8rem 0; justify-items: center;">
-          <table style="width:80%">
+          <table width="80%" align="center" cellspacing="0"  style="width:80%">
             <thead>
               <tr>
               <th  style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">
@@ -1526,7 +1526,7 @@ function copyResults() {
                 .map(
                   (ln) =>
                     `<tr>               
-              
+
     <td style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #305254;  padding: 0.7rem 0;  border-bottom: 1px dotted rgba(28, 165, 171, 0.15); text-align: center;">   
                 ${ln}</td>
                 </tr>`,
@@ -1550,7 +1550,7 @@ function copyResults() {
 
   const DesempeñoRC = `  
       <div style='  padding: 0 1rem;  justify-items: center;'>
-  <table style="width:80%">      
+  <table width="80%" align="center" cellspacing="0"  style="width:80%">      
   <thead>    
   <tr>        
   <th colspan='2'  style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">&#128313; Desempeño por área&#128313;</th>  
@@ -1564,7 +1564,7 @@ function copyResults() {
 
   const CoachCommentRC = ` 
       <div style=" margin: 2.8rem 0; justify-items: center;">
-    <table style="width:80%">    
+    <table width="80%" align="center" cellspacing="0"  style="width:80%">    
     <thead>     
       <tr>     
         <th  style="  font-size: 22px;  font-family: Segoe UI;  font-weight: 600;  color: #126064;  text-align: center;  padding: 1.7rem 0.5rem 0.5rem;  border-bottom: 1px dotted #219fa6;">&#128221; 
