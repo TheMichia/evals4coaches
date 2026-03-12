@@ -1,8 +1,8 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "2.0.0";
-  //NEW FORMAT APPROVED BY RJ & diag evals changes
-  const E4EjsonVersion = 2.0;
+  const versionnum = "2.0.6";
+  //fixed format for tables avoiding style formatting
+  const E4EjsonVersion = 2.3;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
   showversion.innerHTML = `${version} ${versionnum} - JSON ${E4EjsonVersion}`;
@@ -802,7 +802,7 @@ function absentsE4E() {
       </div>
       <!-- next steps -->
       <div style="margin: 2rem 0">
-        <table width="80%" align="center" cellspacing="0" cellpadding="0"
+        <table width="80%" align="center" cellspacing="0" width="80%" align="center" cellspacing="0" cellpadding="0"
           style="width: 80%; border-collapse: collapse; border: none; margin-top: 0.5rem; background-color: #f9fafb;">
           <tr>
             <th
@@ -1026,7 +1026,7 @@ function absentsE4E() {
 </body>
 
 </html>
-    
+
     `;
   }
 
@@ -1205,7 +1205,7 @@ async function evaluatorsCopyResults() {
   const desempeñoHTML = `
   <div class="desempeño"
     style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
-    <table style="width: 80%; overflow: hidden;" width="80%; table-layout: fixed;">
+    <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%; table-layout: fixed;">
       <thead>
         <tr>
           <th colspan="2"
@@ -1219,10 +1219,10 @@ async function evaluatorsCopyResults() {
               const val = document.getElementById(a.id)?.value ?? "";
               return ` 
         <tr>
-          <td
-            style="font-family: Segoe UI; padding: 10px 10px 10px; font-weight: 400; color: #1C5457; text-align: right; font-size: 15px; width=30%">
+          <td width="40%" align="right"
+            style="font-family: Segoe UI; padding: 10px 10px 10px; font-weight: 400; color: #1C5457; text-align: right; font-size: 15px;">
             ${a.label}:</td>
-          <td
+          <td width="60%"
             style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
             ${describeScore(val)}</td>
         </tr>`;
@@ -1262,7 +1262,7 @@ async function evaluatorsCopyResults() {
     const txt = document.getElementById("flcomment")?.value?.trim() || "";
     if (txt)
       areaDetails.push(` 
-     
+
         <tr>
           <td
             style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0.9rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
@@ -1278,7 +1278,7 @@ async function evaluatorsCopyResults() {
   // === Preparación (Masters 2) – versión larga sin leer JSON ===
   const PREPARACION_MAP = {
     "No se preparó": `
-        
+
         <tr>
           <td
             style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0.9rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
@@ -1297,7 +1297,7 @@ async function evaluatorsCopyResults() {
           </td>
         </tr>`,
     "Se preparó, pero pudo hacerlo mejor": `
-    
+
         <tr>
           <td
             style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0.9rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
@@ -1316,7 +1316,7 @@ async function evaluatorsCopyResults() {
           </td>
         </tr>`,
     "Se preparó bien y logró integrar la mitad o más de los temas": `
-        
+
         <tr>
           <td
             style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0.9rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
@@ -1375,7 +1375,7 @@ async function evaluatorsCopyResults() {
   let condicionadoText = ``;
   if (syllabusVal.includes("Juniors")) {
     condicionadoText = `
-       
+
         <tr>
           <td
             style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
@@ -1478,7 +1478,7 @@ async function evaluatorsCopyResults() {
   } else if (syllabusVal.includes("Adults")) {
     if (syllabusVal.includes("Masters")) {
       condicionadoText = `
-       
+
         <tr>
           <td
             style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
@@ -1611,7 +1611,7 @@ async function evaluatorsCopyResults() {
 </div>
 <div class="desempeño"
   style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
-  <table style="width: 80%; overflow: hidden;" width="80%">
+  <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%">
     <thead>
       <tr>
         <th colspan="2"
@@ -1693,7 +1693,7 @@ async function evaluatorsCopyResults() {
 </div>
 <div class="desempeño"
   style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
-  <table style="width: 80%; overflow: hidden;" width="80%">
+  <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%">
     <thead>
       <tr>
         <th colspan="2"
@@ -1826,7 +1826,7 @@ Durante este tiempo, no solo has fortalecido tus <b>habilidades lingüísticas</
 </div>
 <div class="desempeño"
   style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
-  <table style="width: 80%; overflow: hidden;" width="80%">
+  <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%">
     <thead>
       <tr>
         <th colspan="2"
@@ -2072,13 +2072,13 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
   </p>
 </div>
 `;
-  
+
 let resultadoGlobalDiagEval = `
 <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
           <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
           <p
             style="font-weight: 500; font-family: Segoe UI; font-size: 14px; color: #497275; margin: 0 0 0.5rem 0; padding: 0 1rem;">
-            
+
     ${syllabusVal} | Nivel ${levelVal}
           </p>
 
@@ -2088,7 +2088,7 @@ let resultadoGlobalDiagEval = `
             Evaluación Diagnóstica
           </p>
           <div style="margin: 1rem auto 2rem; justify-items: center;">
-            <table width="80%" align="center" cellspacing="0" cellpadding="0"
+            <table width="80%" align="center" cellspacing="0" width="80%" align="center" cellspacing="0" cellpadding="0"
               style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #f9fafb; table-layout:fixed;">
               <tr>
                 <td
@@ -2116,7 +2116,7 @@ let resultadoGlobalDiagEval = `
 
     detalleNotaHTML = `<div class="desempeño"
   style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
-  <table style="width: 80%; overflow: hidden;" width="80%">
+  <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%">
     <thead>
       <tr>
         <th colspan="2"
@@ -2154,7 +2154,7 @@ let resultadoGlobalDiagEval = `
 
   let welcomeHTML = "";
   let resultadoGlobal = "";
-  
+
   // Prioridad máxima: Diagnostic Eval
   if (isDiagnosticEval(syllabusVal, levelVal)) {
     resultadoGlobal = resultadoGlobalDiagEval;
@@ -2226,12 +2226,12 @@ let resultadoGlobalDiagEval = `
       <td
         style="font-size: 15px; font-family: Segoe UI;  padding: 0 15%; font-weight: 400; color: #497275; text-align: center;"
         align="center">
-        
+
           Porque <b>cada progreso cuenta</b>. Identificar lo que ya se domina <b>fortalece la confianza</b> y nos
           permite
           <b>enfocar</b> con
           claridad los <b>próximos pasos</b> para seguir avanzando.
-      
+
       </td>
     </tr>
   </table>
@@ -2241,7 +2241,7 @@ let resultadoGlobalDiagEval = `
     porqueEsImportante = `<!-- PORQUE ES IMPORTANTE -->
   <div style="margin: 4rem auto; justify-items: center;">
     <table width="80%" align="center" cellspacing="0" cellpadding="0"
-      style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #f9fafb; table-layout:fixed;">
+      style="border: none; background-color: #f9fafb;">
       <tr>
         <th
           style="font-weight: 700; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 22px; padding: 1rem; color: #14767B; border: none; font-family: Segoe UI;"
@@ -2259,7 +2259,7 @@ let resultadoGlobalDiagEval = `
           <br><br>
           Cada paso <b>refuerza la confianza</b> y prepara para
             <b>comunicarse con seguridad</b> y <b>pensar en grande</b>.
-        
+
         </td>
       </tr>
     </table>
@@ -2326,7 +2326,7 @@ let resultadoGlobalDiagEval = `
     ? `
     <!-- TEMAS DOMINADOS -->
     <div style="margin: 3rem 0; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
-  <table style="width: 80%;" width="80%">
+  <table width="80%" align="center" cellspacing="0" style="width: 80%;" width="80%">
     <thead>
       <tr>
         <th
@@ -2406,14 +2406,14 @@ let resultadoGlobalDiagEval = `
       </div>`
           : `${porqueEsImportante}`
       }
-    
+
     `
     : "";
   // upd
   const reinforceHTML = reinforceTopics.length
     ? ` <!--temas a reforzar-->
   <div style="margin: 4rem auto; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
-    <table style="width: 80%; overflow: hidden;" width="80%">
+    <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%">
       <thead>
         <tr>
           <th
@@ -2546,7 +2546,7 @@ let resultadoGlobalDiagEval = `
     opportunityHTML = opportunityTopics.length
       ? `
       <div style="margin:4rem auto; justify-items:center; background-color:rgba(252,250,250,0.1); border-radius:25px;">
-        <table width="80%">
+        <table width="80%" align="center" cellspacing="0" width="80%">
           <thead>
             <tr>
               <th style="font-size:22px; font-family:Segoe UI; font-weight:700; color:#14767B; text-align:center; padding:0.5rem; border-bottom:1px dotted #219fa6;">
@@ -2622,7 +2622,7 @@ let resultadoGlobalDiagEval = `
     commentsFinal || isCondicionado
       ? `
         <div style="margin: 4rem auto; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
-    <table width="80%">
+    <table width="80%" align="center" cellspacing="0" width="80%">
       <thead>
         <th
           style="font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;">
@@ -2651,7 +2651,7 @@ let resultadoGlobalDiagEval = `
   const evaluatorLine = shouldHideEvaluator
     ? ""
     : `
-    
+
   <!-- EVALUATORS Referal -->
   <div style="margin: 4rem auto 0; padding: 0;">
     <div
@@ -2804,7 +2804,7 @@ let resultadoGlobalDiagEval = `
   const avanceMotivacionKids = ` <!--avance -->
     <div style="margin: 4rem auto; justify-items: center; ">
     <table width="80%" align="center" cellspacing="0" cellpadding="0"
-      style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #f9fafb;  table-layout:fixed;">
+      style="border: none;  background-color: #f9fafb;">
       <tr>
         <th
           style="font-family: Segoe UI; font-weight: 700; text-align: center; font-size: 22px; padding: 1rem; color: #14767B; border-bottom: none;"
@@ -3185,7 +3185,7 @@ let resultadoGlobalDiagEval = `
                   : "";
 
                 return `
-                
+
         <tr>
           <td
             style="  font-size: 15px;  font-family: Segoe UI;  font-weight: 400;  color: #1C5457;  padding: 10px 10px 10px 5%; text-align: left;">
@@ -3232,7 +3232,7 @@ let resultadoGlobalDiagEval = `
         const topicDescription = matchedKey ? topicBreakdown[matchedKey] : "";
 
         return `
-    
+
         <tr>
           <td
             style="font-family: Segoe UI;  text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 15px; font-weight: 600; color: #1C5457;"
@@ -3335,7 +3335,7 @@ let resultadoGlobalDiagEval = `
       diagevalapproachformap = syllabusLower.includes("adults")
     ? "Continúas desarrollando las competencias del"
     : "El estudiante continúa desarrollando las competencias del";
-    
+
     let bigmap = "";
     bigmap = syllabusLower.includes("adults")
       ? ""
@@ -3438,7 +3438,7 @@ let resultadoGlobalDiagEval = `
   reportHTML += `</div>`;
   reportHTML += `</div>`;
   reportHTML += `<!--FOOTER -->
-    
+
           <img src="${imgFooter}"
            style="width:100%; display:block; margin:0; padding:0; border:0;">
         `;
