@@ -1,7 +1,7 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "2.0.6";
-  //fixed format for tables avoiding style formatting
+  const versionnum = "2.3.1";
+  //added reschedule link logic
   const E4EjsonVersion = 2.3;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
@@ -36,15 +36,15 @@ const prepCommentRow = prepCommentRowEl
   ? prepCommentRowEl.parentElement.parentElement
   : null;
 const diagnosticEvals = document.getElementById("diagnosticEvals");
+const ReSchedulebTN = document.getElementById("ReScheduleEmail");
 
 // ---------- Estado global ----------
 let evaluatorsData = {}; // se llena con fetch
-
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-// ---------- Fetch único (popula evaluatorsDropdown + evaluatorsData) ----------
+// ---------- evaluatorsDropdown + evaluatorsData ----------
 fetch("evaluators.json?v=${E4EjsonVersion}")
   .then((response) => response.json())
   .then((data) => {
@@ -83,16 +83,16 @@ async function loadTopicBreakdown() {
   try {
     const response = await fetch(`topicsBreakdown.json?v=${Date.now()}`);
     const data = await response.json();
-    console.log("✅ JSON cargado:", data); // Verifica todo el objeto
+    console.log("✅ JSON cargado"); // Verifica todo el objeto
     topicBreakdown = data["Topic Breakdown"] || {};
     topicBreakdownLoaded = true;
-    console.log("📦 topicBreakdown procesado:", topicBreakdown);
+    console.log("📦 topicBreakdown procesado");
   } catch (err) {
     console.error("❌ Error loading topic breakdown:", err);
   }
 }
 
-// Llamamos a la función al inicio
+// Llamado inicial
 loadTopicBreakdown();
 
 //
@@ -117,6 +117,74 @@ function isDiagnosticEval(syllabusVal, levelVal) {
     (syllabusVal === "Teens 13-17 (5 horas/semana)" && levelVal === 2) ||
     (syllabusVal === "Kids Masters" && levelVal === 2) ||
     (syllabusVal === "Teens Masters" && levelVal === 2)
+  );
+}
+
+//función para chequear si es filter eval
+function isFilterEval(syllabusVal, levelVal, weekVal) {
+  return (
+    (syllabusVal === "Juniors 5-7" &&
+      [7, 9].includes(levelVal) &&
+      weekVal === 7) ||
+    (syllabusVal === "Kids (Intensivo) 8-12" &&
+      [2, 4, 7, 9].includes(levelVal) &&
+      weekVal === 13) ||
+    (syllabusVal === "Kids (Super Intensivo) 8-12" &&
+      [4, 7, 9].includes(levelVal) &&
+      weekVal === 7) ||
+    (syllabusVal === "Kids Masters" &&
+      [4, 8].includes(levelVal) &&
+      weekVal === 3) ||
+    (syllabusVal === "Kids Masters 2" &&
+      [4, 8].includes(levelVal) &&
+      weekVal === 3) ||
+    (syllabusVal === "Teens 13-17 (3hrs/week)" &&
+      [2, 4, 7, 9].includes(levelVal) &&
+      weekVal === 13) ||
+    (syllabusVal === "Teens 13-17 (5hrs/week)" &&
+      [4, 7, 9].includes(levelVal) &&
+      weekVal === 7) ||
+    (syllabusVal === "Teens Masters" &&
+      [4, 8].includes(levelVal) &&
+      weekVal === 3) ||
+    (syllabusVal === "Teens Masters 2" &&
+      [4, 8].includes(levelVal) &&
+      weekVal === 3) ||
+    (syllabusVal === "Adults (3hrs/week)" &&
+      [5, 8].includes(levelVal) &&
+      weekVal === 3) ||
+    (syllabusVal === "Adults (5hrs/week)" &&
+      [5, 8].includes(levelVal) &&
+      weekVal === 3) ||
+    (syllabusVal === "Adults Masters (3hrs/week)" &&
+      [5, 8].includes(levelVal) &&
+      weekVal === 3) ||
+    (syllabusVal === "Adults Masters (5hrs/week)" &&
+      [5, 8].includes(levelVal) &&
+      weekVal === 3)
+  );
+}
+
+//función para chequear si es exit eval
+function isExitEval(syllabusVal, levelVal, weekVal) {
+  const syllabusLower = syllabusVal.toLowerCase();
+
+  return (
+    !syllabusVal.startsWith("Juniors") &&
+    ((levelVal === 10 && (weekVal === 7 || weekVal === 13)) ||
+      (levelVal === 12 && weekVal === 3) ||
+      (syllabusVal.includes("Masters") && levelVal === 10 && weekVal === 3) ||
+      (syllabusLower.includes("adults (5hrs/week)") &&
+        levelVal === 10 &&
+        weekVal === 3)) &&
+    !(
+      (syllabusLower.includes("kids intensivo") &&
+        levelVal === 10 &&
+        weekVal === 7) ||
+      (syllabusLower.includes("teens 13-17 (3hrs/week)") &&
+        levelVal === 10 &&
+        weekVal === 7)
+    )
   );
 }
 
@@ -166,6 +234,7 @@ function updateExtraInfo() {
   const isprep = !!(
     syllabusVal && syllabusVal.toLowerCase().includes("masters 2")
   );
+
   if (prepCommentRow) {
     if (isprep) {
       prepCommentRow.classList.remove("hidden");
@@ -177,41 +246,17 @@ function updateExtraInfo() {
     }
   }
 
-  // 2) Determinar si es Exit Evaluation (Juniors NO es exit)
-  const syllabusLower = (syllabusVal || "").toLowerCase();
+  // 2) Exit eval
+  const isExit = isExitEval(syllabusVal, levelVal, weekVal);
 
-  const isExit =
-    !syllabusVal.startsWith("Juniors") &&
-    ((levelVal === 10 && (weekVal === 7 || weekVal === 13)) ||
-      (levelVal === 12 && weekVal === 3) ||
-      (syllabusVal.includes("Masters") && levelVal === 10 && weekVal === 3) ||
-      (syllabusLower.includes("adults (5hrs/week)") &&
-        levelVal === 10 &&
-        weekVal === 3)) &&
-    !(
-      (syllabusLower.includes("kids intensivo") &&
-        levelVal === 10 &&
-        weekVal === 7) ||
-      (syllabusLower.includes("teens 13-17 (3hrs/week)") &&
-        levelVal === 10 &&
-        weekVal === 7)
-    );
+  // 3) Diagnostic evals
+  const isDiag = isDiagnosticEval(syllabusVal, levelVal);
+  if (diagnosticEvals) {
+    diagnosticEvals.classList.toggle("hidden", !isDiag);
+  }
 
-  // MEGA 3 handle diag evals if Deval no fl, int comments or condicionado
-  if (isDiagnosticEval(syllabusVal, levelVal)) {
-    diagnosticEvals.classList.toggle(
-      "hidden",
-      !isDiagnosticEval(syllabusVal, levelVal),
-    );
-  } else {
-    if (diagnosticEvals) {
-      diagnosticEvals.classList.toggle(
-        "hidden",
-        !isDiagnosticEval(syllabusVal, levelVal),
-      );
-    }
-
-    // 3) Mostrar/ocultar tabla de Exit Eval
+  if (!isDiag) {
+    // 4) Exit table
     if (exitevaltable) {
       exitevaltable.classList.toggle("hidden", !isExit);
       if (!isExit && skillTest) {
@@ -220,39 +265,47 @@ function updateExtraInfo() {
       }
     }
 
-    // 4) Mostrar/ocultar fila de total score
+    // 5) Total score row
     if (totalscorerow) {
       totalscorerow.classList.toggle("hidden", isExit);
     }
 
-    // 5) Manejar checkbox "Condicionado"
+    // 6) Extra info (CONDICIONADO + RESCHEDULE)
     if (extraInfo) {
       let htmlContent = "";
-      let scoreVal = NaN;
 
-      if (isExit) {
-        scoreVal = finalScore ? parseFloat(finalScore.textContent.trim()) : NaN;
-      } else {
-        scoreVal = totalScoreEl
-          ? parseFloat(totalScoreEl.textContent.trim())
-          : NaN;
+      //  Obtener score
+      let scoreVal = isExit
+        ? parseFloat(finalScore?.textContent.trim())
+        : parseFloat(totalScoreEl?.textContent.trim());
+
+      const fixedScore = Number(scoreVal?.toFixed(2));
+
+      // Condicionado
+      if (fixedScore === 7) {
+        htmlContent += `
+          <label class="extraInfoAddOns">
+            ${isExit ? "Exit Condicionado" : "Condicionado"}
+            <input type="checkbox" id="condicionado" checked>
+          </label>`;
       }
 
-      // 🔍 Convertimos, redondeamos y comparamos exacto
-      const fixedScore = Number(scoreVal.toFixed(2)); // redondea a 2 decimales exactos
-      const isCondicionado = fixedScore === 7.0;
+      //  Reschedule
+      const isFilter = isFilterEval(syllabusVal, levelVal, weekVal);
 
-      if (isCondicionado) {
-        htmlContent = `
-        <label class="condicionado">
-          ${isExit ? "Exit Condicionado" : "Condicionado"}
-          <input type="checkbox" id="condicionado" checked>
-        </label>`;
-        extraInfo.innerHTML = htmlContent;
-      } else {
-        // si ya no es 7, eliminar el checkbox si existe
-        extraInfo.innerHTML = "";
+      const shouldShowReschedule =
+        (isExit && fixedScore < 7) || (isFilter && fixedScore < 7);
+
+      if (shouldShowReschedule) {
+        htmlContent += `
+          <label class="extraInfoAddOns">
+            Include reschedule link
+            <input type="checkbox" id="reScheduleCheck" checked>
+          </label>`;
       }
+
+      // remove
+      extraInfo.innerHTML = htmlContent;
     }
   }
 }
@@ -771,86 +824,81 @@ function absentsE4E() {
           background: linear-gradient(to bottom, #f5f0e6 0%, transparent 50%);
           background-color: transparent;
         ">
-      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERADULTS.png" alt="Resultado - Evaluación Filtro" style="width: 100%; display: block; border: 0">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERKIDS.png" alt="" style="width: 100%; display: block; border: 0">
     </div>
-    <div class="welcome" style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
-      <p class="h2"
-        style="padding: 0 1rem; font-size: 22px; font-weight: 700; color: #126064; font-family: Segoe UI; margin: 0;">
+    <div style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
+      <p style="padding: 0 1rem; font-size: 18px; font-weight: 700; color: #126064; font-family: Segoe UI; margin: 0;">
         Estimado estudiante,</p>
       <!-- &#x1F31F; -->
-      <p class="h3"
-        style="padding: 0 1rem; font-size: 16px; font-weight: 400; color: #126064; padding-bottom: 0.8rem; font-family: Segoe UI;">
+      <p
+        style="padding: 0 1rem; font-size: 14px; font-weight: 400; color: #126064; padding-bottom: 0.8rem; font-family: Segoe UI;">
         Esperamos que estés teniendo una excelente semana</p>
     </div>
+
     <div class="email-body"
       style="border-radius: 20px; padding: 1rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
       <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
         <p
-          style="padding: 1rem 1rem 0; font-size: 18px; text-decoration: none; font-family: Segoe UI; color: #297b7f; font-weight: 600; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
+          style="padding: 1rem 1rem 0; font-size: 15px; text-decoration: none; font-family: Segoe UI; color: #297b7f; font-weight: 600; margin: 0 auto 5px;">
           Te informamos que:
         </p>
         <p
-          style="padding: 0 1rem 0; font-family: Segoe UI; font-weight: 700; color: #297b7f; font-size: 22px; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.5rem;">
+          style="padding: 0 1rem 0; font-family: Segoe UI; font-weight: 700; color: #297b7f; font-size: 20px; margin: 0;">
           No asististe a tu evaluación filtro.
         </p>
         <p
-          style="font-size: 16px; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Segoe UI; MARGIN: 1rem 0;">
+          style="font-size: 14px; font-weight: 400; padding: 0 1rem 0; color: #126064; font-family: Segoe UI; margin: 5px 0 0;">
           correspondiente a tu
           nivel en
           <b>${syllabus}</b>.
         </p>
       </div>
       <!-- next steps -->
-      <div style="margin: 2rem 0">
-        <table width="80%" align="center" cellspacing="0" width="80%" align="center" cellspacing="0" cellpadding="0"
-          style="width: 80%; border-collapse: collapse; border: none; margin-top: 0.5rem; background-color: #f9fafb;">
+      <div style="margin: 4rem 0">
+        <table width="80%" align="center" cellspacing="0" cellpadding="0"
+          style="border-collapse: collapse; border: none; background-color: #f9fafb; border-radius: 20px;">
           <tr>
-            <th
-              style="font-weight: 600; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 15px; padding: 0.5rem 1rem; color: #126064; border: none; font-family: Segoe UI;"
-              align="center">
-              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
-              Para evitar retrocesos en tu progreso, te solicitamos
-              <b>reagendar la evaluación lo antes posible</b>
+            <th width="20%" align="right" cellspacing="0" cellpadding="0">
+              <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 50px;"">
+            </th>
+            <th width="80%"
+              style="font-weight: 500; text-align: left; font-size: 16px; color: #126064; font-family: Segoe UI; padding: 30px 20px; line-height: 1; "
+              align="left">
+              Para evitar retrocesos en su progreso, te solicitamos
+              <b>reagendar la evaluación lo antes posible.</b>
             </th>
           </tr>
           <tr>
-            <td
-              style="font-size: 15px; font-family: Segoe UI; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); padding: 0.9rem 2rem; font-weight: 400; color: #044043; text-align: center;"
+            <td colspan="2"
+              style="font-size: 14px; font-family: Segoe UI; padding: 0 20px 30px; font-weight: 400; color: #044043; text-align: center;"
               align="center">
-              <p style="font-family: Segoe UI; font-size: 15px; margin: 1rem">
+              <p style="font-family: Segoe UI; margin: 1rem 15%">
                 Esta evaluación es <b>obligatoria para avanzar al siguiente nivel</b> del programa.<br><br>&#9888;&#65039; Dado que te encuentras en un
                 <b>nivel filtro</b>, si no presentas esta evaluación, serás
                 <b>reprogramado automáticamente para repetir el nivel</b>.
               </p>
-              <a href=https://meetings.hubspot.com/evaluacionese4kidse4adults/evaluaciones target=_blank
-                style="text-decoration: none; font-family: Segoe UI; background-color: #147b7b; padding: 1rem 1.3rem; border-radius: 15px; font-weight: 700; color: white; font-size: 22px; margin: 1rem 1rem; display: inline-block;">
-                Reagenda tu
+              <a href="https://meetings.hubspot.com/evaluacionese4kidse4adults/evaluaciones" target="_blank"
+                style="text-decoration: none; font-family: Segoe UI; background-color: #147b7b; padding: 1rem 10%; border-radius: 15px; font-weight: 700; color: white; font-size: 15px; margin: 1rem auto 0.5rem; display: inline-block;">
+                Reagenda la
                 Evaluación Aquí</a>
-              <p style="font-family: Segoe UI; font-size: 14px; margin: 0">
+              <p style="font-family: Segoe UI; font-size: 12px; margin: 0 10%;">
                 Ahí podrás seleccionar el
-                <b>horario que mejor se acomode</b> y agendarla por tu cuenta de forma rápida y sencilla.<br>
+                <b>horario que mejor se acomode</b> y agendarla por tu cuenta de forma rápida y sencilla.
               </p>
             </td>
           </tr>
         </table>
       </div>
       <!-- TU ESFUERXO CUENTA -->
-      <div style="margin: 2rem 0">
+      <div style="margin: 3rem 0">
         <table width="80%" align="center" cellspacing="0" cellpadding="0"
-          style="width: 80%; border-collapse: collapse; margin-top: 2rem; background-color: #f9fafb;">
+          style="width: 80%; border-collapse: collapse; background-color: #f9fafb;">
           <tr>
-            <TH
-              style="font-size: 16px; font-family: Segoe UI; padding: 1rem 0.5rem 0; font-weight: 400; color: #044043; text-align: center; border-top: 1px dotted #219fa6;"
-              align="center"> En <b>English4Adults</b>,</TH>
-          </tr>
-          <tr>
-            <td
-              style="font-size: 16px; font-family: Segoe UI; padding: 0.5rem 0.5rem 0.8rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
-              align="center">
-              Creemos firmemente en tu potencial.<br>
-                Con tu compromiso, podemos asegurarnos de que <b>sigas avanzando con éxito</b>.
-
-            </td>
+            <th
+              style="font-size: 14px; font-family: Segoe UI; padding: 2rem 20%; font-weight: 500; color: #044043; text-align: center;"
+              align="center">En <b>ENGLIKSH4ADULTS</b>, creemos firmemente en el potencial de cada estudiante. Con tu
+              esfuerzo, podemos asegurar que <b>seguirás avanzando con éxito</b>.
+            </th>
           </tr>
         </table>
       </div>
@@ -865,7 +913,6 @@ function absentsE4E() {
              style="width: 100%; display:block; margin:0 auto; border:0;">
       </a>
     </div>
-    </div>
     <!-- FOOTER -->
     <div style="
           text-align: center;
@@ -875,7 +922,7 @@ function absentsE4E() {
           font-family: Segoe UI;
           text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         ">
-      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerAdults.png" alt="Atentamente, equipo de English4Adults" style="width: 100%; display: block; border: 0">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerKids.png" alt="Atentamente, equipo de English4Adults" style="width: 100%; display: block; border: 0">
 
 
     </div>
@@ -887,7 +934,7 @@ function absentsE4E() {
   } else {
     // ---- mensaje para padres ----
     message = `
-    <html lang="en">
+   <html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -915,86 +962,81 @@ function absentsE4E() {
           background: linear-gradient(to bottom, #f5f0e6 0%, transparent 50%);
           background-color: transparent;
         ">
-      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERADULTS.png" alt="Resultado - Evaluación Filtro" style="width: 100%; display: block; border: 0">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERADULTS.png" alt="" style="width: 100%; display: block; border: 0">
     </div>
-    <div class="welcome" style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
-      <p class="h2"
-        style="padding: 0 1rem; font-size: 22px; font-weight: 700; color: #126064; font-family: Segoe UI; margin: 0;">
+    <div style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
+      <p style="padding: 0 1rem; font-size: 18px; font-weight: 700; color: #126064; font-family: Segoe UI; margin: 0;">
         Estimado padre/madre de familia,</p>
       <!-- &#x1F31F; -->
-      <p class="h3"
-        style="padding: 0 1rem; font-size: 16px; font-weight: 400; color: #126064; padding-bottom: 0.8rem; font-family: Segoe UI;">
+      <p
+        style="padding: 0 1rem; font-size: 14px; font-weight: 400; color: #126064; padding-bottom: 0.8rem; font-family: Segoe UI;">
         Esperamos que estés teniendo una excelente semana</p>
     </div>
+
     <div class="email-body"
       style="border-radius: 20px; padding: 1rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
       <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
         <p
-          style="padding: 1rem 1rem 0; font-size: 18px; text-decoration: none; font-family: Segoe UI; color: #297b7f; font-weight: 600; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.2rem;">
+          style="padding: 1rem 1rem 0; font-size: 15px; text-decoration: none; font-family: Segoe UI; color: #297b7f; font-weight: 600; margin: 0 auto 5px;">
           Te informamos que:
         </p>
         <p
-          style="padding: 0 1rem 0; font-family: Segoe UI; font-weight: 700; color: #297b7f; font-size: 22px; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0.5rem;">
-         Tu hijo/a no asististió a su evaluación filtro.
+          style="padding: 0 1rem 0; font-family: Segoe UI; font-weight: 700; color: #297b7f; font-size: 20px; margin: 0;">
+          Tu hijo/a no asististió a su evaluación filtro.
         </p>
         <p
-          style="font-size: 16px; font-weight: 500; padding: 0 1rem 0; color: #126064; font-family: Segoe UI; MARGIN: 1rem 0;">
+          style="font-size: 14px; font-weight: 400; padding: 0 1rem 0; color: #126064; font-family: Segoe UI; margin: 5px 0 0;">
           correspondiente a su
           nivel en
           <b>${syllabus}</b>.
         </p>
       </div>
       <!-- next steps -->
-      <div style="margin: 2rem 0">
+      <div style="margin: 4rem 0">
         <table width="80%" align="center" cellspacing="0" cellpadding="0"
-          style="width: 80%; border-collapse: collapse; border: none; margin-top: 0.5rem; background-color: #f9fafb;">
+          style="border-collapse: collapse; border: none; background-color: #f9fafb; border-radius: 20px;">
           <tr>
-            <th
-              style="font-weight: 600; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 15px; padding: 0.5rem 1rem; color: #126064; border: none; font-family: Segoe UI;"
-              align="center">
-              <span><img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 2.5rem; margin-right: 0.2rem"></span>
+            <th width="20%" align="right" cellspacing="0" cellpadding="0">
+              <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 50px;"">
+            </th>
+            <th width="80%"
+              style="font-weight: 500; text-align: left; font-size: 15px; color: #126064; font-family: Segoe UI; padding: 30px 20px; line-height: 1; "
+              align="left">
               Para evitar retrocesos en su progreso, te solicitamos
               <b>reagendar la evaluación lo antes posible.</b>
             </th>
           </tr>
           <tr>
-            <td
-              style="font-size: 15px; font-family: Segoe UI; border-bottom: 1px dotted rgba(28, 165, 171, 0.15); padding: 0.9rem 2rem; font-weight: 400; color: #044043; text-align: center;"
+            <td colspan="2"
+              style="font-size: 14px; font-family: Segoe UI; padding: 0 20px 30px; font-weight: 400; color: #044043; text-align: center;"
               align="center">
-              <p style="font-family: Segoe UI; font-size: 15px; margin: 1rem">
+              <p style="font-family: Segoe UI; margin: 1rem 15%">
                 Esta evaluación es <b>obligatoria para avanzar al siguiente nivel</b> del programa.<br><br>&#9888;&#65039; Dado que tu hijo/a se encuentra en un
                 <b>nivel filtro</b>, si no presenta esta evaluación, será
                 <b>reprogramado automáticamente para repetir el nivel</b>.
               </p>
-              <a href=https://meetings.hubspot.com/evaluacionese4kidse4adults/evaluaciones target=_blank
-                style="text-decoration: none; font-family: Segoe UI; background-color: #147b7b; padding: 1rem 1.3rem; border-radius: 15px; font-weight: 700; color: white; font-size: 22px; margin: 1rem 1rem; display: inline-block;">
+              <a href="https://meetings.hubspot.com/evaluacionese4kidse4adults/evaluaciones" target="_blank"
+                style="text-decoration: none; font-family: Segoe UI; background-color: #147b7b; padding: 1rem 10%; border-radius: 25px; font-weight: 700; color: white; font-size: 14px; margin: 1rem auto 0.5rem; display: inline-block;">
                 Reagenda la
                 Evaluación Aquí</a>
-              <p style="font-family: Segoe UI; font-size: 14px; margin: 0">
+              <p style="font-family: Segoe UI; font-size: 12px; margin: 0 10%;">
                 Ahí podrás seleccionar el
-                <b>horario que mejor se acomode</b> y agendarla por tu cuenta de forma rápida y sencilla.<br>
+                <b>horario que mejor se acomode</b> y agendarla por tu cuenta de forma rápida y sencilla.
               </p>
             </td>
           </tr>
         </table>
       </div>
       <!-- TU ESFUERXO CUENTA -->
-      <div style="margin: 2rem 0">
+      <div style="margin: 3rem 0; width: 100%;">
         <table width="80%" align="center" cellspacing="0" cellpadding="0"
-          style="width: 80%; border-collapse: collapse; margin-top: 2rem; background-color: #f9fafb;">
+          style="width: 80%; border-collapse: collapse; background-color: #f9fafb;">
           <tr>
-            <TH
-              style="font-size: 16px; font-family: Segoe UI; padding: 1rem 0.5rem 0; font-weight: 400; color: #044043; text-align: center; border-top: 1px dotted #219fa6;"
-              align="center"> En <b>English4Kids</b>,</TH>
-          </tr>
-          <tr>
-            <td
-              style="font-size: 16px; font-family: Segoe UI; padding: 0.5rem 0.5rem 0.8rem; font-weight: 500; color: #044043; text-align: center; border-bottom: 1px dotted #219fa6;"
-              align="center">
-             Creemos firmemente en el potencial de cada estudiante.<br>
-                Con tu apoyo, podemos asegurar que tu hijo/a <b>siga avanzando con éxito</b>.
-
-            </td>
+            <th
+              style="font-size: 14px; font-family: Segoe UI; padding: 2rem 20%; font-weight: 500; color: #044043; text-align: center;"
+              align="center">En <b>ENGLIKSH4KIDS</b>, creemos firmemente en el potencial de cada estudiante. Con tu
+              apoyo, podemos asegurar que tu hijo/a <b>siga avanzando con éxito</b>.
+            </th>
           </tr>
         </table>
       </div>
@@ -1041,19 +1083,19 @@ function absentsE4E() {
   document.body.removeChild(tempEl);
 
   showPopup(
-    `<h3>🎉 Success!</h3><p>Absent-Report for <b>${syllabus}</b> successfully copied ✅</p>`,
+    `<h3>✅Success!</h3><p>Absent-Report for <b>${syllabus}</b> successfully copied.</p><h4 class="previewTitle">Preview:</h4>
+        <div class="smallPreview"> ${message} </div>`,
   );
 }
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
-
 async function evaluatorsCopyResults() {
   // Espera hasta que topicBreakdown esté listo
   while (!topicBreakdownLoaded) {
     console.log("⏳ Esperando que topicBreakdown cargue...");
-    await new Promise((res) => setTimeout(res, 100)); // espera 100ms
+    await new Promise((res) => setTimeout(res, 100));
   }
 
   console.log("✅ topicBreakdown cargado, generando RC");
@@ -1130,22 +1172,7 @@ async function evaluatorsCopyResults() {
 
   // ---------- isExit logic ----------
   const syllabusVal = syllabus || "";
-  const isExit =
-    !syllabusVal.startsWith("Juniors") &&
-    ((levelVal === 10 && (weekVal === 7 || weekVal === 13)) ||
-      (levelVal === 12 && weekVal === 3) ||
-      (syllabusVal.includes("Masters") && levelVal === 10 && weekVal === 3) ||
-      (syllabusLower.includes("adults (5hrs/week)") &&
-        levelVal === 10 &&
-        weekVal === 3)) &&
-    !(
-      (syllabusLower.includes("kids intensivo") &&
-        levelVal === 10 &&
-        weekVal === 7) ||
-      (syllabusLower.includes("teens 13-17 (3hrs/week)") &&
-        levelVal === 10 &&
-        weekVal === 7)
-    );
+  const isExit = isExitEval(syllabusVal, levelVal, weekVal);
 
   // ---------- topics extraction (robust) ----------
   const approvedTopics = [];
@@ -1368,6 +1395,42 @@ async function evaluatorsCopyResults() {
     totalScore,
   );
 
+  // ---------- reschedule logic ----------
+  let rescheduleBox = "";
+  const addRescheduleLink =
+    document.getElementById("reScheduleCheck")?.checked === true;
+  if (addRescheduleLink) {
+    rescheduleBox = `
+                           <!-- REPROGRAMAR EVAL -->
+        <table width="60%" align="center" cellspacing="0" cellpadding="0"
+          style="border-collapse: collapse; border: none; background-color: rgba(218, 230, 230, 0.2); border-radius: 20px; margin: 4rem auto;">
+          <tr>
+            <th width="30%" align="right" cellspacing="0" cellpadding="0" style="padding-top: 20px;">
+              <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 50px; "">
+            </th>
+            <th width="70%"
+              style="font-weight: 700; text-align: left; font-size: 20px; color: #126064; font-family: Segoe UI; padding: 50px 20px 30px; line-height: 1; "
+              align="left">
+             Reprogramar Evaluación
+            </th>
+          </tr>
+          <tr>
+            <td colspan="2"
+              style="font-size: 14px; font-family: Segoe UI; padding: 0 20px 30px; font-weight: 400; color: #044043; text-align: center;"
+              align="center">
+              Te compartimos el siguiente enlace, donde podrás reagendar la evaluación de forma rápida y
+              sencilla.<br>
+              <a href="https://meetings.hubspot.com/evaluacionese4kidse4adults/evaluaciones" target="_blank"
+                style="text-decoration: none; font-family: Segoe UI; background-color: #14767B; padding: 1rem 10%; border-radius: 15px; font-weight: 700; color: white; font-size: 15px; margin: 1rem auto; display: inline-block;">
+                Reprogramar Evaluación Aquí
+              </a>
+            </td>
+          </tr>
+        </table>
+
+                       `;
+  }
+
   // ---------- condicionado logic ----------
   const isCondicionado =
     document.getElementById("condicionado")?.checked === true;
@@ -1409,7 +1472,8 @@ async function evaluatorsCopyResults() {
             </ul>
           </td>
         </tr>`;
-  } else if (syllabusVal.includes("Kids")) {
+  } 
+  else if (syllabusVal.includes("Kids")) {
     condicionadoText = ` <tr>
           <td
             style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
@@ -1475,7 +1539,8 @@ async function evaluatorsCopyResults() {
           </td>
         </tr>
       `;
-  } else if (syllabusVal.includes("Adults")) {
+  } 
+  else if (syllabusVal.includes("Adults")) {
     if (syllabusVal.includes("Masters")) {
       condicionadoText = `
 
@@ -1514,7 +1579,8 @@ async function evaluatorsCopyResults() {
               nivel.
           </td>
         </tr>`;
-    } else {
+    } 
+    else {
       condicionadoText = `    <tr>
           <td
             style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
@@ -2073,7 +2139,7 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
 </div>
 `;
 
-let resultadoGlobalDiagEval = `
+  let resultadoGlobalDiagEval = `
 <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
           <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
           <p
@@ -2158,8 +2224,7 @@ let resultadoGlobalDiagEval = `
   // Prioridad máxima: Diagnostic Eval
   if (isDiagnosticEval(syllabusVal, levelVal)) {
     resultadoGlobal = resultadoGlobalDiagEval;
-
-  } else  if (isExit) {
+  } else if (isExit) {
     // choose by syllabus and pass/fail
     const passedExit =
       finalDisplay !== "" &&
@@ -2869,46 +2934,7 @@ let resultadoGlobalDiagEval = `
   //===================================================================
   //IS FILTER / ISFILTEREVAL LOGIC
 
-  const isFilterEval =
-    (syllabus === "Juniors 5-7" &&
-      [7, 9].includes(levelVal) &&
-      weekVal === 7) ||
-    (syllabus === "Kids (Intensivo) 8-12" &&
-      [2, 4, 7, 9].includes(levelVal) &&
-      weekVal === 13) ||
-    (syllabus === "Kids (Super Intensivo) 8-12" &&
-      [4, 7, 9].includes(levelVal) &&
-      weekVal === 7) ||
-    (syllabus === "Kids Masters" &&
-      [4, 8].includes(levelVal) &&
-      weekVal === 3) ||
-    (syllabus === "Kids Masters 2" &&
-      [4, 8].includes(levelVal) &&
-      weekVal === 3) ||
-    (syllabus === "Teens 13-17 (3hrs/week)" &&
-      [2, 4, 7, 9].includes(levelVal) &&
-      weekVal === 13) ||
-    (syllabus === "Teens 13-17 (5hrs/week)" &&
-      [4, 7, 9].includes(levelVal) &&
-      weekVal === 7) ||
-    (syllabus === "Teens Masters" &&
-      [4, 8].includes(levelVal) &&
-      weekVal === 3) ||
-    (syllabus === "Teens Masters 2" &&
-      [4, 8].includes(levelVal) &&
-      weekVal === 3) ||
-    (syllabus === "Adults (3hrs/week)" &&
-      [5, 8].includes(levelVal) &&
-      weekVal === 3) ||
-    (syllabus === "Adults (5hrs/week)" &&
-      [5, 8].includes(levelVal) &&
-      weekVal === 3) ||
-    (syllabus === "Adults Masters (3hrs/week)" &&
-      [5, 8].includes(levelVal) &&
-      weekVal === 3) ||
-    (syllabus === "Adults Masters (5hrs/week)" &&
-      [5, 8].includes(levelVal) &&
-      weekVal === 3);
+  const isFilter = isFilterEval(syllabusVal, levelVal, weekVal);
 
   let willLearn = [];
   let nextFilter = "";
@@ -3157,7 +3183,7 @@ let resultadoGlobalDiagEval = `
 
   let loQueAprendera = ``;
 
-  if (isFilterEval && totalScore > 6.9) {
+  if (isFilter && totalScore > 6.9) {
     loQueAprendera = `  <!-- lo que aprenderá -->
   <div style="margin: 4rem auto; justify-items: center; border-radius: 25px; background-color:rgba(252,250,250,0.1);">
     <table width="100%" align="center" cellspacing="0" cellpadding="0" style="width: 80%; border-collapse: collapse;">
@@ -3217,7 +3243,7 @@ let resultadoGlobalDiagEval = `
   }
   let mustPracticeTopics = ``;
   let mapaGrande = ``;
-  if (isFilterEval && totalScore < 7) {
+  if (isFilter && totalScore < 7) {
     //cuando no aprueban
     mustPracticeTopics = `
     ${approvedTopics
@@ -3332,9 +3358,9 @@ let resultadoGlobalDiagEval = `
       : "El estudiante se encuentra en el";
 
     let diagevalapproachformap = "";
-      diagevalapproachformap = syllabusLower.includes("adults")
-    ? "Continúas desarrollando las competencias del"
-    : "El estudiante continúa desarrollando las competencias del";
+    diagevalapproachformap = syllabusLower.includes("adults")
+      ? "Continúas desarrollando las competencias del"
+      : "El estudiante continúa desarrollando las competencias del";
 
     let bigmap = "";
     bigmap = syllabusLower.includes("adults")
@@ -3358,18 +3384,21 @@ let resultadoGlobalDiagEval = `
         <td
           style="font-family: Segoe UI;  text-align: left; padding: 1rem; font-size: 15px; font-weight: 400; color: #1C5457;"
           align="left">
-          &#9733; ${isDiagnosticEval(syllabusVal, levelVal)
-          ? `${diagevalapproachformap}`
-          : `${approachforMap}`
-      }  <b>nivel ${levelVal}</b>.
-      ${isDiagnosticEval(syllabusVal, levelVal)
-      ? `<br> <br>
+          &#9733; ${
+            isDiagnosticEval(syllabusVal, levelVal)
+              ? `${diagevalapproachformap}`
+              : `${approachforMap}`
+          }  <b>nivel ${levelVal}</b>.
+      ${
+        isDiagnosticEval(syllabusVal, levelVal)
+          ? `<br> <br>
                 &#9733; Seguirá consolidando bases importantes para
                 avanzar con confianza hacia estructuras más complejas.`
-      : ``}
+          : ``
+      }
         </td>
       </tr>`;
-    if (isFilterEval) {
+    if (isFilter) {
       mapaGrande += `<tr>
         <td
           style="font-family: Segoe UI;  text-align: left; padding: 0 1rem 1rem; font-size: 16px; font-weight: 400; color: #1C5457;"
@@ -3416,7 +3445,7 @@ let resultadoGlobalDiagEval = `
             background: linear-gradient(to bottom, #f5f0e6 0%, transparent 50%);
             background-color: transparent;
           ">
-        <img src="${imgHeader}" alt="Reporte de Evaluación" style="width: 100%; display: block; border: 0">
+        <img src="${imgHeader}" alt="" style="width: 100%; display: block; border: 0">
       </div>`;
   reportHTML += welcomeHTML;
   reportHTML += ` <div class="email-body"
@@ -3434,6 +3463,7 @@ let resultadoGlobalDiagEval = `
   reportHTML += mapaGrande;
   reportHTML += avanceMotivacion;
   reportHTML += evaluatorLine;
+  reportHTML += rescheduleBox;
   reportHTML += referText;
   reportHTML += `</div>`;
   reportHTML += `</div>`;
@@ -3489,6 +3519,7 @@ let resultadoGlobalDiagEval = `
         </table>
       </div>
     <h2>Evaluation Results</h2>
+    <p class="previewTitle">Preview</p>
     <div class="preview-wrapper">${reportHTML}</div>
     </div>`;
 
@@ -3513,7 +3544,7 @@ let resultadoGlobalDiagEval = `
     .writeText(reportHTML)
     .then(() =>
       showPopup(
-        "<h3>🎉 Success!</h3><p>✅ The Results have been copied to your clipboard!📝 </p>",
+        "<h3>✅Success!</h3><p>The Results have been copied to your clipboard! </p>",
       ),
     )
     .catch(() =>
@@ -3950,3 +3981,116 @@ checkboxes.forEach((cb) => {
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
+
+// RESCHEDULE EVAL
+
+function ReScheduleEmail() {
+  const ReScheduleEmail = `
+    <html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reporte de evaluación</title>
+  <!-- STYLE -->
+
+</head>
+
+<body style="margin: 0 auto; background: linear-gradient(
+          to bottom,
+          #f5ffff 10%,
+          #aed6d6 60%,
+          #1ca5ab 90%
+        ); background-color: #1ca5ab15; ">
+  <div class="Evaluation-Results" style="margin: 0 auto; background: linear-gradient(
+          to bottom,
+          #f5ffff 10%,
+          #aed6d6 60%,
+          #1ca5ab 90%
+        ); background-color: #1ca5ab15;">
+    <!-- <!HEADER> -->
+    <div style="
+          text-align: center;
+          background: linear-gradient(to bottom, #f5f0e6 0%, transparent 50%);
+          background-color: transparent;
+        ">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/emptyheaderpng.png" alt="" style="width: 100%; display: block; border: 0">
+    </div>
+    <div style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
+      <p
+        style="padding: 0 1rem; font-size: 18px; font-weight: 700; color: #126064; font-family: Segoe UI; margin: 1rem auto;">
+        Estimado/a estudiante o padre de familia,<br>
+        <!-- &#x1F31F; -->
+        <span
+        style="padding: 0 1rem; font-size: 14px; font-weight: 400; color: #126064; padding-bottom: 0.8rem; font-family: Segoe UI;">
+        Esperamos que estés teniendo una excelente semana</span>
+      </p>
+    </div>
+
+    <div class="email-body"
+      style="border-radius: 20px; padding: 20px; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">
+      <!-- next steps -->
+      <div style="margin: 0rem auto;">
+        <table width="100%" align="center" cellspacing="0" cellpadding="0"
+          style="border-collapse: collapse; border: none; background-color: #f9fafb; border-radius: 20px;">
+          <tr>
+            <th width="35%" align="right" cellspacing="0" cellpadding="0" style="padding-top: 20px;">
+              <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/icons/message%20and%20light%20bulb.png" style="width: 50px; "">
+            </th>
+            <th width="65%"
+              style="font-weight: 700; text-align: left; font-size: 20px; color: #126064; font-family: Segoe UI; padding: 50px 20px 30px; line-height: 1; "
+              align="left">
+             Reprogramar Evaluación
+            </th>
+          </tr>
+          <tr>
+            <td colspan="2"
+              style="font-size: 14px; font-family: Segoe UI; padding: 0 20px 30px; font-weight: 400; color: #044043; text-align: center;"
+              align="center">
+              <p style="font-family: Segoe UI; margin: 1rem 15%">
+                Te compartimos el siguiente enlace, donde podrás reagendar la evaluación de forma rápida y sencilla:
+              </p>
+              <a href="https://meetings.hubspot.com/evaluacionese4kidse4adults/evaluaciones" target="_blank"
+                style="text-decoration: none; font-family: Segoe UI; background-color: #147b7b; padding: 1rem 10%; border-radius: 15px; font-weight: 700; color: white; font-size: 15px; margin: 1rem auto; display: inline-block;">
+                Reprogramar Evaluación Aquí
+              </a>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- referal -->
+    </div>
+    <!-- FOOTER -->
+    <div style="
+          text-align: center;
+          margin: 0;
+          padding: 2rem 0 0 0;
+          width: 100%;
+          font-family: Segoe UI;
+          text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        ">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerKids.png" alt="Atentamente, equipo de English4Adults" style="width: 100%; display: block; border: 0">
+
+
+    </div>
+  </div>
+</body>
+
+</html>
+`;
+
+  // Copiar al portapapeles
+  navigator.clipboard
+    .writeText(ReScheduleEmail)
+    .then(() =>
+      showPopup(
+        `<h3>✅Success!</h3><p>The reschedule email has been copied to your clipboard! </p> <h4 class="previewTitle">Preview:</h4>
+        <div class="smallPreview"> ${ReScheduleEmail} </div>`,
+      ),
+    )
+    .catch(() =>
+      showPopup(
+        `<h3>😓 Oops...</h3><p>❌ The results couldn't be copied, please try again or contact Michelle Hernández via Teams.</p>`,
+      ),
+    );
+}
