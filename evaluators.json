@@ -10,7 +10,6 @@
     "Julio Ernesto Garcia Garcia": ["2597"],
     "Jose Carlos Munoz Ruano": ["11397"],
     "Karen Isabel Escobar Alvarado": ["1029"],
-    "Karen Rosmery Vasquez Melendez": ["10164"],
     "Katerine Betancurth Pulido": ["10066"],
     "Kate Alexandra Martinez Cruz": ["10842"],
     "Katherine Bolivar Borda": ["2275"],
@@ -138,6 +137,48 @@
       ],
       "No se preparó": [
         "<b>Preparación para la exposición: No se preparó</b><br>Recuerda que la práctica es clave para mejorar tu inglés. Para la próxima, intenta revisar cada tema con anticipación y practicar hablando en voz alta. Puedes hacer resúmenes o responder preguntas sobre cada tema para sentirte más seguro. ¡Anímate a prepararte mejor la próxima vez!"
+      ]
+    },
+    "Descripción de imágenes": {
+      "Describe claramente con oraciones completas.": [
+        "El estudiante describe la imagen con oraciones completas y claras, identificando los elementos principales."
+      ],
+      "Describe con oraciones completas, aunque con algunos errores.": [
+        "El estudiante describe la imagen con oraciones completas y vocabulario adecuado; aunque presenta algunos errores, comunica sus ideas con claridad."
+      ],
+      "Presenta dificultad para formar oraciones claras y correctas.": [
+        "El estudiante presenta dificultad para expresar sus ideas con claridad, ya que no logra formular oraciones gramaticalmente correctas."
+      ],
+      "Usa frases en lugar de oraciones, con poca claridad.": [
+        "El estudiante recurre al uso de frases en lugar de oraciones gramaticalmente correctas para expresar sus ideas, lo que evidencia dificultades en la organización y claridad de su discurso."
+      ]
+    },
+    "Formulación de preguntas": {
+      "Formula preguntas completas con buen uso de tiempos.": [
+        "El estudiante formula preguntas correctamente, usando oraciones completas y buen manejo de tiempos gramaticales."
+      ],
+      "Formula preguntas completas con uso básico de tiempos.": [
+        "El estudiante formula preguntas con oraciones completas y un manejo básico de tiempos gramaticales, comunicándose con claridad."
+      ],
+      "Tiene dificultades al estructurar preguntas con limitado uso de tiempos.": [
+        "El estudiante presenta limitaciones al estructurar preguntas, presenta errores frecuentes y uso limitado de tiempos gramaticales."
+      ],
+      "No formula preguntas; usa oraciones afirmativas.": [
+        "El estudiante presenta dificultad para formular preguntas completas, ya que en lugar de ello produce oraciones afirmativas."
+      ]
+    },
+    "Expresión de opinión y justificación": {
+      "Expresa ideas claras con oraciones completas y buen vocabulario.": [
+        "El estudiante responde con oraciones completas, sustentando sus ideas con claridad y vocabulario adecuado."
+      ],
+      "Comunica ideas breves, con oportunidad de mayor claridad y detalle.": [
+        "El estudiante comunica sus ideas de forma breve y aún puede mejorar en claridad y detalle."
+      ],
+      "Presenta dificultad para expresar y justificar ideas en oraciones completas.": [
+        "El estudiante tiene dificultad para expresar y justificar sus ideas con oraciones completas."
+      ],
+      "Responde brevemente y requiere apoyo para mayor claridad.": [
+        "El estudiante responde de forma breve y necesita apoyo para expresar sus ideas con claridad."
       ]
     },
     "Condicionado": [
