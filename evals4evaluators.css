@@ -157,10 +157,10 @@
     font-weight: 500;
     font-size: 1.3rem;
     color: var(--turquesa-oscuro);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
 }
 
 /* ACTUAL EVALUATOR DROPDOWN */
@@ -181,11 +181,8 @@
 /*========================EXTRA EVAL AREAS========================*/
 
 .additionalComment {
-    font-family: "Montserrat";
     color: rgb(var(--turquesa));
-    font-weight: 700;
-    text-align: left;
-    background-color: rgb(var(--turquesa), 0.07);
+    background-color: rgb(var(--turquesa), 0.05);
     width: 100%;
 }
 
@@ -324,7 +321,7 @@ textarea:focus {
     user-select: none;
 }
 
-.extraInfoAddOns:hover{
+.extraInfoAddOns:hover {
     transform: scale(1.1);
 }
 
@@ -399,7 +396,7 @@ input {
 
 /*=================== Diagnostic Evaluations =====================*/
 /* fieldset */
-.diagnosticEval{
+.diagnosticEval {
     margin: 0 auto 1.5rem;
     padding: 0.3rem 0;
     display: grid;
@@ -410,18 +407,19 @@ input {
     border: none;
 }
 
-.twocols{
+.twocols {
     display: flex;
     flex-direction: row;
     width: 100%;
     justify-content: space-between;
 }
+
 /* AOI text */
-.twocols h2{
+.twocols h2 {
     width: auto;
 }
 
-.twocols p{
+.twocols p {
     grid-column: 1 / -1;
     text-align: center;
     font-size: 0.9rem;
@@ -432,14 +430,14 @@ input {
 }
 
 /* displayed name */
-.diagnosticEval label{
+.diagnosticEval label {
     display: inline-block;
     font-size: 0.8rem;
     color: var(--turquesa-oscuro);
     font-family: "Montserrat";
     font-weight: 600;
     text-align: center;
-    background-color: rgba(var(--turquesa),0.1);
+    background-color: rgba(var(--turquesa), 0.1);
     user-select: none;
     border-radius: 20px;
     padding: 1rem 0.7rem;
@@ -448,23 +446,25 @@ input {
     align-content: center;
 }
 
-.diagnosticEval .selected{
-  background-color: rgba(var(--turquesa), 0.8);
-  color: white;
+.diagnosticEval .selected {
+    background-color: rgba(var(--turquesa), 0.8);
+    color: white;
     transition: all 0.3s ease;
     font-weight: 700;
 }
-.diagnosticEval .unselected{
+
+.diagnosticEval .unselected {
     background-color: rgb(138, 138, 138, .1);
     color: #919191;
     transition: all 0.3s ease;
     font-weight: 400;
-    
+
 }
+
 /* checkbox */
-.diagnosticEval input{
-        display: none;
-    
+.diagnosticEval input {
+    display: none;
+
 }
 
 
@@ -622,20 +622,21 @@ input {
 }
 
 /* REMOVED H3 */
-.stopSounds{
-      position: fixed;
-      bottom: 10px;
-      left: 10px;
-      padding: 10px 15px;
-      background: #8d1616;
-      color: white;
-      border: none;
-      border-radius: 15px;
-      cursor: pointer;
+.stopSounds {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    padding: 10px 15px;
+    background: #8d1616;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
     width: 250px;
-      z-index: 9999;
+    z-index: 9999;
     animation: slide-in;
 }
+
 /* //btn main section */
 .press-button {
     display: flex;
@@ -696,7 +697,7 @@ input {
     line-height: 1rem;
 }
 
-.press-button h5 p{
+.press-button h5 p {
     font-size: 0.8rem;
     font-weight: bold;
     color: #148e94;
@@ -704,7 +705,7 @@ input {
     margin: -5px;
     padding: 0;
     font-family: "Oswald";
-    
+
 }
 
 .press-button button:hover {
@@ -721,10 +722,12 @@ input {
 .press-button button:active img {
     transform: translatey(-10%);
 }
-.press-button button:focus{
-    border:none;
+
+.press-button button:focus {
+    border: none;
     -webkit-tap-highlight-color: transparent;
 }
+
 :root {
     --btn1: #cdb4db;
     --btn2: #ffafcc;
@@ -813,27 +816,27 @@ input {
 }
 
 /* LIL PREVIEW FROM MODAL */
-.smallPreview{
+.smallPreview {
     width: 100%;
     max-width: 1000px;
     height: 100%;
     overflow-y: scroll;
     min-height: 300px;
     max-height: 50vh;
-      user-select: none;
+    user-select: none;
     margin: 0 auto;
     border: 5px solid #1CA5AB;
     border-top: none;
     border-radius: 0 0 10px 10px;
-      box-sizing: border-box;
-    
+    box-sizing: border-box;
+
 }
 
 .smallPreview::-webkit-scrollbar {
-  width: 0px;
+    width: 0px;
 }
 
-.previewTitle{
+.previewTitle {
     margin: 0 auto 0;
     width: 100%;
     text-align: center;
