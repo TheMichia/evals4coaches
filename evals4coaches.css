@@ -124,7 +124,7 @@ main {
 
 select {
   width: 100%;
-  padding: 6px 10px;
+  padding: 6px 5px;
   border: none;
   border-radius: 10px;
   font-family: "Roboto Condensed", sans-serif;
@@ -133,12 +133,18 @@ select {
   margin-bottom: 0px;
   color: #3a3131;
   font-weight: 500;
-  transition: box-shadow 0.4s ease;
+  transition: all 0.4s ease;
 }
 
 select:hover {
   box-shadow: 0 2px 8px rgba(176, 135, 135, 0.35);
   transition: box-shadow 0.3s ease;
+}
+
+option {
+  color: #2f2828;
+  font-family: "Roboto Condensed";
+  font-weight: 400;
 }
 
 h2 {
@@ -164,11 +170,12 @@ h2 {
 
 .evaluation-table {
   text-align: center;
-  font-family: "Noto Sans", sans-serif;
-  font-weight: 500;
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 400;
   font-size: 0.9rem;
   background-color: transparent;
   width: 100%;
+  color: #053f42;
 }
 
 .evaluation-table tbody tr {
@@ -187,6 +194,9 @@ h2 {
 .areasevaluation {
   width: 100%;
   text-align: left;
+  font-weight: 500;
+  font-size: 1rem;
+  padding-left: 5px;
 }
 
 .totalscore {
