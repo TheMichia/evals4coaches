@@ -1,8 +1,8 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "2.3.1";
+  const versionnum = "2.4.1";
   //added reschedule link logic
-  const E4EjsonVersion = 2.3;
+  const E4EjsonVersion = 3.1;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
   showversion.innerHTML = `${version} ${versionnum} - JSON ${E4EjsonVersion}`;
@@ -229,7 +229,7 @@ function updateExtraInfo() {
   const syllabusVal = syllabusE4E?.value || "";
   const levelVal = parseInt(levelE4E?.value, 10) || 0;
   const weekVal = parseInt(weekE4E?.value, 10) || 0;
-
+  handleL10KidsSI();
   // 1) Mostrar / poblar preparación (solo Masters 2)
   const isprep = !!(
     syllabusVal && syllabusVal.toLowerCase().includes("masters 2")
@@ -488,7 +488,7 @@ function populateComments(selectElement, category, syllabus) {
   // console.log({ syllabus, bucket, category, items });
 }
 
-//pobla preparation
+//pobla preparation - caso masters2 kids
 function populatePreparation(selectEl) {
   if (!selectEl) return;
 
@@ -522,6 +522,74 @@ function populatePreparation(selectEl) {
     // si no había selección previa, seleccionar la primera opción (opcional)
     if (selectEl.options.length > 0) selectEl.selectedIndex = 0;
   }
+}
+
+//
+//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
+//
+
+// Special case for L10 Kids SI - Opinion y Justificación, Describir Imágenes, Hacer Preguntas
+function handleL10KidsSI() {
+  const syllabus = syllabusE4E?.value || "";
+  const level = parseInt(levelE4E?.value, 10);
+
+  const anchorRow = document.getElementById("l10KidsSI");
+  if (!anchorRow) return;
+
+  const isTarget =
+    syllabus === "Kids (Super Intensivo) 8-12" && level === 10;
+
+  document.querySelectorAll(".l10-generated").forEach((row) => row.remove());
+
+  if (!isTarget) {
+    anchorRow.classList.add("hidden");
+    return;
+  }
+
+  anchorRow.classList.remove("hidden");
+
+  //  DISPLAY (EN)
+  const areaLabelsEN = {
+    "Expresión de opinión y justificación": "Opinion & Justification",
+    "Descripción de imágenes": "Describing a Picture",
+    "Formulación de preguntas": "Asking Questions",
+  };
+
+  //  SOURCE (must match JSON keys EXACTLY)
+  const areas = Object.keys(areaLabelsEN);
+
+  areas.forEach((area) => {
+    const data = evaluatorsData?.commentsPerArea?.[area];
+    if (!data) return;
+
+    const tr = document.createElement("tr");
+    tr.classList.add("additionalComment", "l10-generated");
+
+    const tdLabel = document.createElement("td");
+    tdLabel.classList.add("areasevaluation");
+
+    // 🔥 translate only for display
+    tdLabel.textContent = areaLabelsEN[area] || area;
+
+    const tdSelect = document.createElement("td");
+    tdSelect.classList.add("extraarea");
+
+    const select = document.createElement("select");
+
+    Object.keys(data).forEach((label) => {
+      const opt = document.createElement("option");
+      opt.value = data[label][0];
+      opt.textContent = label;
+      select.appendChild(opt);
+    });
+
+    tdSelect.appendChild(select);
+
+    tr.appendChild(tdLabel);
+    tr.appendChild(tdSelect);
+
+    anchorRow.insertAdjacentElement("afterend", tr);
+  });
 }
 
 //
@@ -1221,6 +1289,7 @@ async function evaluatorsCopyResults() {
     }
   });
 
+   
   // ---------- performance areas ----------
   const areas = [
     { id: "gr", label: "Gramática" },
@@ -2301,7 +2370,8 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
     </tr>
   </table>
 </div>`;
-  } else {
+  } 
+  else {
     // upd
     porqueEsImportante = `<!-- PORQUE ES IMPORTANTE -->
   <div style="margin: 4rem auto; justify-items: center;">
@@ -2606,7 +2676,8 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
     </table>
   </div>
 `;
-  } else {
+  } 
+  else {
     // NO ES DIAGNOSTIC: logica normal
     opportunityHTML = opportunityTopics.length
       ? `
@@ -2680,11 +2751,34 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
     </table>
   </div>`
     : "";
+
+   // ---------- Extra areas for L10 Kids SI  ----------
+    let kidsSIExtraAreas = "";
+  if(syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10){
+    const extraAreas = document.querySelectorAll(".l10-generated");
+    kidsSIExtraAreas = `<tr>
+        <td
+          style="color: #1C5457;  text-align: left;  padding: 1.1rem 0.5rem 0.3rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600; ">
+          &#x24D8; Habilidades Evaluadas:</td>
+      </tr>` + Array.from(extraAreas).map(area => 
+      ` <tr>
+            <td
+                style="color: #1C5457;  text-align: left;  padding: 0.5rem 0.5rem 0.4rem 10%; font-family: Segoe UI; font-size:15px; font-weight: 600;">
+                <span style="font-size: 16px; margin-right: 5px; font-weight: 400; ">&#9679;</span> ${area.querySelector(".areasevaluation")?.textContent?.trim() || ""}
+              </td>
+              </tr>
+              <tr>
+              <td
+                style="  color: #497275;  text-align: left;  padding: 0rem 0.5rem 0.9rem 15%; font-family: Segoe UI; font-size: 14px; font-weight: 400;  ">
+              ${area.querySelector(".extraarea select")?.value?.trim() || ""}</td>
+              </tr>` ).join("");
+  }
+  
   // upd
   const selectorComments = areaDetails.join("");
   const commentsFinal = selectorComments || extraCommentsFallback || "";
   const commentsHTML =
-    commentsFinal || isCondicionado
+    kidsSIExtraAreas || commentsFinal || isCondicionado
       ? `
         <div style="margin: 4rem auto; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
     <table width="80%" align="center" cellspacing="0" width="80%">
@@ -2696,6 +2790,7 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
       </thead>
       <tbody>
            ${commentsFinal || ""}
+            ${kidsSIExtraAreas || ""}
             ${isCondicionado ? condicionadoText : ""}
           </tbody>
         </table>
