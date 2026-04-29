@@ -152,6 +152,9 @@
       ],
       "Usa frases en lugar de oraciones, con poca claridad.": [
         "El estudiante recurre al uso de frases en lugar de oraciones gramaticalmente correctas para expresar sus ideas, lo que evidencia dificultades en la organización y claridad de su discurso."
+      ],
+      "No aplica": [
+        ""
       ]
     },
     "Formulación de preguntas": {
@@ -166,6 +169,9 @@
       ],
       "No formula preguntas; usa oraciones afirmativas.": [
         "El estudiante presenta dificultad para formular preguntas completas, ya que en lugar de ello produce oraciones afirmativas."
+      ],
+      "No aplica": [
+        ""
       ]
     },
     "Expresión de opinión y justificación": {
@@ -180,6 +186,9 @@
       ],
       "Responde brevemente y requiere apoyo para mayor claridad.": [
         "El estudiante responde de forma breve y necesita apoyo para expresar sus ideas con claridad."
+      ],
+      "No aplica": [
+        ""
       ]
     },
     "Condicionado": [
