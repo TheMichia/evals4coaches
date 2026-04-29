@@ -1,6 +1,6 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "2.4.1";
+  const versionnum = "2.5.0";
   //added reschedule link logic
   const E4EjsonVersion = 3.1;
   window.appVersion = "Evaluators";
@@ -568,7 +568,7 @@ function handleL10KidsSI() {
     const tdLabel = document.createElement("td");
     tdLabel.classList.add("areasevaluation");
 
-    // 🔥 translate only for display
+    //  translate only for display
     tdLabel.textContent = areaLabelsEN[area] || area;
 
     const tdSelect = document.createElement("td");
@@ -2753,26 +2753,41 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
     : "";
 
    // ---------- Extra areas for L10 Kids SI  ----------
-    let kidsSIExtraAreas = "";
-  if(syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10){
-    const extraAreas = document.querySelectorAll(".l10-generated");
+let kidsSIExtraAreas = "";
+
+if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
+  const extraAreas = document.querySelectorAll(".l10-generated");
+
+  const validAreas = Array.from(extraAreas).filter(area => {
+    const value = area.querySelector(".extraarea select")?.value?.trim();
+    return value && value !== "No aplica";
+  });
+
+  if (validAreas.length === 0) {
+    kidsSIExtraAreas = "";
+  } else {
     kidsSIExtraAreas = `<tr>
-        <td
-          style="color: #1C5457;  text-align: left;  padding: 1.1rem 0.5rem 0.3rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600; ">
-          &#x24D8; Habilidades Evaluadas:</td>
-      </tr>` + Array.from(extraAreas).map(area => 
-      ` <tr>
-            <td
-                style="color: #1C5457;  text-align: left;  padding: 0.5rem 0.5rem 0.4rem 10%; font-family: Segoe UI; font-size:15px; font-weight: 600;">
-                <span style="font-size: 16px; margin-right: 5px; font-weight: 400; ">&#9679;</span> ${area.querySelector(".areasevaluation")?.textContent?.trim() || ""}
-              </td>
-              </tr>
-              <tr>
-              <td
-                style="  color: #497275;  text-align: left;  padding: 0rem 0.5rem 0.9rem 15%; font-family: Segoe UI; font-size: 14px; font-weight: 400;  ">
-              ${area.querySelector(".extraarea select")?.value?.trim() || ""}</td>
-              </tr>` ).join("");
+      <td
+        style="color: #1C5457; text-align: left; padding: 1.1rem 0.5rem 0.3rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
+        &#x24D8; Habilidades Evaluadas:
+      </td>
+    </tr>` + validAreas.map(area => `
+        <tr>
+          <td
+            style="color: #1C5457; text-align: left; padding: 0.5rem 0.5rem 0.4rem 10%; font-family: Segoe UI; font-size:15px; font-weight: 600;">
+            <span style="font-size: 16px; margin-right: 5px; font-weight: 400;">&#9679;</span> 
+            ${area.querySelector(".areasevaluation")?.textContent?.trim() || ""}
+          </td>
+        </tr>
+        <tr>
+          <td
+            style="color: #497275; text-align: left; padding: 0rem 0.5rem 0.9rem 15%; font-family: Segoe UI; font-size: 14px; font-weight: 400;">
+            ${area.querySelector(".extraarea select")?.value?.trim() || ""}
+          </td>
+        </tr>
+      `).join("");
   }
+}
   
   // upd
   const selectorComments = areaDetails.join("");
