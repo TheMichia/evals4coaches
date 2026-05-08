@@ -11,6 +11,12 @@
         "Vocabulario General/ Preguntas Básicas",
         "Verbo ser/estar (1ra persona)",
         "Verbo ser/estar (3ra persona)"
+      ],
+      "IC new topics only": [
+        "Información Personal",
+        "Vocabulario General/ Preguntas Básicas",
+        "Verbo ser/estar (1ra persona)",
+        "Verbo ser/estar (3ra persona)"
       ]
     },
     "2": {
@@ -27,6 +33,10 @@
         "Verbo ser/estar",
         "Demostrativos: This/That",
         "Demostrativos: These/Those"
+      ],
+      "IC new topics only": [
+        "Demostrativos: This/That",
+        "Demostrativos: These/Those"
       ]
     },
     "3": {
@@ -41,7 +51,8 @@
         "Vocabulario General/ Preguntas Básicas",
         "Verbo ser/estar",
         "Presente Simple (1ra persona)"
-      ]
+      ],
+      "IC new topics only": ["Presente Simple (1ra persona)"]
     },
     "4": {
       "4": [
@@ -56,7 +67,8 @@
         "Vocabulario General",
         "Presente Simple (1ra persona)",
         "Presente Progresivo (1ra persona)"
-      ]
+      ],
+      "IC new topics only": ["Presente Progresivo (1ra persona)"]
     },
     "5": {
       "4": [
@@ -75,7 +87,8 @@
         "Presente Progresivo (1ra persona)",
         "Preposiciones",
         "Presente Simple (3ra persona)"
-      ]
+      ],
+      "IC new topics only": ["Preposiciones", "Presente Simple (3ra persona)"]
     },
     "6": {
       "4": [
@@ -94,7 +107,8 @@
         "Presente Simple (3ra persona)",
         "Presente Progresivo (1ra persona)",
         "Presente Progresivo (3ra persona)"
-      ]
+      ],
+      "IC new topics only": ["Presente Progresivo (3ra persona)"]
     },
     "7": {
       "4": [
@@ -113,7 +127,8 @@
         "Presente Simple (3ra persona)",
         "Presente Progresivo (1ra persona)",
         "Presente Progresivo (3ra persona)"
-      ]
+      ],
+      "IC new topics only": ["Repaso General"]
     },
     "8": {
       "4": [
@@ -136,7 +151,8 @@
         "Presente Progresivo (3ra persona)",
         "Futuro Simple (Going to)",
         "Futuro Simple (Will)"
-      ]
+      ],
+      "IC new topics only": ["Futuro Simple (Going to)", "Futuro Simple (Will)"]
     },
     "9": {
       "4": [
@@ -156,7 +172,8 @@
         "Presente Simple (1ra y 3ra persona)",
         "Presente Progresivo (1ra y 3ra persona)",
         "Futuro Simple (Going to)"
-      ]
+      ],
+      "IC new topics only": ["Repaso General"]
     },
     "10": {
       "4": [
@@ -179,7 +196,8 @@
         "Presente Progresivo (3ra persona)",
         "Futuro Simple (Going to)",
         "Futuro Simple (Will)"
-      ]
+      ],
+      "IC new topics only": ["Repaso de Tiempos Gramaticales Básicos"]
     }
   },
   "Kids (Intensivo) 8-12": {
@@ -204,7 +222,8 @@
         "Vocabulario General/ Preguntas Básicas",
         "Verbo ser/estar (1ra persona)",
         "Verbo ser/estar (3ra persona)",
-        "Presente Simple (1ra persona)"
+        "Presente Simple (1ra persona)",
+        "Presente Simple (3ra persona)"
       ]
     },
     "2": {
