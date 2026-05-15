@@ -286,7 +286,7 @@ function updateExtraInfo() {
         htmlContent += `
           <label class="extraInfoAddOns">
             ${isExit ? "Exit Condicionado" : "Condicionado"}
-            <input type="checkbox" id="condicionado" checked>
+            <input type="checkbox" id="condicionado" >
           </label>`;
       }
 
@@ -300,7 +300,7 @@ function updateExtraInfo() {
         htmlContent += `
           <label class="extraInfoAddOns">
             Include reschedule link
-            <input type="checkbox" id="reScheduleCheck" checked>
+            <input type="checkbox" id="reScheduleCheck" >
           </label>`;
       }
 
