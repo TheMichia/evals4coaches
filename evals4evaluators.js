@@ -1,8 +1,8 @@
 (() => {
   const version = "Evaluators";
-  const versionnum = "2.5.0";
-  //added reschedule link logic
-  const E4EjsonVersion = 3.1;
+  const versionnum = "2.6.0";
+  //changed the intro to Rc to have transition and for not approved changed the title
+  const E4EjsonVersion = 3.2;
   window.appVersion = "Evaluators";
   const showversion = document.getElementById("version");
   showversion.innerHTML = `${version} ${versionnum} - JSON ${E4EjsonVersion}`;
@@ -286,7 +286,7 @@ function updateExtraInfo() {
         htmlContent += `
           <label class="extraInfoAddOns">
             ${isExit ? "Exit Condicionado" : "Condicionado"}
-            <input type="checkbox" id="condicionado" >
+            <input type="checkbox" id="condicionado" checked>
           </label>`;
       }
 
@@ -2078,22 +2078,28 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
       <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
   <p
     style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
-    ¡Te saludamos de ${chosenSyllabus}!</p>
+    ¡Te saludamos desde ${chosenSyllabus}!</p>
   <!-- &#x1F31F; -->
-  <p
-    style="padding: 0 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
-    Esperamos que estés teniendo una excelente semana</p>
+     <p
+        style="padding: 0 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
+        Gracias por confiar en nosotros para acompañar el aprendizaje de tu hijo/a.
+      </p>
+         <p style="font-family: Segoe UI; font-size: 15px; font-weight: 400; color: #1C5457; margin: 1.5rem auto;">A
+        continuación, te compartimos los resultados de la evaluación.</p>
 </div>
       `;
   const normal_fail_header = `
        <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
   <p
     style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
-    ¡Te saludamos de ${chosenSyllabus}!</p>
+    ¡Te saludamos desde ${chosenSyllabus}!</p>
   <!-- &#x1F31F; -->
-  <p
-    style="padding: 0 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
-    Esperamos que estés teniendo una excelente semana</p>
+    <p
+        style="padding: 0 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
+        Gracias por confiar en nosotros para acompañar el aprendizaje de tu hijo/a.
+      </p>
+          <p style="font-family: Segoe UI; font-size: 15px; font-weight: 400; color: #1C5457; margin: 1.5rem auto;">A
+        continuación, te compartimos los resultados de la evaluación.</p>
 </div>
     `;
   // Class Paths
@@ -2164,7 +2170,7 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
   <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
   <p
     style="font-weight: 600; font-family: Segoe UI; font-size: 15px; color: #497275; margin: 0 0 0.5rem 0; padding: 0 1rem;">
-    ${syllabusVal} | Nivel ${levelVal}
+      Programa: ${syllabusVal} |  Nivel Evaluado: Nivel ${levelVal}
   </p>
 
   <p
@@ -2189,18 +2195,20 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
   <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
   <p
     style="font-weight: 600; font-family: Segoe UI; font-size: 15px; color: #497275; margin: 0 0 0.5rem 0; padding: 0 1rem;">
-    ${syllabusVal} | Nivel ${levelVal}
+      Programa: ${syllabusVal} |  Nivel Evaluado: Nivel ${levelVal}
   </p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                            
+  
+        <p
+          style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 3rem auto 0rem;">
+         Resultado:<br> Objetivo del nivel aún no alcanzado
 
-  <p
-    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
-    Evaluación No Lograda
-  </p>
+        </p>
 
-  <p class="h3"
-    style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 20%;">
-    Aunque aún no se ha alcanzado el objetivo, el esfuerzo cuenta y seguiremos trabajando para mejorar.
-  </p>
+ <p class="h3"
+          style="font-size: 15px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 20%;">
+          Seguiremos acompañando su proceso para fortalecer las habilidades necesarias de este nivel.
+        </p>
 
   <p style="font-size:15px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
     A continuación un informe detallado de la evaluación:
