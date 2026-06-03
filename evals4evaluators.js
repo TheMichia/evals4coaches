@@ -3146,15 +3146,8 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
     }
 
     // video tutorials for next steps in RC
+    // removed until approval
     const topicVideoTutorials = {
-        "Presente Simple (1ra persona)": "https://youtu.be/glUEl62W5x0",
-        "Presente Simple (3ra persona)": "https://youtu.be/UKoqa6SD36k",
-        "Presente Progresivo (1ra persona)": "https://youtu.be/O9sIAKligKg",
-        "Presente Progresivo (3ra persona)": "https://youtu.be/zMOm9xDTnSM",
-        "Futuro Simple (Going to)": "https://youtu.be/TaxWLCwMJQ0",
-        "Futuro Simple (Will)": "https://youtu.be/B_WrXyMKGs4",
-        "Pasado Simple": "https://youtu.be/06V52PuH9f8",
-        "Pasado Progresivo": "https://youtu.be/wh1j5eRMZuo"
     };
 
     let mustPracticeTopics = ``;
