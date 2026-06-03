@@ -1,12 +1,15 @@
-(() => {
-  const version = "Evaluators";
-  const versionnum = "2.6.0";
-  //changed the intro to Rc to have transition and for not approved changed the title
-  const E4EjsonVersion = 3.2;
-  window.appVersion = "Evaluators";
-  const showversion = document.getElementById("version");
-  showversion.innerHTML = `${version} ${versionnum} - JSON ${E4EjsonVersion}`;
-})();
+( () => {
+    const version = "Evaluators";
+    const versionnum = "2.7.1";
+    // Cambiar el welcome a que diga "¡Te saludamos de English4Kids!"
+    // el resto del welcome a "Gracias por confiar en nosotros para acompañar el aprendizaje de tu hijo/a. A continuación, te compartimos los resultados de la evaluación."
+    // quitar el mini mapa al inicio de la report card
+    const E4EjsonVersion = 3.;
+    window.appVersion = "Evaluators";
+    const showversion = document.getElementById("version");
+    showversion.innerHTML = `${version} ${versionnum} - JSON ${E4EjsonVersion}`;
+}
+)();
 
 // ---------- Elementos del DOM ----------
 const syllabusE4E = document.getElementById("syllabusDropdown");
@@ -17,14 +20,10 @@ const evaluatorsDropdown = document.getElementById("evaluatorsDropdown");
 const evaluatorIDSpan = document.getElementById("evaluatorID");
 const fluency = document.getElementById("fl");
 const flCommentRowEl = document.getElementById("flcomment");
-const flCommentRow = flCommentRowEl
-  ? flCommentRowEl.parentElement.parentElement
-  : null;
+const flCommentRow = flCommentRowEl ? flCommentRowEl.parentElement.parentElement : null;
 const intonation = document.getElementById("in");
 const inCommentRowEl = document.getElementById("incomment");
-const inCommentRow = inCommentRowEl
-  ? inCommentRowEl.parentElement.parentElement
-  : null;
+const inCommentRow = inCommentRowEl ? inCommentRowEl.parentElement.parentElement : null;
 const absentBtn = document.getElementById("absentBtn");
 const extraInfo = document.getElementById("extra-info");
 const totalScoreEl = document.getElementById("totalscore");
@@ -32,44 +31,67 @@ const skillTest = document.getElementById("skilltest");
 const exitevaltable = document.getElementById("exitEvalTable");
 const totalscorerow = document.getElementById("totalScoreRow");
 const prepCommentRowEl = document.getElementById("prepcomment");
-const prepCommentRow = prepCommentRowEl
-  ? prepCommentRowEl.parentElement.parentElement
-  : null;
+const prepCommentRow = prepCommentRowEl ? prepCommentRowEl.parentElement.parentElement : null;
 const diagnosticEvals = document.getElementById("diagnosticEvals");
 const ReSchedulebTN = document.getElementById("ReScheduleEmail");
 
 // ---------- Estado global ----------
-let evaluatorsData = {}; // se llena con fetch
+let evaluatorsData = {};
+// se llena con fetch
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
 // ---------- evaluatorsDropdown + evaluatorsData ----------
-fetch("evaluators.json?v=${E4EjsonVersion}")
-  .then((response) => response.json())
-  .then((data) => {
+fetch("evaluators.json?v=${E4EjsonVersion}").then( (response) => response.json()).then( (data) => {
     evaluatorsData = data;
     const evaluators = data.evaluators || {};
-    evaluatorsDropdown.innerHTML =
-      '<option value="">-- Select your credentials --</option>';
-    Object.keys(evaluators).forEach((name) => {
-      const option = document.createElement("option");
-      option.value = name;
-      option.textContent = name;
-      evaluatorsDropdown.appendChild(option);
-    });
+    evaluatorsDropdown.innerHTML = '<option value="">-- Select your credentials --</option>';
+    Object.keys(evaluators).forEach( (name) => {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        evaluatorsDropdown.appendChild(option);
+    }
+    );
 
     evaluatorsDropdown.addEventListener("change", () => {
-      const selectedName = evaluatorsDropdown.value;
-      evaluatorIDSpan.textContent =
-        selectedName && evaluators[selectedName]
-          ? evaluators[selectedName][0]
-          : "- - - -";
-    });
-  })
-  .catch((error) => {
+        const selectedName = evaluatorsDropdown.value;
+        evaluatorIDSpan.textContent = selectedName && evaluators[selectedName] ? evaluators[selectedName][0] : "- - - -";
+        if (selectedName) {
+            localStorage.setItem("selectedEvaluator", selectedName);
+        } else {
+            localStorage.removeItem("selectedEvaluator");
+        }
+    }
+    );
+
+    const savedEvaluator = localStorage.getItem("selectedEvaluator");
+
+    if (savedEvaluator && evaluators[savedEvaluator]) {
+        evaluatorsDropdown.value = savedEvaluator;
+        evaluatorsDropdown.dispatchEvent(new Event("change",{
+            bubbles: true
+        }));
+
+        // welcome message
+        const welcome = document.createElement("div");
+        welcome.className = "evaluator-welcome";
+        welcome.textContent = `Welcome back, ${savedEvaluator}! 👋`;
+        document.body.appendChild(welcome);
+        console.log(`Welcome back, ${savedEvaluator}`)
+
+        setTimeout( () => {
+            welcome.remove();
+        }
+        , 5000);
+
+    }
+}
+).catch( (error) => {
     console.error("Error al cargar el JSON:", error);
-  });
+}
+);
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
@@ -80,16 +102,17 @@ let topicBreakdownLoaded = false;
 
 // Carga inicial del JSON
 async function loadTopicBreakdown() {
-  try {
-    const response = await fetch(`topicsBreakdown.json?v=${Date.now()}`);
-    const data = await response.json();
-    console.log("✅ JSON cargado"); // Verifica todo el objeto
-    topicBreakdown = data["Topic Breakdown"] || {};
-    topicBreakdownLoaded = true;
-    console.log("📦 topicBreakdown procesado");
-  } catch (err) {
-    console.error("❌ Error loading topic breakdown:", err);
-  }
+    try {
+        const response = await fetch(`topicsBreakdown.json?v=${Date.now()}`);
+        const data = await response.json();
+        console.log("✅ JSON cargado");
+        // Verifica todo el objeto
+        topicBreakdown = data["Topic Breakdown"] || {};
+        topicBreakdownLoaded = true;
+        console.log("📦 topicBreakdown procesado");
+    } catch (err) {
+        console.error("❌ Error loading topic breakdown:", err);
+    }
 }
 
 // Llamado inicial
@@ -101,9 +124,11 @@ loadTopicBreakdown();
 
 // Habilitar absent al cambiar syllabus (comprueba existencia)
 if (syllabusE4E) {
-  syllabusE4E.addEventListener("change", () => {
-    if (absentBtn) absentBtn.disabled = false;
-  });
+    syllabusE4E.addEventListener("change", () => {
+        if (absentBtn)
+            absentBtn.disabled = false;
+    }
+    );
 }
 
 //
@@ -112,113 +137,57 @@ if (syllabusE4E) {
 
 // función para chequear si es diagnóstico
 function isDiagnosticEval(syllabusVal, levelVal) {
-  return (
-    (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 2) ||
-    (syllabusVal === "Teens 13-17 (5 horas/semana)" && levelVal === 2) ||
-    (syllabusVal === "Kids Masters" && levelVal === 2) ||
-    (syllabusVal === "Teens Masters" && levelVal === 2)
-  );
+    return ((syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 2) || (syllabusVal === "Teens 13-17 (5 horas/semana)" && levelVal === 2) || (syllabusVal === "Kids Masters" && levelVal === 2) || (syllabusVal === "Teens Masters" && levelVal === 2));
 }
 
 //función para chequear si es filter eval
 function isFilterEval(syllabusVal, levelVal, weekVal) {
-  return (
-    (syllabusVal === "Juniors 5-7" &&
-      [7, 9].includes(levelVal) &&
-      weekVal === 7) ||
-    (syllabusVal === "Kids (Intensivo) 8-12" &&
-      [2, 4, 7, 9].includes(levelVal) &&
-      weekVal === 13) ||
-    (syllabusVal === "Kids (Super Intensivo) 8-12" &&
-      [4, 7, 9].includes(levelVal) &&
-      weekVal === 7) ||
-    (syllabusVal === "Kids Masters" &&
-      [4, 8].includes(levelVal) &&
-      weekVal === 3) ||
-    (syllabusVal === "Kids Masters 2" &&
-      [4, 8].includes(levelVal) &&
-      weekVal === 3) ||
-    (syllabusVal === "Teens 13-17 (3hrs/week)" &&
-      [2, 4, 7, 9].includes(levelVal) &&
-      weekVal === 13) ||
-    (syllabusVal === "Teens 13-17 (5hrs/week)" &&
-      [4, 7, 9].includes(levelVal) &&
-      weekVal === 7) ||
-    (syllabusVal === "Teens Masters" &&
-      [4, 8].includes(levelVal) &&
-      weekVal === 3) ||
-    (syllabusVal === "Teens Masters 2" &&
-      [4, 8].includes(levelVal) &&
-      weekVal === 3) ||
-    (syllabusVal === "Adults (3hrs/week)" &&
-      [5, 8].includes(levelVal) &&
-      weekVal === 3) ||
-    (syllabusVal === "Adults (5hrs/week)" &&
-      [5, 8].includes(levelVal) &&
-      weekVal === 3) ||
-    (syllabusVal === "Adults Masters (3hrs/week)" &&
-      [5, 8].includes(levelVal) &&
-      weekVal === 3) ||
-    (syllabusVal === "Adults Masters (5hrs/week)" &&
-      [5, 8].includes(levelVal) &&
-      weekVal === 3)
-  );
+    return ((syllabusVal === "Juniors 5-7" && [7, 9].includes(levelVal) && weekVal === 7) || (syllabusVal === "Kids (Intensivo) 8-12" && [2, 4, 7, 9].includes(levelVal) && weekVal === 13) || (syllabusVal === "Kids (Super Intensivo) 8-12" && [4, 7, 9].includes(levelVal) && weekVal === 7) || (syllabusVal === "Kids Masters" && [4, 8].includes(levelVal) && weekVal === 3) || (syllabusVal === "Kids Masters 2" && [4, 8].includes(levelVal) && weekVal === 3) || (syllabusVal === "Teens 13-17 (3hrs/week)" && [2, 4, 7, 9].includes(levelVal) && weekVal === 13) || (syllabusVal === "Teens 13-17 (5hrs/week)" && [4, 7, 9].includes(levelVal) && weekVal === 7) || (syllabusVal === "Teens Masters" && [4, 8].includes(levelVal) && weekVal === 3) || (syllabusVal === "Teens Masters 2" && [4, 8].includes(levelVal) && weekVal === 3) || (syllabusVal === "Adults (3hrs/week)" && [5, 8].includes(levelVal) && weekVal === 3) || (syllabusVal === "Adults (5hrs/week)" && [5, 8].includes(levelVal) && weekVal === 3) || (syllabusVal === "Adults Masters (3hrs/week)" && [5, 8].includes(levelVal) && weekVal === 3) || (syllabusVal === "Adults Masters (5hrs/week)" && [5, 8].includes(levelVal) && weekVal === 3));
 }
 
 //función para chequear si es exit eval
 function isExitEval(syllabusVal, levelVal, weekVal) {
-  const syllabusLower = syllabusVal.toLowerCase();
+    const syllabusLower = syllabusVal.toLowerCase();
 
-  return (
-    !syllabusVal.startsWith("Juniors") &&
-    ((levelVal === 10 && (weekVal === 7 || weekVal === 13)) ||
-      (levelVal === 12 && weekVal === 3) ||
-      (syllabusVal.includes("Masters") && levelVal === 10 && weekVal === 3) ||
-      (syllabusLower.includes("adults (5hrs/week)") &&
-        levelVal === 10 &&
-        weekVal === 3)) &&
-    !(
-      (syllabusLower.includes("kids intensivo") &&
-        levelVal === 10 &&
-        weekVal === 7) ||
-      (syllabusLower.includes("teens 13-17 (3hrs/week)") &&
-        levelVal === 10 &&
-        weekVal === 7)
-    )
-  );
+    return (!syllabusVal.startsWith("Juniors") && ((levelVal === 10 && (weekVal === 7 || weekVal === 13)) || (levelVal === 12 && weekVal === 3) || (syllabusVal.includes("Masters") && levelVal === 10 && weekVal === 3) || (syllabusLower.includes("adults (5hrs/week)") && levelVal === 10 && weekVal === 3)) && !((syllabusLower.includes("kids intensivo") && levelVal === 10 && weekVal === 7) || (syllabusLower.includes("teens 13-17 (3hrs/week)") && levelVal === 10 && weekVal === 7)));
 }
 
 // función para ocultar/mostrar las tablas topictable
 function hideTopicTables(diagnostic) {
-  const tables = document.querySelectorAll(".topictable");
-  tables.forEach((table) => {
-    table.style.display = diagnostic ? "none" : "";
-  });
+    const tables = document.querySelectorAll(".topictable");
+    tables.forEach( (table) => {
+        table.style.display = diagnostic ? "none" : "";
+    }
+    );
 }
 
 // listener en el dropdown de weeks
 weekE4E.addEventListener("change", () => {
-  const syllabusVal = syllabusE4E.value; // obtiene syllabus seleccionado
-  const levelVal = parseInt(levelE4E.value, 10); // convierte a número
+    const syllabusVal = syllabusE4E.value;
+    // obtiene syllabus seleccionado
+    const levelVal = parseInt(levelE4E.value, 10);
+    // convierte a número
 
-  const diagnostic = isDiagnosticEval(syllabusVal, levelVal);
+    const diagnostic = isDiagnosticEval(syllabusVal, levelVal);
 
-  hideTopicTables(diagnostic);
+    hideTopicTables(diagnostic);
 
-  // opcional: también puedes mostrar/ocultar tu sección diagnosticEvals
-  if (diagnosticEvals) {
-    diagnosticEvals.style.display = diagnostic ? "" : "none";
-  }
-});
+    // opcional: también puedes mostrar/ocultar tu sección diagnosticEvals
+    if (diagnosticEvals) {
+        diagnosticEvals.style.display = diagnostic ? "" : "none";
+    }
+}
+);
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
 // helper para comparar floats con tolerancia
-function nearlyEqual(a, b, eps = 1e-6) {
-  if (!Number.isFinite(a) || !Number.isFinite(b)) return false;
-  return Math.abs(a - b) <= eps;
+function nearlyEqual(a, b, eps=1e-6) {
+    if (!Number.isFinite(a) || !Number.isFinite(b))
+        return false;
+    return Math.abs(a - b) <= eps;
 }
 
 //
@@ -226,88 +195,84 @@ function nearlyEqual(a, b, eps = 1e-6) {
 //
 
 function updateExtraInfo() {
-  const syllabusVal = syllabusE4E?.value || "";
-  const levelVal = parseInt(levelE4E?.value, 10) || 0;
-  const weekVal = parseInt(weekE4E?.value, 10) || 0;
-  handleL10KidsSI();
-  // 1) Mostrar / poblar preparación (solo Masters 2)
-  const isprep = !!(
-    syllabusVal && syllabusVal.toLowerCase().includes("masters 2")
-  );
+    const syllabusVal = syllabusE4E?.value || "";
+    const levelVal = parseInt(levelE4E?.value, 10) || 0;
+    const weekVal = parseInt(weekE4E?.value, 10) || 0;
+    handleL10KidsSI();
+    // 1) Mostrar / poblar preparación (solo Masters 2)
+    const isprep = !!(syllabusVal && syllabusVal.toLowerCase().includes("masters 2"));
 
-  if (prepCommentRow) {
-    if (isprep) {
-      prepCommentRow.classList.remove("hidden");
-      if (prepCommentRowEl && prepCommentRowEl.options.length === 0) {
-        populatePreparation(prepCommentRowEl);
-      }
-    } else {
-      prepCommentRow.classList.add("hidden");
-    }
-  }
-
-  // 2) Exit eval
-  const isExit = isExitEval(syllabusVal, levelVal, weekVal);
-
-  // 3) Diagnostic evals
-  const isDiag = isDiagnosticEval(syllabusVal, levelVal);
-  if (diagnosticEvals) {
-    diagnosticEvals.classList.toggle("hidden", !isDiag);
-  }
-
-  if (!isDiag) {
-    // 4) Exit table
-    if (exitevaltable) {
-      exitevaltable.classList.toggle("hidden", !isExit);
-      if (!isExit && skillTest) {
-        skillTest.value = "";
-        if (typeof calculateFinalScore === "function") calculateFinalScore();
-      }
+    if (prepCommentRow) {
+        if (isprep) {
+            prepCommentRow.classList.remove("hidden");
+            if (prepCommentRowEl && prepCommentRowEl.options.length === 0) {
+                populatePreparation(prepCommentRowEl);
+            }
+        } else {
+            prepCommentRow.classList.add("hidden");
+        }
     }
 
-    // 5) Total score row
-    if (totalscorerow) {
-      totalscorerow.classList.toggle("hidden", isExit);
+    // 2) Exit eval
+    const isExit = isExitEval(syllabusVal, levelVal, weekVal);
+
+    // 3) Diagnostic evals
+    const isDiag = isDiagnosticEval(syllabusVal, levelVal);
+    if (diagnosticEvals) {
+        diagnosticEvals.classList.toggle("hidden", !isDiag);
     }
 
-    // 6) Extra info (CONDICIONADO + RESCHEDULE)
-    if (extraInfo) {
-      let htmlContent = "";
+    if (!isDiag) {
+        // 4) Exit table
+        if (exitevaltable) {
+            exitevaltable.classList.toggle("hidden", !isExit);
+            if (!isExit && skillTest) {
+                skillTest.value = "";
+                if (typeof calculateFinalScore === "function")
+                    calculateFinalScore();
+            }
+        }
 
-      //  Obtener score
-      let scoreVal = isExit
-        ? parseFloat(finalScore?.textContent.trim())
-        : parseFloat(totalScoreEl?.textContent.trim());
+        // 5) Total score row
+        if (totalscorerow) {
+            totalscorerow.classList.toggle("hidden", isExit);
+        }
 
-      const fixedScore = Number(scoreVal?.toFixed(2));
+        // 6) Extra info (CONDICIONADO + RESCHEDULE)
+        if (extraInfo) {
+            let htmlContent = "";
 
-      // Condicionado
-      if (fixedScore === 7) {
-        htmlContent += `
+            //  Obtener score
+            let scoreVal = isExit ? parseFloat(finalScore?.textContent.trim()) : parseFloat(totalScoreEl?.textContent.trim());
+
+            const fixedScore = Number(scoreVal?.toFixed(2));
+
+            // Condicionado
+            if (fixedScore === 7) {
+                htmlContent += `
           <label class="extraInfoAddOns">
             ${isExit ? "Exit Condicionado" : "Condicionado"}
             <input type="checkbox" id="condicionado" checked>
           </label>`;
-      }
+            }
 
-      //  Reschedule
-      const isFilter = isFilterEval(syllabusVal, levelVal, weekVal);
+            //  Reschedule
+            const isFilter = isFilterEval(syllabusVal, levelVal, weekVal);
 
-      const shouldShowReschedule =
-        (isExit && fixedScore < 7) || (isFilter && fixedScore < 7);
+            const shouldShowReschedule = (isExit && fixedScore < 7) || (isFilter && fixedScore < 7);
 
-      if (shouldShowReschedule) {
-        htmlContent += `
+            if (shouldShowReschedule) {
+                htmlContent += `
           <label class="extraInfoAddOns">
             Include reschedule link
             <input type="checkbox" id="reScheduleCheck" >
           </label>`;
-      }
+            }
 
-      // remove
-      extraInfo.innerHTML = htmlContent;
+            // remove
+            extraInfo.innerHTML = htmlContent;
+        }
     }
-  }
 }
 
 //
@@ -315,55 +280,60 @@ function updateExtraInfo() {
 //
 
 function calculateFinalScore() {
-  const totalValue = parseFloat(totalScoreEl?.textContent) || 0;
+    const totalValue = parseFloat(totalScoreEl?.textContent) || 0;
 
-  // si skillTest es input
-  let skillTestScore = 0;
-  if (skillTest) {
-    if ("value" in skillTest) {
-      skillTestScore = parseFloat(skillTest.value) || 0;
-    } else {
-      // fallback
-      skillTestScore = parseFloat(skillTest.textContent) || 0;
+    // si skillTest es input
+    let skillTestScore = 0;
+    if (skillTest) {
+        if ("value"in skillTest) {
+            skillTestScore = parseFloat(skillTest.value) || 0;
+        } else {
+            // fallback
+            skillTestScore = parseFloat(skillTest.textContent) || 0;
+        }
     }
-  }
 
-  const finalScoreValue = totalValue * 0.6 + skillTestScore * 0.4;
-  if (finalScore) {
-    finalScore.textContent = Number.isFinite(finalScoreValue)
-      ? Math.round(finalScoreValue * 10) / 10
-      : "";
-  }
+    const finalScoreValue = totalValue * 0.6 + skillTestScore * 0.4;
+    if (finalScore) {
+        finalScore.textContent = Number.isFinite(finalScoreValue) ? Math.round(finalScoreValue * 10) / 10 : "";
+    }
 }
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-["gr", "pr", "in", "fl", "co"].forEach((id) => {
-  const el = document.getElementById(id);
-  if (el) {
-    el.addEventListener("change", () => {
-      updateExtraInfo();
+["gr", "pr", "in", "fl", "co"].forEach( (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.addEventListener("change", () => {
+            updateExtraInfo();
 
-      // si la exit eval table está visible, recalcular score
-      if (exitevaltable && !exitevaltable.classList.contains("hidden")) {
-        calculateFinalScore();
-      }
-    });
-  }
-});
+            // si la exit eval table está visible, recalcular score
+            if (exitevaltable && !exitevaltable.classList.contains("hidden")) {
+                calculateFinalScore();
+            }
+        }
+        );
+    }
+}
+);
 
-if (weekE4E) weekE4E.addEventListener("change", updateExtraInfo);
-if (levelE4E) levelE4E.addEventListener("change", updateExtraInfo);
-if (syllabusE4E) syllabusE4E.addEventListener("change", updateExtraInfo);
+if (weekE4E)
+    weekE4E.addEventListener("change", updateExtraInfo);
+if (levelE4E)
+    levelE4E.addEventListener("change", updateExtraInfo);
+if (syllabusE4E)
+    syllabusE4E.addEventListener("change", updateExtraInfo);
 
 // skillTest es un <input type="number">: recalcula final y luego extraInfo al cambiar
 if (skillTest) {
-  skillTest.addEventListener("input", () => {
-    if (typeof calculateFinalScore === "function") calculateFinalScore();
-    updateExtraInfo();
-  });
+    skillTest.addEventListener("input", () => {
+        if (typeof calculateFinalScore === "function")
+            calculateFinalScore();
+        updateExtraInfo();
+    }
+    );
 }
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
@@ -371,16 +341,19 @@ if (skillTest) {
 
 // ---------- Helpers ----------
 function getSyllabusBucket(syllabus) {
-  if (!syllabus) return null;
-  if (syllabus.startsWith("Juniors")) return "Juniors";
-  if (syllabus.startsWith("Kids") && !syllabus.includes("Masters"))
-    return "Kids";
-  if (syllabus.startsWith("Teens") && !syllabus.includes("Master"))
-    return "Teens";
-  if (syllabus.startsWith("Adults") && !syllabus.includes("Masters"))
-    return "Adults";
-  if (syllabus.includes("Masters")) return "Masters";
-  return null;
+    if (!syllabus)
+        return null;
+    if (syllabus.startsWith("Juniors"))
+        return "Juniors";
+    if (syllabus.startsWith("Kids") && !syllabus.includes("Masters"))
+        return "Kids";
+    if (syllabus.startsWith("Teens") && !syllabus.includes("Master"))
+        return "Teens";
+    if (syllabus.startsWith("Adults") && !syllabus.includes("Masters"))
+        return "Adults";
+    if (syllabus.includes("Masters"))
+        return "Masters";
+    return null;
 }
 
 //
@@ -389,21 +362,24 @@ function getSyllabusBucket(syllabus) {
 
 // Normaliza distintos formatos de datos a un array de items
 function normalizeCommentsData(data) {
-  if (!data) return [];
-  if (Array.isArray(data)) return data; // array de strings
-  if (typeof data === "object") {
-    // objeto: transformarlo en array de {label, html}
-    return Object.keys(data).map((key) => {
-      const val = data[key];
-      const html = Array.isArray(val)
-        ? val[0]
-        : typeof val === "string"
-          ? val
-          : "";
-      return { label: key, html };
-    });
-  }
-  return [];
+    if (!data)
+        return [];
+    if (Array.isArray(data))
+        return data;
+    // array de strings
+    if (typeof data === "object") {
+        // objeto: transformarlo en array de {label, html}
+        return Object.keys(data).map( (key) => {
+            const val = data[key];
+            const html = Array.isArray(val) ? val[0] : typeof val === "string" ? val : "";
+            return {
+                label: key,
+                html
+            };
+        }
+        );
+    }
+    return [];
 }
 
 //
@@ -412,44 +388,35 @@ function normalizeCommentsData(data) {
 
 // Busca comentarios probando varias estructuras del JSON
 function getCommentsArray(bucket, category) {
-  if (!evaluatorsData) return [];
+    if (!evaluatorsData)
+        return [];
 
-  // 1) bucket-first: evaluatorsData[bucket][category]
-  if (bucket && evaluatorsData[bucket] && evaluatorsData[bucket][category]) {
-    return normalizeCommentsData(evaluatorsData[bucket][category]);
-  }
+    // 1) bucket-first: evaluatorsData[bucket][category]
+    if (bucket && evaluatorsData[bucket] && evaluatorsData[bucket][category]) {
+        return normalizeCommentsData(evaluatorsData[bucket][category]);
+    }
 
-  // 2) evaluatorsData.comments[bucket][category]
-  if (
-    evaluatorsData.comments &&
-    evaluatorsData.comments[bucket] &&
-    evaluatorsData.comments[bucket][category]
-  ) {
-    return normalizeCommentsData(evaluatorsData.comments[bucket][category]);
-  }
+    // 2) evaluatorsData.comments[bucket][category]
+    if (evaluatorsData.comments && evaluatorsData.comments[bucket] && evaluatorsData.comments[bucket][category]) {
+        return normalizeCommentsData(evaluatorsData.comments[bucket][category]);
+    }
 
-  // 3) category-first: evaluatorsData[category][bucket]
-  if (evaluatorsData[category] && evaluatorsData[category][bucket]) {
-    return normalizeCommentsData(evaluatorsData[category][bucket]);
-  }
+    // 3) category-first: evaluatorsData[category][bucket]
+    if (evaluatorsData[category] && evaluatorsData[category][bucket]) {
+        return normalizeCommentsData(evaluatorsData[category][bucket]);
+    }
 
-  // 4) commentsPerArea: evaluatorsData.commentsPerArea[category][bucket]  <-- tu caso
-  if (
-    evaluatorsData.commentsPerArea &&
-    evaluatorsData.commentsPerArea[category] &&
-    evaluatorsData.commentsPerArea[category][bucket]
-  ) {
-    return normalizeCommentsData(
-      evaluatorsData.commentsPerArea[category][bucket],
-    );
-  }
+    // 4) commentsPerArea: evaluatorsData.commentsPerArea[category][bucket]  <-- tu caso
+    if (evaluatorsData.commentsPerArea && evaluatorsData.commentsPerArea[category] && evaluatorsData.commentsPerArea[category][bucket]) {
+        return normalizeCommentsData(evaluatorsData.commentsPerArea[category][bucket], );
+    }
 
-  // 5) evaluatorsData[category] direct array
-  if (Array.isArray(evaluatorsData[category])) {
-    return normalizeCommentsData(evaluatorsData[category]);
-  }
+    // 5) evaluatorsData[category] direct array
+    if (Array.isArray(evaluatorsData[category])) {
+        return normalizeCommentsData(evaluatorsData[category]);
+    }
 
-  return [];
+    return [];
 }
 
 //
@@ -458,70 +425,74 @@ function getCommentsArray(bucket, category) {
 
 // Pobla el select con comentarios según categoría y syllabus
 function populateComments(selectElement, category, syllabus) {
-  selectElement.innerHTML = ""; // limpiar
-  const bucket = getSyllabusBucket(syllabus);
-  const items = getCommentsArray(bucket, category);
+    selectElement.innerHTML = "";
+    // limpiar
+    const bucket = getSyllabusBucket(syllabus);
+    const items = getCommentsArray(bucket, category);
 
-  if (items && items.length) {
-    items.forEach((item) => {
-      const opt = document.createElement("option");
-      if (typeof item === "string") {
-        opt.value = item;
-        opt.textContent = item;
-      } else if (item && typeof item === "object" && item.label) {
-        opt.value = item.html || ""; // aquí guardamos el HTML de detalle
-        opt.textContent = item.label; // y mostramos la frase resumen
-      } else {
+    if (items && items.length) {
+        items.forEach( (item) => {
+            const opt = document.createElement("option");
+            if (typeof item === "string") {
+                opt.value = item;
+                opt.textContent = item;
+            } else if (item && typeof item === "object" && item.label) {
+                opt.value = item.html || "";
+                // aquí guardamos el HTML de detalle
+                opt.textContent = item.label;
+                // y mostramos la frase resumen
+            } else {
+                opt.value = "";
+                opt.textContent = String(item);
+            }
+            selectElement.appendChild(opt);
+        }
+        );
+    } else {
+        const opt = document.createElement("option");
         opt.value = "";
-        opt.textContent = String(item);
-      }
-      selectElement.appendChild(opt);
-    });
-  } else {
-    const opt = document.createElement("option");
-    opt.value = "";
-    opt.textContent = "Choose a Syllabus first";
-    selectElement.appendChild(opt);
-  }
+        opt.textContent = "Choose a Syllabus first";
+        selectElement.appendChild(opt);
+    }
 
-  // DEBUG
-  // console.log({ syllabus, bucket, category, items });
+    // DEBUG
+    // console.log({ syllabus, bucket, category, items });
 }
 
 //pobla preparation - caso masters2 kids
 function populatePreparation(selectEl) {
-  if (!selectEl) return;
+    if (!selectEl)
+        return;
 
-  // buscar datos en el JSON
-  const prepObj = evaluatorsData?.commentsPerArea?.["Preparación"];
-  if (!prepObj) {
-    // si no hay datos, vacía y sal
+    // buscar datos en el JSON
+    const prepObj = evaluatorsData?.commentsPerArea?.["Preparación"];
+    if (!prepObj) {
+        // si no hay datos, vacía y sal
+        selectEl.innerHTML = "";
+        return;
+    }
+
+    // guardar selección previa para restaurarla después
+    const prevValue = selectEl.value;
+
+    // repoblar
     selectEl.innerHTML = "";
-    return;
-  }
+    Object.keys(prepObj).forEach( (label) => {
+        const opt = document.createElement("option");
+        opt.value = label;
+        opt.textContent = label;
+        selectEl.appendChild(opt);
+    }
+    );
 
-  // guardar selección previa para restaurarla después
-  const prevValue = selectEl.value;
-
-  // repoblar
-  selectEl.innerHTML = "";
-  Object.keys(prepObj).forEach((label) => {
-    const opt = document.createElement("option");
-    opt.value = label;
-    opt.textContent = label;
-    selectEl.appendChild(opt);
-  });
-
-  // restaurar selección previa si existe entre las nuevas opciones
-  if (
-    prevValue &&
-    Array.from(selectEl.options).some((o) => o.value === prevValue)
-  ) {
-    selectEl.value = prevValue;
-  } else {
-    // si no había selección previa, seleccionar la primera opción (opcional)
-    if (selectEl.options.length > 0) selectEl.selectedIndex = 0;
-  }
+    // restaurar selección previa si existe entre las nuevas opciones
+    if (prevValue && Array.from(selectEl.options).some( (o) => o.value === prevValue)) {
+        selectEl.value = prevValue;
+    } else {
+        // si no había selección previa, seleccionar la primera opción (opcional)
+        if (selectEl.options.length > 0)
+            selectEl.selectedIndex = 0;
+    }
 }
 
 //
@@ -530,66 +501,69 @@ function populatePreparation(selectEl) {
 
 // Special case for L10 Kids SI - Opinion y Justificación, Describir Imágenes, Hacer Preguntas
 function handleL10KidsSI() {
-  const syllabus = syllabusE4E?.value || "";
-  const level = parseInt(levelE4E?.value, 10);
+    const syllabus = syllabusE4E?.value || "";
+    const level = parseInt(levelE4E?.value, 10);
 
-  const anchorRow = document.getElementById("l10KidsSI");
-  if (!anchorRow) return;
+    const anchorRow = document.getElementById("l10KidsSI");
+    if (!anchorRow)
+        return;
 
-  const isTarget =
-    syllabus === "Kids (Super Intensivo) 8-12" && level === 10;
+    const isTarget = syllabus === "Kids (Super Intensivo) 8-12" && level === 10;
 
-  document.querySelectorAll(".l10-generated").forEach((row) => row.remove());
+    document.querySelectorAll(".l10-generated").forEach( (row) => row.remove());
 
-  if (!isTarget) {
-    anchorRow.classList.add("hidden");
-    return;
-  }
+    if (!isTarget) {
+        anchorRow.classList.add("hidden");
+        return;
+    }
 
-  anchorRow.classList.remove("hidden");
+    anchorRow.classList.remove("hidden");
 
-  //  DISPLAY (EN)
-  const areaLabelsEN = {
-    "Expresión de opinión y justificación": "Opinion & Justification",
-    "Descripción de imágenes": "Describing a Picture",
-    "Formulación de preguntas": "Asking Questions",
-  };
+    //  DISPLAY (EN)
+    const areaLabelsEN = {
+        "Expresión de opinión y justificación": "Opinion & Justification",
+        "Descripción de imágenes": "Describing a Picture",
+        "Formulación de preguntas": "Asking Questions",
+    };
 
-  //  SOURCE (must match JSON keys EXACTLY)
-  const areas = Object.keys(areaLabelsEN);
+    //  SOURCE (must match JSON keys EXACTLY)
+    const areas = Object.keys(areaLabelsEN);
 
-  areas.forEach((area) => {
-    const data = evaluatorsData?.commentsPerArea?.[area];
-    if (!data) return;
+    areas.forEach( (area) => {
+        const data = evaluatorsData?.commentsPerArea?.[area];
+        if (!data)
+            return;
 
-    const tr = document.createElement("tr");
-    tr.classList.add("additionalComment", "l10-generated");
+        const tr = document.createElement("tr");
+        tr.classList.add("additionalComment", "l10-generated");
 
-    const tdLabel = document.createElement("td");
-    tdLabel.classList.add("areasevaluation");
+        const tdLabel = document.createElement("td");
+        tdLabel.classList.add("areasevaluation");
 
-    //  translate only for display
-    tdLabel.textContent = areaLabelsEN[area] || area;
+        //  translate only for display
+        tdLabel.textContent = areaLabelsEN[area] || area;
 
-    const tdSelect = document.createElement("td");
-    tdSelect.classList.add("extraarea");
+        const tdSelect = document.createElement("td");
+        tdSelect.classList.add("extraarea");
 
-    const select = document.createElement("select");
+        const select = document.createElement("select");
 
-    Object.keys(data).forEach((label) => {
-      const opt = document.createElement("option");
-      opt.value = data[label][0];
-      opt.textContent = label;
-      select.appendChild(opt);
-    });
+        Object.keys(data).forEach( (label) => {
+            const opt = document.createElement("option");
+            opt.value = data[label][0];
+            opt.textContent = label;
+            select.appendChild(opt);
+        }
+        );
 
-    tdSelect.appendChild(select);
+        tdSelect.appendChild(select);
 
-    tr.appendChild(tdLabel);
-    tr.appendChild(tdSelect);
+        tr.appendChild(tdLabel);
+        tr.appendChild(tdSelect);
 
-    anchorRow.insertAdjacentElement("afterend", tr);
-  });
+        anchorRow.insertAdjacentElement("afterend", tr);
+    }
+    );
 }
 
 //
@@ -598,44 +572,48 @@ function handleL10KidsSI() {
 
 // ---------- Eventos: FLUENCY / INTONATION ----------
 fluency.addEventListener("change", () => {
-  const syllabusVal = syllabusE4E.value;
-  const levelVal = parseInt(levelE4E.value, 10);
-  if (isDiagnosticEval(syllabusVal, levelVal)) return;
+    const syllabusVal = syllabusE4E.value;
+    const levelVal = parseInt(levelE4E.value, 10);
+    if (isDiagnosticEval(syllabusVal, levelVal))
+        return;
 
-  const value = parseFloat(fluency.value);
-  const select = document.getElementById("flcomment");
-  const syllabus = syllabusE4E.value;
+    const value = parseFloat(fluency.value);
+    const select = document.getElementById("flcomment");
+    const syllabus = syllabusE4E.value;
 
-  if (value <= 1.0) {
-    flCommentRow.classList.remove("hidden");
-    populateComments(select, "Fluidez", syllabus);
-  } else {
-    flCommentRow.classList.add("hidden");
-    select.innerHTML = "";
-  }
-});
+    if (value <= 1.0) {
+        flCommentRow.classList.remove("hidden");
+        populateComments(select, "Fluidez", syllabus);
+    } else {
+        flCommentRow.classList.add("hidden");
+        select.innerHTML = "";
+    }
+}
+);
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
 intonation.addEventListener("change", () => {
-  const syllabusVal = syllabusE4E.value;
-  const levelVal = parseInt(levelE4E.value, 10);
-  if (isDiagnosticEval(syllabusVal, levelVal)) return;
+    const syllabusVal = syllabusE4E.value;
+    const levelVal = parseInt(levelE4E.value, 10);
+    if (isDiagnosticEval(syllabusVal, levelVal))
+        return;
 
-  const value = parseFloat(intonation.value);
-  const select = document.getElementById("incomment");
-  const syllabus = syllabusE4E.value;
+    const value = parseFloat(intonation.value);
+    const select = document.getElementById("incomment");
+    const syllabus = syllabusE4E.value;
 
-  if (value <= 1.0) {
-    inCommentRow.classList.remove("hidden");
-    populateComments(select, "Entonación", syllabus);
-  } else {
-    inCommentRow.classList.add("hidden");
-    select.innerHTML = "";
-  }
-});
+    if (value <= 1.0) {
+        inCommentRow.classList.remove("hidden");
+        populateComments(select, "Entonación", syllabus);
+    } else {
+        inCommentRow.classList.add("hidden");
+        select.innerHTML = "";
+    }
+}
+);
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
@@ -643,35 +621,31 @@ intonation.addEventListener("change", () => {
 
 // ------------------ helpers pequeños ------------------
 function refreshVisibleComments() {
-  const syllabus = syllabusE4E.value;
+    const syllabus = syllabusE4E.value;
 
-  // Fluency: si la fila está visible, repobla
-  const flSelect = document.getElementById("flcomment");
-  if (!flCommentRow.classList.contains("hidden")) {
-    const prevLabel =
-      flSelect.options[flSelect.selectedIndex]?.textContent || null;
-    populateComments(flSelect, "Fluidez", syllabus);
-    if (prevLabel) {
-      const idx = Array.from(flSelect.options).findIndex(
-        (o) => o.textContent === prevLabel,
-      );
-      if (idx >= 0) flSelect.selectedIndex = idx;
+    // Fluency: si la fila está visible, repobla
+    const flSelect = document.getElementById("flcomment");
+    if (!flCommentRow.classList.contains("hidden")) {
+        const prevLabel = flSelect.options[flSelect.selectedIndex]?.textContent || null;
+        populateComments(flSelect, "Fluidez", syllabus);
+        if (prevLabel) {
+            const idx = Array.from(flSelect.options).findIndex( (o) => o.textContent === prevLabel, );
+            if (idx >= 0)
+                flSelect.selectedIndex = idx;
+        }
     }
-  }
 
-  // Intonation: si la fila está visible, repobla
-  const inSelect = document.getElementById("incomment");
-  if (!inCommentRow.classList.contains("hidden")) {
-    const prevLabel =
-      inSelect.options[inSelect.selectedIndex]?.textContent || null;
-    populateComments(inSelect, "Entonación", syllabus);
-    if (prevLabel) {
-      const idx = Array.from(inSelect.options).findIndex(
-        (o) => o.textContent === prevLabel,
-      );
-      if (idx >= 0) inSelect.selectedIndex = idx;
+    // Intonation: si la fila está visible, repobla
+    const inSelect = document.getElementById("incomment");
+    if (!inCommentRow.classList.contains("hidden")) {
+        const prevLabel = inSelect.options[inSelect.selectedIndex]?.textContent || null;
+        populateComments(inSelect, "Entonación", syllabus);
+        if (prevLabel) {
+            const idx = Array.from(inSelect.options).findIndex( (o) => o.textContent === prevLabel, );
+            if (idx >= 0)
+                inSelect.selectedIndex = idx;
+        }
     }
-  }
 }
 
 //
@@ -680,52 +654,65 @@ function refreshVisibleComments() {
 
 // ------------------ reaccionar al cambio de syllabus ------------------
 syllabusE4E.addEventListener("change", () => {
-  // Si no hay syllabus seleccionado, limpiamos los selects visibles
-  const syllabus = syllabusE4E.value;
-  if (!syllabus) {
-    if (!flCommentRow.classList.contains("hidden"))
-      document.getElementById("flcomment").innerHTML = "";
-    if (!inCommentRow.classList.contains("hidden"))
-      document.getElementById("incomment").innerHTML = "";
-    return;
-  }
+    // Si no hay syllabus seleccionado, limpiamos los selects visibles
+    const syllabus = syllabusE4E.value;
+    if (!syllabus) {
+        if (!flCommentRow.classList.contains("hidden"))
+            document.getElementById("flcomment").innerHTML = "";
+        if (!inCommentRow.classList.contains("hidden"))
+            document.getElementById("incomment").innerHTML = "";
+        return;
+    }
 
-  // Re-popular solo los selects que estén visibles
-  refreshVisibleComments();
-});
+    // Re-popular solo los selects que estén visibles
+    refreshVisibleComments();
+}
+);
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-(function () {
-  function waitForEvaluatorReady(timeout = 4000) {
-    return new Promise((resolve) => {
-      const start = Date.now();
-      (function check() {
-        const domReady = document.readyState !== "loading";
-        const hasOptions =
-          document.getElementById("evaluatorsDropdown") &&
-          document.getElementById("evaluatorsDropdown").options.length > 1;
-        const dataReady =
-          typeof evaluatorsData !== "undefined" &&
-          (evaluatorsData.evaluators || Object.keys(evaluatorsData).length > 0);
-        if (domReady && (hasOptions || dataReady)) return resolve(true);
-        if (Date.now() - start > timeout) return resolve(false);
-        setTimeout(check, 50);
-      })();
-    });
-  }
+(function() {
+    function waitForEvaluatorReady(timeout=4000) {
+        return new Promise( (resolve) => {
+            const start = Date.now();
+            (function check() {
+                const domReady = document.readyState !== "loading";
+                const hasOptions = document.getElementById("evaluatorsDropdown") && document.getElementById("evaluatorsDropdown").options.length > 1;
+                const dataReady = typeof evaluatorsData !== "undefined" && (evaluatorsData.evaluators || Object.keys(evaluatorsData).length > 0);
+                if (domReady && (hasOptions || dataReady))
+                    return resolve(true);
+                if (Date.now() - start > timeout)
+                    return resolve(false);
+                setTimeout(check, 50);
+            }
+            )();
+        }
+        );
+    }
 
-  async function showEvaluatorModal() {
-    await waitForEvaluatorReady();
+    async function showEvaluatorModal() {
+        await waitForEvaluatorReady();
+        const savedEvaluator = localStorage.getItem("selectedEvaluator");
 
-    // overlay + box
-    const overlay = document.createElement("div");
-    overlay.className = "modal-overlay";
-    const box = document.createElement("div");
-    box.className = "modal-box";
-    box.innerHTML = `
+        if (savedEvaluator && document.getElementById("evaluatorsDropdown")) {
+            const realEval = document.getElementById("evaluatorsDropdown");
+
+            if (Array.from(realEval.options).some( (o) => o.value === savedEvaluator)) {
+                realEval.value = savedEvaluator;
+                realEval.dispatchEvent(new Event("change",{
+                    bubbles: true
+                }));
+                return;
+            }
+        }
+        // overlay + box
+        const overlay = document.createElement("div");
+        overlay.className = "modal-overlay";
+        const box = document.createElement("div");
+        box.className = "modal-box";
+        box.innerHTML = `
       <h3 class="modal-title">Knock Knock! Who's there?</h3>
       <p class="modal-desc">Select your name to continue.</p>
       <div class="modal-grid">
@@ -735,135 +722,144 @@ syllabusE4E.addEventListener("change", () => {
         </div>
       </div>
     `;
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
-    document.documentElement.style.overflow = "hidden";
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+        document.documentElement.style.overflow = "hidden";
 
-    const container = box.querySelector("#modalEvalContainer");
-    const btnConfirm = box.querySelector("#modalConfirm");
+        const container = box.querySelector("#modalEvalContainer");
+        const btnConfirm = box.querySelector("#modalConfirm");
 
-    // clonar select real si tiene opciones; si no generarlo desde evaluatorsData
-    const realEval = document.getElementById("evaluatorsDropdown");
-    let modalSelect;
-    if (realEval && realEval.options.length > 1) {
-      modalSelect = realEval.cloneNode(true);
-      modalSelect.id = "modal_evaluatorsDropdown";
-      modalSelect.disabled = false;
-    } else {
-      modalSelect = document.createElement("select");
-      modalSelect.id = "modal_evaluatorsDropdown";
-      if (evaluatorsData && evaluatorsData.evaluators) {
-        modalSelect.innerHTML =
-          '<option value="">-- Select evaluator --</option>';
-        Object.keys(evaluatorsData.evaluators).forEach((name) => {
-          const o = document.createElement("option");
-          o.value = name;
-          o.textContent = name;
-          modalSelect.appendChild(o);
-        });
-      } else {
-        modalSelect.innerHTML = '<option value="">(no evaluators)</option>';
-      }
-    }
-
-    modalSelect.className = "modal-select";
-    container.appendChild(modalSelect);
-    modalSelect.focus();
-
-    // función de shake reutilizable
-    function shakeAndFocus() {
-      box.animate(
-        [
-          { transform: "translateX(0)" },
-          { transform: "translateX(-8px)" },
-          { transform: "translateX(8px)" },
-          { transform: "translateX(0)" },
-        ],
-        { duration: 220, easing: "ease-out" },
-      );
-      // tiny visual cue en el select
-      modalSelect.style.boxShadow = "0 0 0 3px rgba(255,0,0,0.12)";
-      setTimeout(() => (modalSelect.style.boxShadow = ""), 420);
-      modalSelect.focus();
-    }
-
-    // confirmar: aplicar valor al select real y disparar change
-    btnConfirm.addEventListener("click", () => {
-      const chosen = modalSelect.value;
-      if (!chosen) {
-        shakeAndFocus();
-        return;
-      }
-
-      if (realEval) {
-        if (!Array.from(realEval.options).some((o) => o.value === chosen)) {
-          const opt = document.createElement("option");
-          opt.value = chosen;
-          opt.textContent =
-            modalSelect.options[modalSelect.selectedIndex]?.textContent ||
-            chosen;
-          realEval.appendChild(opt);
+        // clonar select real si tiene opciones; si no generarlo desde evaluatorsData
+        const realEval = document.getElementById("evaluatorsDropdown");
+        let modalSelect;
+        if (realEval && realEval.options.length > 1) {
+            modalSelect = realEval.cloneNode(true);
+            modalSelect.id = "modal_evaluatorsDropdown";
+            modalSelect.disabled = false;
+        } else {
+            modalSelect = document.createElement("select");
+            modalSelect.id = "modal_evaluatorsDropdown";
+            if (evaluatorsData && evaluatorsData.evaluators) {
+                modalSelect.innerHTML = '<option value="">-- Select evaluator --</option>';
+                Object.keys(evaluatorsData.evaluators).forEach( (name) => {
+                    const o = document.createElement("option");
+                    o.value = name;
+                    o.textContent = name;
+                    modalSelect.appendChild(o);
+                }
+                );
+            } else {
+                modalSelect.innerHTML = '<option value="">(no evaluators)</option>';
+            }
         }
-        realEval.value = chosen;
-        realEval.dispatchEvent(new Event("change", { bubbles: true }));
-      } else {
-        console.warn("evaluatorsDropdown no encontrado en DOM.");
-      }
 
-      if (overlay && overlay.parentElement) document.body.removeChild(overlay);
-      document.documentElement.style.overflow = "";
-    });
+        modalSelect.className = "modal-select";
+        container.appendChild(modalSelect);
+        modalSelect.focus();
 
-    // accesibilidad: Escape -> shake (no cierra)
-    function onKey(e) {
-      if (e.key === "Escape") {
-        shakeAndFocus();
-      }
-      if (e.key === "Enter" && document.activeElement === modalSelect) {
-        // permitir enter para confirmar también (si hay selección)
-        btnConfirm.click();
-      }
+        // función de shake reutilizable
+        function shakeAndFocus() {
+            box.animate([{
+                transform: "translateX(0)"
+            }, {
+                transform: "translateX(-8px)"
+            }, {
+                transform: "translateX(8px)"
+            }, {
+                transform: "translateX(0)"
+            }, ], {
+                duration: 220,
+                easing: "ease-out"
+            }, );
+            // tiny visual cue en el select
+            modalSelect.style.boxShadow = "0 0 0 3px rgba(255,0,0,0.12)";
+            setTimeout( () => (modalSelect.style.boxShadow = ""), 420);
+            modalSelect.focus();
+        }
+
+        // confirmar: aplicar valor al select real y disparar change
+        btnConfirm.addEventListener("click", () => {
+            const chosen = modalSelect.value;
+            if (!chosen) {
+                shakeAndFocus();
+                return;
+            }
+
+            localStorage.setItem("selectedEvaluator", chosen);
+            console.log("Saved:", localStorage.getItem("selectedEvaluator"));
+
+            if (realEval) {
+                if (!Array.from(realEval.options).some( (o) => o.value === chosen)) {
+                    const opt = document.createElement("option");
+                    opt.value = chosen;
+                    opt.textContent = modalSelect.options[modalSelect.selectedIndex]?.textContent || chosen;
+                    realEval.appendChild(opt);
+                }
+                realEval.value = chosen;
+                realEval.dispatchEvent(new Event("change",{
+                    bubbles: true
+                }));
+            } else {
+                console.warn("evaluatorsDropdown no encontrado en DOM.");
+            }
+
+            if (overlay && overlay.parentElement)
+                document.body.removeChild(overlay);
+            document.documentElement.style.overflow = "";
+        }
+        );
+
+        // accesibilidad: Escape -> shake (no cierra)
+        function onKey(e) {
+            if (e.key === "Escape") {
+                shakeAndFocus();
+            }
+            if (e.key === "Enter" && document.activeElement === modalSelect) {
+                // permitir enter para confirmar también (si hay selección)
+                btnConfirm.click();
+            }
+        }
+        document.addEventListener("keydown", onKey);
+
+        // limpiar listener cuando se cierra
+        const observer = new MutationObserver( () => {
+            if (!document.body.contains(box)) {
+                document.removeEventListener("keydown", onKey);
+                observer.disconnect();
+            }
+        }
+        );
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
     }
-    document.addEventListener("keydown", onKey);
 
-    // limpiar listener cuando se cierra
-    const observer = new MutationObserver(() => {
-      if (!document.body.contains(box)) {
-        document.removeEventListener("keydown", onKey);
-        observer.disconnect();
-      }
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () =>
-      setTimeout(showEvaluatorModal, 60),
-    );
-  } else {
-    setTimeout(showEvaluatorModal, 60);
-  }
-})();
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => setTimeout(showEvaluatorModal, 60), );
+    } else {
+        setTimeout(showEvaluatorModal, 60);
+    }
+}
+)();
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
 function absentsE4E() {
-  const syllabus = syllabusE4E.value || "";
-  if (!syllabus) {
-    showPopup(
-      "<h3>😓 Oops...</h3><p>Please select a valid syllabus first.</p>",
-    );
-    absentBtn.disabled = true;
-    return;
-  }
+    const syllabus = syllabusE4E.value || "";
+    if (!syllabus) {
+        showPopup("<h3>😓 Oops...</h3><p>Please select a valid syllabus first.</p>", );
+        absentBtn.disabled = true;
+        return;
+    }
 
-  let message = "";
+    let message = "";
 
-  if (syllabus.startsWith("Adults")) {
-    // ---- mensaje para estudiante ----
-    message = `
+    if (syllabus.startsWith("Adults")) {
+        // ---- mensaje para estudiante ----
+        message = `
     <html lang="en">
 
 <head>
@@ -999,9 +995,9 @@ function absentsE4E() {
 
 </html>
     `;
-  } else {
-    // ---- mensaje para padres ----
-    message = `
+    } else {
+        // ---- mensaje para padres ----
+        message = `
    <html lang="en">
 
 <head>
@@ -1138,167 +1134,144 @@ function absentsE4E() {
 </html>
 
     `;
-  }
+    }
 
-  // Copiar al portapapeles
-  const tempEl = document.createElement("textarea");
-  tempEl.style.position = "fixed"; // evitar scroll raro
-  tempEl.style.opacity = "0";
-  tempEl.value = message; // aquí va el string literal con &#
-  document.body.appendChild(tempEl);
-  tempEl.select();
-  document.execCommand("copy");
-  document.body.removeChild(tempEl);
+    // Copiar al portapapeles
+    const tempEl = document.createElement("textarea");
+    tempEl.style.position = "fixed";
+    // evitar scroll raro
+    tempEl.style.opacity = "0";
+    tempEl.value = message;
+    // aquí va el string literal con &#
+    document.body.appendChild(tempEl);
+    tempEl.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempEl);
 
-  showPopup(
-    `<h3>✅Success!</h3><p>Absent-Report for <b>${syllabus}</b> successfully copied.</p><h4 class="previewTitle">Preview:</h4>
-        <div class="smallPreview"> ${message} </div>`,
-  );
+    showPopup(`<h3>✅Success!</h3><p>Absent-Report for <b>${syllabus}</b> successfully copied.</p><h4 class="previewTitle">Preview:</h4>
+        <div class="smallPreview"> ${message} </div>`, );
 }
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 async function evaluatorsCopyResults() {
-  // Espera hasta que topicBreakdown esté listo
-  while (!topicBreakdownLoaded) {
-    console.log("⏳ Esperando que topicBreakdown cargue...");
-    await new Promise((res) => setTimeout(res, 100));
-  }
-
-  console.log("✅ topicBreakdown cargado, generando RC");
-  // ---------- helpers ----------
-  const safe = (s) =>
-    s === null || s === undefined ? "" : String(s).replace(/\n/g, "<br>");
-  const toNum = (v) => {
-    const n = Number(String(v ?? "").trim());
-    return Number.isNaN(n) ? NaN : n;
-  };
-  const describeScore = (val) => {
-    switch (String(val)) {
-      case "2.0":
-        return "¡Excelente!";
-      case "1.5":
-        return "¡Muy buen trabajo!";
-      case "1.0":
-        return "Casi lo logras, pero necesitas mejorar.";
-      case "0.5":
-      case "0":
-        return "Necesitas mejorar, creemos en tí.";
-      default:
-        return "";
+    // Espera hasta que topicBreakdown esté listo
+    while (!topicBreakdownLoaded) {
+        console.log("⏳ Esperando que topicBreakdown cargue...");
+        await new Promise( (res) => setTimeout(res, 100));
     }
-  };
 
-  // ---------- little getters ----------
-  const getGrammarScore = () =>
-    (
-      document.getElementById("skilltest")?.value ||
-      document.getElementById("grammarScore")?.value ||
-      document.getElementById("grammarTest")?.value ||
-      ""
-    ).toString();
-
-  const getOralScore = () =>
-    (
-      document.getElementById("totalscore")?.textContent ||
-      document.getElementById("totalscore")?.value ||
-      document.getElementById("oralScore")?.value ||
-      document.getElementById("oralTotal")?.textContent ||
-      ""
-    ).toString();
-
-  const getFinalScore = () =>
-    (
-      document.getElementById("finalScore")?.textContent ||
-      document.getElementById("finalscore")?.textContent ||
-      ""
-    ).toString();
-
-  // ---------- read DOM/state ----------
-  const syllabus = document.getElementById("syllabusDropdown")?.value || "";
-  const syllabusLower = syllabus.toLowerCase();
-  const levelVal = Number(window.selectedlevel || 0);
-  const weekVal = Number(window.selectedweek || 0);
-  const totalScore = Number(window.totalScore ?? NaN);
-  const finalScoreText = getFinalScore();
-  const evaluatorName = (
-    document.getElementById("evaluatorsDropdown")?.value ||
-    document.getElementById("evaluatorsDropdown")?.selectedOptions?.[0]?.text ||
-    ""
-  ).trim();
-  let evaluatorID =
-    document.getElementById("evaluatorID")?.textContent?.trim() || "";
-  if (!evaluatorID && window.evaluatorsData && evaluatorName) {
-    const ev =
-      (window.evaluatorsData &&
-        window.evaluatorsData.evaluators &&
-        window.evaluatorsData.evaluators[evaluatorName]) ||
-      null;
-    evaluatorID = ev ? String(ev[0]) : evaluatorID;
-  }
-
-  // ---------- isExit logic ----------
-  const syllabusVal = syllabus || "";
-  const isExit = isExitEval(syllabusVal, levelVal, weekVal);
-
-  // ---------- topics extraction (robust) ----------
-  const approvedTopics = [];
-  const reinforceTopics = [];
-  const opportunityTopics = []; // {title, answer, correction}
-  const sections = Array.from(document.querySelectorAll("#topicsList section"));
-
-  sections.forEach((section, idx) => {
-    const container = section.querySelector(".topic-container") || section;
-    const title =
-      container.querySelector(".topic-title h3")?.innerText?.trim() ||
-      "Tema desconocido";
-
-    // detect status by button class, fallback to topicsStatus
-    const yesBtn = container.querySelector(".toggle-cell.yes");
-    const noBtn = container.querySelector(".toggle-cell.no");
-    let choice;
-    if (yesBtn) choice = "yes";
-    else if (noBtn) choice = "no";
-    else
-      choice =
-        (window.topicsStatus && window.topicsStatus[String(idx)]) || undefined;
-
-    if (choice === "yes") approvedTopics.push(title);
-    if (choice === "no") reinforceTopics.push(title);
-
-    const answerEl =
-      container.querySelector(`#answer${idx}`) ||
-      document.getElementById(`answer${idx}`);
-    const corrEl =
-      container.querySelector(`#correction${idx}`) ||
-      document.getElementById(`correction${idx}`);
-    const answerText = answerEl
-      ? (answerEl.innerText || answerEl.textContent || "").trim()
-      : "";
-    const correctionText = corrEl
-      ? (corrEl.innerText || corrEl.textContent || "").trim()
-      : "";
-
-    if (answerText !== "" || correctionText !== "") {
-      opportunityTopics.push({
-        title,
-        answer: answerText,
-        correction: correctionText,
-      });
+    console.log("✅ topicBreakdown cargado, generando RC");
+    // ---------- helpers ----------
+    const safe = (s) => s === null || s === undefined ? "" : String(s).replace(/\n/g, "<br>");
+    const toNum = (v) => {
+        const n = Number(String(v ?? "").trim());
+        return Number.isNaN(n) ? NaN : n;
     }
-  });
+    ;
+    const describeScore = (val) => {
+        switch (String(val)) {
+        case "2.0":
+            return "¡Excelente!";
+        case "1.5":
+            return "¡Muy buen trabajo!";
+        case "1.0":
+            return "Casi lo logras, pero necesitas mejorar.";
+        case "0.5":
+        case "0":
+            return "Necesitas mejorar, creemos en tí.";
+        default:
+            return "";
+        }
+    }
+    ;
 
-   
-  // ---------- performance areas ----------
-  const areas = [
-    { id: "gr", label: "Gramática" },
-    { id: "fl", label: "Fluidez" },
-    { id: "pr", label: "Pronunciación" },
-    { id: "co", label: "Comprensión" },
-    { id: "in", label: "Entonación" },
-  ];
-  const desempeñoHTML = `
+    // ---------- little getters ----------
+    const getGrammarScore = () => (document.getElementById("skilltest")?.value || document.getElementById("grammarScore")?.value || document.getElementById("grammarTest")?.value || "").toString();
+
+    const getOralScore = () => (document.getElementById("totalscore")?.textContent || document.getElementById("totalscore")?.value || document.getElementById("oralScore")?.value || document.getElementById("oralTotal")?.textContent || "").toString();
+
+    const getFinalScore = () => (document.getElementById("finalScore")?.textContent || document.getElementById("finalscore")?.textContent || "").toString();
+
+    // ---------- read DOM/state ----------
+    const syllabus = document.getElementById("syllabusDropdown")?.value || "";
+    const syllabusLower = syllabus.toLowerCase();
+    const levelVal = Number(window.selectedlevel || 0);
+    const weekVal = Number(window.selectedweek || 0);
+    const totalScore = Number(window.totalScore ?? NaN);
+    const finalScoreText = getFinalScore();
+    const evaluatorName = (document.getElementById("evaluatorsDropdown")?.value || document.getElementById("evaluatorsDropdown")?.selectedOptions?.[0]?.text || "").trim();
+    let evaluatorID = document.getElementById("evaluatorID")?.textContent?.trim() || "";
+    if (!evaluatorID && window.evaluatorsData && evaluatorName) {
+        const ev = (window.evaluatorsData && window.evaluatorsData.evaluators && window.evaluatorsData.evaluators[evaluatorName]) || null;
+        evaluatorID = ev ? String(ev[0]) : evaluatorID;
+    }
+
+    // ---------- isExit logic ----------
+    const syllabusVal = syllabus || "";
+    const isExit = isExitEval(syllabusVal, levelVal, weekVal);
+
+    // ---------- topics extraction (robust) ----------
+    const approvedTopics = [];
+    const reinforceTopics = [];
+    const opportunityTopics = [];
+    // {title, answer, correction}
+    const sections = Array.from(document.querySelectorAll("#topicsList section"));
+
+    sections.forEach( (section, idx) => {
+        const container = section.querySelector(".topic-container") || section;
+        const title = container.querySelector(".topic-title h3")?.innerText?.trim() || "Tema desconocido";
+
+        // detect status by button class, fallback to topicsStatus
+        const yesBtn = container.querySelector(".toggle-cell.yes");
+        const noBtn = container.querySelector(".toggle-cell.no");
+        let choice;
+        if (yesBtn)
+            choice = "yes";
+        else if (noBtn)
+            choice = "no";
+        else
+            choice = (window.topicsStatus && window.topicsStatus[String(idx)]) || undefined;
+
+        if (choice === "yes")
+            approvedTopics.push(title);
+        if (choice === "no")
+            reinforceTopics.push(title);
+
+        const answerEl = container.querySelector(`#answer${idx}`) || document.getElementById(`answer${idx}`);
+        const corrEl = container.querySelector(`#correction${idx}`) || document.getElementById(`correction${idx}`);
+        const answerText = answerEl ? (answerEl.innerText || answerEl.textContent || "").trim() : "";
+        const correctionText = corrEl ? (corrEl.innerText || corrEl.textContent || "").trim() : "";
+
+        if (answerText !== "" || correctionText !== "") {
+            opportunityTopics.push({
+                title,
+                answer: answerText,
+                correction: correctionText,
+            });
+        }
+    }
+    );
+
+    // ---------- performance areas ----------
+    const areas = [{
+        id: "gr",
+        label: "Gramática"
+    }, {
+        id: "fl",
+        label: "Fluidez"
+    }, {
+        id: "pr",
+        label: "Pronunciación"
+    }, {
+        id: "co",
+        label: "Comprensión"
+    }, {
+        id: "in",
+        label: "Entonación"
+    }, ];
+    const desempeñoHTML = `
   <div class="desempeño"
     style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
     <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%; table-layout: fixed;">
@@ -1310,10 +1283,9 @@ async function evaluatorsCopyResults() {
         </tr>
       </thead>
       <tbody>
-          ${areas
-            .map((a) => {
-              const val = document.getElementById(a.id)?.value ?? "";
-              return ` 
+          ${areas.map( (a) => {
+        const val = document.getElementById(a.id)?.value ?? "";
+        return ` 
         <tr>
           <td width="40%" align="right"
             style="font-family: Segoe UI; padding: 10px 10px 10px; font-weight: 400; color: #1C5457; text-align: right; font-size: 15px;">
@@ -1322,27 +1294,24 @@ async function evaluatorsCopyResults() {
             style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
             ${describeScore(val)}</td>
         </tr>`;
-            })
-            .join("")}
+    }
+    ).join("")}
         </tbody>
       </table>
     </div>`;
 
-  // pronunciation  comments
-  const pronunciationMistakes =
-    document.getElementById("pronunciationMistakes")?.value?.trim() || "";
-  const extraCommentsFallback =
-    document.getElementById("extraComments")?.value?.trim() || "";
+    // pronunciation  comments
+    const pronunciationMistakes = document.getElementById("pronunciationMistakes")?.value?.trim() || "";
+    const extraCommentsFallback = document.getElementById("extraComments")?.value?.trim() || "";
 
-  const areaDetails = [];
-  const inVal = toNum(document.getElementById("in")?.value ?? NaN);
-  const flVal = toNum(document.getElementById("fl")?.value ?? NaN);
+    const areaDetails = [];
+    const inVal = toNum(document.getElementById("in")?.value ?? NaN);
+    const flVal = toNum(document.getElementById("fl")?.value ?? NaN);
 
-  if (!Number.isNaN(inVal) && inVal <= 1.0) {
-    const txt = document.getElementById("incomment")?.value?.trim() || "";
-    if (txt)
-      areaDetails.push(
-        ` <tr>
+    if (!Number.isNaN(inVal) && inVal <= 1.0) {
+        const txt = document.getElementById("incomment")?.value?.trim() || "";
+        if (txt)
+            areaDetails.push(` <tr>
           <td
             style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0.9rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
             &#x24D8; Detalle de Entonación:</td>
@@ -1351,13 +1320,12 @@ async function evaluatorsCopyResults() {
           <td
             style="  color: #497275;  text-align: left;  padding: 0rem 0.5rem 0.9rem 10%; font-family: Segoe UI; font-size:14px; font-weight: 400; border-bottom: 1px dotted rgb(18, 96, 100, 0.2); ">
             ${safe(txt)}</td>
-        </tr>`,
-      );
-  }
-  if (!Number.isNaN(flVal) && flVal <= 1.0) {
-    const txt = document.getElementById("flcomment")?.value?.trim() || "";
-    if (txt)
-      areaDetails.push(` 
+        </tr>`, );
+    }
+    if (!Number.isNaN(flVal) && flVal <= 1.0) {
+        const txt = document.getElementById("flcomment")?.value?.trim() || "";
+        if (txt)
+            areaDetails.push(` 
 
         <tr>
           <td
@@ -1370,10 +1338,10 @@ async function evaluatorsCopyResults() {
             ${safe(txt)}</td>
         </tr>
                 `);
-  }
-  // === Preparación (Masters 2) – versión larga sin leer JSON ===
-  const PREPARACION_MAP = {
-    "No se preparó": `
+    }
+    // === Preparación (Masters 2) – versión larga sin leer JSON ===
+    const PREPARACION_MAP = {
+        "No se preparó": `
 
         <tr>
           <td
@@ -1392,7 +1360,7 @@ async function evaluatorsCopyResults() {
         ¡Anímate a prepararte mejor la próxima vez!
           </td>
         </tr>`,
-    "Se preparó, pero pudo hacerlo mejor": `
+        "Se preparó, pero pudo hacerlo mejor": `
 
         <tr>
           <td
@@ -1411,7 +1379,7 @@ async function evaluatorsCopyResults() {
       ¡Sigue practicando, estás mejorando!
           </td>
         </tr>`,
-    "Se preparó bien y logró integrar la mitad o más de los temas": `
+        "Se preparó bien y logró integrar la mitad o más de los temas": `
 
         <tr>
           <td
@@ -1434,42 +1402,34 @@ async function evaluatorsCopyResults() {
           buen camino!
           </td>
         </tr>`,
-  };
+    };
 
-  if (syllabusVal.includes("Masters 2")) {
-    const txt = (document.getElementById("prepcomment")?.value || "").trim();
-    if (txt) {
-      const largo = PREPARACION_MAP[txt]; // coincide exacto con una de las 3 claves
-      if (largo) {
-        areaDetails.push(largo + "");
-      } else {
-        // fallback
-        areaDetails.push(` ${safe(txt)}`);
-      }
+    if (syllabusVal.includes("Masters 2")) {
+        const txt = (document.getElementById("prepcomment")?.value || "").trim();
+        if (txt) {
+            const largo = PREPARACION_MAP[txt];
+            // coincide exacto con una de las 3 claves
+            if (largo) {
+                areaDetails.push(largo + "");
+            } else {
+                // fallback
+                areaDetails.push(` ${safe(txt)}`);
+            }
+        }
     }
-  }
 
-  // ---------- grammar/oral/final details for exit ----------
-  const grammarScore = getGrammarScore();
-  const oralScore = getOralScore();
-  const finalDisplay =
-    finalScoreText || (Number.isFinite(totalScore) ? String(totalScore) : "");
+    // ---------- grammar/oral/final details for exit ----------
+    const grammarScore = getGrammarScore();
+    const oralScore = getOralScore();
+    const finalDisplay = finalScoreText || (Number.isFinite(totalScore) ? String(totalScore) : "");
 
-  console.log(
-    "DEBUG isExit:",
-    isExit,
-    "finalscore",
-    finalDisplay,
-    "totalScore:",
-    totalScore,
-  );
+    console.log("DEBUG isExit:", isExit, "finalscore", finalDisplay, "totalScore:", totalScore, );
 
-  // ---------- reschedule logic ----------
-  let rescheduleBox = "";
-  const addRescheduleLink =
-    document.getElementById("reScheduleCheck")?.checked === true;
-  if (addRescheduleLink) {
-    rescheduleBox = `
+    // ---------- reschedule logic ----------
+    let rescheduleBox = "";
+    const addRescheduleLink = document.getElementById("reScheduleCheck")?.checked === true;
+    if (addRescheduleLink) {
+        rescheduleBox = `
                            <!-- REPROGRAMAR EVAL -->
         <table width="60%" align="center" cellspacing="0" cellpadding="0"
           style="border-collapse: collapse; border: none; background-color: rgba(218, 230, 230, 0.2); border-radius: 20px; margin: 4rem auto;">
@@ -1498,15 +1458,14 @@ async function evaluatorsCopyResults() {
         </table>
 
                        `;
-  }
+    }
 
-  // ---------- condicionado logic ----------
-  const isCondicionado =
-    document.getElementById("condicionado")?.checked === true;
+    // ---------- condicionado logic ----------
+    const isCondicionado = document.getElementById("condicionado")?.checked === true;
 
-  let condicionadoText = ``;
-  if (syllabusVal.includes("Juniors")) {
-    condicionadoText = `
+    let condicionadoText = ``;
+    if (syllabusVal.includes("Juniors")) {
+        condicionadoText = `
 
         <tr>
           <td
@@ -1541,9 +1500,8 @@ async function evaluatorsCopyResults() {
             </ul>
           </td>
         </tr>`;
-  } 
-  else if (syllabusVal.includes("Kids")) {
-    condicionadoText = ` <tr>
+    } else if (syllabusVal.includes("Kids")) {
+        condicionadoText = ` <tr>
           <td
             style="  color: #126064;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
 
@@ -1575,8 +1533,8 @@ async function evaluatorsCopyResults() {
           </td>
         </tr>
 `;
-  } else if (syllabusVal.includes("Teens")) {
-    condicionadoText = ` <tr>
+    } else if (syllabusVal.includes("Teens")) {
+        condicionadoText = ` <tr>
           <td
             style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
             <span style="color: #E87373; font-weight: bold; margin-right: 5px;">&#9888;</span>
@@ -1608,10 +1566,9 @@ async function evaluatorsCopyResults() {
           </td>
         </tr>
       `;
-  } 
-  else if (syllabusVal.includes("Adults")) {
-    if (syllabusVal.includes("Masters")) {
-      condicionadoText = `
+    } else if (syllabusVal.includes("Adults")) {
+        if (syllabusVal.includes("Masters")) {
+            condicionadoText = `
 
         <tr>
           <td
@@ -1648,9 +1605,8 @@ async function evaluatorsCopyResults() {
               nivel.
           </td>
         </tr>`;
-    } 
-    else {
-      condicionadoText = `    <tr>
+        } else {
+            condicionadoText = `    <tr>
           <td
             style="  color: #1C5457;  text-align: left;  padding: 0.9rem 0.5rem 0rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
             <span style="color: #E87373; font-weight: bold; margin-right: 5px;">&#9888;</span>
@@ -1689,13 +1645,13 @@ async function evaluatorsCopyResults() {
         </tr>
 
       `;
+        }
     }
-  }
-  // all condicionados updated
-  // ---------- Build full headers (complete texts) ----------
-  // ---***EXIT*** Kids and teens---
-  // updated
-  const header_pass_kids_teens = `
+    // all condicionados updated
+    // ---------- Build full headers (complete texts) ----------
+    // ---***EXIT*** Kids and teens---
+    // updated
+    const header_pass_kids_teens = `
     <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
   <p
     style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
@@ -1722,8 +1678,8 @@ async function evaluatorsCopyResults() {
   </p>
 </div>
       `;
-  // upd
-  const resultado_global_pass_kids_teens = `
+    // upd
+    const resultado_global_pass_kids_teens = `
     <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
 
   <p
@@ -1779,8 +1735,8 @@ async function evaluatorsCopyResults() {
   </table>
 </div>
     `;
-  // updated
-  const header_fail_kids_teens = `
+    // updated
+    const header_fail_kids_teens = `
  <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
   <p
     style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
@@ -1801,9 +1757,9 @@ async function evaluatorsCopyResults() {
 </div>
     `;
 
-  const semanas4kidsteens = syllabusVal.includes("Masters") ? 4 : 8;
-  // upd
-  const resultado_global_fail_kids_teens = `
+    const semanas4kidsteens = syllabusVal.includes("Masters") ? 4 : 8;
+    // upd
+    const resultado_global_fail_kids_teens = `
    <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
 
   <p
@@ -1859,9 +1815,9 @@ async function evaluatorsCopyResults() {
   </p>
 </div>
 `;
-  // ---***EXIT***ADULTS---
-  // upd
-  const header_pass_adults = `
+    // ---***EXIT***ADULTS---
+    // upd
+    const header_pass_adults = `
       <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
   <p
     style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
@@ -1889,8 +1845,8 @@ Durante este tiempo, no solo has fortalecido tus <b>habilidades lingüísticas</
   </p>
 </div>
 `;
-  // u
-  const header_fail_adults = `
+    // u
+    const header_fail_adults = `
    <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
   <p
     style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
@@ -1909,8 +1865,8 @@ Durante este tiempo, no solo has fortalecido tus <b>habilidades lingüísticas</
   </p>
 </div>
 `;
-  // upd
-  const resultado_global_fail_adults = `
+    // upd
+    const resultado_global_fail_adults = `
     <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
 
   <p
@@ -1938,8 +1894,8 @@ Durante este tiempo, no solo has fortalecido tus <b>habilidades lingüísticas</
     meta.
   </p>
 </div>`;
-  // upd
-  const resultado_global_pass_adults = `
+    // upd
+    const resultado_global_pass_adults = `
     <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
 
   <p
@@ -1999,9 +1955,9 @@ Durante este tiempo, no solo has fortalecido tus <b>habilidades lingüísticas</
     ¡Te animamos a seguir practicando para avanzar al siguiente nivel!
   </p>
 </div>`;
-  // ---***EXIT***JUNIORS---
-  // u
-  const header_pass_juniors = `
+    // ---***EXIT***JUNIORS---
+    // u
+    const header_pass_juniors = `
      <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
   <p
     style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
@@ -2033,8 +1989,8 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
   </p>
 </div>
     `;
-  // u
-  const header_fail_juniors = `
+    // u
+    const header_fail_juniors = `
 
     <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
   <p
@@ -2070,104 +2026,90 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
 </div>
     `;
 
-  // ---NORMAL EVALUATIONS---
-  let chosenSyllabus = syllabusLower.includes("adults")
-    ? "English4Adults"
-    : "English4Kids";
-  const normal_pass_header = `
+    // ---NORMAL EVALUATIONS---
+    let chosenSyllabus = syllabusLower.includes("adults") ? "English4Adults" : "English4Kids";
+    let welcomeApproach = syllabusLower.includes("adults") ? "tu aprendizaje" : "el aprendizaje de tu hijo/a";
+    const normal_pass_header = `
       <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
   <p
     style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
-    ¡Te saludamos desde ${chosenSyllabus}!</p>
+    ¡Te saludamos de ${chosenSyllabus}!</p>
   <!-- &#x1F31F; -->
      <p
         style="padding: 0 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
-        Gracias por confiar en nosotros para acompañar el aprendizaje de tu hijo/a.
+        Gracias por confiar en nosotros para acompañar ${welcomeApproach}.
       </p>
          <p style="font-family: Segoe UI; font-size: 15px; font-weight: 400; color: #1C5457; margin: 1.5rem auto;">A
         continuación, te compartimos los resultados de la evaluación.</p>
 </div>
       `;
-  const normal_fail_header = `
+    const normal_fail_header = `
        <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
   <p
     style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
-    ¡Te saludamos desde ${chosenSyllabus}!</p>
+    ¡Te saludamos de ${chosenSyllabus}!</p>
   <!-- &#x1F31F; -->
     <p
         style="padding: 0 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
-        Gracias por confiar en nosotros para acompañar el aprendizaje de tu hijo/a.
+        Gracias por confiar en nosotros para acompañar ${welcomeApproach}.
       </p>
           <p style="font-family: Segoe UI; font-size: 15px; font-weight: 400; color: #1C5457; margin: 1.5rem auto;">A
         continuación, te compartimos los resultados de la evaluación.</p>
 </div>
     `;
-  // Class Paths
-  // Helper
-  const includesAny = (text, arr) =>
-    arr.some((item) => text.includes(item.toLowerCase()));
+    // Class Paths
+    // Helper
+    const includesAny = (text, arr) => arr.some( (item) => text.includes(item.toLowerCase()));
 
-  // Mapping centralizado
-  const classGroups = [
-    {
-      match: ["kids (super intensivo) 8-12", "teens 13-17 (3hrs/week)"],
-      B: "SI_0-10",
-      S: "0-10",
-    },
-    {
-      match: ["kids (intensivo) 8-12", "teens 13-17 (3hrs/week)"],
-      B: "I_0-10",
-      S: "0-10",
-    },
-    {
-      match: ["juniors 5-7"],
-      B: "J_1-10",
-      S: "1-10",
-    },
-    {
-      match: [
-        "kids masters",
-        "kids masters 2",
-        "teens masters",
-        "teens masters 2",
-      ],
-      B: "M_1-10",
-      S: "1-10",
-    },
-    {
-      match: ["adults (5hrs/week)", "adults masters (5hrs/week)"],
-      B: "A5_1-10",
-      S: "1-10",
-    },
-    {
-      match: ["adults (3hrs/week)", "adults masters (3hrs/week)"],
-      B: "A3_1-12",
-      S: "1-12",
-    },
-  ];
+    // Mapping centralizado
+    const classGroups = [{
+        match: ["kids (super intensivo) 8-12", "teens 13-17 (3hrs/week)"],
+        B: "SI_0-10",
+        S: "0-10",
+    }, {
+        match: ["kids (intensivo) 8-12", "teens 13-17 (3hrs/week)"],
+        B: "I_0-10",
+        S: "0-10",
+    }, {
+        match: ["juniors 5-7"],
+        B: "J_1-10",
+        S: "1-10",
+    }, {
+        match: ["kids masters", "kids masters 2", "teens masters", "teens masters 2", ],
+        B: "M_1-10",
+        S: "1-10",
+    }, {
+        match: ["adults (5hrs/week)", "adults masters (5hrs/week)"],
+        B: "A5_1-10",
+        S: "1-10",
+    }, {
+        match: ["adults (3hrs/week)", "adults masters (3hrs/week)"],
+        B: "A3_1-12",
+        S: "1-12",
+    }, ];
 
-  let SclassPathLvl = null;
-  let BclassPathLvl = null;
+    let SclassPathLvl = null;
+    let BclassPathLvl = null;
 
-  // Resolver
-  for (const group of classGroups) {
-    if (includesAny(syllabusLower, group.match)) {
-      BclassPathLvl = group.B;
-      SclassPathLvl = group.S;
-      break;
+    // Resolver
+    for (const group of classGroups) {
+        if (includesAny(syllabusLower, group.match)) {
+            BclassPathLvl = group.B;
+            SclassPathLvl = group.S;
+            break;
+        }
     }
-  }
 
-  // Final URLs
-  const S_ClassPath = `https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/S-CP_${SclassPathLvl}_A${levelVal}.png`;
+    // Final URLs
+    const S_ClassPath = `https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/S-CP_${SclassPathLvl}_A${levelVal}.png`;
 
-  const B_ClassPath = `https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/B-CP_${BclassPathLvl}_A${levelVal}.png`;
+    const B_ClassPath = `https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Class%20Paths/B-CP_${BclassPathLvl}_A${levelVal}.png`;
 
-  // --- RESULTADO GLOBAL
-  // upd
-  let resultado_global_pass_normal = `
+    // --- RESULTADO GLOBAL
+    // upd removed:   <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
+    let resultado_global_pass_normal = `
     <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
-  <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
+
   <p
     style="font-weight: 600; font-family: Segoe UI; font-size: 15px; color: #497275; margin: 0 0 0.5rem 0; padding: 0 1rem;">
       Programa: ${syllabusVal} |  Nivel Evaluado: Nivel ${levelVal}
@@ -2189,10 +2131,10 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
   </p>
 </div>
   `;
-  // upd
-  let resultado_global_fail_normal = ` 
+    // upd removed:  <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
+    let resultado_global_fail_normal = ` 
   <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
-  <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
+ 
   <p
     style="font-weight: 600; font-family: Segoe UI; font-size: 15px; color: #497275; margin: 0 0 0.5rem 0; padding: 0 1rem;">
       Programa: ${syllabusVal} |  Nivel Evaluado: Nivel ${levelVal}
@@ -2215,10 +2157,10 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
   </p>
 </div>
 `;
-
-  let resultadoGlobalDiagEval = `
+    // upd removed: <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
+    let resultadoGlobalDiagEval = `
 <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
-          <img src="${S_ClassPath}" style="width:80%; margin-bottom: 1rem;">
+          
           <p
             style="font-weight: 500; font-family: Segoe UI; font-size: 14px; color: #497275; margin: 0 0 0.5rem 0; padding: 0 1rem;">
 
@@ -2250,14 +2192,14 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
           </p>
 
         </div>`;
-  // ---------- SHOW NOTA FINAL for Exit (only if not juniors) ----------
-  let detalleNotaHTML = "";
-  if (isExit && !syllabusLower.startsWith("juniors")) {
-    const g = safe(grammarScore) || "-";
-    const o = safe(oralScore) || "-";
-    const f = safe(finalDisplay) || "-";
+    // ---------- SHOW NOTA FINAL for Exit (only if not juniors) ----------
+    let detalleNotaHTML = "";
+    if (isExit && !syllabusLower.startsWith("juniors")) {
+        const g = safe(grammarScore) || "-";
+        const o = safe(oralScore) || "-";
+        const f = safe(finalDisplay) || "-";
 
-    detalleNotaHTML = `<div class="desempeño"
+        detalleNotaHTML = `<div class="desempeño"
   style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
   <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%">
     <thead>
@@ -2293,69 +2235,45 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
   </table>
 </div>
     `;
-  }
-
-  let welcomeHTML = "";
-  let resultadoGlobal = "";
-
-  // Prioridad máxima: Diagnostic Eval
-  if (isDiagnosticEval(syllabusVal, levelVal)) {
-    resultadoGlobal = resultadoGlobalDiagEval;
-  } else if (isExit) {
-    // choose by syllabus and pass/fail
-    const passedExit =
-      finalDisplay !== "" &&
-      !Number.isNaN(Number(finalDisplay)) &&
-      Number(finalDisplay) >= 7;
-
-    if (syllabusLower.includes("kids") || syllabusLower.includes("teens")) {
-      welcomeHTML = passedExit
-        ? header_pass_kids_teens
-        : header_fail_kids_teens;
-      resultadoGlobal = passedExit
-        ? resultado_global_pass_kids_teens
-        : resultado_global_fail_kids_teens;
-    } else if (syllabusLower.includes("adults")) {
-      welcomeHTML = passedExit ? header_pass_adults : header_fail_adults;
-      resultadoGlobal = passedExit
-        ? resultado_global_pass_adults
-        : resultado_global_fail_adults;
-    } else if (
-      syllabusLower.startsWith("juniors") &&
-      levelVal === 10 &&
-      weekVal === 7
-    ) {
-      // normal
-      welcomeHTML =
-        Number.isFinite(totalScore) && totalScore >= 7
-          ? header_pass_juniors
-          : header_fail_juniors;
-      resultadoGlobal = passedExit
-        ? resultado_global_pass_kids_teens
-        : resultado_global_fail_kids_teens;
-    } else {
-      welcomeHTML = passedExit ? `` : ``;
     }
-  } else {
-    welcomeHTML =
-      Number.isFinite(totalScore) && totalScore < 7
-        ? normal_fail_header
-        : normal_pass_header;
-    resultadoGlobal =
-      Number.isFinite(totalScore) && totalScore < 7
-        ? resultado_global_fail_normal
-        : resultado_global_pass_normal;
-  }
 
-  //--extra sections
-  let porqueEsImportante = ``;
-  if (totalScore < 7) {
-    // REPROBADO
-    // upd
-    porqueEsImportante = `  <!-- PORQUE ES IMPORTANTE -->
+    let welcomeHTML = "";
+    let resultadoGlobal = "";
+
+    // Prioridad máxima: Diagnostic Eval
+    if (isDiagnosticEval(syllabusVal, levelVal)) {
+        resultadoGlobal = resultadoGlobalDiagEval;
+    } else if (isExit) {
+        // choose by syllabus and pass/fail
+        const passedExit = finalDisplay !== "" && !Number.isNaN(Number(finalDisplay)) && Number(finalDisplay) >= 7;
+
+        if (syllabusLower.includes("kids") || syllabusLower.includes("teens")) {
+            welcomeHTML = passedExit ? header_pass_kids_teens : header_fail_kids_teens;
+            resultadoGlobal = passedExit ? resultado_global_pass_kids_teens : resultado_global_fail_kids_teens;
+        } else if (syllabusLower.includes("adults")) {
+            welcomeHTML = passedExit ? header_pass_adults : header_fail_adults;
+            resultadoGlobal = passedExit ? resultado_global_pass_adults : resultado_global_fail_adults;
+        } else if (syllabusLower.startsWith("juniors") && levelVal === 10 && weekVal === 7) {
+            // normal
+            welcomeHTML = Number.isFinite(totalScore) && totalScore >= 7 ? header_pass_juniors : header_fail_juniors;
+            resultadoGlobal = passedExit ? resultado_global_pass_kids_teens : resultado_global_fail_kids_teens;
+        } else {
+            welcomeHTML = passedExit ? `` : ``;
+        }
+    } else {
+        welcomeHTML = Number.isFinite(totalScore) && totalScore < 7 ? normal_fail_header : normal_pass_header;
+        resultadoGlobal = Number.isFinite(totalScore) && totalScore < 7 ? resultado_global_fail_normal : resultado_global_pass_normal;
+    }
+
+    //--extra sections
+    let porqueEsImportante = ``;
+    if (totalScore < 7) {
+        // REPROBADO
+        // upd
+        porqueEsImportante = `  <!-- PORQUE ES IMPORTANTE -->
 <div style="margin: 4rem auto; justify-items: center;">
   <table width="80%" align="center" cellspacing="0" cellpadding="0"
-    style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #f9fafb; table-layout:fixed;">
+    style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0 auto; background-color: #f9fafb; table-layout:fixed;">
     <tr>
       <th
         style="font-weight: 700; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 22px; padding: 1rem; color: #14767B; border: none; font-family: Segoe UI;"
@@ -2366,7 +2284,7 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
     </tr>
     <tr>
       <td
-        style="font-size: 15px; font-family: Segoe UI;  padding: 0 15%; font-weight: 400; color: #497275; text-align: center;"
+        style="font-size: 15px; font-family: Segoe UI;  padding: 0 15% 1rem; font-weight: 400; color: #497275; text-align: center;"
         align="center">
 
           Porque <b>cada progreso cuenta</b>. Identificar lo que ya se domina <b>fortalece la confianza</b> y nos
@@ -2378,13 +2296,12 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
     </tr>
   </table>
 </div>`;
-  } 
-  else {
-    // upd
-    porqueEsImportante = `<!-- PORQUE ES IMPORTANTE -->
+    } else {
+        // upd
+        porqueEsImportante = `<!-- PORQUE ES IMPORTANTE -->
   <div style="margin: 4rem auto; justify-items: center;">
     <table width="80%" align="center" cellspacing="0" cellpadding="0"
-      style="border: none; background-color: #f9fafb;">
+      style="border: none; background-color: #f9fafb; margin: auto; width:80%;">
       <tr>
         <th
           style="font-weight: 700; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 22px; padding: 1rem; color: #14767B; border: none; font-family: Segoe UI;"
@@ -2395,7 +2312,7 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
       </tr>
       <tr>
         <td
-          style="font-size: 15px; font-family: Segoe UI;  padding: 0 15%; font-weight: 400; color: #497275; text-align: center;"
+          style="font-size: 15px; font-family: Segoe UI;  padding: 0 15% 1rem; font-weight: 400; color: #497275; text-align: center;"
           align="center">
           Te permite <b>ver el progreso</b>, <b>celebrar cada avance</b> y
             <b>acompañar el aprendizaje</b> con determinación.
@@ -2407,14 +2324,13 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
       </tr>
     </table>
   </div>`;
-  }
-  // both upd
-  let tuEsfuerzoCuenta = ``;
-  tuEsfuerzoCuenta += syllabusLower.includes("adults")
-    ? `<!-- TU ESFUERZO CUENTA -->
+    }
+    // both upd
+    let tuEsfuerzoCuenta = ``;
+    tuEsfuerzoCuenta += syllabusLower.includes("adults") ? `<!-- TU ESFUERZO CUENTA -->
 <div style="margin: 4rem auto; justify-items: center;">
   <table width="80%" align="center" cellspacing="0" cellpadding="0"
-    style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #f9fafb;  table-layout:fixed;">
+    style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0 auto; background-color: #f9fafb;  table-layout:fixed;">
     <tr>
       <th
         style="font-weight: 700; border-bottom: 1px dotted #219fa6; text-align: center; font-size: 22px; padding: 1rem; color: #14767B; border: none; font-family: Segoe UI;"
@@ -2433,8 +2349,7 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
       </td>
     </tr>
   </table>
-</div>`
-    : `<!-- TU ESFUERZO CUENTA -->
+</div>` : `<!-- TU ESFUERZO CUENTA -->
 <div style="margin: 4rem auto; justify-items: center;">
   <table width="80%" align="center" cellspacing="0" cellpadding="0"
     style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #f9fafb;  table-layout:fixed;">
@@ -2447,7 +2362,7 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
     </tr>
     <tr>
       <td
-        style="font-size: 14px; font-family: Segoe UI; padding: 0 15%; font-weight: 400; color: #1C5457; text-align: center;"
+        style="font-size: 14px; font-family: Segoe UI; padding: 0 15% 1rem; font-weight: 400; color: #1C5457; text-align: center;"
         align="center">
           Cada mes tu hijo/a <b>avanza más</b> y estamos
           <b>muy orgullosos de su progreso</b>.
@@ -2459,26 +2374,23 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
 </div>
     `;
 
-  if (totalScore < 7) {
-    tuEsfuerzoCuenta = ``;
-  }
+    if (totalScore < 7) {
+        tuEsfuerzoCuenta = ``;
+    }
 
-  // ---------- build topics & opportunities HTML ----------
-  // upd
-  let dominatedHTML = approvedTopics.length
-    ? `
+    // ---------- build topics & opportunities HTML ----------
+    // upd
+    let dominatedHTML = approvedTopics.length ? `
     <!-- TEMAS DOMINADOS -->
     <div style="margin: 3rem 0; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
-  <table width="80%" align="center" cellspacing="0" style="width: 80%;" width="80%">
+  <table width="80%" align="center" cellspacing="0" style="width: 80%; margin: auto;" width="80%">
     <thead>
       <tr>
         <th
           style="font-size: 22px; font-family:  Segoe UI, Roboto; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
           align="center"> Temas Dominados </th>
       </tr> 
-      ${
-        isDiagnosticEval(syllabusVal, levelVal)
-          ? `<tr>
+      ${isDiagnosticEval(syllabusVal, levelVal) ? `<tr>
           <th
             style="font-family: Segoe UI;  text-align: center; padding: 0.5rem 5% 1rem; font-size: 16px; font-weight: 500; color: #497275;"
             align="left">
@@ -2486,25 +2398,18 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
             siguientes
             temas:
           </th>
-        </tr>`
-          : ""
-      }
+        </tr>` : ""}
         </thead>
     <tbody>
-        ${approvedTopics
-          .map((topic) => {
-            const topicKey = topic.toLowerCase();
+        ${approvedTopics.map( (topic) => {
+        const topicKey = topic.toLowerCase();
 
-            // Buscar dentro del breakdown ignorando mayúsculas/minúsculas
-            const matchedKey = Object.keys(topicBreakdown).find(
-              (k) => k.toLowerCase() === topicKey,
-            );
+        // Buscar dentro del breakdown ignorando mayúsculas/minúsculas
+        const matchedKey = Object.keys(topicBreakdown).find( (k) => k.toLowerCase() === topicKey, );
 
-            const topicDescription = matchedKey
-              ? topicBreakdown[matchedKey]
-              : "";
+        const topicDescription = matchedKey ? topicBreakdown[matchedKey] : "";
 
-            return `
+        return `
                  <tr>
         <td
           style="font-family: Segoe UI;  text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 15px; font-weight: 600; color: #1C5457;"
@@ -2520,14 +2425,12 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
         </td>
       </tr>
               `;
-          })
-          .join("")}
+    }
+    ).join("")}
         </tbody>
       </table>
     </div>
-      ${
-        isDiagnosticEval(syllabusVal, levelVal)
-          ? `
+      ${isDiagnosticEval(syllabusVal, levelVal) ? `
       <div style="margin: 4rem auto; justify-items: center;">
         <table width="80%" align="center" cellspacing="0" cellpadding="0"
           style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #F5FAFA; table-layout:fixed;">
@@ -2546,15 +2449,11 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
             </td>
           </tr>
         </table>
-      </div>`
-          : `${porqueEsImportante}`
-      }
+      </div>` : `${porqueEsImportante}`}
 
-    `
-    : "";
-  // upd
-  const reinforceHTML = reinforceTopics.length
-    ? ` <!--temas a reforzar-->
+    ` : "";
+    // upd
+    const reinforceHTML = reinforceTopics.length ? ` <!--temas a reforzar-->
   <div style="margin: 4rem auto; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
     <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%">
       <thead>
@@ -2566,20 +2465,15 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
         </tr>
       </thead>
       <tbody>
-          ${reinforceTopics
-            .map((topic) => {
-              const topicKey = topic.toLowerCase();
+          ${reinforceTopics.map( (topic) => {
+        const topicKey = topic.toLowerCase();
 
-              // Match insensible a mayúsculas
-              const matchedKey = Object.keys(topicBreakdown).find(
-                (k) => k.toLowerCase() === topicKey,
-              );
+        // Match insensible a mayúsculas
+        const matchedKey = Object.keys(topicBreakdown).find( (k) => k.toLowerCase() === topicKey, );
 
-              const topicDescription = matchedKey
-                ? topicBreakdown[matchedKey]
-                : "";
+        const topicDescription = matchedKey ? topicBreakdown[matchedKey] : "";
 
-              return ` <tr>
+        return ` <tr>
           <td
             style="font-family: Segoe UI;  text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 15px; font-weight: 600; color: #1C5457;"
             align="left">
@@ -2590,64 +2484,54 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
             style="font-family: Segoe UI; font-weight: 400; text-align: left; padding: 0.3rem 0 1rem 13%;  color: #1C5457; font-size: 14px;"
             align="left">${topicDescription}</td>
                       </tr>`;
-            })
-            .join("")}
+    }
+    ).join("")}
         </tbody>
       </table>
-    </div>`
-    : "";
-  // upd
+    </div>` : "";
+    // upd
 
-  let opportunityHTML = "";
+    let opportunityHTML = "";
 
-  if (isDiagnosticEval(syllabusVal, levelVal)) {
-    // DIAGNOSTIC: revisamos cuáles checkboxes están checked
-    // Mapa de AOIs para diagnóstico
-    const diagAOIs = [
-      {
-        checkboxLabel: "Construcción de oraciones completas",
-        title: "Construcción de oraciones completas",
-        desc: "Reforzar el uso de frases con sujeto + verbo + complemento para expresar ideas con mayor claridad.",
-      },
-      {
-        checkboxLabel: "Fluidez al responder preguntas",
-        title: "Fluidez al responder preguntas",
-        desc: "Desarrollar mayor continuidad al hablar, reduciendo pausas largas y ganando seguridad al responder.",
-      },
-      {
-        checkboxLabel: "Uso de vocab en nuevos contextos",
-        title: "Uso del vocabulario aprendido en nuevos contextos",
-        desc: "Aplicar palabras conocidas en diferentes situaciones y preguntas, no solo en ejemplos memorizados.",
-      },
-      {
-        checkboxLabel: "Uso correcto del presente simple",
-        title: "Uso correcto del presente simple",
-        desc: "Fortalecer la estructura del presente simple, especialmente en la tercera persona (he / she).",
-      },
-      {
-        checkboxLabel: "Pronunciación de palabras frecuentes",
-        title: "Pronunciación de palabras frecuentes",
-        desc: "Mejorar la claridad al pronunciar palabras de uso común para facilitar la comprensión.",
-      },
-      {
-        checkboxLabel: "Comprensión y seguimiento de preguntas",
-        title: "Comprensión y seguimiento de preguntas",
-        desc: "Reforzar la comprensión auditiva para responder de forma más precisa a lo que se pregunta.",
-      },
-    ];
+    if (isDiagnosticEval(syllabusVal, levelVal)) {
+        // DIAGNOSTIC: revisamos cuáles checkboxes están checked
+        // Mapa de AOIs para diagnóstico
+        const diagAOIs = [{
+            checkboxLabel: "Construcción de oraciones completas",
+            title: "Construcción de oraciones completas",
+            desc: "Reforzar el uso de frases con sujeto + verbo + complemento para expresar ideas con mayor claridad.",
+        }, {
+            checkboxLabel: "Fluidez al responder preguntas",
+            title: "Fluidez al responder preguntas",
+            desc: "Desarrollar mayor continuidad al hablar, reduciendo pausas largas y ganando seguridad al responder.",
+        }, {
+            checkboxLabel: "Uso de vocab en nuevos contextos",
+            title: "Uso del vocabulario aprendido en nuevos contextos",
+            desc: "Aplicar palabras conocidas en diferentes situaciones y preguntas, no solo en ejemplos memorizados.",
+        }, {
+            checkboxLabel: "Uso correcto del presente simple",
+            title: "Uso correcto del presente simple",
+            desc: "Fortalecer la estructura del presente simple, especialmente en la tercera persona (he / she).",
+        }, {
+            checkboxLabel: "Pronunciación de palabras frecuentes",
+            title: "Pronunciación de palabras frecuentes",
+            desc: "Mejorar la claridad al pronunciar palabras de uso común para facilitar la comprensión.",
+        }, {
+            checkboxLabel: "Comprensión y seguimiento de preguntas",
+            title: "Comprensión y seguimiento de preguntas",
+            desc: "Reforzar la comprensión auditiva para responder de forma más precisa a lo que se pregunta.",
+        }, ];
 
-    // HTML dinámico para diagnostic eval
-    const checkboxes = document.querySelectorAll(
-      '#optionsGroup input[type="checkbox"]',
-    );
-    const checkedHTML = [];
+        // HTML dinámico para diagnostic eval
+        const checkboxes = document.querySelectorAll('#optionsGroup input[type="checkbox"]', );
+        const checkedHTML = [];
 
-    checkboxes.forEach((cb) => {
-      if (cb.checked) {
-        const labelText = cb.closest("label").textContent.trim();
-        const match = diagAOIs.find((o) => o.checkboxLabel === labelText);
-        if (match) {
-          checkedHTML.push(`
+        checkboxes.forEach( (cb) => {
+            if (cb.checked) {
+                const labelText = cb.closest("label").textContent.trim();
+                const match = diagAOIs.find( (o) => o.checkboxLabel === labelText);
+                if (match) {
+                    checkedHTML.push(`
         <tr>
           <td style="font-size:15px; font-family:Segoe UI; font-weight:600; color:#1C5457; padding:10px 10px 3px 5%; text-align:left; margin:0;">
             <span style="font-weight:400; margin-right:5px; color:#14767B; font-size:12px;">&#9745;</span>${match.title}
@@ -2659,11 +2543,12 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
           </td>
         </tr>
       `);
+                }
+            }
         }
-      }
-    });
+        );
 
-    opportunityHTML = `
+        opportunityHTML = `
   <div style="margin:4rem auto; justify-items:center; background-color:rgba(252,250,250,0.1); border-radius:25px;">
     <table width="80%">
       <thead>
@@ -2684,11 +2569,9 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
     </table>
   </div>
 `;
-  } 
-  else {
-    // NO ES DIAGNOSTIC: logica normal
-    opportunityHTML = opportunityTopics.length
-      ? `
+    } else {
+        // NO ES DIAGNOSTIC: logica normal
+        opportunityHTML = opportunityTopics.length ? `
       <div style="margin:4rem auto; justify-items:center; background-color:rgba(252,250,250,0.1); border-radius:25px;">
         <table width="80%" align="center" cellspacing="0" width="80%">
           <thead>
@@ -2699,48 +2582,34 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
             </tr>
           </thead>
           <tbody>
-            ${opportunityTopics
-              .map(
-                (o) => `
+            ${opportunityTopics.map( (o) => `
                 <tr>
                   <td style="font-size:15px; font-family:Segoe UI; font-weight:400; color:#1C5457; padding:10px 10px 10px 5%; text-align:left;">
                     <b>Tema:</b> ${safe(o.title)}
                   </td>
                 </tr>
-                ${
-                  o.answer
-                    ? `<tr>
+                ${o.answer ? `<tr>
                   <td style="text-align:left; color:#1C5457; font-weight:400; padding:5px 10px 5px 15%; font-family:Segoe UI; font-size:14px;">
                     <span style="color:#E87373; font-weight:bold; margin-right:5px;">&#10006;</span>
                     Respuesta: ${safe(o.answer)}
                   </td>
-                </tr>`
-                    : ""
-                }
-                ${
-                  o.correction
-                    ? `<tr>
+                </tr>` : ""}
+                ${o.correction ? `<tr>
                   <td style="text-align:left; color:#1C5457; font-weight:400; padding:5px 10px 5px 15%; font-family:Segoe UI; font-size:14px;">
                     <span style="color:#89C287; font-weight:bold; margin-right:5px;">&#10004;</span>
                     Corrección: ${safe(o.correction)}
                   </td>
-                </tr>`
-                    : ""
-                }
-              `,
-              )
-              .join("")}
+                </tr>` : ""}
+              `, ).join("")}
           </tbody>
         </table>
       </div>
       ${tuEsfuerzoCuenta}
-    `
-      : "";
-  }
+    ` : "";
+    }
 
-  // upd
-  const pronunciationHTML = pronunciationMistakes
-    ? `  <div style="margin: 4rem auto; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
+    // upd
+    const pronunciationHTML = pronunciationMistakes ? `  <div style="margin: 4rem auto; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
     <table width="80%">
       <thead>
         <tr>
@@ -2757,24 +2626,24 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
         </tr>
       </tbody>
     </table>
-  </div>`
-    : "";
+  </div>` : "";
 
-   // ---------- Extra areas for L10 Kids SI  ----------
-let kidsSIExtraAreas = "";
+    // ---------- Extra areas for L10 Kids SI  ----------
+    let kidsSIExtraAreas = "";
 
-if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
-  const extraAreas = document.querySelectorAll(".l10-generated");
+    if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
+        const extraAreas = document.querySelectorAll(".l10-generated");
 
-  const validAreas = Array.from(extraAreas).filter(area => {
-    const value = area.querySelector(".extraarea select")?.value?.trim();
-    return value && value !== "No aplica";
-  });
+        const validAreas = Array.from(extraAreas).filter(area => {
+            const value = area.querySelector(".extraarea select")?.value?.trim();
+            return value && value !== "No aplica";
+        }
+        );
 
-  if (validAreas.length === 0) {
-    kidsSIExtraAreas = "";
-  } else {
-    kidsSIExtraAreas = `<tr>
+        if (validAreas.length === 0) {
+            kidsSIExtraAreas = "";
+        } else {
+            kidsSIExtraAreas = `<tr>
       <td
         style="color: #1C5457; text-align: left; padding: 1.1rem 0.5rem 0.3rem 5%; font-family: Segoe UI; font-size:16px; font-weight: 600;">
         &#x24D8; Habilidades Evaluadas:
@@ -2794,15 +2663,13 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
           </td>
         </tr>
       `).join("");
-  }
-}
-  
-  // upd
-  const selectorComments = areaDetails.join("");
-  const commentsFinal = selectorComments || extraCommentsFallback || "";
-  const commentsHTML =
-    kidsSIExtraAreas || commentsFinal || isCondicionado
-      ? `
+        }
+    }
+
+    // upd
+    const selectorComments = areaDetails.join("");
+    const commentsFinal = selectorComments || extraCommentsFallback || "";
+    const commentsHTML = kidsSIExtraAreas || commentsFinal || isCondicionado ? `
         <div style="margin: 4rem auto; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
     <table width="80%" align="center" cellspacing="0" width="80%">
       <thead>
@@ -2817,23 +2684,16 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
             ${isCondicionado ? condicionadoText : ""}
           </tbody>
         </table>
-      </div>`
-      : "";
-  // evaluator + survey + referidos
-  // Determinar si mostramos el nombre del evaluador o lo tratamos como vacío
-  const shouldHideEvaluator =
-    evaluatorName && String(evaluatorName).startsWith("━");
+      </div>` : "";
+    // evaluator + survey + referidos
+    // Determinar si mostramos el nombre del evaluador o lo tratamos como vacío
+    const shouldHideEvaluator = evaluatorName && String(evaluatorName).startsWith("━");
 
-  const surveyBaseFinal = syllabusLower.includes("adults")
-    ? "https://e4cc.typeform.com/to/efJago3L#coach="
-    : "https://e4cc.typeform.com/to/ovOnAdWx#coach=";
+    const surveyBaseFinal = syllabusLower.includes("adults") ? "https://e4cc.typeform.com/to/efJago3L#coach=" : "https://e4cc.typeform.com/to/ovOnAdWx#coach=";
 
-  const surveyLinkFinal =
-    surveyBaseFinal + encodeURIComponent(evaluatorID || "");
-  // upd
-  const evaluatorLine = shouldHideEvaluator
-    ? ""
-    : `
+    const surveyLinkFinal = surveyBaseFinal + encodeURIComponent(evaluatorID || "");
+    // upd
+    const evaluatorLine = shouldHideEvaluator ? "" : `
 
   <!-- EVALUATORS Referal -->
   <div style="margin: 4rem auto 0; padding: 0;">
@@ -2855,9 +2715,8 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
         aquí</a>
     </div> `;
 
-  //referidos text- its alr no need to upd
-  const referText = syllabusLower.includes("adults")
-    ? ` <!-- referal -->
+    //referidos text- its alr no need to upd
+    const referText = syllabusLower.includes("adults") ? ` <!-- referal -->
 
       <h1
         style="font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
@@ -2867,8 +2726,7 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
             <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Referal/referalAdults.gif"
              alt="Refiere Aquí"
              style="width: 100%; display:block; margin:0 auto; border:0;">
-          </a> `
-    : ` <!-- referal -->
+          </a> ` : ` <!-- referal -->
         <h1
           style="font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #126064; text-align: center;  border-bottom: 1px dotted #219fa6; margin:5rem auto 0.5rem;"
           align="center">¡Has recibido un cupón de ahorro!</h1>
@@ -2879,28 +2737,26 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
              style="width: 100%; display:block; margin:0 auto; border:0;">
           </a>`;
 
-  //===================================================
-  // Coaching Opportunity in RC
-  const checkedInputs = document.querySelectorAll(
-    ".coachingOpportunity input:checked",
-  );
+    //===================================================
+    // Coaching Opportunity in RC
+    const checkedInputs = document.querySelectorAll(".coachingOpportunity input:checked", );
 
-  const links = {
-    futuroGoingTo: "https://view.genially.com/68ae362d32a8126030592eb7",
-    pasadoProgresivo: "https://view.genially.com/68ace62d5a6838e7306b1395",
-    presenteProgresivo: "https://view.genially.com/68ace5b12d712b8b4b642422",
-  };
+    const links = {
+        futuroGoingTo: "https://view.genially.com/68ae362d32a8126030592eb7",
+        pasadoProgresivo: "https://view.genially.com/68ace62d5a6838e7306b1395",
+        presenteProgresivo: "https://view.genially.com/68ace5b12d712b8b4b642422",
+    };
 
-  const labels = {
-    futuroGoingTo: "Futuro: Going to",
-    pasadoProgresivo: "Pasado Progresivo",
-    presenteProgresivo: "Presente Progresivo",
-  };
+    const labels = {
+        futuroGoingTo: "Futuro: Going to",
+        pasadoProgresivo: "Pasado Progresivo",
+        presenteProgresivo: "Presente Progresivo",
+    };
 
-  let coachingHTML = "";
+    let coachingHTML = "";
 
-  if (checkedInputs.length) {
-    coachingHTML = `
+    if (checkedInputs.length) {
+        coachingHTML = `
     <div style="margin: 4rem auto; justify-items: center; border-radius: 25px; background-color:rgba(252,250,250,0.1);">
     <table width="100%" align="center" cellspacing="0" cellpadding="0" style="width: 80%; border-collapse: collapse;">
       <tr>
@@ -2917,10 +2773,10 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
       </thead>
       <tbody>`;
 
-    checkedInputs.forEach((input) => {
-      const id = input.id;
-      if (links[id]) {
-        coachingHTML += `
+        checkedInputs.forEach( (input) => {
+            const id = input.id;
+            if (links[id]) {
+                coachingHTML += `
         <tr>
           <td
             style="font-family: Segoe UI;  text-align: left; padding: 0.9rem 0.5rem 0 5%; font-size: 16px; font-weight: 400; color: #1C5457; margin:0;"
@@ -2939,29 +2795,26 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
               Certificación ${labels[id]}</a>
           </td>
         </tr>`;
-      }
-    });
+            }
+        }
+        );
 
-    coachingHTML += `
+        coachingHTML += `
         </tbody>
       </table>
     </div>`;
-  }
+    }
 
-  //headers & footers
-  // ---HEADERS & FOOTERS---
+    //headers & footers
+    // ---HEADERS & FOOTERS---
 
-  // Adults vs Kids assets
-  const adultsHeader =
-    "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERADULTS.png";
-  const adultsFooter =
-    "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerAdults.png";
+    // Adults vs Kids assets
+    const adultsHeader = "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERADULTS.png";
+    const adultsFooter = "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerAdults.png";
 
-  const kidsHeader =
-    "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERKIDS.png";
-  const kidsFooter =
-    "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerKids.png";
-  const avanceMotivacionAdults = `  <!--avance -->
+    const kidsHeader = "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERKIDS.png";
+    const kidsFooter = "https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Footers/footerKids.png";
+    const avanceMotivacionAdults = `  <!--avance -->
    <div style="margin: 4rem auto; justify-items: center; ">
     <table width="80%" align="center" cellspacing="0" cellpadding="0"
       style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #f9fafb;  table-layout:fixed;">
@@ -2984,7 +2837,7 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
       </tr>
     </table>
   </div>`;
-  const avanceMotivacionKids = ` <!--avance -->
+    const avanceMotivacionKids = ` <!--avance -->
     <div style="margin: 4rem auto; justify-items: center; ">
     <table width="80%" align="center" cellspacing="0" cellpadding="0"
       style="border: none;  background-color: #f9fafb;">
@@ -3008,7 +2861,7 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
       </tr>
     </table>
   </div>`;
-  const avanceMotivacionDiagEvals = `<div style="margin: 4rem auto; justify-items: center;">
+    const avanceMotivacionDiagEvals = `<div style="margin: 4rem auto; justify-items: center;">
     <table width="80%" align="center" cellspacing="0" cellpadding="0"
       style="width: 80%; border-collapse: collapse; border-radius: 25px; border: none; overflow: hidden; margin: 0; background-color: #F5FAFA; table-layout:fixed;">
       <tr>
@@ -3029,280 +2882,224 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
       </tr>
     </table>
   </div>`;
-  const avanceMotivacionFailAdults = "";
-  const avanceMotivacionFailKids = "";
+    const avanceMotivacionFailAdults = "";
+    const avanceMotivacionFailKids = "";
 
-  // Final selection
-  let imgHeader = syllabusLower.includes("adults") ? adultsHeader : kidsHeader;
+    // Final selection
+    let imgHeader = syllabusLower.includes("adults") ? adultsHeader : kidsHeader;
 
-  let imgFooter = syllabusLower.includes("adults") ? adultsFooter : kidsFooter;
+    let imgFooter = syllabusLower.includes("adults") ? adultsFooter : kidsFooter;
 
-  // let avanceMotivacion = syllabusLower.includes("adults") ? avanceMotivacionAdults : avanceMotivacionKids;
+    // let avanceMotivacion = syllabusLower.includes("adults") ? avanceMotivacionAdults : avanceMotivacionKids;
 
-  let avanceMotivacion = isDiagnosticEval(syllabusVal, levelVal)
-    ? avanceMotivacionDiagEvals
-    : totalScore >= 7
-      ? syllabusLower.includes("adults")
-        ? avanceMotivacionAdults
-        : avanceMotivacionKids
-      : syllabusLower.includes("adults")
-        ? avanceMotivacionFailAdults
-        : avanceMotivacionFailKids;
+    let avanceMotivacion = isDiagnosticEval(syllabusVal, levelVal) ? avanceMotivacionDiagEvals : totalScore >= 7 ? syllabusLower.includes("adults") ? avanceMotivacionAdults : avanceMotivacionKids : syllabusLower.includes("adults") ? avanceMotivacionFailAdults : avanceMotivacionFailKids;
 
-  //===================================================================
-  //IS FILTER / ISFILTEREVAL LOGIC
+    //===================================================================
+    //IS FILTER / ISFILTEREVAL LOGIC
 
-  const isFilter = isFilterEval(syllabusVal, levelVal, weekVal);
+    const isFilter = isFilterEval(syllabusVal, levelVal, weekVal);
 
-  let willLearn = [];
-  let nextFilter = "";
-  let weeksToRepeat = "";
+    let willLearn = [];
+    let nextFilter = "";
+    let weeksToRepeat = "";
 
-  if (syllabus === "Juniors 5-7") {
-    weeksToRepeat = "8";
-    if (levelVal === 7 && weekVal === 7) {
-      willLearn = [
-        "Futuro Simple (Going to)",
-        "Futuro Simple (Will)",
-        "Repaso de Tiempos Gramaticales Básicos",
-      ];
-      nextFilter = "9";
+    if (syllabus === "Juniors 5-7") {
+        weeksToRepeat = "8";
+        if (levelVal === 7 && weekVal === 7) {
+            willLearn = ["Futuro Simple (Going to)", "Futuro Simple (Will)", "Repaso de Tiempos Gramaticales Básicos", ];
+            nextFilter = "9";
+        }
+        if (levelVal === 9 && weekVal === 7) {
+            willLearn = ["Repaso de Tiempos Gramaticales Básicos"];
+            nextFilter = "10";
+            // último
+        }
     }
-    if (levelVal === 9 && weekVal === 7) {
-      willLearn = ["Repaso de Tiempos Gramaticales Básicos"];
-      nextFilter = "10"; // último
-    }
-  }
 
-  if (syllabus === "Kids (Intensivo) 8-12") {
-    weeksToRepeat = "8";
-    if (levelVal === 2 && weekVal === 13) {
-      willLearn = [
-        "Futuro Simple (Going to)",
-        "Futuro Simple (Will)",
-        "Pasado Simple",
-      ];
-      nextFilter = "4";
+    if (syllabus === "Kids (Intensivo) 8-12") {
+        weeksToRepeat = "8";
+        if (levelVal === 2 && weekVal === 13) {
+            willLearn = ["Futuro Simple (Going to)", "Futuro Simple (Will)", "Pasado Simple", ];
+            nextFilter = "4";
+        }
+        if (levelVal === 4 && weekVal === 13) {
+            willLearn = ["Pasado Simple", "Pasado Progresivo", "Repaso General"];
+            nextFilter = "7";
+        }
+        if (levelVal === 7 && weekVal === 13) {
+            willLearn = ["Condicionales", "Comparativos y Superlativos", "Modales"];
+            nextFilter = "9";
+        }
+        if (levelVal === 9 && weekVal === 13) {
+            willLearn = ["Presente Perfecto", "Repaso de Tiempos Gramaticales Básicos", ];
+            nextFilter = "10";
+            // último
+        }
     }
-    if (levelVal === 4 && weekVal === 13) {
-      willLearn = ["Pasado Simple", "Pasado Progresivo", "Repaso General"];
-      nextFilter = "7";
-    }
-    if (levelVal === 7 && weekVal === 13) {
-      willLearn = ["Condicionales", "Comparativos y Superlativos", "Modales"];
-      nextFilter = "9";
-    }
-    if (levelVal === 9 && weekVal === 13) {
-      willLearn = [
-        "Presente Perfecto",
-        "Repaso de Tiempos Gramaticales Básicos",
-      ];
-      nextFilter = "10"; // último
-    }
-  }
 
-  if (syllabus === "Kids (Super Intensivo) 8-12") {
-    weeksToRepeat = "8";
-    if (levelVal === 4 && weekVal === 7) {
-      willLearn = ["Pasado Simple", "Pasado Progresivo", "Repaso General"];
-      nextFilter = "7";
+    if (syllabus === "Kids (Super Intensivo) 8-12") {
+        weeksToRepeat = "8";
+        if (levelVal === 4 && weekVal === 7) {
+            willLearn = ["Pasado Simple", "Pasado Progresivo", "Repaso General"];
+            nextFilter = "7";
+        }
+        if (levelVal === 7 && weekVal === 7) {
+            willLearn = ["Condicionales", "Comparativos y Superlativos", "Modales"];
+            nextFilter = "9";
+        }
+        if (levelVal === 9 && weekVal === 7) {
+            willLearn = ["Repaso de Tiempos Gramaticales Básicos"];
+            nextFilter = "10";
+            // último
+        }
     }
-    if (levelVal === 7 && weekVal === 7) {
-      willLearn = ["Condicionales", "Comparativos y Superlativos", "Modales"];
-      nextFilter = "9";
-    }
-    if (levelVal === 9 && weekVal === 7) {
-      willLearn = ["Repaso de Tiempos Gramaticales Básicos"];
-      nextFilter = "10"; // último
-    }
-  }
 
-  if (syllabus === "Kids Masters") {
-    weeksToRepeat = "4";
-    if (levelVal === 4 && weekVal === 3) {
-      willLearn = [
-        "Superlativos",
-        "Presente Perfecto",
-        "Presente Perfecto Progresivo",
-      ];
-      nextFilter = "8";
+    if (syllabus === "Kids Masters") {
+        weeksToRepeat = "4";
+        if (levelVal === 4 && weekVal === 3) {
+            willLearn = ["Superlativos", "Presente Perfecto", "Presente Perfecto Progresivo", ];
+            nextFilter = "8";
+        }
+        if (levelVal === 8 && weekVal === 3) {
+            willLearn = ["Repaso de Tiempos Gramaticales Básicos"];
+            nextFilter = "10";
+            // último
+        }
     }
-    if (levelVal === 8 && weekVal === 3) {
-      willLearn = ["Repaso de Tiempos Gramaticales Básicos"];
-      nextFilter = "10"; // último
-    }
-  }
 
-  if (syllabus === "Kids Masters 2") {
-    weeksToRepeat = "4";
-    if (levelVal === 4 && weekVal === 3) {
-      willLearn = [
-        "Presente Perfecto Progresivo",
-        "Repaso de Tiempos Gramaticales Básicos",
-      ];
-      nextFilter = "8";
+    if (syllabus === "Kids Masters 2") {
+        weeksToRepeat = "4";
+        if (levelVal === 4 && weekVal === 3) {
+            willLearn = ["Presente Perfecto Progresivo", "Repaso de Tiempos Gramaticales Básicos", ];
+            nextFilter = "8";
+        }
+        if (levelVal === 8 && weekVal === 3) {
+            willLearn = ["Futuro Perfecto", "Modales perfectos", "Repaso de Tiempos Gramaticales Básicos", ];
+            nextFilter = "10";
+            // último
+        }
     }
-    if (levelVal === 8 && weekVal === 3) {
-      willLearn = [
-        "Futuro Perfecto",
-        "Modales perfectos",
-        "Repaso de Tiempos Gramaticales Básicos",
-      ];
-      nextFilter = "10"; // último
-    }
-  }
 
-  if (syllabus === "Teens 13-17 (3hrs/week)") {
-    weeksToRepeat = "8";
-    if (levelVal === 2 && weekVal === 13) {
-      willLearn = [
-        "Pasado Simple",
-        "Pasado Progresivo",
-        "Repaso de Tiempos Gramaticales Básicos",
-      ];
-      nextFilter = "4";
+    if (syllabus === "Teens 13-17 (3hrs/week)") {
+        weeksToRepeat = "8";
+        if (levelVal === 2 && weekVal === 13) {
+            willLearn = ["Pasado Simple", "Pasado Progresivo", "Repaso de Tiempos Gramaticales Básicos", ];
+            nextFilter = "4";
+        }
+        if (levelVal === 4 && weekVal === 13) {
+            willLearn = ["Modales", "Condicionales", "Comparativos y Superlativos"];
+            nextFilter = "7";
+        }
+        if (levelVal === 7 && weekVal === 13) {
+            willLearn = ["Presente Perfecto", "Repaso General"];
+            nextFilter = "9";
+        }
+        if (levelVal === 9 && weekVal === 13) {
+            willLearn = ["Presente Perfecto Progresivo", "Repaso General"];
+            nextFilter = "10";
+            // último
+        }
     }
-    if (levelVal === 4 && weekVal === 13) {
-      willLearn = ["Modales", "Condicionales", "Comparativos y Superlativos"];
-      nextFilter = "7";
-    }
-    if (levelVal === 7 && weekVal === 13) {
-      willLearn = ["Presente Perfecto", "Repaso General"];
-      nextFilter = "9";
-    }
-    if (levelVal === 9 && weekVal === 13) {
-      willLearn = ["Presente Perfecto Progresivo", "Repaso General"];
-      nextFilter = "10"; // último
-    }
-  }
 
-  if (syllabus === "Teens 13-17 (5hrs/week)") {
-    weeksToRepeat = "8";
-    if (levelVal === 4 && weekVal === 7) {
-      willLearn = ["Modales", "Condicionales", "Comparativos y Superlativos"];
-      nextFilter = "7";
+    if (syllabus === "Teens 13-17 (5hrs/week)") {
+        weeksToRepeat = "8";
+        if (levelVal === 4 && weekVal === 7) {
+            willLearn = ["Modales", "Condicionales", "Comparativos y Superlativos"];
+            nextFilter = "7";
+        }
+        if (levelVal === 7 && weekVal === 7) {
+            willLearn = ["Presente Perfecto", "Repaso General"];
+            nextFilter = "9";
+        }
+        if (levelVal === 9 && weekVal === 7) {
+            willLearn = ["Presente Perfecto Progresivo", "Repaso de Tiempos Gramaticales Básicos", ];
+            nextFilter = "10";
+            // último
+        }
     }
-    if (levelVal === 7 && weekVal === 7) {
-      willLearn = ["Presente Perfecto", "Repaso General"];
-      nextFilter = "9";
-    }
-    if (levelVal === 9 && weekVal === 7) {
-      willLearn = [
-        "Presente Perfecto Progresivo",
-        "Repaso de Tiempos Gramaticales Básicos",
-      ];
-      nextFilter = "10"; // último
-    }
-  }
 
-  if (syllabus === "Teens Masters") {
-    weeksToRepeat = "4";
-    if (levelVal === 4 && weekVal === 3) {
-      willLearn = [
-        "Superlativos",
-        "Presente Perfecto",
-        "Presente Perfecto Progresivo",
-      ];
-      nextFilter = "8";
+    if (syllabus === "Teens Masters") {
+        weeksToRepeat = "4";
+        if (levelVal === 4 && weekVal === 3) {
+            willLearn = ["Superlativos", "Presente Perfecto", "Presente Perfecto Progresivo", ];
+            nextFilter = "8";
+        }
+        if (levelVal === 8 && weekVal === 3) {
+            willLearn = ["Futuro Perfecto", "Repaso de Tiempos Gramaticales Básicos"];
+            nextFilter = "10";
+            // último
+        }
     }
-    if (levelVal === 8 && weekVal === 3) {
-      willLearn = ["Futuro Perfecto", "Repaso de Tiempos Gramaticales Básicos"];
-      nextFilter = "10"; // último
-    }
-  }
 
-  if (syllabus === "Teens Masters 2") {
-    weeksToRepeat = "4";
-    if (levelVal === 4 && weekVal === 3) {
-      willLearn = [
-        "Superlativos",
-        "Presente Perfecto",
-        "Presente Perfecto Progresivo",
-      ];
-      nextFilter = "8";
+    if (syllabus === "Teens Masters 2") {
+        weeksToRepeat = "4";
+        if (levelVal === 4 && weekVal === 3) {
+            willLearn = ["Superlativos", "Presente Perfecto", "Presente Perfecto Progresivo", ];
+            nextFilter = "8";
+        }
+        if (levelVal === 8 && weekVal === 3) {
+            willLearn = ["Futuro Perfecto", "Repaso de Tiempos Gramaticales Básicos"];
+            nextFilter = "10";
+            // último
+        }
     }
-    if (levelVal === 8 && weekVal === 3) {
-      willLearn = ["Futuro Perfecto", "Repaso de Tiempos Gramaticales Básicos"];
-      nextFilter = "10"; // último
-    }
-  }
 
-  if (syllabus === "Adults (3hrs/week)") {
-    weeksToRepeat = "4";
-    if (levelVal === 5 && weekVal === 3) {
-      willLearn = ["Pasado Progresivo", "Pasado Simple", "Repaso General"];
-      nextFilter = "8";
+    if (syllabus === "Adults (3hrs/week)") {
+        weeksToRepeat = "4";
+        if (levelVal === 5 && weekVal === 3) {
+            willLearn = ["Pasado Progresivo", "Pasado Simple", "Repaso General"];
+            nextFilter = "8";
+        }
+        if (levelVal === 8 && weekVal === 3) {
+            willLearn = ["Modales: Can / Should", "Comparativos y Superlativos", "Repaso General", ];
+            nextFilter = "12";
+            // último
+        }
     }
-    if (levelVal === 8 && weekVal === 3) {
-      willLearn = [
-        "Modales: Can / Should",
-        "Comparativos y Superlativos",
-        "Repaso General",
-      ];
-      nextFilter = "12"; // último
-    }
-  }
 
-  if (syllabus === "Adults (5hrs/week)") {
-    weeksToRepeat = "4";
-    if (levelVal === 5 && weekVal === 3) {
-      willLearn = ["Pasado Progresivo", "Pasado Simple", "Repaso General"];
-      nextFilter = "8";
+    if (syllabus === "Adults (5hrs/week)") {
+        weeksToRepeat = "4";
+        if (levelVal === 5 && weekVal === 3) {
+            willLearn = ["Pasado Progresivo", "Pasado Simple", "Repaso General"];
+            nextFilter = "8";
+        }
+        if (levelVal === 8 && weekVal === 3) {
+            willLearn = ["Modales: Can / Should", "Comparativos y Superlativos", "Repaso General", ];
+            nextFilter = "12";
+            // último
+        }
     }
-    if (levelVal === 8 && weekVal === 3) {
-      willLearn = [
-        "Modales: Can / Should",
-        "Comparativos y Superlativos",
-        "Repaso General",
-      ];
-      nextFilter = "12"; // último
-    }
-  }
 
-  if (syllabus === "Adults Masters (3hrs/week)") {
-    weeksToRepeat = "4";
-    if (levelVal === 5 && weekVal === 3) {
-      willLearn = [
-        "Presente Perfecto",
-        "Condicionales",
-        "Deseos (I wish / If only)",
-      ];
-      nextFilter = "8";
+    if (syllabus === "Adults Masters (3hrs/week)") {
+        weeksToRepeat = "4";
+        if (levelVal === 5 && weekVal === 3) {
+            willLearn = ["Presente Perfecto", "Condicionales", "Deseos (I wish / If only)", ];
+            nextFilter = "8";
+        }
+        if (levelVal === 8 && weekVal === 3) {
+            willLearn = ["Used to", "Deseos en Presente y Futuro (I wish / If only)", "Voz Pasiva", ];
+            nextFilter = "12";
+            // último
+        }
     }
-    if (levelVal === 8 && weekVal === 3) {
-      willLearn = [
-        "Used to",
-        "Deseos en Presente y Futuro (I wish / If only)",
-        "Voz Pasiva",
-      ];
-      nextFilter = "12"; // último
-    }
-  }
 
-  if (syllabus === "Adults Masters (5hrs/week)") {
-    weeksToRepeat = "4";
-    if (levelVal === 5 && weekVal === 3) {
-      willLearn = [
-        "Presente Perfecto",
-        "Condicionales",
-        "Deseos (I wish / If only)",
-      ];
-      nextFilter = "8";
+    if (syllabus === "Adults Masters (5hrs/week)") {
+        weeksToRepeat = "4";
+        if (levelVal === 5 && weekVal === 3) {
+            willLearn = ["Presente Perfecto", "Condicionales", "Deseos (I wish / If only)", ];
+            nextFilter = "8";
+        }
+        if (levelVal === 8 && weekVal === 3) {
+            willLearn = ["Used to", "Deseos en Presente y Futuro (I wish / If only)", "Voz Pasiva", ];
+            nextFilter = "12";
+            // último
+        }
     }
-    if (levelVal === 8 && weekVal === 3) {
-      willLearn = [
-        "Used to",
-        "Deseos en Presente y Futuro (I wish / If only)",
-        "Voz Pasiva",
-      ];
-      nextFilter = "12"; // último
-    }
-  }
 
-  let loQueAprendera = ``;
+    let loQueAprendera = ``;
 
-  if (isFilter && totalScore > 6.9) {
-    loQueAprendera = `  <!-- lo que aprenderá -->
+    if (isFilter && totalScore > 6.9) {
+        loQueAprendera = `  <!-- lo que aprenderá -->
   <div style="margin: 4rem auto; justify-items: center; border-radius: 25px; background-color:rgba(252,250,250,0.1);">
     <table width="100%" align="center" cellspacing="0" cellpadding="0" style="width: 80%; border-collapse: collapse;">
       <tr>
@@ -3315,20 +3112,15 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
       </tr>
       </thead>
       <tbody>
-            ${willLearn
-              .map((topic) => {
-                const topicKey = topic.toLowerCase();
+            ${willLearn.map( (topic) => {
+            const topicKey = topic.toLowerCase();
 
-                // Match insensible a mayúsculas
-                const matchedKey = Object.keys(topicBreakdown).find(
-                  (k) => k.toLowerCase() === topicKey,
-                );
+            // Match insensible a mayúsculas
+            const matchedKey = Object.keys(topicBreakdown).find( (k) => k.toLowerCase() === topicKey, );
 
-                const topicDescription = matchedKey
-                  ? topicBreakdown[matchedKey]
-                  : "";
+            const topicDescription = matchedKey ? topicBreakdown[matchedKey] : "";
 
-                return `
+            return `
 
         <tr>
           <td
@@ -3344,95 +3136,109 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
           </td>
         </tr>
               `;
-              })
-              .join("")}
+        }
+        ).join("")}
           </tbody>
         </table>
       </div>`;
 
-    console.log(
-      "Filter Eval detected:",
-      syllabus,
-      "Level:",
-      levelVal,
-      "Week:",
-      weekVal,
-    );
-  }
-  let mustPracticeTopics = ``;
-  let mapaGrande = ``;
-  if (isFilter && totalScore < 7) {
-    //cuando no aprueban
-    mustPracticeTopics = `
-    ${approvedTopics
-      .map((topic) => {
-        const topicKey = topic.toLowerCase();
+        console.log("Filter Eval detected:", syllabus, "Level:", levelVal, "Week:", weekVal, );
+    }
 
-        // Match insensible a mayúsculas
-        const matchedKey = Object.keys(topicBreakdown).find(
-          (k) => k.toLowerCase() === topicKey,
-        );
+    // video tutorials for next steps in RC
+    const topicVideoTutorials = {
+        "Presente Simple (1ra persona)": "https://youtu.be/glUEl62W5x0",
+        "Presente Simple (3ra persona)": "https://youtu.be/UKoqa6SD36k",
+        "Presente Progresivo (1ra persona)": "https://youtu.be/O9sIAKligKg",
+        "Presente Progresivo (3ra persona)": "https://youtu.be/zMOm9xDTnSM",
+        "Futuro Simple (Going to)": "https://youtu.be/TaxWLCwMJQ0",
+        "Futuro Simple (Will)": "https://youtu.be/B_WrXyMKGs4",
+        "Pasado Simple": "https://youtu.be/06V52PuH9f8",
+        "Pasado Progresivo": "https://youtu.be/wh1j5eRMZuo"
+    };
 
-        const topicDescription = matchedKey ? topicBreakdown[matchedKey] : "";
+    let mustPracticeTopics = ``;
+    let mapaGrande = ``;
 
-        return `
+    if (isFilter && totalScore < 7) {
+        // cuando no aprueban
+        mustPracticeTopics = `
+    ${reinforceTopics.map( (topic) => {
+
+            const topicKey = topic.toLowerCase();
+
+            // Buscar descripción
+            const matchedDescriptionKey = Object.keys(topicBreakdown).find( (k) => k.toLowerCase() === topicKey);
+
+            const topicDescription = matchedDescriptionKey ? topicBreakdown[matchedDescriptionKey] : "";
+
+            // Buscar video
+            const matchedVideoKey = Object.keys(topicVideoTutorials).find( (k) => k.toLowerCase() === topicKey);
+
+            const videoUrl = matchedVideoKey ? topicVideoTutorials[matchedVideoKey] : null;
+
+            return `
+        <tr>
+            <td
+                style="font-family: Segoe UI; text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 15px; font-weight: 600; color: #1C5457;"
+                align="left">
+                <span style="font-weight: bold; margin-right: 5px;">&#9744;</span>
+                ${safe(topic)}
+            </td>
+        </tr>
 
         <tr>
-          <td
-            style="font-family: Segoe UI;  text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 15px; font-weight: 600; color: #1C5457;"
-            align="left">
-            <span style="font-weight: bold; margin-right: 5px;"> &#9744;</span>  ${safe(topic)}
-          </td>
+            <td
+                style="font-family: Segoe UI; font-weight: 400; text-align: left; padding: 0.3rem 0 0.3rem 13%; color: #1C5457; font-size: 14px;"
+                align="left">
+                ${topicDescription}
+            </td>
         </tr>
-       <tr>
-          <td
-            style="font-family: Segoe UI; font-weight: 400; text-align: left; padding: 0.3rem 0 1rem 13%;  color: #1C5457; font-size: 14px;"
-            align="left">
-            ${topicDescription}
-          </td>
+
+        ${videoUrl ? `
+        <tr>
+            <td
+                align="left"
+                style="font-family: Segoe UI; text-align: left; padding: 5px 0 1rem 13%;">
+                <a
+                    href="${videoUrl}"
+                    target="_blank"
+                    style="
+                        display:block;
+                        box-sizing:border-box;
+                        background-color:#f1f8f8;
+                        padding:8px 15px;
+                        border-radius:10px;
+                        color:#126064;
+                        text-decoration:none;
+                        font-family:Segoe UI;
+                        font-size:13px;
+                        line-height:18px;
+                        font-weight: 400;
+                    ">
+                    <span style="font-size:12px;">&#9654;</span>
+                    Ver lección de
+                    <span style="font-weight:600;">${safe(topic)}</span>
+                </a>
+            </td>
         </tr>
-      `;
-      })
-      .join("")}
-    ${reinforceTopics
-      .map((topic) => {
-        const topicKey = topic.toLowerCase();
-
-        // Match insensible a mayúsculas
-        const matchedKey = Object.keys(topicBreakdown).find(
-          (k) => k.toLowerCase() === topicKey,
-        );
-
-        const topicDescription = matchedKey ? topicBreakdown[matchedKey] : "";
-
-        return `
-      <tr>
-          <td
-            style="font-family: Segoe UI;  text-align: left; padding: 1rem 0 0.2rem 5%; font-size: 15px; font-weight: 600; color: #1C5457;"
-            align="left">
-            <span style="font-weight: bold; margin-right: 5px;"> &#9744;</span> ${safe(topic)}</td>
-              </tr>
-               <tr>
-          <td
-            style="font-family: Segoe UI; font-weight: 400; text-align: left; padding: 0.3rem 0 1rem 13%;  color: #1C5457; font-size: 14px;"
-            align="left">
-        ${topicDescription}</td>
-              </tr>`;
-      })
-      .join("")}
+        ` : `
+        <tr>
+            <td style="height:12px;"></td>
+        </tr>
+        `}
+        `;
+        }
+        ).join("")}
     `;
-    // siguientes pasos for reprobado
-    let approachforMap = "";
-    approachforMap = syllabusLower.includes("adults")
-      ? "<b>Continuarás reforzando</b> contenidos en tu <b>nivel actual</b>"
-      : "El estudiante <b>continuará reforzando</b> contenidos en su <b>nivel actual</b>";
-    let apoyarAvances = "";
-    apoyarAvances = syllabusLower.includes("adults")
-      ? "Para apoyar tu avance"
-      : "Para apoyar su avance";
+        // siguientes pasos for reprobado
+        let approachforMap = "";
+        approachforMap = syllabusLower.includes("adults") ? "<b>Continuarás reforzando</b> contenidos en tu <b>nivel actual</b>" : "El estudiante <b>continuará reforzando</b> contenidos en su <b>nivel actual</b>";
+        let apoyarAvances = "";
+        apoyarAvances = syllabusLower.includes("adults") ? "Para apoyar tu avance" : "Para apoyar su avance";
 
-    // =======================================================
-    mapaGrande = ` <!--SIGUIENTES PASOS-->
+        // =======================================================
+        mapaGrande = ` <!--SIGUIENTES PASOS-->
   <div style="margin: 4rem auto; justify-items: center; border-radius: 25px; background-color:rgba(252,250,250,0.1);">
     <table width="100%" align="center" cellspacing="0" cellpadding="0" style="width: 80%; border-collapse: collapse;">
       <tr>
@@ -3468,26 +3274,20 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
     </table>
   </div>
      `;
-  } else {
-    // for aprobadso and no matter if its filter or not
-    let approachforMap = "";
-    approachforMap = syllabusLower.includes("adults")
-      ? "Te encuentras en el"
-      : "El estudiante se encuentra en el";
+    } else {
+        // for aprobadso and no matter if its filter or not
+        let approachforMap = "";
+        approachforMap = syllabusLower.includes("adults") ? "Te encuentras en el" : "El estudiante se encuentra en el";
 
-    let diagevalapproachformap = "";
-    diagevalapproachformap = syllabusLower.includes("adults")
-      ? "Continúas desarrollando las competencias del"
-      : "El estudiante continúa desarrollando las competencias del";
+        let diagevalapproachformap = "";
+        diagevalapproachformap = syllabusLower.includes("adults") ? "Continúas desarrollando las competencias del" : "El estudiante continúa desarrollando las competencias del";
 
-    let bigmap = "";
-    bigmap = syllabusLower.includes("adults")
-      ? ""
-      : `
+        let bigmap = "";
+        bigmap = syllabusLower.includes("adults") ? "" : `
       <img src="${B_ClassPath}" style="width: 90%; margin-bottom: 1rem;">`;
 
-    // ===============
-    mapaGrande = ` <!--MAPA GRANDE-->
+        // ===============
+        mapaGrande = ` <!--MAPA GRANDE-->
   <div
     style="margin: 4rem auto; justify-items: center; border-radius: 25px; background-color:rgba(252,250,250,0.1); text-align:center;">
     <table width="100%" align="center" cellspacing="0" cellpadding="0" style="width: 80%; border-collapse: collapse;">
@@ -3502,45 +3302,37 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
         <td
           style="font-family: Segoe UI;  text-align: left; padding: 1rem; font-size: 15px; font-weight: 400; color: #1C5457;"
           align="left">
-          &#9733; ${
-            isDiagnosticEval(syllabusVal, levelVal)
-              ? `${diagevalapproachformap}`
-              : `${approachforMap}`
-          }  <b>nivel ${levelVal}</b>.
-      ${
-        isDiagnosticEval(syllabusVal, levelVal)
-          ? `<br> <br>
+          &#9733; ${isDiagnosticEval(syllabusVal, levelVal) ? `${diagevalapproachformap}` : `${approachforMap}`}  <b>nivel ${levelVal}</b>.
+      ${isDiagnosticEval(syllabusVal, levelVal) ? `<br> <br>
                 &#9733; Seguirá consolidando bases importantes para
-                avanzar con confianza hacia estructuras más complejas.`
-          : ``
-      }
+                avanzar con confianza hacia estructuras más complejas.` : ``}
         </td>
       </tr>`;
-    if (isFilter) {
-      mapaGrande += `<tr>
+        if (isFilter) {
+            mapaGrande += `<tr>
         <td
           style="font-family: Segoe UI;  text-align: left; padding: 0 1rem 1rem; font-size: 16px; font-weight: 400; color: #1C5457;"
           align="left">&#9733; El próximo nivel filtro es el
           <b>nivel ${nextFilter}</b>.
         </td>
       </tr>`;
-    }
-    mapaGrande += `
+        }
+        mapaGrande += `
               </table>
               ${bigmap}
             </div>`;
-  }
+    }
 
-  // ---------- styles removed ----------
+    // ---------- styles removed ----------
 
-  //
-  //===================================================================
-  // ---------- final assembly ----------
-  //===================================================================
-  //
+    //
+    //===================================================================
+    // ---------- final assembly ----------
+    //===================================================================
+    //
 
-  let reportHTML = "";
-  reportHTML += `
+    let reportHTML = "";
+    reportHTML += `
  <html lang="en">
 
 <head>
@@ -3565,45 +3357,45 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
           ">
         <img src="${imgHeader}" alt="" style="width: 100%; display: block; border: 0">
       </div>`;
-  reportHTML += welcomeHTML;
-  reportHTML += ` <div class="email-body"
+    reportHTML += welcomeHTML;
+    reportHTML += ` <div class="email-body"
       style="border-radius: 20px; padding: 2rem 1.5rem; box-shadow: 0 0 15px rgb(14, 126, 134, 0.1); width: 80%; margin: 0 auto; background-color: rgba(255, 255, 255, 0.95); max-width: 1200px;">`;
-  reportHTML += resultadoGlobal;
-  reportHTML += detalleNotaHTML;
-  reportHTML += desempeñoHTML;
-  reportHTML += dominatedHTML;
-  reportHTML += reinforceHTML;
-  reportHTML += opportunityHTML;
-  reportHTML += pronunciationHTML;
-  reportHTML += commentsHTML;
-  reportHTML += coachingHTML;
-  reportHTML += loQueAprendera;
-  reportHTML += mapaGrande;
-  reportHTML += avanceMotivacion;
-  reportHTML += evaluatorLine;
-  reportHTML += rescheduleBox;
-  reportHTML += referText;
-  reportHTML += `</div>`;
-  reportHTML += `</div>`;
-  reportHTML += `<!--FOOTER -->
+    reportHTML += resultadoGlobal;
+    reportHTML += detalleNotaHTML;
+    reportHTML += desempeñoHTML;
+    reportHTML += dominatedHTML;
+    reportHTML += reinforceHTML;
+    reportHTML += opportunityHTML;
+    reportHTML += pronunciationHTML;
+    reportHTML += commentsHTML;
+    reportHTML += coachingHTML;
+    reportHTML += loQueAprendera;
+    reportHTML += mapaGrande;
+    reportHTML += avanceMotivacion;
+    reportHTML += evaluatorLine;
+    reportHTML += rescheduleBox;
+    reportHTML += referText;
+    reportHTML += `</div>`;
+    reportHTML += `</div>`;
+    reportHTML += `<!--FOOTER -->
 
           <img src="${imgFooter}"
            style="width:100%; display:block; margin:0; padding:0; border:0;">
         `;
-  reportHTML += `</div>
+    reportHTML += `</div>
                     </body>
                   </html>`;
 
-  // ---------- preview ----------
-  const popupContent = document.querySelector("#popupContent");
-  //const para preview de scores
-  if (popupContent) {
-    const fp = document.getElementById("fl").value;
-    const gp = document.getElementById("gr").value;
-    const pp = document.getElementById("pr").value;
-    const cp = document.getElementById("co").value;
-    const ip = document.getElementById("in").value;
-    popupContent.innerHTML = `
+    // ---------- preview ----------
+    const popupContent = document.querySelector("#popupContent");
+    //const para preview de scores
+    if (popupContent) {
+        const fp = document.getElementById("fl").value;
+        const gp = document.getElementById("gr").value;
+        const pp = document.getElementById("pr").value;
+        const cp = document.getElementById("co").value;
+        const ip = document.getElementById("in").value;
+        popupContent.innerHTML = `
     <div class="results-preview">
       <div class="floating-results">
         <table>
@@ -3641,35 +3433,24 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
     <div class="preview-wrapper">${reportHTML}</div>
     </div>`;
 
-    // ---------- buttons ----------
-    const backBtn = document.createElement("button");
-    backBtn.id = "backFromCopy";
-    backBtn.innerText = "Back: Finish Feedback";
-    backBtn.classList.add("action-btn");
-    backBtn.addEventListener("click", () => showFinalSection());
-    popupContent.appendChild(backBtn);
+        // ---------- buttons ----------
+        const backBtn = document.createElement("button");
+        backBtn.id = "backFromCopy";
+        backBtn.innerText = "Back: Finish Feedback";
+        backBtn.classList.add("action-btn");
+        backBtn.addEventListener("click", () => showFinalSection());
+        popupContent.appendChild(backBtn);
 
-    const restartBtn = document.createElement("button");
-    restartBtn.id = "restart4Evaluators";
-    restartBtn.innerText = "End: Start New Evaluation";
-    restartBtn.classList.add("action-btn");
-    restartBtn.addEventListener("click", evaluatorsReloadPage);
-    popupContent.appendChild(restartBtn);
-  }
+        const restartBtn = document.createElement("button");
+        restartBtn.id = "restart4Evaluators";
+        restartBtn.innerText = "End: Start New Evaluation";
+        restartBtn.classList.add("action-btn");
+        restartBtn.addEventListener("click", evaluatorsReloadPage);
+        popupContent.appendChild(restartBtn);
+    }
 
-  // ---------- copy to clipboard ----------
-  navigator.clipboard
-    .writeText(reportHTML)
-    .then(() =>
-      showPopup(
-        "<h3>✅Success!</h3><p>The Results have been copied to your clipboard! </p>",
-      ),
-    )
-    .catch(() =>
-      showPopup(
-        "<h3>😓 Oops...</h3><p>❌ The results couldn't be copied, please try again or contact Michelle Hernández via Teams.</p>",
-      ),
-    );
+    // ---------- copy to clipboard ----------
+    navigator.clipboard.writeText(reportHTML).then( () => showPopup("<h3>✅Success!</h3><p>The Results have been copied to your clipboard! </p>", ), ).catch( () => showPopup("<h3>😓 Oops...</h3><p>❌ The results couldn't be copied, please try again or contact Michelle Hernández via Teams.</p>", ), );
 }
 
 //
@@ -3677,80 +3458,86 @@ if (syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 10) {
 //
 
 async function evaluatorsReloadPage() {
-  const proceed = await confirmPopup(
-    "<h3>Start again? 🤔</h3><p>We’ll reset everything so you can begin a fresh evaluation.</p><p><b>Are you sure you want to restart? 👀</b></p>",
-  );
+    const proceed = await confirmPopup("<h3>Start again? 🤔</h3><p>We’ll reset everything so you can begin a fresh evaluation.</p><p><b>Are you sure you want to restart? 👀</b></p>", );
 
-  if (proceed) {
-    // Uncheck all AOI checkboxes
-    const fieldset = document.querySelector("#optionsGroup");
+    if (proceed) {
+        // Uncheck all AOI checkboxes
+        const fieldset = document.querySelector("#optionsGroup");
 
-    if (fieldset) {
-      const checkboxes = fieldset.querySelectorAll('input[type="checkbox"]');
+        if (fieldset) {
+            const checkboxes = fieldset.querySelectorAll('input[type="checkbox"]');
 
-      checkboxes.forEach((cb) => {
-        cb.checked = false;
+            checkboxes.forEach( (cb) => {
+                cb.checked = false;
 
-        const label = cb.closest("label");
-        if (label) {
-          label.classList.remove("selected");
-          label.classList.remove("unselected");
+                const label = cb.closest("label");
+                if (label) {
+                    label.classList.remove("selected");
+                    label.classList.remove("unselected");
+                }
+            }
+            );
+            const counter = document.querySelector("#counter");
+
+            if (counter) {
+                counter.textContent = `0/${maxAllowed} seleccionadas`;
+            }
         }
-      });
-      const counter = document.querySelector("#counter");
 
-      if (counter) {
-        counter.textContent = `0/${maxAllowed} seleccionadas`;
-      }
+        // Refrescar topics como si el usuario hubiera cambiado la semana
+        if (weeksDropdown) {
+            weeksDropdown.dispatchEvent(new Event("change"));
+        }
+
+        // Resetear todos los selects a 2.0
+        const selects = document.querySelectorAll("#gr, #pr, #in, #fl, #co");
+        selects.forEach( (select) => {
+            select.value = "2.0";
+        }
+        );
+
+        //refresh extra-comments
+        refreshVisibleComments();
+        updateExtraInfo();
+        if (fluency) {
+            fluency.dispatchEvent(new Event("change"));
+        }
+        if (intonation) {
+            intonation.dispatchEvent(new Event("change"));
+        }
+
+        // Vaciar todos los textareas
+        const textareas = document.querySelectorAll("textarea");
+        textareas.forEach( (textarea) => {
+            textarea.value = "";
+            skillTest.value = "";
+        }
+        );
+
+        // Resetear el total
+        if (typeof updateTotalScore === "function") {
+            updateTotalScore();
+        }
+        if (typeof calculateFinalScore === "function") {
+            calculateFinalScore();
+        }
+
+        //back to main content
+        popup.classList.add("hidden");
+        mainContent.style.display = "block";
+
+        // Scroll to first topic
+        const topicsSection = document.getElementById("topicsList");
+        if (topicsSection) {
+            topicsSection.scrollIntoView({
+                behavior: "smooth"
+            });
+        }
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
     }
-
-    // Refrescar topics como si el usuario hubiera cambiado la semana
-    if (weeksDropdown) {
-      weeksDropdown.dispatchEvent(new Event("change"));
-    }
-
-    // Resetear todos los selects a 2.0
-    const selects = document.querySelectorAll("#gr, #pr, #in, #fl, #co");
-    selects.forEach((select) => {
-      select.value = "2.0";
-    });
-
-    //refresh extra-comments
-    refreshVisibleComments();
-    updateExtraInfo();
-    if (fluency) {
-      fluency.dispatchEvent(new Event("change"));
-    }
-    if (intonation) {
-      intonation.dispatchEvent(new Event("change"));
-    }
-
-    // Vaciar todos los textareas
-    const textareas = document.querySelectorAll("textarea");
-    textareas.forEach((textarea) => {
-      textarea.value = "";
-      skillTest.value = "";
-    });
-
-    // Resetear el total
-    if (typeof updateTotalScore === "function") {
-      updateTotalScore();
-    }
-    if (typeof calculateFinalScore === "function") {
-      calculateFinalScore();
-    }
-
-    //back to main content
-    popup.classList.add("hidden");
-    mainContent.style.display = "block";
-
-    // Scroll to first topic
-    const topicsSection = document.getElementById("topicsList");
-    if (topicsSection) {
-      topicsSection.scrollIntoView({ behavior: "smooth" });
-    }
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
 }
 
 //
@@ -3758,22 +3545,20 @@ async function evaluatorsReloadPage() {
 //
 
 function showCoachingOpportunity() {
-  const syllabus = syllabusE4E?.value || "";
-  const level = levelE4E?.value || "";
-  const totalScore = parseFloat(totalScoreEl?.textContent) || 0; // si quieres score
+    const syllabus = syllabusE4E?.value || "";
+    const level = levelE4E?.value || "";
+    const totalScore = parseFloat(totalScoreEl?.textContent) || 0;
+    // si quieres score
 
-  // Condición para mostrar coaching
-  const hasCoachingOpportunity =
-    (syllabus.includes("Kids Intensivo") ||
-      syllabus.includes("Kids (Super Intensivo)")) &&
-    ["2", "4", "7"].includes(level) &&
-    totalScore <= 7; // incluye score si aplica
+    // Condición para mostrar coaching
+    const hasCoachingOpportunity = (syllabus.includes("Kids Intensivo") || syllabus.includes("Kids (Super Intensivo)")) && ["2", "4", "7"].includes(level) && totalScore <= 7;
+    // incluye score si aplica
 
-  const popupContent = popup?.querySelector?.("#popupContent");
+    const popupContent = popup?.querySelector?.("#popupContent");
 
-  if (hasCoachingOpportunity && popupContent) {
-    // HTML de coaching
-    popupContent.innerHTML = `
+    if (hasCoachingOpportunity && popupContent) {
+        // HTML de coaching
+        popupContent.innerHTML = `
       <div class="final-container">
         <h4>Every Selected item will be added to the RC</h4>
         <fieldset class="coachingOpportunity">
@@ -3790,26 +3575,27 @@ function showCoachingOpportunity() {
         </fieldset>
       </div>`;
 
-    // Botón back
-    const backButton = document.createElement("button");
-    backButton.id = "nextBtn";
-    backButton.innerText = "Back: See feedback";
-    backButton.addEventListener("click", showFinalSection);
-    popupContent.appendChild(backButton);
+        // Botón back
+        const backButton = document.createElement("button");
+        backButton.id = "nextBtn";
+        backButton.innerText = "Back: See feedback";
+        backButton.addEventListener("click", showFinalSection);
+        popupContent.appendChild(backButton);
 
-    // Botón copy results
-    const copyButton = document.createElement("button");
-    copyButton.id = "copyResults";
-    copyButton.classList.add("copybutton");
-    copyButton.innerText = "Next: Copy Results (EVALUATORS ONLY)";
-    copyButton.addEventListener("click", evaluatorsCopyResults);
-    popupContent.appendChild(copyButton);
+        // Botón copy results
+        const copyButton = document.createElement("button");
+        copyButton.id = "copyResults";
+        copyButton.classList.add("copybutton");
+        copyButton.innerText = "Next: Copy Results (EVALUATORS ONLY)";
+        copyButton.addEventListener("click", evaluatorsCopyResults);
+        popupContent.appendChild(copyButton);
 
-    if (closeBtn) closeBtn.style.display = "inline-block";
-  } else {
-    console.log("no PASA");
-    evaluatorsCopyResults();
-  }
+        if (closeBtn)
+            closeBtn.style.display = "inline-block";
+    } else {
+        console.log("no PASA");
+        evaluatorsCopyResults();
+    }
 }
 
 //
@@ -3818,10 +3604,10 @@ function showCoachingOpportunity() {
 
 // ---open---
 function openSoundboard() {
-  const soundboard = document.createElement("div");
-  soundboard.classList.add("soundboard", "slide-in");
+    const soundboard = document.createElement("div");
+    soundboard.classList.add("soundboard", "slide-in");
 
-  soundboard.innerHTML = `
+    soundboard.innerHTML = `
     <button class="close" onclick="closeSoundboard()">✖</button>
     <div id="wrapping" class="wrapping">
       <button class="category-btn" onclick="openCategory('actions', this)">Actions</button>
@@ -3831,166 +3617,104 @@ function openSoundboard() {
       </div>
   `;
 
-  document.body.appendChild(soundboard);
-  // Detectar clic fuera para cerrar
-  setTimeout(() => {
-    document.addEventListener("click", handleOutsideClick);
-  }, 0);
+    document.body.appendChild(soundboard);
+    // Detectar clic fuera para cerrar
+    setTimeout( () => {
+        document.addEventListener("click", handleOutsideClick);
+    }
+    , 0);
 }
 
 // ---close---
 function closeSoundboard() {
-  const soundboard = document.querySelector(".soundboard");
-  if (soundboard) {
-    soundboard.classList.remove("slide-in");
-    soundboard.classList.add("slide-out");
+    const soundboard = document.querySelector(".soundboard");
+    if (soundboard) {
+        soundboard.classList.remove("slide-in");
+        soundboard.classList.add("slide-out");
 
-    soundboard.addEventListener(
-      "animationend",
-      () => {
-        soundboard.remove();
-        document.getElementById("soundboardBtn").style.display = "flex";
-        document.removeEventListener("click", handleOutsideClick);
-      },
-      { once: true },
-    );
-  }
+        soundboard.addEventListener("animationend", () => {
+            soundboard.remove();
+            document.getElementById("soundboardBtn").style.display = "flex";
+            document.removeEventListener("click", handleOutsideClick);
+        }
+        , {
+            once: true
+        }, );
+    }
 }
 
 // ---category---
 
 function openCategory(category, clickedBtn) {
-  const soundboard = document.querySelector(".soundboard");
-  const buttons = soundboard.querySelectorAll(".category-btn");
-  const wrapping = document.getElementById("wrapping");
+    const soundboard = document.querySelector(".soundboard");
+    const buttons = soundboard.querySelectorAll(".category-btn");
+    const wrapping = document.getElementById("wrapping");
 
-  // Eliminar div anterior si existe
-  const existingCategoryDiv = soundboard.querySelector(".category-content");
-  if (existingCategoryDiv) existingCategoryDiv.remove();
+    // Eliminar div anterior si existe
+    const existingCategoryDiv = soundboard.querySelector(".category-content");
+    if (existingCategoryDiv)
+        existingCategoryDiv.remove();
 
-  // Expandir panel visualmente
-  soundboard.classList.add("expanded");
+    // Expandir panel visualmente
+    soundboard.classList.add("expanded");
 
-  // Crear nuevo div con ID del nombre de la categoría
-  const categoryDiv = document.createElement("div");
-  categoryDiv.classList.add("category-content", "fade-in");
-  categoryDiv.id = category;
-  wrapping.classList.remove("wrapping");
-  wrapping.classList.add("wrapped");
+    // Crear nuevo div con ID del nombre de la categoría
+    const categoryDiv = document.createElement("div");
+    categoryDiv.classList.add("category-content", "fade-in");
+    categoryDiv.id = category;
+    wrapping.classList.remove("wrapping");
+    wrapping.classList.add("wrapped");
 
-  // Marcar el botón seleccionado
-  buttons.forEach((btn) => {
-    if (btn === clickedBtn) {
-      btn.classList.remove("unselected");
-      btn.classList.add("selected");
-    } else {
-      btn.classList.remove("selected");
-      btn.classList.add("unselected");
+    // Marcar el botón seleccionado
+    buttons.forEach( (btn) => {
+        if (btn === clickedBtn) {
+            btn.classList.remove("unselected");
+            btn.classList.add("selected");
+        } else {
+            btn.classList.remove("selected");
+            btn.classList.add("unselected");
+        }
     }
-  });
+    );
 
-  // ---DATOS DE CADA CATEGORÍA---
-  const categories = {
-    actions: [
-      "Eat",
-      "Bite",
-      "Drink",
-      "Sleep",
-      "Run",
-      "Jump",
-      "Dance Macarena",
-      "Walk",
-    ],
-    sfx: [
-      "Impostor Among Us",
-      "Buzzer",
-      "Chan Chan Chan",
-      "Claps",
-      "Correct Ding",
-      "Crickets",
-      "Hoop Ding",
-      "Horn",
-      "Huh",
-      "Sad Meow",
-      "Shock Cinematic",
-      "Tiny Violin",
-      "Victory",
-      "Vine Boom",
-      "Yipee",
-    ],
-    music: [
-      "My Little Soda Pop",
-      "Dance-Remix",
-      "Dynamite - BTS",
-      "Fancy - Twice",
-      "Jump - Blackpink",
-      "Macarena",
-      "Russian Roulette",
-    ],
-    animals: [
-      "Bee",
-      "Cat",
-      "Chicken",
-      "Cow",
-      "Crow",
-      "Dinosaur",
-      "Dog",
-      "Dove",
-      "Duck",
-      "Elephant",
-      "Frog",
-      "Giraffe",
-      "Horse",
-      "Whale",
-      "Lion",
-      "Owl",
-      "Panda",
-      "Penguin",
-      "Pig",
-      "Rabbit",
-      "Raccoon",
-      "Rat",
-      "Rattlesnake",
-      "Rooster",
-      "Sheep",
-      "Tiger",
-      "Wolf",
-      "Zebra",
-    ],
-  };
+    // ---DATOS DE CADA CATEGORÍA---
+    const categories = {
+        actions: ["Eat", "Bite", "Drink", "Sleep", "Run", "Jump", "Dance Macarena", "Walk", ],
+        sfx: ["Impostor Among Us", "Buzzer", "Chan Chan Chan", "Claps", "Correct Ding", "Crickets", "Hoop Ding", "Horn", "Huh", "Sad Meow", "Shock Cinematic", "Tiny Violin", "Victory", "Vine Boom", "Yipee", ],
+        music: ["My Little Soda Pop", "Dance-Remix", "Dynamite - BTS", "Fancy - Twice", "Jump - Blackpink", "Macarena", "Russian Roulette", ],
+        animals: ["Bee", "Cat", "Chicken", "Cow", "Crow", "Dinosaur", "Dog", "Dove", "Duck", "Elephant", "Frog", "Giraffe", "Horse", "Whale", "Lion", "Owl", "Panda", "Penguin", "Pig", "Rabbit", "Raccoon", "Rat", "Rattlesnake", "Rooster", "Sheep", "Tiger", "Wolf", "Zebra", ],
+    };
 
-  // Crear HTML dinámicamente según categoría
-  let html = '<section class="press-button">';
-  categories[category].forEach((name) => {
-    // convertir a minúsculas y reemplazar caracteres especiales para el archivo
-    let fileName = name.toLowerCase().replace(/ /g, " ");
-    let folder = category.charAt(0).toUpperCase() + category.slice(1); // Actions, SFX, Music, Animals
-    html += `
+    // Crear HTML dinámicamente según categoría
+    let html = '<section class="press-button">';
+    categories[category].forEach( (name) => {
+        // convertir a minúsculas y reemplazar caracteres especiales para el archivo
+        let fileName = name.toLowerCase().replace(/ /g, " ");
+        let folder = category.charAt(0).toUpperCase() + category.slice(1);
+        // Actions, SFX, Music, Animals
+        html += `
       <div>
         <button data-sound="SoundBoard/${folder}/${fileName}.mp3" onclick="playSound(this)"></button>
         <h5>${name}</h5>
       </div>
     `;
-  });
-  html += "</section>";
+    }
+    );
+    html += "</section>";
 
-  // Insertar HTML al nuevo div
-  categoryDiv.innerHTML = html;
+    // Insertar HTML al nuevo div
+    categoryDiv.innerHTML = html;
 
-  // Agregar el nuevo div al soundboard
-  soundboard.appendChild(categoryDiv);
+    // Agregar el nuevo div al soundboard
+    soundboard.appendChild(categoryDiv);
 }
 
 // ---Cerrar si se hace clic fuera---
 function handleOutsideClick(e) {
-  const soundboard = document.querySelector(".soundboard");
-  if (
-    soundboard &&
-    !soundboard.contains(e.target) &&
-    e.target.id !== "soundboardBtn"
-  ) {
-    closeSoundboard();
-  }
+    const soundboard = document.querySelector(".soundboard");
+    if (soundboard && !soundboard.contains(e.target) && e.target.id !== "soundboardBtn") {
+        closeSoundboard();
+    }
 }
 
 // Array global para controlar todos los audios activos
@@ -3998,61 +3722,64 @@ let activeAudios = [];
 
 // ---PLAY SOUND---
 function playSound(button) {
-  const soundPath = button.getAttribute("data-sound");
-  const audio = new Audio(soundPath);
+    const soundPath = button.getAttribute("data-sound");
+    const audio = new Audio(soundPath);
 
-  // Reproducir audio
-  audio.play();
+    // Reproducir audio
+    audio.play();
 
-  // Guardar audio en el array
-  activeAudios.push(audio);
+    // Guardar audio en el array
+    activeAudios.push(audio);
 
-  // Si no existe botón Stop All, lo creamos
-  if (!document.getElementById("stop-all-btn")) {
-    const stopBtn = document.createElement("button");
-    stopBtn.id = "stop-all-btn";
-    stopBtn.textContent = "Stop All Sounds";
-    stopBtn.classList.add("stopSounds", "slide-in");
-    stopBtn.onclick = stopAllSounds;
-    document.body.appendChild(stopBtn);
-  }
-
-  // Cuando el audio termina, se elimina del array
-  audio.addEventListener("ended", () => {
-    activeAudios = activeAudios.filter((a) => a !== audio);
-
-    // Si no quedan audios, eliminamos el botón de stop
-    if (activeAudios.length === 0) {
-      const stopBtn = document.getElementById("stop-all-btn");
-      if (stopBtn) {
-        stopBtn.classList.remove("slide-in");
-        stopBtn.classList.add("slide-out");
-
-        stopBtn.addEventListener(
-          "animationend",
-          () => {
-            stopBtn.remove();
-            document.getElementById("soundboardBtn").style.display = "flex";
-            document.removeEventListener("click", handleOutsideClick);
-          },
-          { once: true },
-        );
-      }
+    // Si no existe botón Stop All, lo creamos
+    if (!document.getElementById("stop-all-btn")) {
+        const stopBtn = document.createElement("button");
+        stopBtn.id = "stop-all-btn";
+        stopBtn.textContent = "Stop All Sounds";
+        stopBtn.classList.add("stopSounds", "slide-in");
+        stopBtn.onclick = stopAllSounds;
+        document.body.appendChild(stopBtn);
     }
-  });
+
+    // Cuando el audio termina, se elimina del array
+    audio.addEventListener("ended", () => {
+        activeAudios = activeAudios.filter( (a) => a !== audio);
+
+        // Si no quedan audios, eliminamos el botón de stop
+        if (activeAudios.length === 0) {
+            const stopBtn = document.getElementById("stop-all-btn");
+            if (stopBtn) {
+                stopBtn.classList.remove("slide-in");
+                stopBtn.classList.add("slide-out");
+
+                stopBtn.addEventListener("animationend", () => {
+                    stopBtn.remove();
+                    document.getElementById("soundboardBtn").style.display = "flex";
+                    document.removeEventListener("click", handleOutsideClick);
+                }
+                , {
+                    once: true
+                }, );
+            }
+        }
+    }
+    );
 }
 
 // ---STOP ALL SOUNDS---
 function stopAllSounds() {
-  activeAudios.forEach((audio) => {
-    audio.pause();
-    audio.currentTime = 0; // Reiniciar al inicio
-  });
-  activeAudios = [];
+    activeAudios.forEach( (audio) => {
+        audio.pause();
+        audio.currentTime = 0;
+        // Reiniciar al inicio
+    }
+    );
+    activeAudios = [];
 
-  // Remover botón Stop All
-  const stopBtn = document.getElementById("stop-all-btn");
-  if (stopBtn) stopBtn.remove();
+    // Remover botón Stop All
+    const stopBtn = document.getElementById("stop-all-btn");
+    if (stopBtn)
+        stopBtn.remove();
 }
 
 //
@@ -4064,37 +3791,41 @@ const checkboxes = fieldset.querySelectorAll('input[type="checkbox"]');
 const counter = document.querySelector("#counter");
 const maxAllowed = 3;
 
-checkboxes.forEach((cb) => {
-  cb.addEventListener("change", () => {
-    const checked = fieldset.querySelectorAll('input[type="checkbox"]:checked');
-    const count = checked.length;
+checkboxes.forEach( (cb) => {
+    cb.addEventListener("change", () => {
+        const checked = fieldset.querySelectorAll('input[type="checkbox"]:checked');
+        const count = checked.length;
 
-    // actualiza contador
-    counter.textContent = `${count}/${maxAllowed} seleccionadas`;
+        // actualiza contador
+        counter.textContent = `${count}/${maxAllowed} seleccionadas`;
 
-    // bloquea/desbloquea inputs y actualiza clase unselected
-    checkboxes.forEach((box) => {
-      const label = box.closest("label");
-      if (count >= maxAllowed && !box.checked) {
-        box.disabled = true;
-        label.classList.add("unselected");
-      } else {
-        box.disabled = false;
-        label.classList.remove("unselected");
-      }
-    });
+        // bloquea/desbloquea inputs y actualiza clase unselected
+        checkboxes.forEach( (box) => {
+            const label = box.closest("label");
+            if (count >= maxAllowed && !box.checked) {
+                box.disabled = true;
+                label.classList.add("unselected");
+            } else {
+                box.disabled = false;
+                label.classList.remove("unselected");
+            }
+        }
+        );
 
-    // toggle clase selected en labels
-    checkboxes.forEach((box) => {
-      const label = box.closest("label");
-      if (box.checked) {
-        label.classList.add("selected");
-      } else {
-        label.classList.remove("selected");
-      }
-    });
-  });
-});
+        // toggle clase selected en labels
+        checkboxes.forEach( (box) => {
+            const label = box.closest("label");
+            if (box.checked) {
+                label.classList.add("selected");
+            } else {
+                label.classList.remove("selected");
+            }
+        }
+        );
+    }
+    );
+}
+);
 
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
@@ -4103,7 +3834,7 @@ checkboxes.forEach((cb) => {
 // RESCHEDULE EVAL
 
 function ReScheduleEmail() {
-  const ReScheduleEmail = `
+    const ReScheduleEmail = `
     <html lang="en">
 
 <head>
@@ -4197,18 +3928,7 @@ function ReScheduleEmail() {
 </html>
 `;
 
-  // Copiar al portapapeles
-  navigator.clipboard
-    .writeText(ReScheduleEmail)
-    .then(() =>
-      showPopup(
-        `<h3>✅Success!</h3><p>The reschedule email has been copied to your clipboard! </p> <h4 class="previewTitle">Preview:</h4>
-        <div class="smallPreview"> ${ReScheduleEmail} </div>`,
-      ),
-    )
-    .catch(() =>
-      showPopup(
-        `<h3>😓 Oops...</h3><p>❌ The results couldn't be copied, please try again or contact Michelle Hernández via Teams.</p>`,
-      ),
-    );
+    // Copiar al portapapeles
+    navigator.clipboard.writeText(ReScheduleEmail).then( () => showPopup(`<h3>✅Success!</h3><p>The reschedule email has been copied to your clipboard! </p> <h4 class="previewTitle">Preview:</h4>
+        <div class="smallPreview"> ${ReScheduleEmail} </div>`, ), ).catch( () => showPopup(`<h3>😓 Oops...</h3><p>❌ The results couldn't be copied, please try again or contact Michelle Hernández via Teams.</p>`, ), );
 }
