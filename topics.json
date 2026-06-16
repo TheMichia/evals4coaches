@@ -549,24 +549,25 @@
       "Presente Simple (1ra y 3ra persona)",
       "Presente Progresivo (1ra y 3ra persona)",
       "Pasado Simple",
-      "Modales"
+      "Pasado Progresivo",
+      "Comparativos",
+      "Superlativos"
     ],
     "8": [
       "Presente Simple (3ra persona)",
       "Futuro Simple (Going to y Will)",
       "Pasado Simple",
-      "Pasado Progresivo",
-      "Modales",
-      "Condicionales"
+      "Comparativos",
+      "Superlativos",
+      "Presente perfecto"
     ]
   },
   "9": {
     "4": [
-      "Presente Simple (3ra persona)",
+      "Presente Simple (1ra y 3ra persona)",
       "Pasado Simple",
       "Modales",
       "Condicionales",
-      "Comparativos y Superlativos",
       "Presente Perfecto"
     ],
     "7": [
@@ -608,7 +609,10 @@
       "Comparativos",
       "Superlativos",
       "Modales",
-      "Presente Perfecto"
+      "Presente Perfecto",
+      "Opinion & Justification",
+      "Describing a Picture",
+      "Asking Question"
     ]
   }
 },"Kids Masters": {
