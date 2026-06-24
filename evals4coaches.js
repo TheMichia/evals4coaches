@@ -1820,11 +1820,14 @@ function startTimer(durationSeconds) {
       .toString()
       .padStart(2, "0")}`;
 
-    // Cambiar estilos
+    // Cambiar estilos    
+    // a los 6 mins enable feedback btn
+    if (timer <= 360) {
+      feedbackBtn.disabled = false;      
+    }
     if (timer <= 300) {
       container.classList.remove("normal");
       container.classList.add("warning");
-      feedbackBtn.disabled = false;
     }
     if (timer <= 60) {
       container.classList.remove("warning");
