@@ -1,10 +1,8 @@
 ( () => {
     const version = "Evaluators";
-    const versionnum = "2.7.1";
-    // Cambiar el welcome a que diga "¡Te saludamos de English4Kids!"
-    // el resto del welcome a "Gracias por confiar en nosotros para acompañar el aprendizaje de tu hijo/a. A continuación, te compartimos los resultados de la evaluación."
-    // quitar el mini mapa al inicio de la report card
-    const E4EjsonVersion = 3.;
+    const versionnum = "2.8.0";
+    // added a function to deal with cefr info for exit evals and changed exist evals/s resultado global to be dynamic based on the function
+    const E4EjsonVersion = 3;
     window.appVersion = "Evaluators";
     const showversion = document.getElementById("version");
     showversion.innerHTML = `${version} ${versionnum} - JSON ${E4EjsonVersion}`;
@@ -134,6 +132,7 @@ if (syllabusE4E) {
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
+// ---------- HELPERS ----------
 
 // función para chequear si es diagnóstico
 function isDiagnosticEval(syllabusVal, levelVal) {
@@ -151,6 +150,165 @@ function isExitEval(syllabusVal, levelVal, weekVal) {
 
     return (!syllabusVal.startsWith("Juniors") && ((levelVal === 10 && (weekVal === 7 || weekVal === 13)) || (levelVal === 12 && weekVal === 3) || (syllabusVal.includes("Masters") && levelVal === 10 && weekVal === 3) || (syllabusLower.includes("adults (5hrs/week)") && levelVal === 10 && weekVal === 3)) && !((syllabusLower.includes("kids intensivo") && levelVal === 10 && weekVal === 7) || (syllabusLower.includes("teens 13-17 (3hrs/week)") && levelVal === 10 && weekVal === 7)));
 }
+function setCEFRInfo(syllabusVal) {
+  var failedCEFR = "";
+  var finalCEFR = "";
+  var descripcionCEFR = "";
+
+  switch (syllabusVal) {
+// juniors dont have cefr but left empty for future updates or changes
+    case "Juniors 5-7":
+      failedCEFR = "";
+      finalCEFR = "A2";
+      descripcionCEFR = "";
+      break;
+
+          // all kids and teens share the same
+    case "Kids (Intensivo) 8-12":
+    case "Kids (Super Intensivo) 8-12":
+    case "Teens 13-17 (3hrs/week)":
+    case "Teens 13-17 (5hrs/week)":
+      failedCEFR = "Básico Avanzado (A2)";
+      finalCEFR = "Intermedio (B1)";
+      descripcionCEFR = `<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Comunicarse con confianza en situaciones cotidianas, describiendo personas, lugares y experiencias.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Hablar sobre rutinas, acciones presentes, eventos pasados y planes futuros con claridad.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Participar en conversaciones sobre temas familiares, expresar opiniones, comparar ideas, hacer predicciones y hablar sobre situaciones hipotéticas.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Comprender las ideas principales de conversaciones y textos sobre temas conocidos y responder con claridad, organización y un buen nivel de precisión gramatical.
+  </td>
+</tr>`;
+      break;
+
+          // kids and teens masters share
+    case "Kids Masters":
+    case "Teens Masters":
+      failedCEFR = "Intermedio (B1)";
+      finalCEFR = "Intermedio Alto (B1+)";
+      descripcionCEFR = `<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Comunicarse con confianza en situaciones cotidianas, describiendo personas, lugares y experiencias.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Hablar sobre rutinas, acciones presentes, eventos pasados y planes futuros utilizando una variedad de tiempos verbales.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Participar en conversaciones sobre temas familiares, expresar opiniones, comparar ideas, hacer predicciones y hablar sobre situaciones hipotéticas.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Comprender las ideas principales de conversaciones y textos sobre temas conocidos y responder con claridad, organización y buena precisión gramatical.
+  </td>
+</tr>`;
+     break;
+// `
+          // kids and teens masters 2 share
+    case "Kids Masters 2":
+    case "Teens Masters 2":
+      failedCEFR = "Intermedio Alto (B1+)";
+      finalCEFR = "Intermedio Avanzado-Inicial (B2 Inicial)";
+      descripcionCEFR = `<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Comunicarse con confianza y espontaneidad en una amplia variedad de situaciones cotidianas y académicas.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Expresar y defender sus opiniones, narrar experiencias, describir acciones presentes y planes futuros, y formular hipótesis utilizando una amplia variedad de estructuras gramaticales.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Mantener conversaciones fluidas con hablantes de inglés sobre temas familiares y de interés con seguridad y naturalidad.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Comprender las ideas principales de conversaciones y textos de complejidad media, y producir respuestas claras, coherentes y bien organizadas con un buen nivel de precisión gramatical.
+  </td>
+</tr>`;
+          break;
+
+          // adults share
+    case "Adults (3hrs/week)":
+    case "Adults (5hrs/week)":
+      failedCEFR = "";
+      finalCEFR = "Básico Avanzado-Alto (A2+)";
+      descripcionCEFR = `<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Comunicarte con confianza en situaciones cotidianas y de viaje, realizando y respondiendo preguntas sobre información personal, rutinas, experiencias pasadas y planes futuros.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Describir personas, lugares y actividades, comparar opciones, expresar habilidades y dar consejos sencillos utilizando estructuras gramaticales básicas e intermedias.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Comprender las ideas principales de conversaciones relacionadas con temas familiares y situaciones de la vida diaria.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Mantener intercambios claros y efectivos en contextos sociales, laborales y académicos de complejidad moderada.
+  </td>
+</tr>`
+          break;
+
+          // adults masters share
+    case "Adults Masters (3hrs/week)":
+    case "Adults Masters (5hrs/week)":
+      failedCEFR = "Básico Avanzado-Alto (A2+)";
+      finalCEFR = "Intermedio (B1)";
+      descripcionCEFR = `<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Comunicarte con seguridad y autonomía en una amplia variedad de situaciones personales, académicas y laborales.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Describir experiencias, rutinas y hábitos pasados, hablar sobre acciones en progreso, expresar planes, predicciones y formular hipótesis utilizando una amplia variedad de estructuras gramaticales.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Mantener conversaciones claras y relativamente espontáneas, expresar y justificar opiniones, y ofrecer consejos con confianza.
+  </td>
+</tr>
+<tr>
+  <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
+    &#10004; Comprender las ideas principales de conversaciones y textos de complejidad media y desenvolverse eficazmente en la mayoría de situaciones en un entorno de habla inglesa.
+  </td>
+</tr>`;
+  break;
+  }
+
+  return {
+    failedCEFR,
+    finalCEFR,
+    descripcionCEFR
+  };
+}
+
+
 
 // función para ocultar/mostrar las tablas topictable
 function hideTopicTables(diagnostic) {
@@ -1647,316 +1805,11 @@ async function evaluatorsCopyResults() {
       `;
         }
     }
-    // all condicionados updated
-    // ---------- Build full headers (complete texts) ----------
-    // ---***EXIT*** Kids and teens---
-    // updated
-    const header_pass_kids_teens = `
-    <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
-  <p
-    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
-    &#127881; ¡Felicidades, papás y mamás!</p>
-  <!-- &#x1F31F; -->
-  <p
-    style="padding: 1rem 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
-    Hoy celebramos juntos un <b>logro extraordinario</b><br /><br />
-    Su hijo/a ha completado con éxito su curso de inglés,
-    superando cada reto con
-    <b>dedicación, alegría y una constancia admirable.</b>
-    Durante este tiempo, no solo adquirió nuevas habilidades lingüísticas,
-    sino que también desarrolló
-    <b>confianza, disciplina y una mentalidad de superación</b> que le
-    acompañará toda la vida.<br /><br />
-    Este avance es fruto de su esfuerzo, del acompañamiento de ustedes y
-    del compromiso de todo nuestro equipo English4kids.<br /><br />
-     ¡Gracias por ser
-    parte activa de este viaje y por inspirar a su pequeño/a a alcanzar la
-    meta!
-    <b><br><br />
-    &#127775; Hoy, más que un curso terminado, celebramos el inicio de
-    un futuro lleno de oportunidades.</b>
-  </p>
-</div>
-      `;
-    // upd
-    const resultado_global_pass_kids_teens = `
-    <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
-
-  <p
-    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
-    ¡Un gran paso hacia el dominio del idioma!
-  </p>
-
-  <p style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 0;">
-    Tu hijo/a ha alcanzado un nivel
-    intermedio de inglés (B1–B2)<br>
-    <span style="font-size: 13px; font-weight: 400; color: #497275;">Según el Marco Común Europeo (CEFR)</span>
-  </p>
-
-  <p style="font-size:15px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
-    Estamos seguros de que este logro abrirá
-    muchas puertas para su futuro.
-
-
-  </p>
-</div>
-<div class="desempeño"
-  style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
-  <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%">
-    <thead>
-      <tr>
-        <th colspan="2"
-          style="font-size: 22px; font-family:  Segoe UI, Roboto; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
-          align="center">
-          Esto significa que es capaz de: </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td
-          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
-          &#10004; Comprender ideas principales en conversaciones claras
-        </td>
-      </tr>
-      <tr>
-        <td
-          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
-          &#10004; Expresar opiniones y relatar experiencias
-        </td>
-      </tr>
-      <tr>
-        <td
-          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
-
-          &#10004; Participar activamente en interacciones reales con
-          seguridad y autonomía</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-    `;
-    // updated
-    const header_fail_kids_teens = `
- <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
-  <p
-    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
-
-    &#127919; Queremos reconocer la dedicación y el esfuerzo
-  </p>
-  <!-- &#x1F31F; -->
-  <p
-    style="padding: 1rem 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
-    Tu hijo/a ha mostrado compromiso y participación en cada etapa del
-    aprendizaje del inglés. ¡Cada paso cuenta! &#10024;<br><br>
-    En esta evaluación final,
-    <b
-    >aún no se ha alcanzado el nivel de dominio necesario para cerrar el
-    curso satisfactoriamente</b>. Esto significa que algunas habilidades clave todavía están en proceso
-    de fortalecimiento.
-  </p>
-</div>
-    `;
-
-    const semanas4kidsteens = syllabusVal.includes("Masters") ? 4 : 8;
-    // upd
-    const resultado_global_fail_kids_teens = `
-   <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
-
-  <p
-    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0; ">
-    Siguientes Pasos
-  </p>
-
-  <p style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 0 0; ">
-    No te desanimes:<br>
-    <span style="font-size: 14px; font-weight: 400; color: #497275;">tu hijo/a tendrá una segunda oportunidad en
-          <b>${semanas4kidsteens} semanas</b>. </span>
-  </p>
-
-  <p style="font-size:14px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
-    Será asignado/a nuevamente al mismo nivel,
-    lo que le permitirá
-    <b
-    >repasar los contenidos, reforzar áreas clave y prepararse
-    de la mejor manera </b>para aprobar en la próxima evaluación.
-
-  </p>
-</div>
-<div class="desempeño"
-  style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
-  <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%">
-    <thead>
-      <tr>
-        <th colspan="2"
-          style="font-size: 18px; font-family:  Segoe UI, Roboto; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
-          align="center">
-          Nivel actual: </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td
-          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px;text-align: left; font-weight: 400; ">
-          Según el Marco Común Europeo de Referencia para las Lenguas
-          (CEFR), tu hijo/a aún no alcanza el nivel intermedio (B1).<br><br>
-          Actualmente se encuentra en un nivel básico alto (A2) y
-          necesita reforzar estructuras clave, comprensión auditiva y
-          expresión oral fluida para avanzar al siguiente nivel.
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p
-    style="font-size:15px; font-weight: 500; padding: 2rem 1rem 0; color: #497275; font-family: Segoe UI; text-align:center;">
-    Gracias por acompañar este proceso. Con práctica constante y
-    apoyo familiar, ¡estamos seguros de que muy pronto alcanzará
-    el siguiente nivel!
-  </p>
-</div>
-`;
-    // ---***EXIT***ADULTS---
-    // upd
-    const header_pass_adults = `
-      <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
-  <p
-    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
-
-    &#127881; ¡Felicidades!
-  </p>
-  <!-- &#x1F31F; -->
-  <p
-    style="padding: 1rem 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
-    Hoy celebramos contigo un <b>logro extraordinario</b>.<br><br>
-
-Has completado con éxito tu curso de inglés, superando cada reto con
-    <b>dedicación, constancia y una admirable voluntad de aprendizaje</b>.
-    &#127942;&#10024;<br><br>
-
-Durante este tiempo, no solo has fortalecido tus <b>habilidades lingüísticas</b> para desenvolverte en situaciones
-    cotidianas con mayor <b>seguridad y fluidez</b>, sino que también has desarrollado
-    <b>confianza, disciplina y una mentalidad de superación</b> que te acompañará en cada meta que te propongas.<br><br>
-
-&#127775; Este avance es fruto de tu <b>esfuerzo</b>, de tu <b>compromiso</b> y de la
-    <b>determinación de seguir creciendo</b>.
-    Hoy no solo celebramos un curso terminado, sino el inicio de un <b>futuro lleno de nuevas oportunidades</b> para
-    comunicarte, conectar y alcanzar tus sueños.
-
-  </p>
-</div>
-`;
-    // u
-    const header_fail_adults = `
-   <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
-  <p
-    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
-
-    Reconocemos tu esfuerzo y tu participación
-  </p>
-  <!-- &#x1F31F; -->
-  <p
-    style="padding: 1rem 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
-    Cada paso que das en tu aprendizaje del inglés suma y te acerca
-    más a tu meta. <br><br>
-    En esta evaluación final, <b
-    >aún no se ha alcanzado el nivel de dominio necesario para cerrar el
-    curso satisfactoriamente</b>. Esto indica que algunas habilidades clave siguen en proceso de
-    desarrollo.
-  </p>
-</div>
-`;
-    // upd
-    const resultado_global_fail_adults = `
-    <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
-
-  <p
-    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0; ">
-    Siguientes Pasos
-  </p>
-
-  <p style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 0 0; ">
-    No te desanimes:<br>
-    <span style="font-size: 15px; font-weight: 400; color: #497275;">tendrás una segunda oportunidad en
-          <b>4 semanas</b> mientras repites el nivel.</span>
-  </p>
-
-  <p style="font-size:15px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
-    Esto te permitirá
-    repasar los contenidos, reforzar áreas específicas y llegar
-    con más seguridad a tu próxima evaluación.
-
-  </p>
-  <p style="font-size:15px; font-weight: 500; padding: 1rem; color: #497275; font-family: Segoe UI; text-align:center;">
-
-    Este resultado <b>no marca el final del camino</b>, sino una
-    nueva oportunidad para avanzar. Con tu constancia y
-    dedicación, estamos seguros de que muy pronto alcanzarás la
-    meta.
-  </p>
-</div>`;
-    // upd
-    const resultado_global_pass_adults = `
-    <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
-
-  <p
-    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
-    ¡Un gran paso hacia el dominio del idioma!
-  </p>
-
-  <p style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 0;">
-    Has alcanzado un nivel
-    A2 de inglés<br>
-    <span style="font-size: 13px; font-weight: 400; color: #497275;">Según el Marco Común Europeo (CEFR)</span>
-  </p>
-
-  <p style="font-size:15px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
-    Estamos seguros de que este logro abrirá muchas puertas para tu futuro.
-
-
-  </p>
-</div>
-<div class="desempeño"
-  style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
-  <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%">
-    <thead>
-      <tr>
-        <th colspan="2"
-          style="font-size: 22px; font-family:  Segoe UI, Roboto; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
-          align="center">
-          Esto significa que puedes: </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td
-          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
-          &#10004; Comprender expresiones comunes y frases sobre temas
-          cotidianos
-        </td>
-      </tr>
-      <tr>
-        <td
-          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
-          &#10004; Participar en conversaciones simples y directas
-        </td>
-      </tr>
-      <tr>
-        <td
-          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px;text-align: left; font-weight: 400; ">
-
-          &#10004; Hablar sobre experiencias personales, rutinas, y
-          necesidades inmediatas
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p style="font-size:15px; font-weight: 500; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
-    ¡Te animamos a seguir practicando para avanzar al siguiente nivel!
-  </p>
-</div>`;
-    // ---***EXIT***JUNIORS---
-    // u
+    
+    // ====================================================
+    // ================== EXIT: headers  ==================
+    // ====================================================
+// -- juniors--
     const header_pass_juniors = `
      <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
   <p
@@ -2025,6 +1878,279 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
   </p>
 </div>
     `;
+    
+    // ---Kids and teens---
+    
+    const header_pass_kids_teens = `
+    <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
+  <p
+    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
+    &#127881; ¡Felicidades, papás y mamás!</p>
+  <!-- &#x1F31F; -->
+  <p
+    style="padding: 1rem 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
+    Hoy celebramos juntos un <b>logro extraordinario</b><br /><br />
+    Su hijo/a ha completado con éxito su curso de inglés,
+    superando cada reto con
+    <b>dedicación, alegría y una constancia admirable.</b>
+    Durante este tiempo, no solo adquirió nuevas habilidades lingüísticas,
+    sino que también desarrolló
+    <b>confianza, disciplina y una mentalidad de superación</b> que le
+    acompañará toda la vida.<br /><br />
+    Este avance es fruto de su esfuerzo, del acompañamiento de ustedes y
+    del compromiso de todo nuestro equipo English4kids.<br /><br />
+     ¡Gracias por ser
+    parte activa de este viaje y por inspirar a su pequeño/a a alcanzar la
+    meta!
+    <b><br><br />
+    &#127775; Hoy, más que un curso terminado, celebramos el inicio de
+    un futuro lleno de oportunidades.</b>
+  </p>
+</div>
+      `;
+      const header_fail_kids_teens = `
+ <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
+  <p
+    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
+
+    &#127919; Queremos reconocer la dedicación y el esfuerzo
+  </p>
+  <!-- &#x1F31F; -->
+  <p
+    style="padding: 1rem 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
+    Tu hijo/a ha mostrado compromiso y participación en cada etapa del
+    aprendizaje del inglés. ¡Cada paso cuenta! &#10024;<br><br>
+    En esta evaluación final,
+    <b
+    >aún no se ha alcanzado el nivel de dominio necesario para cerrar el
+    curso satisfactoriamente</b>. Esto significa que algunas habilidades clave todavía están en proceso
+    de fortalecimiento.
+  </p>
+</div>
+    `;
+    // ---ADULTS---
+     const header_pass_adults = `
+      <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
+  <p
+    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
+
+    &#127881; ¡Felicidades!
+  </p>
+  <!-- &#x1F31F; -->
+  <p
+    style="padding: 1rem 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
+    Hoy celebramos contigo un <b>logro extraordinario</b>.<br><br>
+
+Has completado con éxito tu curso de inglés, superando cada reto con
+    <b>dedicación, constancia y una admirable voluntad de aprendizaje</b>.
+    &#127942;&#10024;<br><br>
+
+Durante este tiempo, no solo has fortalecido tus <b>habilidades lingüísticas</b> para desenvolverte en situaciones
+    cotidianas con mayor <b>seguridad y fluidez</b>, sino que también has desarrollado
+    <b>confianza, disciplina y una mentalidad de superación</b> que te acompañará en cada meta que te propongas.<br><br>
+
+&#127775; Este avance es fruto de tu <b>esfuerzo</b>, de tu <b>compromiso</b> y de la
+    <b>determinación de seguir creciendo</b>.
+    Hoy no solo celebramos un curso terminado, sino el inicio de un <b>futuro lleno de nuevas oportunidades</b> para
+    comunicarte, conectar y alcanzar tus sueños.
+
+  </p>
+</div>
+`;
+    const header_fail_adults = `
+   <div style="justify-items: center; padding: 0 2rem; text-align: center; margin: 0 auto;">
+  <p
+    style="padding: 0 1rem; font-size:22px; font-weight: 700; color: #14767B; font-family: Segoe UI; margin: 0.5rem 0;">
+
+    Reconocemos tu esfuerzo y tu participación
+  </p>
+  <!-- &#x1F31F; -->
+  <p
+    style="padding: 1rem 1rem; font-size: 1rem; font-weight: 400; color: #1C5457; margin-top: 0;padding-bottom: 0.5rem; font-family: Segoe UI;">
+    Cada paso que das en tu aprendizaje del inglés suma y te acerca
+    más a tu meta. <br><br>
+    En esta evaluación final, <b
+    >aún no se ha alcanzado el nivel de dominio necesario para cerrar el
+    curso satisfactoriamente</b>. Esto indica que algunas habilidades clave siguen en proceso de
+    desarrollo.
+  </p>
+</div>
+`;
+    
+    // ====================================================
+    // ================== EXIT: CEFR  ==================
+    // ====================================================
+    // ------------ fed from: function setCEFRInfo(syllabusVal) ---------------
+const cefr = setCEFRInfo(syllabusVal);
+    
+    // KIDS AND TEENS PASSED CEFR
+    
+    const resultado_global_pass_kids_teens = `
+    <div style="padding: 0 1rem; text-align: center;">
+
+  <p
+    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
+    ¡Un gran paso hacia el dominio del idioma!
+  </p>
+
+  <p style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 0;">
+    Tu hijo/a ha alcanzado un nivel
+    ${cefr.finalCEFR} de inglés<br>
+    <span style="font-size: 13px; font-weight: 400; color: #497275;">Según el Marco Común Europeo (CEFR)</span>
+  </p>
+
+  <p style="font-size:15px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
+    Estamos seguros de que este logro abrirá
+    muchas puertas para su futuro.
+  </p>
+</div>
+
+
+<div class="desempeño"
+  style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
+  <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%">
+    <thead>
+      <tr>
+        <th
+          style="font-size: 22px; font-family:  Segoe UI, Roboto; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
+          align="center">
+          Esto significa que es capaz de: </th>
+      </tr>
+    </thead>
+    <tbody>
+     ${cefr.descripcionCEFR}
+    </tbody>
+  </table>
+</div>
+    `;
+
+
+
+    const semanas4kidsteens = syllabusVal.includes("Masters") ? 4 : 8;
+    const resultado_global_fail_kids_teens = `
+   <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
+
+  <p
+    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0; ">
+    Siguientes Pasos
+  </p>
+
+  <p style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 0 0; ">
+    No te desanimes:<br>
+    <span style="font-size: 14px; font-weight: 400; color: #497275;">tu hijo/a tendrá una segunda oportunidad en
+          <b>${semanas4kidsteens} semanas</b>. </span>
+  </p>
+
+  <p style="font-size:14px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
+    Será asignado/a nuevamente al mismo nivel,
+    lo que le permitirá
+    <b
+    >repasar los contenidos, reforzar áreas clave y prepararse
+    de la mejor manera </b>para aprobar en la próxima evaluación.
+  </p>
+</div>
+<div class="desempeño"
+  style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
+  <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%">
+    <thead>
+      <tr>
+        <th 
+          style="font-size: 18px; font-family:  Segoe UI, Roboto; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
+          align="center">
+          Nivel actual: </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td
+          style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px;text-align: left; font-weight: 400; ">
+          Según el Marco Común Europeo de Referencia para las Lenguas
+          (CEFR), tu hijo/a aún no alcanza el nivel ${cefr.finalCEFR}.<br><br>
+          Actualmente se encuentra en un nivel ${cefr.failedCEFR}  y
+          necesita reforzar estructuras clave, comprensión auditiva y
+          expresión oral fluida para avanzar al siguiente nivel.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p
+    style="font-size:15px; font-weight: 500; padding: 2rem 1rem 0; color: #497275; font-family: Segoe UI; text-align:center;">
+    Gracias por acompañar este proceso. Con práctica constante y
+    apoyo familiar, ¡estamos seguros de que muy pronto alcanzará
+    el siguiente nivel!
+  </p>
+</div>
+`;
+    const resultado_global_fail_adults = `
+    <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
+
+  <p
+    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0; ">
+    Siguientes Pasos
+  </p>
+
+  <p style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 0 0; ">
+    No te desanimes:<br>
+    <span style="font-size: 15px; font-weight: 400; color: #497275;">tendrás una segunda oportunidad en
+          <b>4 semanas</b> mientras repites el nivel.</span>
+  </p>
+
+  <p style="font-size:15px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
+    Esto te permitirá
+    repasar los contenidos, reforzar áreas específicas y llegar
+    con más seguridad a tu próxima evaluación.
+
+  </p>
+  <p style="font-size:15px; font-weight: 500; padding: 1rem; color: #497275; font-family: Segoe UI; text-align:center;">
+
+    Este resultado <b>no marca el final del camino</b>, sino una
+    nueva oportunidad para avanzar. Con tu constancia y
+    dedicación, estamos seguros de que muy pronto alcanzarás la
+    meta.
+  </p>
+</div>`;
+    // upd
+    const resultado_global_pass_adults = `
+    <div class="resultado-global" style="padding: 0 1rem; text-align: center;">
+
+  <p
+    style="padding: 0 1rem 0; font-size:26px; text-decoration: none; font-family: Segoe UI; color: #14767B; font-weight: 700; text-shadow: 0 0 10px rgba(163, 225, 230, 0.15); margin: 0;">
+    ¡Un gran paso hacia el dominio del idioma!
+  </p>
+
+  <p style="font-size: 18px; font-weight: 600; font-family:  Segoe UI, Roboto; color: #14767B; padding: 1.5rem 0;">
+    Has alcanzado un nivel
+    ${cefr.finalCEFR} de inglés<br>
+    <span style="font-size: 13px; font-weight: 400; color: #497275;">Según el Marco Común Europeo (CEFR)</span>
+  </p>
+
+  <p style="font-size:15px; font-weight: 400; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
+    Estamos seguros de que este logro abrirá muchas puertas para tu futuro.
+
+
+  </p>
+</div>
+<div class="desempeño"
+  style="margin: 3rem 1rem; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
+  <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%">
+    <thead>
+      <tr>
+        <th
+          style="font-size: 22px; font-family:  Segoe UI, Roboto; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
+          align="center">
+          Esto significa que puedes: </th>
+      </tr>
+    </thead>
+    <tbody>
+     ${cefr.descripcionCEFR}
+    </tbody>
+  </table>
+
+  <p style="font-size:15px; font-weight: 500; padding: 0 1rem 0; color: #497275; font-family: Segoe UI;">
+    ¡Te animamos a seguir practicando para avanzar al siguiente nivel!
+  </p>
+</div>`;
 
     // ---NORMAL EVALUATIONS---
     let chosenSyllabus = syllabusLower.includes("adults") ? "English4Adults" : "English4Kids";
@@ -2204,7 +2330,7 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
   <table width="80%" align="center" cellspacing="0" style="width: 80%; overflow: hidden;" width="80%">
     <thead>
       <tr>
-        <th colspan="2"
+        <th 
           style="font-size: 22px; font-family:  Segoe UI, Roboto; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;"
           align="center">Detalles de la nota</th>
       </tr>
@@ -2671,7 +2797,7 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
     const commentsFinal = selectorComments || extraCommentsFallback || "";
     const commentsHTML = kidsSIExtraAreas || commentsFinal || isCondicionado ? `
         <div style="margin: 4rem auto; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
-    <table width="80%" align="center" cellspacing="0" width="80%">
+    <table width="80%" align="center" cellspacing="0" style="width:80%; ">
       <thead>
         <th
           style="font-size: 22px; font-family: Segoe UI; font-weight: 700; color: #14767B; text-align: center; padding: 0.5rem; border-bottom: 1px dotted #219fa6;">
@@ -3147,12 +3273,15 @@ Su hijo/a ha alcanzado un <b>nivel básico alto de inglés (A2)</b>, lo que sign
 
     // video tutorials for next steps in RC
     const topicVideoTutorials = {
-          "Presente Simple (1ra persona)": "https://vimeo.com/1203922050/b8bd4fdab4?share=copy&fl=sv&fe=ci",
+        "Presente Simple (1ra persona)": "https://vimeo.com/1203922050/b8bd4fdab4?share=copy&fl=sv&fe=ci",
         "Presente Simple (3ra persona)": "https://vimeo.com/1203923180/a0881078ea?share=copy&fl=sv&fe=ci",
         "Presente Progresivo (1ra persona)": "https://vimeo.com/1203923205/1fb6936ec4?share=copy&fl=sv&fe=ci",
         "Presente Progresivo (3ra persona)": "https://vimeo.com/1203923227/4087690b01?share=copy&fl=sv&fe=ci",
         "Futuro Simple (Going to)": "https://vimeo.com/1203923261/faa813b407?share=copy&fl=sv&fe=ci"
     };
+    // "Futuro Simple (Will)": "",
+    // "Pasado Simple": "",
+    // "Pasado Progresivo": ""
 
     let mustPracticeTopics = ``;
     let mapaGrande = ``;
