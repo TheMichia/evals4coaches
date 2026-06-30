@@ -250,7 +250,7 @@ function setCEFRInfo(syllabusVal) {
     case "Adults (3hrs/week)":
     case "Adults (5hrs/week)":
       failedCEFR = "";
-      finalCEFR = "Básico Avanzado-Alto (A2+)";
+      finalCEFR = "Básico Avanzado (A2+)";
       descripcionCEFR = `<tr>
   <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
     &#10004; Comunicarte con confianza en situaciones cotidianas y de viaje, realizando y respondiendo preguntas sobre información personal, rutinas, experiencias pasadas y planes futuros.
@@ -276,7 +276,7 @@ function setCEFRInfo(syllabusVal) {
           // adults masters share
     case "Adults Masters (3hrs/week)":
     case "Adults Masters (5hrs/week)":
-      failedCEFR = "Básico Avanzado-Alto (A2+)";
+      failedCEFR = "Básico Avanzado (A2+)";
       finalCEFR = "Intermedio (B1)";
       descripcionCEFR = `<tr>
   <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
