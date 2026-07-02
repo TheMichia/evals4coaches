@@ -1,7 +1,7 @@
 ( () => {
     const version = "Evaluators";
-    const versionnum = "2.8.0";
-    // added a function to deal with cefr info for exit evals and changed exist evals/s resultado global to be dynamic based on the function
+    const versionnum = "2.8.1";
+    //02-jul-26 changes read debbug file
     const E4EjsonVersion = 3;
     window.appVersion = "Evaluators";
     const showversion = document.getElementById("version");
@@ -166,8 +166,8 @@ function setCEFRInfo(syllabusVal) {
           // all kids and teens share the same
     case "Kids (Intensivo) 8-12":
     case "Kids (Super Intensivo) 8-12":
-    case "Teens 13-17 (3hrs/week)":
-    case "Teens 13-17 (5hrs/week)":
+    case "Teens 13-17 (3 horas/semana)":
+    case "Teens 13-17 (5 horas/semana)":
       failedCEFR = "Básico Avanzado (A2)";
       finalCEFR = "Intermedio (B1)";
       descripcionCEFR = `<tr>
@@ -222,8 +222,8 @@ function setCEFRInfo(syllabusVal) {
           // kids and teens masters 2 share
     case "Kids Masters 2":
     case "Teens Masters 2":
-      failedCEFR = "Intermedio Alto (B1+)";
-      finalCEFR = "Intermedio Avanzado-Inicial (B2 Inicial)";
+      failedCEFR = " B1+ (Intermedio Alto)";
+      finalCEFR = "B2 Inicial (Intermedio Avanzado)";
       descripcionCEFR = `<tr>
   <td style="font-size: 15px; font-family: Segoe UI; color: #1C5457; padding: 10px 10px 10px 20px; text-align: left; font-weight: 400;">
     &#10004; Comunicarse con confianza y espontaneidad en una amplia variedad de situaciones cotidianas y académicas.
