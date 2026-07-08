@@ -1,7 +1,7 @@
 ( () => {
     const version = "Evaluators";
     const versionnum = "2.8.1";
-    //02-jul-26 changes read debbug file
+    // video tutorials only for kids intensivo and super intensivo
     const E4EjsonVersion = 3;
     window.appVersion = "Evaluators";
     const showversion = document.getElementById("version");
@@ -3272,17 +3272,19 @@ const cefr = setCEFRInfo(syllabusVal);
     }
 
     // video tutorials for next steps in RC
-    const topicVideoTutorials = {
+    let topicVideoTutorials = ""
+    // "Futuro Simple (Will)": "",
+    // "Pasado Simple": "",
+    // "Pasado Progresivo": ""
+if (syllabusLower.includes("kids (intensivo) 8-12") || syllabusLower.includes("kids (super intensivo) 8-12")){
+   topicVideoTutorials = {
         "Presente Simple (1ra persona)": "https://vimeo.com/1203922050/b8bd4fdab4?share=copy&fl=sv&fe=ci",
         "Presente Simple (3ra persona)": "https://vimeo.com/1203923180/a0881078ea?share=copy&fl=sv&fe=ci",
         "Presente Progresivo (1ra persona)": "https://vimeo.com/1203923205/1fb6936ec4?share=copy&fl=sv&fe=ci",
         "Presente Progresivo (3ra persona)": "https://vimeo.com/1203923227/4087690b01?share=copy&fl=sv&fe=ci",
         "Futuro Simple (Going to)": "https://vimeo.com/1203923261/faa813b407?share=copy&fl=sv&fe=ci"
     };
-    // "Futuro Simple (Will)": "",
-    // "Pasado Simple": "",
-    // "Pasado Progresivo": ""
-
+}
     let mustPracticeTopics = ``;
     let mapaGrande = ``;
 
