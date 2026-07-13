@@ -13,10 +13,8 @@
 //
 
 let topicsData = {};
-// estado global para los temas
 const topicsStatus = {};
 
-// Referencias al DOM
 const syllabusDropdown = document.getElementById("syllabusDropdown");
 const levelsDropdown = document.getElementById("levelsDropdown");
 const weeksDropdown = document.getElementById("weeksDropdown");
@@ -59,7 +57,7 @@ function resetDropdown(dropdown, placeholder) {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-// 1) Al cargar página → poblar syllabus
+
 (function initSyllabus() {
   resetDropdown(levelsDropdown, "Select a syllabus first");
   resetDropdown(weeksDropdown, "Select a level first");
@@ -79,27 +77,27 @@ function resetDropdown(dropdown, placeholder) {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-// 2) Al cambiar syllabus → poblar levels
+
 syllabusDropdown.addEventListener("change", () => {
   const s = syllabusDropdown.value;
   const feedbackBtn = document.getElementById("feedback");
   const helperSpan = document.getElementById("feedback-helper");
 
-  // 1) Reset visual de niveles, semanas y topics
+
   levelsDropdown.innerHTML = "";
   topicsList.innerHTML = "";
   resetDropdown(weeksDropdown, "-- Select a level first --");
 
-  // 2) Reset estado interno
+
   Object.keys(topicsStatus).forEach((key) => delete topicsStatus[key]);
 
-  // 3) Feedback button vuelve a disabled + mensaje
+
   feedbackBtn.disabled = true;
   helperSpan.textContent = "Now choose a level to load the weeks.";
   cursorToggle.checked = !s.includes("Adults");
   cursorToggle.dispatchEvent(new Event("change"));
 
-  // 4) Poblar levels o dejar placeholder
+
   if (s && topicsData[s]) {
     levelsDropdown.disabled = false;
     levelsDropdown.innerHTML = '<option value="">-- Choose a level --</option>';
@@ -113,14 +111,14 @@ syllabusDropdown.addEventListener("change", () => {
         levelsDropdown.appendChild(opt);
       });
 
-    // Mensaje de helper más orientado al siguiente paso
+
     helperSpan.textContent = "Now choose a level!";
   } else {
     levelsDropdown.disabled = true;
     levelsDropdown.innerHTML =
       '<option value="">-- Select a syllabus first --</option>';
   }
-  //make sure timer and counter hidden
+
   const counterDiv = document.getElementById("count-container");
   counterDiv.classList.add("hidden");
 
@@ -132,21 +130,21 @@ syllabusDropdown.addEventListener("change", () => {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-// 3) Al cambiar level → poblar weeks
+
 levelsDropdown.addEventListener("change", () => {
   const s = syllabusDropdown.value;
   const l = levelsDropdown.value;
   const feedbackBtn = document.getElementById("feedback");
   const helperSpan = document.getElementById("feedback-helper");
 
-  // Reset semanas y topics
+
   resetDropdown(weeksDropdown, "-- Select a level first --");
   topicsList.innerHTML = "";
 
-  // Reset estado
+
   Object.keys(topicsStatus).forEach((key) => delete topicsStatus[key]);
 
-  // Feedback reset
+
   feedbackBtn.disabled = true;
   helperSpan.textContent = "Now choose a level to load the weeks.";
 
@@ -170,7 +168,7 @@ levelsDropdown.addEventListener("change", () => {
       '<option value="">-- Select a level first --</option>';
   }
   window.selectedlevel = l;
-  //make sure timer and counter hidden
+
   const counterDiv = document.getElementById("count-container");
   counterDiv.classList.add("hidden");
 
@@ -182,7 +180,7 @@ levelsDropdown.addEventListener("change", () => {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-// 4) Al cambiar week → poblar topics con formato HTML
+
 weeksDropdown.addEventListener("change", () => {
   const s = syllabusDropdown.value;
   const l = levelsDropdown.value;
@@ -190,14 +188,14 @@ weeksDropdown.addEventListener("change", () => {
   topicsList.innerHTML = "";
 
   const helperSpan = document.getElementById("feedback-helper");
-  // 1) Reset de estado interno
+
   Object.keys(topicsStatus).forEach((key) => delete topicsStatus[key]);
 
-  // 2) Deshabilitar botón de feedback
+
   const feedbackButton = document.getElementById("feedback");
   if (feedbackButton) feedbackButton.disabled = true;
 
-  // 3) Poblar topics si syllabus + level + week existen
+
   if (s && l && w && topicsData[s][l][w]) {
     const topics = topicsData[s][l][w];
     topics.forEach((grammar, index) => {
@@ -244,7 +242,7 @@ weeksDropdown.addEventListener("change", () => {
   window.selectedweek = w;
   const el = document.getElementById("reminder-container");
   el.classList.add("fadeout");
-  // Iniciar en 10 minutos
+
   startTimer(600);
   updateEvaluatedCount();
 });
@@ -297,7 +295,7 @@ function getTemasDominados() {
     let contenido = [];
 
     rows.forEach((row) => {
-      // ignoramos botón "Add Row"
+  
       if (row.id.includes("add-row-container")) return;
 
       const tds = row.querySelectorAll("td");
@@ -385,29 +383,29 @@ function selectButton(button) {
   const index = button.getAttribute("data-index"); // qué tema
   const choice = button.getAttribute("data-choice"); // yes o no
 
-  // Seleccionamos todos los botones del tema actual
+
   const parentSection = button.closest(".approved-section");
   const allButtons = parentSection.querySelectorAll(".toggle-cell");
 
-  // Reinicia todos a sutil
+
   allButtons.forEach((btn) => {
     btn.classList.remove("yes", "no");
     btn.classList.add("sutil");
   });
 
-  // Activa el clicado
+
   button.classList.remove("sutil");
   button.classList.add(choice); // yes o no
 
-  // Guarda el estado global
+
   topicsStatus[index] = choice;
-  // obtén el topic-container
+
   const topicContainer = parentSection.closest(".topic-container");
 
-  // remueve clases
+
   topicContainer.classList.remove("approved", "rejected");
 
-  // agrega la clase según choice
+
   if (choice === "yes") {
     topicContainer.classList.add("approved");
   } else if (choice === "no") {
@@ -421,7 +419,7 @@ function selectButton(button) {
 //
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
-//cuenta la cantidad de topics evaluatos verify
+
 function checkCompletion() {
   const sections = document.querySelectorAll("#topicsList section");
   const feedbackButton = document.getElementById("feedback");
@@ -435,10 +433,10 @@ function checkCompletion() {
     }
   });
 
-  // ✅ Detectar si el timer está en 0 (ya terminó)
+
   const timerIsOver = !container.classList.contains("normal");
 
-  // ✅ Si el timer terminó, el feedback queda habilitado aunque falten topics
+
   if (timerIsOver) {
     feedbackButton.disabled = false;
   } else {
@@ -450,7 +448,7 @@ function checkCompletion() {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-//for counter-visual aid only
+
 function updateEvaluatedCount() {
   const total = document.querySelectorAll("#topicsList section").length;
   const evaluated = Object.values(topicsStatus).filter(Boolean).length;
@@ -518,7 +516,7 @@ function showAbsentSection() {
   popup.querySelector("#popupContent").innerHTML = html;
   closeBtn.style.display = "inline-block";
 
-  // Botón copy results
+
   const copyAbsentbutton = document.createElement("button");
   copyAbsentbutton.id = "copyAbsentResults";
   copyAbsentbutton.innerText = "Finish: Copy Absent's Report-Card and Close";
@@ -815,11 +813,11 @@ function copyAbsentResults() {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-// Función que arma y muestra Kudos y el botón Next
+
 function showKudosSection() {
   const approvedTopics = [];
 
-  // Recorre los topics
+
   Object.entries(topicsStatus).forEach(([index, choice]) => {
     const section = document.querySelector(
       `#topicsList section:nth-child(${parseInt(index) + 1})`,
@@ -827,7 +825,7 @@ function showKudosSection() {
     const title =
       section?.querySelector(".topic-title h3")?.innerText || "Unknown Topic";
     if (choice === "yes") {
-      approvedTopics.push(title); // solo titles de gramática aprobada
+      approvedTopics.push(title);
     }
   });
 
@@ -835,7 +833,7 @@ function showKudosSection() {
     .getElementById("pronunciationMistakes")
     .value.trim();
 
-  // Construimos kudos por áreas
+
   let areaKudosList = "";
   if (document.getElementById("in").value === "2.0") {
     areaKudosList += "<li>🎶 Intonation</li>";
@@ -850,7 +848,7 @@ function showKudosSection() {
     areaKudosList += "<li>🗣️ Pronunciation</li>";
   }
 
-  // separation logic
+
   const syllabusValue = String(
     syllabusDropdown.value || syllabusDropdown.selectedOptions?.[0]?.text || "",
   )
@@ -905,7 +903,7 @@ function showKudosSection() {
   nextButton.style.width = "100%";
   nextButton.addEventListener("click", () => showErrorsSection());
   popup.querySelector("#popupContent").appendChild(nextButton);
-  // }
+
 }
 
 //
@@ -919,27 +917,27 @@ function showErrorsSection(perfectAreasList = []) {
     .getElementById("pronunciationMistakes")
     .value.trim();
 
-  // 1. Iterar todas las secciones de topicsList
+
   const sections = document.querySelectorAll("#topicsList section");
   sections.forEach((section, index) => {
     const title =
       section.querySelector(".topic-title h3")?.innerText.trim() ||
       "Tema desconocido";
-    const choice = topicsStatus[index]; // "yes" o "no"
+    const choice = topicsStatus[index]; 
 
-    // Excluir si está en perfectAreasList
+
     if (perfectAreasList.includes(title)) return;
 
-    // Extraer contenido de answer y correction
+
     const answerText =
       section.querySelector(`#answer${index}`)?.innerText.trim() || "";
     const correctionText =
       section.querySelector(`#correction${index}`)?.innerText.trim() || "";
 
-    // Incluir si está reprobado (choice === "no") o si hay texto en alguna de las celdas
+
     if (choice !== "no" && !answerText && !correctionText) return;
 
-    // Clonar tabla y desactivar edición
+
     const table = section.querySelector("table.topictable");
     let clonedTable = null;
     if (table) {
@@ -956,7 +954,7 @@ function showErrorsSection(perfectAreasList = []) {
       tableHTML: clonedTable ? clonedTable.outerHTML : "<p>Unknown table</p>",
     });
   });
-  // separation logic
+
   const syllabusValue = String(
     syllabusDropdown.value || syllabusDropdown.selectedOptions?.[0]?.text || "",
   )
@@ -974,7 +972,7 @@ function showErrorsSection(perfectAreasList = []) {
   let html = `<div class="feedback-container">
       `;
 
-  // Agregar header solo si hay mistakes
+
   if (pronunciationMistakes || rejectedTopics.length) {
     html += `<h2>${headerText}</h2>`;
   }
@@ -1023,21 +1021,20 @@ function showErrorsSection(perfectAreasList = []) {
     }
   }
 
-  html += `</div>`; // cierre feedback-container
+  html += `</div>`;
 
-  // 3. Inyectar y mostrar botones
+
   const popupContent = document.querySelector("#popupContent");
   popupContent.innerHTML = html;
   closeBtn.style.display = "inline-block";
 
-  // Botón Back: ver Kudos
   const backButton = document.createElement("button");
   backButton.id = "backBtn";
   backButton.innerText = "Back: See Kudos";
   backButton.addEventListener("click", () => showKudosSection());
   popupContent.appendChild(backButton);
 
-  // Botón Next: terminar feedback
+
   const finalButton = document.createElement("button");
   finalButton.id = "finalBtn";
   finalButton.innerText = "Next: Finish Feedback";
@@ -1081,16 +1078,16 @@ function showFinalSection() {
   // --- HTML container start ---
   let html = `<div class="final-container">`;
 
-  // Resultado global (aseguramos que selectedweek y level sean números)
+
   const totalScore = Number(window.totalScore || 0);
   const selectedweek = Number(window.selectedweek || 0);
   const level = Number(window.selectedlevel || 0);
 
-  // Obtener syllabus (texto del dropdown)
+
   const syllabusDropdown = document.getElementById("syllabusDropdown");
   const syllabus = syllabusDropdown ? syllabusDropdown.value || "" : "";
 
-  // Helpers para matching de syllabus
+
   const isJuniors = syllabus.toLowerCase().startsWith("juniors");
   const isKids = syllabus.toLowerCase().includes("kids");
   const isTeens = syllabus.toLowerCase().includes("teens");
@@ -1101,7 +1098,7 @@ function showFinalSection() {
     ? Number(finalScoreEl.textContent || finalScoreEl.value || 0)
     : 0;
 
-  // --- DEFINICIÓN DE BANDERAS ---
+
   const isExit =
     !isJuniors &&
     ((level === 10 && (selectedweek === 7 || selectedweek === 13)) ||
@@ -1110,7 +1107,7 @@ function showFinalSection() {
 
   const isMidterm =
     !isExit &&
-    // Use includes / startsWith para tolerar ligeras variaciones en labels
+
     ((syllabus.toLowerCase().includes("juniors 5-7") && selectedweek === 4) ||
       (syllabus.toLowerCase().includes("kids (intensivo)") &&
         selectedweek === 7) ||
@@ -1136,7 +1133,7 @@ function showFinalSection() {
           syllabus.toLowerCase().includes("5"))) &&
         selectedweek === 8));
 
-  // --- DETERMINAR VIDEO usando el mapa VIDEOS ---
+
   let canvavideo = "";
 
   // Si es Juniors, no se les muestra si pasan o no
@@ -1223,7 +1220,7 @@ function showFinalSection() {
   backButton.addEventListener("click", () => showErrorsSection());
   if (popupContent) popupContent.appendChild(backButton);
 
-  // Definir currentVersion a partir del global
+
   const currentVersion = window.appVersion || "Coaches";
 
   // Botón copy results
@@ -1231,7 +1228,7 @@ function showFinalSection() {
   copybutton.id = "copyResults";
   copybutton.classList.add("copybutton");
 
-  // Texto dinámico según versión
+  
   if (currentVersion === "Coaches") {
     copybutton.innerText = "Next: Copy Results (COACH ONLY)";
     copybutton.addEventListener("click", () => copyResults());
@@ -1242,7 +1239,7 @@ function showFinalSection() {
     });
   }
 
-  // Insertar el botón en el DOM
+
   if (popupContent) popupContent.appendChild(copybutton);
 }
 
@@ -1251,7 +1248,7 @@ function showFinalSection() {
 //
 
 function copyResults() {
-  // 1. Sacar temas aprobados (Dominados)
+
   const approvedTopics = [];
   Object.entries(topicsStatus).forEach(([index, choice]) => {
     const section = document.querySelector(
@@ -1263,7 +1260,7 @@ function copyResults() {
     if (choice === "yes") approvedTopics.push(title);
   });
 
-  // 1.1 Desempeño por área
+
   const describeScore = (val) => {
     switch (val) {
       case "2.0":
@@ -1295,9 +1292,9 @@ function copyResults() {
     )
     .join("");
 
-  // 2. Reforzar: temas con choice "no"
+
   const reinforceTopics = [];
-  // 3. Áreas de oportunidad: todo tema con contenido en las celdas (aunque esté aprobado)
+
   const opportunityTopics = [];
 
   Object.entries(topicsStatus).forEach(([index, choice]) => {
@@ -1307,18 +1304,16 @@ function copyResults() {
     const title =
       section?.querySelector(".topic-title h3")?.innerText ||
       "Tema desconocido";
-    // Extraer texto de answer y correction
+
     const answerText =
       section.querySelector(`#answer${index}`)?.innerText.trim() || "";
     const correctionText =
       section.querySelector(`#correction${index}`)?.innerText.trim() || "";
 
-    // Reinforce
     if (choice === "no") {
       reinforceTopics.push(title);
     }
 
-    // Opportunity: si tiene contenido en answer o correction
     if (answerText !== "" || correctionText !== "") {
       opportunityTopics.push({
         title,
@@ -1335,7 +1330,7 @@ function copyResults() {
     .getElementById("extraComments")
     .value.trim();
 
-  // Resultado global
+
   const totalScore = window.totalScore || 0;
   const resultadoGlobal =
     totalScore > 6.5
@@ -1750,7 +1745,6 @@ function copyResults() {
     `;
 
   // ------------------------------------------
-  // 3. Inyecta el wrapper en un popup
   document.querySelector("#popupContent").innerHTML = previewHTML;
 
   // boton de retroceder
@@ -1768,7 +1762,7 @@ function copyResults() {
   restart.addEventListener("click", reloadPage);
   popup.querySelector("#popupContent").appendChild(restart);
 
-  // Copiar sin romper el método que ya funciona
+
   navigator.clipboard
     .writeText(reportHTML)
     .then(() =>
@@ -1783,7 +1777,7 @@ function copyResults() {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-// Botón para cerrar el popup y volver a mostrar el contenido original
+
 document.getElementById("closePopup").addEventListener("click", () => {
   document.getElementById("popupMistakes").classList.add("hidden");
   document.getElementById("mainContent").style.display = "block";
@@ -1793,7 +1787,7 @@ document.getElementById("closePopup").addEventListener("click", () => {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-let timerInterval; // global
+let timerInterval;
 
 function startTimer(durationSeconds) {
   const display = document.getElementById("time-display");
@@ -1802,16 +1796,16 @@ function startTimer(durationSeconds) {
   container.classList.add("normal");
   container.classList.remove("hidden");
 
-  // Limpiar cualquier timer previo
+
   clearInterval(timerInterval);
 
-  // Reset visual
+
   container.classList.remove("warning", "danger", "over");
   display.classList.remove("time-over");
   display.textContent = "10:00";
   feedbackBtn.disabled = true;
 
-  // Guardar el nuevo interval
+
   timerInterval = setInterval(() => {
     const minutes = Math.floor(timer / 60);
     const seconds = timer % 60;
@@ -1820,8 +1814,7 @@ function startTimer(durationSeconds) {
       .toString()
       .padStart(2, "0")}`;
 
-    // Cambiar estilos    
-    // a los 6 mins enable feedback btn
+
     if (timer <= 360) {
       feedbackBtn.disabled = false;      
     }
@@ -1847,9 +1840,8 @@ function startTimer(durationSeconds) {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-// Nuevo showPopup: compatible con la llamada existente showPopup(message)
+
 function showPopup(message) {
-  // Si ya hay un popup, elimínalo (evita choques)
   const existing = document.querySelector(".popup-overlay");
   if (existing) {
     existing.parentNode.removeChild(existing);
@@ -1873,7 +1865,6 @@ function showPopup(message) {
 
     const cleanup = () => {
       if (overlay.parentNode) document.body.removeChild(overlay);
-      // Emitir evento global para que otras funciones puedan reaccionar
       document.dispatchEvent(
         new CustomEvent("popupClosed", { detail: { message } }),
       );
@@ -1888,7 +1879,6 @@ function showPopup(message) {
       { once: true },
     );
 
-    // Cerrar si hacen click fuera del box (UX-friendly)
     overlay.addEventListener(
       "click",
       (ev) => {
@@ -1897,19 +1887,15 @@ function showPopup(message) {
       { once: true },
     );
 
-    // bloquear scroll detrás del popup
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    // Restaurar overflow cuando se cierre
     const restore = () => (document.body.style.overflow = prevOverflow || "");
-    // Hook para restaurar overflow al resolver la promesa
     const originalResolve = resolve;
     const proxiedResolve = () => {
       restore();
       originalResolve();
     };
-    // Note: proxiedResolve no es estrictamente necesario aquí porque cleanup() llama resolve()
-    // pero dejamos la restauración clara en caso de futuras modificaciones
+ 
   });
 }
 
@@ -1917,9 +1903,8 @@ function showPopup(message) {
 //✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
 //
 
-// popup con confirmación
+
 function confirmPopup(message) {
-  // Si ya hay un popup, elimínalo (evita choques)
   const existing = document.querySelector(".popup-overlay");
   if (existing) {
     existing.parentNode.removeChild(existing);
@@ -1947,14 +1932,14 @@ function confirmPopup(message) {
 
     const cleanup = () => {
       if (overlay.parentNode) document.body.removeChild(overlay);
-      document.body.style.overflow = ""; // restore scroll
+      document.body.style.overflow = "";
     };
 
     yesBtn.addEventListener(
       "click",
       () => {
         cleanup();
-        resolve(true); // ✅ confirmar
+        resolve(true); 
       },
       { once: true },
     );
@@ -1963,12 +1948,11 @@ function confirmPopup(message) {
       "click",
       () => {
         cleanup();
-        resolve(false); // ❌ cancelar
+        resolve(false); 
       },
       { once: true },
     );
 
-    // cerrar si hacen click fuera del box
     overlay.addEventListener(
       "click",
       (ev) => {
@@ -1980,7 +1964,6 @@ function confirmPopup(message) {
       { once: true },
     );
 
-    // bloquear scroll detrás
     document.body.style.overflow = "hidden";
   });
 }
@@ -2011,7 +1994,6 @@ async function reloadPage() {
       updateTotalScore();
     }
 
-    // Volver al contenido principal
     popup.classList.add("hidden");
     mainContent.style.display = "block";
 
@@ -2036,7 +2018,6 @@ cursorToggle.addEventListener("change", () => {
       ? 'url("cursors/superstarcursor.cur"), default'
       : "default";
 
-    // Si hay tablas dentro del popup, también cambias su cursor
     popup.querySelectorAll("table").forEach((t) => {
       t.style.cursor = useCustom
         ? 'url("cursors/superstarcursor.cur"), pointer'
