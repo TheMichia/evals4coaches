@@ -35,10 +35,8 @@ const ReSchedulebTN = document.getElementById("ReScheduleEmail");
 
 // ---------- Estado global ----------
 let evaluatorsData = {};
-// se llena con fetch
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
+
+
 
 // ---------- evaluatorsDropdown + evaluatorsData ----------
 fetch("evaluators.json?v=${E4EjsonVersion}").then( (response) => response.json()).then( (data) => {
@@ -91,36 +89,29 @@ fetch("evaluators.json?v=${E4EjsonVersion}").then( (response) => response.json()
 }
 );
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
 
 let topicBreakdown = {};
 let topicBreakdownLoaded = false;
 
-// Carga inicial del JSON
 async function loadTopicBreakdown() {
     try {
         const response = await fetch(`topicsBreakdown.json?v=${Date.now()}`);
         const data = await response.json();
-        console.log("✅ JSON cargado");
-        // Verifica todo el objeto
+        console.log("JSON cargado");
         topicBreakdown = data["Topic Breakdown"] || {};
         topicBreakdownLoaded = true;
-        console.log("📦 topicBreakdown procesado");
+        console.log("📦topicBreakdown procesado");
     } catch (err) {
-        console.error("❌ Error loading topic breakdown:", err);
+        console.error(" Error loading topic breakdown:", err);
     }
 }
 
-// Llamado inicial
+
 loadTopicBreakdown();
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
 
-// Habilitar absent al cambiar syllabus (comprueba existencia)
+
+// Habilitar absent al cambiar syllabus
 if (syllabusE4E) {
     syllabusE4E.addEventListener("change", () => {
         if (absentBtn)
@@ -129,22 +120,20 @@ if (syllabusE4E) {
     );
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
+
 // ---------- HELPERS ----------
 
-// función para chequear si es diagnóstico
+
 function isDiagnosticEval(syllabusVal, levelVal) {
     return ((syllabusVal === "Kids (Super Intensivo) 8-12" && levelVal === 2) || (syllabusVal === "Teens 13-17 (5 horas/semana)" && levelVal === 2) || (syllabusVal === "Kids Masters" && levelVal === 2) || (syllabusVal === "Teens Masters" && levelVal === 2));
 }
 
-//función para chequear si es filter eval
+
 function isFilterEval(syllabusVal, levelVal, weekVal) {
     return ((syllabusVal === "Juniors 5-7" && [7, 9].includes(levelVal) && weekVal === 7) || (syllabusVal === "Kids (Intensivo) 8-12" && [2, 4, 7, 9].includes(levelVal) && weekVal === 13) || (syllabusVal === "Kids (Super Intensivo) 8-12" && [4, 7, 9].includes(levelVal) && weekVal === 7) || (syllabusVal === "Kids Masters" && [4, 8].includes(levelVal) && weekVal === 3) || (syllabusVal === "Kids Masters 2" && [4, 8].includes(levelVal) && weekVal === 3) || (syllabusVal === "Teens 13-17 (3hrs/week)" && [2, 4, 7, 9].includes(levelVal) && weekVal === 13) || (syllabusVal === "Teens 13-17 (5hrs/week)" && [4, 7, 9].includes(levelVal) && weekVal === 7) || (syllabusVal === "Teens Masters" && [4, 8].includes(levelVal) && weekVal === 3) || (syllabusVal === "Teens Masters 2" && [4, 8].includes(levelVal) && weekVal === 3) || (syllabusVal === "Adults (3hrs/week)" && [5, 8].includes(levelVal) && weekVal === 3) || (syllabusVal === "Adults (5hrs/week)" && [5, 8].includes(levelVal) && weekVal === 3) || (syllabusVal === "Adults Masters (3hrs/week)" && [5, 8].includes(levelVal) && weekVal === 3) || (syllabusVal === "Adults Masters (5hrs/week)" && [5, 8].includes(levelVal) && weekVal === 3));
 }
 
-//función para chequear si es exit eval
+
 function isExitEval(syllabusVal, levelVal, weekVal) {
     const syllabusLower = syllabusVal.toLowerCase();
 
@@ -310,7 +299,7 @@ function setCEFRInfo(syllabusVal) {
 
 
 
-// función para ocultar/mostrar las tablas topictable
+
 function hideTopicTables(diagnostic) {
     const tables = document.querySelectorAll(".topictable");
     tables.forEach( (table) => {
@@ -319,46 +308,36 @@ function hideTopicTables(diagnostic) {
     );
 }
 
-// listener en el dropdown de weeks
+
 weekE4E.addEventListener("change", () => {
     const syllabusVal = syllabusE4E.value;
-    // obtiene syllabus seleccionado
     const levelVal = parseInt(levelE4E.value, 10);
-    // convierte a número
-
-    const diagnostic = isDiagnosticEval(syllabusVal, levelVal);
+      const diagnostic = isDiagnosticEval(syllabusVal, levelVal);
 
     hideTopicTables(diagnostic);
 
-    // opcional: también puedes mostrar/ocultar tu sección diagnosticEvals
-    if (diagnosticEvals) {
+        if (diagnosticEvals) {
         diagnosticEvals.style.display = diagnostic ? "" : "none";
     }
 }
 );
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
 
-// helper para comparar floats con tolerancia
+
 function nearlyEqual(a, b, eps=1e-6) {
     if (!Number.isFinite(a) || !Number.isFinite(b))
         return false;
     return Math.abs(a - b) <= eps;
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
+
 
 function updateExtraInfo() {
     const syllabusVal = syllabusE4E?.value || "";
     const levelVal = parseInt(levelE4E?.value, 10) || 0;
     const weekVal = parseInt(weekE4E?.value, 10) || 0;
     handleL10KidsSI();
-    // 1) Mostrar / poblar preparación (solo Masters 2)
-    const isprep = !!(syllabusVal && syllabusVal.toLowerCase().includes("masters 2"));
+       const isprep = !!(syllabusVal && syllabusVal.toLowerCase().includes("masters 2"));
 
     if (prepCommentRow) {
         if (isprep) {
@@ -371,17 +350,16 @@ function updateExtraInfo() {
         }
     }
 
-    // 2) Exit eval
+
     const isExit = isExitEval(syllabusVal, levelVal, weekVal);
 
-    // 3) Diagnostic evals
+
     const isDiag = isDiagnosticEval(syllabusVal, levelVal);
     if (diagnosticEvals) {
         diagnosticEvals.classList.toggle("hidden", !isDiag);
     }
 
     if (!isDiag) {
-        // 4) Exit table
         if (exitevaltable) {
             exitevaltable.classList.toggle("hidden", !isExit);
             if (!isExit && skillTest) {
@@ -391,21 +369,21 @@ function updateExtraInfo() {
             }
         }
 
-        // 5) Total score row
+
         if (totalscorerow) {
             totalscorerow.classList.toggle("hidden", isExit);
         }
 
-        // 6) Extra info (CONDICIONADO + RESCHEDULE)
+
         if (extraInfo) {
             let htmlContent = "";
 
-            //  Obtener score
+
             let scoreVal = isExit ? parseFloat(finalScore?.textContent.trim()) : parseFloat(totalScoreEl?.textContent.trim());
 
             const fixedScore = Number(scoreVal?.toFixed(2));
 
-            // Condicionado
+
             if (fixedScore === 7) {
                 htmlContent += `
           <label class="extraInfoAddOns">
@@ -414,7 +392,7 @@ function updateExtraInfo() {
           </label>`;
             }
 
-            //  Reschedule
+
             const isFilter = isFilterEval(syllabusVal, levelVal, weekVal);
 
             const shouldShowReschedule = (isExit && fixedScore < 7) || (isFilter && fixedScore < 7);
@@ -427,26 +405,23 @@ function updateExtraInfo() {
           </label>`;
             }
 
-            // remove
+
             extraInfo.innerHTML = htmlContent;
         }
     }
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
+
 
 function calculateFinalScore() {
     const totalValue = parseFloat(totalScoreEl?.textContent) || 0;
 
-    // si skillTest es input
+
     let skillTestScore = 0;
     if (skillTest) {
         if ("value"in skillTest) {
             skillTestScore = parseFloat(skillTest.value) || 0;
         } else {
-            // fallback
             skillTestScore = parseFloat(skillTest.textContent) || 0;
         }
     }
@@ -457,9 +432,7 @@ function calculateFinalScore() {
     }
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
+
 
 ["gr", "pr", "in", "fl", "co"].forEach( (id) => {
     const el = document.getElementById(id);
@@ -467,7 +440,6 @@ function calculateFinalScore() {
         el.addEventListener("change", () => {
             updateExtraInfo();
 
-            // si la exit eval table está visible, recalcular score
             if (exitevaltable && !exitevaltable.classList.contains("hidden")) {
                 calculateFinalScore();
             }
@@ -493,11 +465,8 @@ if (skillTest) {
     }
     );
 }
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
 
-// ---------- Helpers ----------
+
 function getSyllabusBucket(syllabus) {
     if (!syllabus)
         return null;
@@ -514,19 +483,14 @@ function getSyllabusBucket(syllabus) {
     return null;
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
 
-// Normaliza distintos formatos de datos a un array de items
+
 function normalizeCommentsData(data) {
     if (!data)
         return [];
     if (Array.isArray(data))
         return data;
-    // array de strings
     if (typeof data === "object") {
-        // objeto: transformarlo en array de {label, html}
         return Object.keys(data).map( (key) => {
             const val = data[key];
             const html = Array.isArray(val) ? val[0] : typeof val === "string" ? val : "";
@@ -540,36 +504,34 @@ function normalizeCommentsData(data) {
     return [];
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
 
-// Busca comentarios probando varias estructuras del JSON
+
+
 function getCommentsArray(bucket, category) {
     if (!evaluatorsData)
         return [];
 
-    // 1) bucket-first: evaluatorsData[bucket][category]
+
     if (bucket && evaluatorsData[bucket] && evaluatorsData[bucket][category]) {
         return normalizeCommentsData(evaluatorsData[bucket][category]);
     }
 
-    // 2) evaluatorsData.comments[bucket][category]
+
     if (evaluatorsData.comments && evaluatorsData.comments[bucket] && evaluatorsData.comments[bucket][category]) {
         return normalizeCommentsData(evaluatorsData.comments[bucket][category]);
     }
 
-    // 3) category-first: evaluatorsData[category][bucket]
+
     if (evaluatorsData[category] && evaluatorsData[category][bucket]) {
         return normalizeCommentsData(evaluatorsData[category][bucket]);
     }
 
-    // 4) commentsPerArea: evaluatorsData.commentsPerArea[category][bucket]  <-- tu caso
+
     if (evaluatorsData.commentsPerArea && evaluatorsData.commentsPerArea[category] && evaluatorsData.commentsPerArea[category][bucket]) {
         return normalizeCommentsData(evaluatorsData.commentsPerArea[category][bucket], );
     }
 
-    // 5) evaluatorsData[category] direct array
+
     if (Array.isArray(evaluatorsData[category])) {
         return normalizeCommentsData(evaluatorsData[category]);
     }
@@ -577,14 +539,12 @@ function getCommentsArray(bucket, category) {
     return [];
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
 
-// Pobla el select con comentarios según categoría y syllabus
+
+
 function populateComments(selectElement, category, syllabus) {
     selectElement.innerHTML = "";
-    // limpiar
+
     const bucket = getSyllabusBucket(syllabus);
     const items = getCommentsArray(bucket, category);
 
@@ -596,9 +556,7 @@ function populateComments(selectElement, category, syllabus) {
                 opt.textContent = item;
             } else if (item && typeof item === "object" && item.label) {
                 opt.value = item.html || "";
-                // aquí guardamos el HTML de detalle
                 opt.textContent = item.label;
-                // y mostramos la frase resumen
             } else {
                 opt.value = "";
                 opt.textContent = String(item);
@@ -617,23 +575,23 @@ function populateComments(selectElement, category, syllabus) {
     // console.log({ syllabus, bucket, category, items });
 }
 
-//pobla preparation - caso masters2 kids
+
 function populatePreparation(selectEl) {
     if (!selectEl)
         return;
 
-    // buscar datos en el JSON
+
     const prepObj = evaluatorsData?.commentsPerArea?.["Preparación"];
     if (!prepObj) {
-        // si no hay datos, vacía y sal
+
         selectEl.innerHTML = "";
         return;
     }
 
-    // guardar selección previa para restaurarla después
+
     const prevValue = selectEl.value;
 
-    // repoblar
+
     selectEl.innerHTML = "";
     Object.keys(prepObj).forEach( (label) => {
         const opt = document.createElement("option");
@@ -643,19 +601,17 @@ function populatePreparation(selectEl) {
     }
     );
 
-    // restaurar selección previa si existe entre las nuevas opciones
+
     if (prevValue && Array.from(selectEl.options).some( (o) => o.value === prevValue)) {
         selectEl.value = prevValue;
     } else {
-        // si no había selección previa, seleccionar la primera opción (opcional)
+
         if (selectEl.options.length > 0)
             selectEl.selectedIndex = 0;
     }
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
+
 
 // Special case for L10 Kids SI - Opinion y Justificación, Describir Imágenes, Hacer Preguntas
 function handleL10KidsSI() {
@@ -677,14 +633,14 @@ function handleL10KidsSI() {
 
     anchorRow.classList.remove("hidden");
 
-    //  DISPLAY (EN)
+
     const areaLabelsEN = {
         "Expresión de opinión y justificación": "Opinion & Justification",
         "Descripción de imágenes": "Describing a Picture",
         "Formulación de preguntas": "Asking Questions",
     };
 
-    //  SOURCE (must match JSON keys EXACTLY)
+
     const areas = Object.keys(areaLabelsEN);
 
     areas.forEach( (area) => {
@@ -698,7 +654,7 @@ function handleL10KidsSI() {
         const tdLabel = document.createElement("td");
         tdLabel.classList.add("areasevaluation");
 
-        //  translate only for display
+
         tdLabel.textContent = areaLabelsEN[area] || area;
 
         const tdSelect = document.createElement("td");
@@ -724,9 +680,6 @@ function handleL10KidsSI() {
     );
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
 
 // ---------- Eventos: FLUENCY / INTONATION ----------
 fluency.addEventListener("change", () => {
@@ -749,9 +702,7 @@ fluency.addEventListener("change", () => {
 }
 );
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
+
 
 intonation.addEventListener("change", () => {
     const syllabusVal = syllabusE4E.value;
@@ -773,15 +724,13 @@ intonation.addEventListener("change", () => {
 }
 );
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
+
 
 // ------------------ helpers pequeños ------------------
 function refreshVisibleComments() {
     const syllabus = syllabusE4E.value;
 
-    // Fluency: si la fila está visible, repobla
+
     const flSelect = document.getElementById("flcomment");
     if (!flCommentRow.classList.contains("hidden")) {
         const prevLabel = flSelect.options[flSelect.selectedIndex]?.textContent || null;
@@ -793,7 +742,7 @@ function refreshVisibleComments() {
         }
     }
 
-    // Intonation: si la fila está visible, repobla
+
     const inSelect = document.getElementById("incomment");
     if (!inCommentRow.classList.contains("hidden")) {
         const prevLabel = inSelect.options[inSelect.selectedIndex]?.textContent || null;
@@ -806,13 +755,11 @@ function refreshVisibleComments() {
     }
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
 
-// ------------------ reaccionar al cambio de syllabus ------------------
+
+
 syllabusE4E.addEventListener("change", () => {
-    // Si no hay syllabus seleccionado, limpiamos los selects visibles
+
     const syllabus = syllabusE4E.value;
     if (!syllabus) {
         if (!flCommentRow.classList.contains("hidden"))
@@ -822,14 +769,12 @@ syllabusE4E.addEventListener("change", () => {
         return;
     }
 
-    // Re-popular solo los selects que estén visibles
+
     refreshVisibleComments();
 }
 );
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
+
 
 (function() {
     function waitForEvaluatorReady(timeout=4000) {
@@ -887,7 +832,7 @@ syllabusE4E.addEventListener("change", () => {
         const container = box.querySelector("#modalEvalContainer");
         const btnConfirm = box.querySelector("#modalConfirm");
 
-        // clonar select real si tiene opciones; si no generarlo desde evaluatorsData
+
         const realEval = document.getElementById("evaluatorsDropdown");
         let modalSelect;
         if (realEval && realEval.options.length > 1) {
@@ -915,7 +860,7 @@ syllabusE4E.addEventListener("change", () => {
         container.appendChild(modalSelect);
         modalSelect.focus();
 
-        // función de shake reutilizable
+
         function shakeAndFocus() {
             box.animate([{
                 transform: "translateX(0)"
@@ -929,13 +874,13 @@ syllabusE4E.addEventListener("change", () => {
                 duration: 220,
                 easing: "ease-out"
             }, );
-            // tiny visual cue en el select
+
             modalSelect.style.boxShadow = "0 0 0 3px rgba(255,0,0,0.12)";
             setTimeout( () => (modalSelect.style.boxShadow = ""), 420);
             modalSelect.focus();
         }
 
-        // confirmar: aplicar valor al select real y disparar change
+
         btnConfirm.addEventListener("click", () => {
             const chosen = modalSelect.value;
             if (!chosen) {
@@ -967,19 +912,19 @@ syllabusE4E.addEventListener("change", () => {
         }
         );
 
-        // accesibilidad: Escape -> shake (no cierra)
+
         function onKey(e) {
             if (e.key === "Escape") {
                 shakeAndFocus();
             }
             if (e.key === "Enter" && document.activeElement === modalSelect) {
-                // permitir enter para confirmar también (si hay selección)
+
                 btnConfirm.click();
             }
         }
         document.addEventListener("keydown", onKey);
 
-        // limpiar listener cuando se cierra
+
         const observer = new MutationObserver( () => {
             if (!document.body.contains(box)) {
                 document.removeEventListener("keydown", onKey);
@@ -1001,9 +946,7 @@ syllabusE4E.addEventListener("change", () => {
 }
 )();
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
+
 
 function absentsE4E() {
     const syllabus = syllabusE4E.value || "";
@@ -1297,10 +1240,8 @@ function absentsE4E() {
     // Copiar al portapapeles
     const tempEl = document.createElement("textarea");
     tempEl.style.position = "fixed";
-    // evitar scroll raro
     tempEl.style.opacity = "0";
     tempEl.value = message;
-    // aquí va el string literal con &#
     document.body.appendChild(tempEl);
     tempEl.select();
     document.execCommand("copy");
@@ -1310,11 +1251,8 @@ function absentsE4E() {
         <div class="smallPreview"> ${message} </div>`, );
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
 async function evaluatorsCopyResults() {
-    // Espera hasta que topicBreakdown esté listo
+
     while (!topicBreakdownLoaded) {
         console.log("⏳ Esperando que topicBreakdown cargue...");
         await new Promise( (res) => setTimeout(res, 100));
@@ -1345,14 +1283,14 @@ async function evaluatorsCopyResults() {
     }
     ;
 
-    // ---------- little getters ----------
+
     const getGrammarScore = () => (document.getElementById("skilltest")?.value || document.getElementById("grammarScore")?.value || document.getElementById("grammarTest")?.value || "").toString();
 
     const getOralScore = () => (document.getElementById("totalscore")?.textContent || document.getElementById("totalscore")?.value || document.getElementById("oralScore")?.value || document.getElementById("oralTotal")?.textContent || "").toString();
 
     const getFinalScore = () => (document.getElementById("finalScore")?.textContent || document.getElementById("finalscore")?.textContent || "").toString();
 
-    // ---------- read DOM/state ----------
+
     const syllabus = document.getElementById("syllabusDropdown")?.value || "";
     const syllabusLower = syllabus.toLowerCase();
     const levelVal = Number(window.selectedlevel || 0);
@@ -1366,22 +1304,22 @@ async function evaluatorsCopyResults() {
         evaluatorID = ev ? String(ev[0]) : evaluatorID;
     }
 
-    // ---------- isExit logic ----------
+
     const syllabusVal = syllabus || "";
     const isExit = isExitEval(syllabusVal, levelVal, weekVal);
 
-    // ---------- topics extraction (robust) ----------
+
     const approvedTopics = [];
     const reinforceTopics = [];
     const opportunityTopics = [];
-    // {title, answer, correction}
+
     const sections = Array.from(document.querySelectorAll("#topicsList section"));
 
     sections.forEach( (section, idx) => {
         const container = section.querySelector(".topic-container") || section;
         const title = container.querySelector(".topic-title h3")?.innerText?.trim() || "Tema desconocido";
 
-        // detect status by button class, fallback to topicsStatus
+
         const yesBtn = container.querySelector(".toggle-cell.yes");
         const noBtn = container.querySelector(".toggle-cell.no");
         let choice;
@@ -1458,7 +1396,7 @@ async function evaluatorsCopyResults() {
       </table>
     </div>`;
 
-    // pronunciation  comments
+
     const pronunciationMistakes = document.getElementById("pronunciationMistakes")?.value?.trim() || "";
     const extraCommentsFallback = document.getElementById("extraComments")?.value?.trim() || "";
 
@@ -1497,7 +1435,7 @@ async function evaluatorsCopyResults() {
         </tr>
                 `);
     }
-    // === Preparación (Masters 2) – versión larga sin leer JSON ===
+
     const PREPARACION_MAP = {
         "No se preparó": `
 
@@ -1565,12 +1503,9 @@ async function evaluatorsCopyResults() {
     if (syllabusVal.includes("Masters 2")) {
         const txt = (document.getElementById("prepcomment")?.value || "").trim();
         if (txt) {
-            const largo = PREPARACION_MAP[txt];
-            // coincide exacto con una de las 3 claves
-            if (largo) {
+            const largo = PREPARACION_MAP[txt];            if (largo) {
                 areaDetails.push(largo + "");
             } else {
-                // fallback
                 areaDetails.push(` ${safe(txt)}`);
             }
         }
@@ -2217,7 +2152,7 @@ const cefr = setCEFRInfo(syllabusVal);
     let SclassPathLvl = null;
     let BclassPathLvl = null;
 
-    // Resolver
+
     for (const group of classGroups) {
         if (includesAny(syllabusLower, group.match)) {
             BclassPathLvl = group.B;
@@ -2366,11 +2301,11 @@ const cefr = setCEFRInfo(syllabusVal);
     let welcomeHTML = "";
     let resultadoGlobal = "";
 
-    // Prioridad máxima: Diagnostic Eval
+
     if (isDiagnosticEval(syllabusVal, levelVal)) {
         resultadoGlobal = resultadoGlobalDiagEval;
     } else if (isExit) {
-        // choose by syllabus and pass/fail
+
         const passedExit = finalDisplay !== "" && !Number.isNaN(Number(finalDisplay)) && Number(finalDisplay) >= 7;
 
         if (syllabusLower.includes("kids") || syllabusLower.includes("teens")) {
@@ -2530,7 +2465,7 @@ const cefr = setCEFRInfo(syllabusVal);
         ${approvedTopics.map( (topic) => {
         const topicKey = topic.toLowerCase();
 
-        // Buscar dentro del breakdown ignorando mayúsculas/minúsculas
+
         const matchedKey = Object.keys(topicBreakdown).find( (k) => k.toLowerCase() === topicKey, );
 
         const topicDescription = matchedKey ? topicBreakdown[matchedKey] : "";
@@ -2594,7 +2529,7 @@ const cefr = setCEFRInfo(syllabusVal);
           ${reinforceTopics.map( (topic) => {
         const topicKey = topic.toLowerCase();
 
-        // Match insensible a mayúsculas
+
         const matchedKey = Object.keys(topicBreakdown).find( (k) => k.toLowerCase() === topicKey, );
 
         const topicDescription = matchedKey ? topicBreakdown[matchedKey] : "";
@@ -2615,13 +2550,12 @@ const cefr = setCEFRInfo(syllabusVal);
         </tbody>
       </table>
     </div>` : "";
-    // upd
+
 
     let opportunityHTML = "";
 
     if (isDiagnosticEval(syllabusVal, levelVal)) {
-        // DIAGNOSTIC: revisamos cuáles checkboxes están checked
-        // Mapa de AOIs para diagnóstico
+
         const diagAOIs = [{
             checkboxLabel: "Construcción de oraciones completas",
             title: "Construcción de oraciones completas",
@@ -2648,7 +2582,7 @@ const cefr = setCEFRInfo(syllabusVal);
             desc: "Reforzar la comprensión auditiva para responder de forma más precisa a lo que se pregunta.",
         }, ];
 
-        // HTML dinámico para diagnostic eval
+
         const checkboxes = document.querySelectorAll('#optionsGroup input[type="checkbox"]', );
         const checkedHTML = [];
 
@@ -2695,9 +2629,7 @@ const cefr = setCEFRInfo(syllabusVal);
     </table>
   </div>
 `;
-    } else {
-        // NO ES DIAGNOSTIC: logica normal
-        opportunityHTML = opportunityTopics.length ? `
+    } else {        opportunityHTML = opportunityTopics.length ? `
       <div style="margin:4rem auto; justify-items:center; background-color:rgba(252,250,250,0.1); border-radius:25px;">
         <table width="80%" align="center" cellspacing="0" width="80%">
           <thead>
@@ -2734,7 +2666,7 @@ const cefr = setCEFRInfo(syllabusVal);
     ` : "";
     }
 
-    // upd
+
     const pronunciationHTML = pronunciationMistakes ? `  <div style="margin: 4rem auto; justify-items: center; background-color:rgba(252,250,250,0.1); border-radius: 25px;">
     <table width="80%">
       <thead>
@@ -2812,7 +2744,7 @@ const cefr = setCEFRInfo(syllabusVal);
         </table>
       </div>` : "";
     // evaluator + survey + referidos
-    // Determinar si mostramos el nombre del evaluador o lo tratamos como vacío
+
     const shouldHideEvaluator = evaluatorName && String(evaluatorName).startsWith("━");
 
     const surveyBaseFinal = syllabusLower.includes("adults") ? "https://e4cc.typeform.com/to/efJago3L#coach=" : "https://e4cc.typeform.com/to/ovOnAdWx#coach=";
@@ -3038,7 +2970,7 @@ const cefr = setCEFRInfo(syllabusVal);
         if (levelVal === 9 && weekVal === 7) {
             willLearn = ["Repaso de Tiempos Gramaticales Básicos"];
             nextFilter = "10";
-            // último
+
         }
     }
 
@@ -3059,7 +2991,7 @@ const cefr = setCEFRInfo(syllabusVal);
         if (levelVal === 9 && weekVal === 13) {
             willLearn = ["Presente Perfecto", "Repaso de Tiempos Gramaticales Básicos", ];
             nextFilter = "10";
-            // último
+
         }
     }
 
@@ -3076,7 +3008,6 @@ const cefr = setCEFRInfo(syllabusVal);
         if (levelVal === 9 && weekVal === 7) {
             willLearn = ["Repaso de Tiempos Gramaticales Básicos"];
             nextFilter = "10";
-            // último
         }
     }
 
@@ -3089,7 +3020,7 @@ const cefr = setCEFRInfo(syllabusVal);
         if (levelVal === 8 && weekVal === 3) {
             willLearn = ["Repaso de Tiempos Gramaticales Básicos"];
             nextFilter = "10";
-            // último
+
         }
     }
 
@@ -3102,7 +3033,7 @@ const cefr = setCEFRInfo(syllabusVal);
         if (levelVal === 8 && weekVal === 3) {
             willLearn = ["Futuro Perfecto", "Modales perfectos", "Repaso de Tiempos Gramaticales Básicos", ];
             nextFilter = "10";
-            // último
+
         }
     }
 
@@ -3123,7 +3054,7 @@ const cefr = setCEFRInfo(syllabusVal);
         if (levelVal === 9 && weekVal === 13) {
             willLearn = ["Presente Perfecto Progresivo", "Repaso General"];
             nextFilter = "10";
-            // último
+
         }
     }
 
@@ -3140,7 +3071,7 @@ const cefr = setCEFRInfo(syllabusVal);
         if (levelVal === 9 && weekVal === 7) {
             willLearn = ["Presente Perfecto Progresivo", "Repaso de Tiempos Gramaticales Básicos", ];
             nextFilter = "10";
-            // último
+
         }
     }
 
@@ -3153,7 +3084,7 @@ const cefr = setCEFRInfo(syllabusVal);
         if (levelVal === 8 && weekVal === 3) {
             willLearn = ["Futuro Perfecto", "Repaso de Tiempos Gramaticales Básicos"];
             nextFilter = "10";
-            // último
+
         }
     }
 
@@ -3166,7 +3097,7 @@ const cefr = setCEFRInfo(syllabusVal);
         if (levelVal === 8 && weekVal === 3) {
             willLearn = ["Futuro Perfecto", "Repaso de Tiempos Gramaticales Básicos"];
             nextFilter = "10";
-            // último
+
         }
     }
 
@@ -3179,7 +3110,7 @@ const cefr = setCEFRInfo(syllabusVal);
         if (levelVal === 8 && weekVal === 3) {
             willLearn = ["Modales: Can / Should", "Comparativos y Superlativos", "Repaso General", ];
             nextFilter = "12";
-            // último
+
         }
     }
 
@@ -3192,7 +3123,7 @@ const cefr = setCEFRInfo(syllabusVal);
         if (levelVal === 8 && weekVal === 3) {
             willLearn = ["Modales: Can / Should", "Comparativos y Superlativos", "Repaso General", ];
             nextFilter = "12";
-            // último
+
         }
     }
 
@@ -3205,7 +3136,7 @@ const cefr = setCEFRInfo(syllabusVal);
         if (levelVal === 8 && weekVal === 3) {
             willLearn = ["Used to", "Deseos en Presente y Futuro (I wish / If only)", "Voz Pasiva", ];
             nextFilter = "12";
-            // último
+
         }
     }
 
@@ -3218,7 +3149,7 @@ const cefr = setCEFRInfo(syllabusVal);
         if (levelVal === 8 && weekVal === 3) {
             willLearn = ["Used to", "Deseos en Presente y Futuro (I wish / If only)", "Voz Pasiva", ];
             nextFilter = "12";
-            // último
+
         }
     }
 
@@ -3241,7 +3172,7 @@ const cefr = setCEFRInfo(syllabusVal);
             ${willLearn.map( (topic) => {
             const topicKey = topic.toLowerCase();
 
-            // Match insensible a mayúsculas
+
             const matchedKey = Object.keys(topicBreakdown).find( (k) => k.toLowerCase() === topicKey, );
 
             const topicDescription = matchedKey ? topicBreakdown[matchedKey] : "";
@@ -3581,15 +3512,12 @@ if (syllabusLower.includes("kids (intensivo) 8-12") || syllabusLower.includes("k
     navigator.clipboard.writeText(reportHTML).then( () => showPopup("<h3>✅Success!</h3><p>The Results have been copied to your clipboard! </p>", ), ).catch( () => showPopup("<h3>😓 Oops...</h3><p>❌ The results couldn't be copied, please try again or contact Michelle Hernández via Teams.</p>", ), );
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
 
 async function evaluatorsReloadPage() {
     const proceed = await confirmPopup("<h3>Start again? 🤔</h3><p>We’ll reset everything so you can begin a fresh evaluation.</p><p><b>Are you sure you want to restart? 👀</b></p>", );
 
     if (proceed) {
-        // Uncheck all AOI checkboxes
+
         const fieldset = document.querySelector("#optionsGroup");
 
         if (fieldset) {
@@ -3612,19 +3540,19 @@ async function evaluatorsReloadPage() {
             }
         }
 
-        // Refrescar topics como si el usuario hubiera cambiado la semana
+
         if (weeksDropdown) {
             weeksDropdown.dispatchEvent(new Event("change"));
         }
 
-        // Resetear todos los selects a 2.0
+
         const selects = document.querySelectorAll("#gr, #pr, #in, #fl, #co");
         selects.forEach( (select) => {
             select.value = "2.0";
         }
         );
 
-        //refresh extra-comments
+
         refreshVisibleComments();
         updateExtraInfo();
         if (fluency) {
@@ -3634,7 +3562,7 @@ async function evaluatorsReloadPage() {
             intonation.dispatchEvent(new Event("change"));
         }
 
-        // Vaciar todos los textareas
+
         const textareas = document.querySelectorAll("textarea");
         textareas.forEach( (textarea) => {
             textarea.value = "";
@@ -3642,7 +3570,7 @@ async function evaluatorsReloadPage() {
         }
         );
 
-        // Resetear el total
+
         if (typeof updateTotalScore === "function") {
             updateTotalScore();
         }
@@ -3650,11 +3578,11 @@ async function evaluatorsReloadPage() {
             calculateFinalScore();
         }
 
-        //back to main content
+
         popup.classList.add("hidden");
         mainContent.style.display = "block";
 
-        // Scroll to first topic
+
         const topicsSection = document.getElementById("topicsList");
         if (topicsSection) {
             topicsSection.scrollIntoView({
@@ -3668,19 +3596,17 @@ async function evaluatorsReloadPage() {
     }
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
+
 
 function showCoachingOpportunity() {
     const syllabus = syllabusE4E?.value || "";
     const level = levelE4E?.value || "";
     const totalScore = parseFloat(totalScoreEl?.textContent) || 0;
-    // si quieres score
 
-    // Condición para mostrar coaching
+
+
     const hasCoachingOpportunity = (syllabus.includes("Kids Intensivo") || syllabus.includes("Kids (Super Intensivo)")) && ["2", "4", "7"].includes(level) && totalScore <= 7;
-    // incluye score si aplica
+
 
     const popupContent = popup?.querySelector?.("#popupContent");
 
@@ -3726,10 +3652,6 @@ function showCoachingOpportunity() {
     }
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
-
 // ---open---
 function openSoundboard() {
     const soundboard = document.createElement("div");
@@ -3746,7 +3668,6 @@ function openSoundboard() {
   `;
 
     document.body.appendChild(soundboard);
-    // Detectar clic fuera para cerrar
     setTimeout( () => {
         document.addEventListener("click", handleOutsideClick);
     }
@@ -3778,22 +3699,22 @@ function openCategory(category, clickedBtn) {
     const buttons = soundboard.querySelectorAll(".category-btn");
     const wrapping = document.getElementById("wrapping");
 
-    // Eliminar div anterior si existe
+
     const existingCategoryDiv = soundboard.querySelector(".category-content");
     if (existingCategoryDiv)
         existingCategoryDiv.remove();
 
-    // Expandir panel visualmente
+
     soundboard.classList.add("expanded");
 
-    // Crear nuevo div con ID del nombre de la categoría
+
     const categoryDiv = document.createElement("div");
     categoryDiv.classList.add("category-content", "fade-in");
     categoryDiv.id = category;
     wrapping.classList.remove("wrapping");
     wrapping.classList.add("wrapped");
 
-    // Marcar el botón seleccionado
+
     buttons.forEach( (btn) => {
         if (btn === clickedBtn) {
             btn.classList.remove("unselected");
@@ -3805,7 +3726,7 @@ function openCategory(category, clickedBtn) {
     }
     );
 
-    // ---DATOS DE CADA CATEGORÍA---
+
     const categories = {
         actions: ["Eat", "Bite", "Drink", "Sleep", "Run", "Jump", "Dance Macarena", "Walk", ],
         sfx: ["Impostor Among Us", "Buzzer", "Chan Chan Chan", "Claps", "Correct Ding", "Crickets", "Hoop Ding", "Horn", "Huh", "Sad Meow", "Shock Cinematic", "Tiny Violin", "Victory", "Vine Boom", "Yipee", ],
@@ -3813,7 +3734,7 @@ function openCategory(category, clickedBtn) {
         animals: ["Bee", "Cat", "Chicken", "Cow", "Crow", "Dinosaur", "Dog", "Dove", "Duck", "Elephant", "Frog", "Giraffe", "Horse", "Whale", "Lion", "Owl", "Panda", "Penguin", "Pig", "Rabbit", "Raccoon", "Rat", "Rattlesnake", "Rooster", "Sheep", "Tiger", "Wolf", "Zebra", ],
     };
 
-    // Crear HTML dinámicamente según categoría
+
     let html = '<section class="press-button">';
     categories[category].forEach( (name) => {
         // convertir a minúsculas y reemplazar caracteres especiales para el archivo
@@ -3830,14 +3751,14 @@ function openCategory(category, clickedBtn) {
     );
     html += "</section>";
 
-    // Insertar HTML al nuevo div
+
     categoryDiv.innerHTML = html;
 
-    // Agregar el nuevo div al soundboard
+
     soundboard.appendChild(categoryDiv);
 }
 
-// ---Cerrar si se hace clic fuera---
+
 function handleOutsideClick(e) {
     const soundboard = document.querySelector(".soundboard");
     if (soundboard && !soundboard.contains(e.target) && e.target.id !== "soundboardBtn") {
@@ -3845,7 +3766,7 @@ function handleOutsideClick(e) {
     }
 }
 
-// Array global para controlar todos los audios activos
+
 let activeAudios = [];
 
 // ---PLAY SOUND---
@@ -3853,13 +3774,13 @@ function playSound(button) {
     const soundPath = button.getAttribute("data-sound");
     const audio = new Audio(soundPath);
 
-    // Reproducir audio
+
     audio.play();
 
-    // Guardar audio en el array
+
     activeAudios.push(audio);
 
-    // Si no existe botón Stop All, lo creamos
+
     if (!document.getElementById("stop-all-btn")) {
         const stopBtn = document.createElement("button");
         stopBtn.id = "stop-all-btn";
@@ -3869,11 +3790,11 @@ function playSound(button) {
         document.body.appendChild(stopBtn);
     }
 
-    // Cuando el audio termina, se elimina del array
+
     audio.addEventListener("ended", () => {
         activeAudios = activeAudios.filter( (a) => a !== audio);
 
-        // Si no quedan audios, eliminamos el botón de stop
+
         if (activeAudios.length === 0) {
             const stopBtn = document.getElementById("stop-all-btn");
             if (stopBtn) {
@@ -3904,16 +3825,14 @@ function stopAllSounds() {
     );
     activeAudios = [];
 
-    // Remover botón Stop All
+
     const stopBtn = document.getElementById("stop-all-btn");
     if (stopBtn)
         stopBtn.remove();
 }
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
-// AOIS FOR DIAG EVALS
+
+
 const fieldset = document.querySelector("#optionsGroup");
 const checkboxes = fieldset.querySelectorAll('input[type="checkbox"]');
 const counter = document.querySelector("#counter");
@@ -3924,10 +3843,10 @@ checkboxes.forEach( (cb) => {
         const checked = fieldset.querySelectorAll('input[type="checkbox"]:checked');
         const count = checked.length;
 
-        // actualiza contador
+
         counter.textContent = `${count}/${maxAllowed} seleccionadas`;
 
-        // bloquea/desbloquea inputs y actualiza clase unselected
+
         checkboxes.forEach( (box) => {
             const label = box.closest("label");
             if (count >= maxAllowed && !box.checked) {
@@ -3940,7 +3859,7 @@ checkboxes.forEach( (cb) => {
         }
         );
 
-        // toggle clase selected en labels
+
         checkboxes.forEach( (box) => {
             const label = box.closest("label");
             if (box.checked) {
@@ -3955,9 +3874,6 @@ checkboxes.forEach( (cb) => {
 }
 );
 
-//
-//✧˖°── .✦────☼༺☆༻☾────✦.── °˖✧
-//
 
 // RESCHEDULE EVAL
 
