@@ -614,6 +614,7 @@ function populatePreparation(selectEl) {
 
 
 // Special case for L10 Kids SI - Opinion y Justificación, Describir Imágenes, Hacer Preguntas
+// 10-aug-26 > request urgent change: add Kids Intensivo to the target
 function handleL10KidsSI() {
     const syllabus = syllabusE4E?.value || "";
     const level = parseInt(levelE4E?.value, 10);
@@ -621,8 +622,9 @@ function handleL10KidsSI() {
     const anchorRow = document.getElementById("l10KidsSI");
     if (!anchorRow)
         return;
-
-    const isTarget = syllabus === "Kids (Super Intensivo) 8-12" && level === 10;
+    // BEFORE
+    // const isTarget = syllabus === "Kids (Super Intensivo) 8-12" && level === 10;
+     const isTarget =  (syllabus === "Kids (Super Intensivo) 8-12" || syllabus === "Kids (Intensivo) 8-12")  && level === 10;
 
     document.querySelectorAll(".l10-generated").forEach( (row) => row.remove());
 
