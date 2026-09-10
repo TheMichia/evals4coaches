@@ -394,8 +394,10 @@ function updateExtraInfo() {
 
 
             const isFilter = isFilterEval(syllabusVal, levelVal, weekVal);
-
-            const shouldShowReschedule = (isExit && fixedScore < 7) || (isFilter && fixedScore < 7);
+//previous setting changed since it wasnt working for Juniors and was redundant
+            // const shouldShowReschedule = (isExit && fixedScore < 7) || (isFilter && fixedScore < 7);
+            
+               const shouldShowReschedule = ( fixedScore < 7);
 
             if (shouldShowReschedule) {
                 htmlContent += `
