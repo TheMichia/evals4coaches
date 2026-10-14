@@ -1131,7 +1131,7 @@ function absentsE4E() {
           background: linear-gradient(to bottom, #f5f0e6 0%, transparent 50%);
           background-color: transparent;
         ">
-      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERADULTS.png" alt="" style="width: 100%; display: block; border: 0">
+      <img src="https://raw.githubusercontent.com/TheMichia/database/refs/heads/main/EmailAssets/Headers/HEADERKIDS.png" alt="" style="width: 100%; display: block; border: 0">
     </div>
     <div style="justify-items: center; padding: 0rem 2rem; text-align: center; margin: 0 auto;">
       <p style="padding: 0 1rem; font-size: 18px; font-weight: 700; color: #126064; font-family: Segoe UI; margin: 0;">
