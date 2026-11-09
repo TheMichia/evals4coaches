@@ -2753,7 +2753,7 @@ const cefr = setCEFRInfo(syllabusVal);
 
     const surveyBaseFinal = syllabusLower.includes("adults") ? "https://e4cc.typeform.com/to/efJago3L#coach=" : "https://e4cc.typeform.com/to/ovOnAdWx#coach=";
 
-    const surveyLinkFinal = surveyBaseFinal + encodeURIComponent(evaluatorID || "");
+    const surveyLinkFinal = surveyBaseFinal + encodeURIComponent(evaluatorID || "") + "&fix=0000";
     // upd
     const evaluatorLine = shouldHideEvaluator ? "" : `
 
